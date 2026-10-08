@@ -24,7 +24,7 @@ export function Header() {
       <Container className="py-3.5 flex items-center gap-4 sm:gap-6">
         <Logo />
 
-        <div className="hidden md:flex flex-1 max-w-md">
+        <div className="hidden md:flex flex-1 max-w-xl mx-auto">
           <form
             role="search"
             onSubmit={submitSearch}
@@ -44,7 +44,7 @@ export function Header() {
           </form>
         </div>
 
-        <div className="hidden lg:flex items-center gap-1 text-sm font-semibold text-[var(--text)]">
+        <div className="hidden lg:flex items-center gap-1 ml-auto shrink-0 text-sm font-semibold text-[var(--text)]">
           <UserCircle2 size={20} />
           Iniciar sesión
           <ChevronDown size={14} />
