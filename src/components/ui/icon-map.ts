@@ -1,0 +1,30 @@
+import {
+  FileCheck2,
+  GraduationCap,
+  BarChart3,
+  Tv,
+  UserCircle2,
+  Users,
+  Scale,
+  HelpCircle,
+  Building2,
+  Newspaper,
+  Database,
+  Store,
+  type LucideIcon,
+} from "lucide-react";
+
+export const iconMap: Record<string, LucideIcon> = {
+  "file-check": FileCheck2,
+  "graduation-cap": GraduationCap,
+  "bar-chart": BarChart3,
+  tv: Tv,
+  "user-circle": UserCircle2,
+  users: Users,
+  scale: Scale,
+  "help-circle": HelpCircle,
+  building: Building2,
+  newspaper: Newspaper,
+  database: Database,
+  store: Store,
+};
