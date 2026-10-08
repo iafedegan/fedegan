@@ -48,10 +48,10 @@ export function hasAnyRole(roles: string[] | undefined, allowed: string[]) {
   return allowed.some((r) => set.has(r));
 }
 
-// Perfiles del modo de prueba (solo fuera de producción).
+// Cuentas ficticias de la demostración (no existen en Azure ni piden contraseña).
 export const demoProfiles = [
-  { id: "funcionario", nombre: "Funcionario FEDEGÁN", roles: [ROLES.funcionario] },
-  { id: "editor-contexto", nombre: "Editor de CONtexto", roles: [ROLES.funcionario, ROLES.contextoEditor] },
-  { id: "admin-portal", nombre: "Administrador del portal", roles: [ROLES.funcionario, ROLES.portalAdmin] },
-  { id: "superadmin", nombre: "Superadministrador", roles: [ROLES.funcionario, ROLES.portalAdmin, ROLES.contextoAdmin] },
+  { id: "funcionario", nombre: "Laura Gómez", email: "laura.gomez@fedegan.org.co", cargo: "Analista de Tecnología", roles: [ROLES.funcionario] },
+  { id: "editor-contexto", nombre: "Carlos Rojas", email: "carlos.rojas@fedegan.org.co", cargo: "Editor de CONtexto Ganadero", roles: [ROLES.funcionario, ROLES.contextoEditor] },
+  { id: "admin-portal", nombre: "Andrea Pardo", email: "andrea.pardo@fedegan.org.co", cargo: "Administradora del portal", roles: [ROLES.funcionario, ROLES.portalAdmin] },
+  { id: "superadmin", nombre: "Equipo de Tecnología", email: "tecnologia@fedegan.org.co", cargo: "Superadministrador", roles: [ROLES.funcionario, ROLES.portalAdmin, ROLES.contextoAdmin] },
 ] as const;

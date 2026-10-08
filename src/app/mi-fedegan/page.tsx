@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ArrowUpRight, Newspaper, ShieldCheck } from "lucide-react";
-import { auth } from "@/auth";
+import { auth, demoEnabled, entraConfigured } from "@/auth";
 import { appsForRoles } from "@/lib/access";
 import { Container } from "@/components/ui/Container";
 import { PageHeader } from "@/components/ui/PageHeader";
@@ -30,6 +30,7 @@ export default async function MiFedeganPage() {
       />
       <Container className="flex flex-col gap-8 py-12">
         <div className="flex flex-wrap items-center gap-2">
+          {demoEnabled && !entraConfigured && <Badge tone="lime">Sesión de demostración</Badge>}
           <span className="text-sm text-[var(--text-muted)]">Su perfil:</span>
           {roles.length ? roles.map((r) => <Badge key={r} tone="neutral">{r}</Badge>) : <Badge tone="neutral">Sin roles asignados</Badge>}
           <div className="ml-auto"><SignOutButton /></div>

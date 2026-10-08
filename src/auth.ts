@@ -15,8 +15,9 @@ export const entraConfigured = Boolean(
     process.env.AUTH_MICROSOFT_ENTRA_ID_ISSUER,
 );
 
-// El modo de prueba nunca se activa en producción, aunque la variable esté definida.
-export const demoEnabled = process.env.AUTH_DEMO_MODE === "true" && process.env.NODE_ENV !== "production";
+// Modo demostración: ingreso simulado con cuentas ficticias, sin contraseñas. Es opt-in:
+// solo se activa con AUTH_DEMO_MODE=true y debe quitarse al conectar Azure real.
+export const demoEnabled = process.env.AUTH_DEMO_MODE === "true";
 
 const providers = [];
 
@@ -28,12 +29,12 @@ if (demoEnabled) {
   providers.push(
     Credentials({
       id: "demo",
-      name: "Modo de prueba",
+      name: "Modo demostración",
       credentials: { profile: {} },
       authorize(credentials) {
         const p = demoProfiles.find((d) => d.id === credentials?.profile);
         if (!p) return null;
-        return { id: `demo-${p.id}`, name: p.nombre, email: `${p.id}@demo.local`, roles: [...p.roles] } as never;
+        return { id: `demo-${p.id}`, name: p.nombre, email: p.email, roles: [...p.roles] } as never;
       },
     }),
   );
