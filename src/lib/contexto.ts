@@ -36,6 +36,11 @@ function formatDate(iso: string | null) {
   return iso ? formatter.format(new Date(iso)) : "";
 }
 
+function absoluteUrl(url: string | null) {
+  if (!url || !url.startsWith("/") || !BASE) return url;
+  return new URL(url, BASE).toString();
+}
+
 function fromApi(a: ApiArticulo): Noticia {
   return {
     slug: a.slug,
@@ -44,7 +49,7 @@ function fromApi(a: ApiArticulo): Noticia {
     title: a.title,
     dek: a.excerpt,
     author: a.autor ?? "Redacción CONtexto Ganadero",
-    image: a.coverImageUrl,
+    image: absoluteUrl(a.coverImageUrl),
     imageAlt: null,
     bodyHtml: null,
     body: null,

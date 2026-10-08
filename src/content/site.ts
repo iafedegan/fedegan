@@ -2,15 +2,14 @@
 // En producción esto se reemplaza por consultas al CMS headless (Fase 1-E1/E3 del TDR).
 
 export const mainNav = [
-  { label: "Directorio", href: "/directorio" },
-  { label: "Quiénes somos", href: "/quienes-somos" },
-  { label: "Programas", href: "/programas" },
-  { label: "Noticias", href: "/noticias" },
-  { label: "Publicaciones", href: "/publicaciones" },
-  { label: "Eventos", href: "/eventos" },
-  { label: "Servicios", href: "/servicios" },
-  { label: "Normatividad", href: "/normatividad" },
-  { label: "Contacto", href: "/contacto" },
+  { label: "Inicio", href: "/" },
+  { label: "Nosotros", href: "/quienes-somos" },
+  { label: "Sala de Prensa", href: "/noticias" },
+  { label: "Cartas de Presidencia", href: "/seccion/cartas-de-presidencia" },
+  { label: "Seguridad Ganadera", href: "/seccion/seguridad-ganadera" },
+  { label: "Preguntas Frecuentes", href: "/preguntas-frecuentes" },
+  { label: "PQRSD", href: "/contacto" },
+  { label: "Consulta RUV", href: "/servicios" },
 ];
 
 export const quickAccess = [
@@ -213,42 +212,17 @@ export type Piso = {
 
 export const pisos: Piso[] = [
   {
-    id: "piso-1",
-    nombre: "Piso 1 · Plaza institucional",
-    descripcion: "El gremio, su gobierno y la información pública.",
+    id: "locales",
+    nombre: "Locales del gremio",
+    descripcion: "Cada línea de valor de FEDEGÁN–FNG tiene su propio local dentro del portal.",
     locales: [
-      { id: "institucional", numero: "101", nombre: "Institucional", rubro: "Gremio y gobierno", descripcion: "Quiénes somos, programas, normatividad y transparencia.", href: "/quienes-somos", icon: "building", status: "abierto", ancla: true },
-      { id: "editorial", numero: "102", nombre: "Editorial", rubro: "Noticias y publicaciones", descripcion: "Noticias, publicaciones, eventos y la columna del presidente.", href: "/noticias", icon: "newspaper", status: "abierto", ancla: true },
-      { id: "normatividad", numero: "103", nombre: "Normatividad", rubro: "Marco legal", descripcion: "Leyes, decretos y resoluciones del sector.", href: "/normatividad", icon: "scale", status: "abierto" },
-      { id: "ayuda", numero: "104", nombre: "Atención al ganadero", rubro: "PQRS y ayuda", descripcion: "Preguntas frecuentes, contacto y radicación de PQRS.", href: "/preguntas-frecuentes", icon: "help-circle", status: "abierto" },
-    ],
-  },
-  {
-    id: "piso-2",
-    nombre: "Piso 2 · Servicios y formación",
-    descripcion: "Trámites, capacitación y accesos a los sistemas del gremio.",
-    locales: [
-      { id: "servicios", numero: "201", nombre: "Trámites y servicios", rubro: "Autogestión", descripcion: "RUV, recaudo biológico, sello ambiental y oferta de tierras.", href: "/servicios", icon: "file-check", status: "abierto", ancla: true },
-      { id: "formacion", numero: "202", nombre: "Escuela Virtual", rubro: "Formación", descripcion: "Cursos para productores, técnicos y profesionales.", href: "/escuela-virtual", icon: "graduation-cap", status: "abierto", ancla: true },
-      { id: "programas", numero: "203", nombre: "Programas", rubro: "Proyectos del gremio", descripcion: "Ganadería sostenible, sanidad animal y fomento al consumo.", href: "/programas", icon: "users", status: "abierto" },
-    ],
-  },
-  {
-    id: "piso-3",
-    nombre: "Piso 3 · Medios y datos",
-    descripcion: "Contenido audiovisual, periodismo y cifras del sector.",
-    locales: [
-      { id: "medios", numero: "301", nombre: "TVGAN", rubro: "Medios", descripcion: "El canal del ganadero: programas y streaming.", href: "/tvgan", icon: "tv", status: "abierto", ancla: true },
-      { id: "contexto", numero: "302", nombre: "Contexto Ganadero", rubro: "Periodismo", descripcion: "Información estratégica y periodismo del sector ganadero.", href: "https://contexto-olive.vercel.app/", icon: "bar-chart", status: "abierto", external: true },
-      { id: "datos", numero: "303", nombre: "Datos del sector", rubro: "Cifras y tableros", descripcion: "Inventario bovino, precios y tableros especializados.", href: "/datos", icon: "database", status: "proximamente" },
-    ],
-  },
-  {
-    id: "piso-vip",
-    nombre: "Zona de membresía",
-    descripcion: "Espacio autenticado para afiliados y usuarios registrados.",
-    locales: [
-      { id: "mi-fedegan", numero: "VIP", nombre: "Mi FEDEGÁN", rubro: "Membresía", descripcion: "Perfil, beneficios, trámites personalizados y alertas.", href: "/mi-fedegan", icon: "user-circle", status: "proximamente", ancla: true },
+      { id: "programas", numero: "101", nombre: "Programas", rubro: "Proyectos del gremio", descripcion: "Ganadería sostenible, sanidad animal y fomento al consumo.", href: "/programas", icon: "users", status: "abierto", ancla: true },
+      { id: "normatividad", numero: "102", nombre: "Normatividad", rubro: "Marco legal", descripcion: "Leyes, decretos y resoluciones del sector ganadero.", href: "/normatividad", icon: "scale", status: "abierto", ancla: true },
+      { id: "publicaciones", numero: "103", nombre: "Publicaciones", rubro: "Biblioteca", descripcion: "Informes, manuales, boletines y documentos técnicos.", href: "/publicaciones", icon: "newspaper", status: "abierto", ancla: true },
+      { id: "cifras", numero: "104", nombre: "Cifras del sector", rubro: "Datos", descripcion: "Inventario bovino y bufalino, precios y estadísticas.", href: "/seccion/cifras-del-sector", icon: "database", status: "abierto", ancla: true },
+      { id: "fng", numero: "105", nombre: "FNG", rubro: "Fondo Nacional del Ganado", descripcion: "Recaudo de la cuota de fomento y su inversión en el sector.", href: "/seccion/fng", icon: "building", status: "abierto", ancla: true },
+      { id: "fep", numero: "106", nombre: "FEP", rubro: "Estabilización de precios", descripcion: "Fondo de Estabilización de Precios: mecanismo y resultados.", href: "/seccion/fep", icon: "bar-chart", status: "abierto", ancla: true },
+      { id: "sig", numero: "107", nombre: "Sistema Integrado de Gestión", rubro: "Calidad", descripcion: "Políticas, procesos y certificaciones de la entidad.", href: "/seccion/sistema-integrado-de-gestion", icon: "file-check", status: "abierto", ancla: true },
     ],
   },
 ];

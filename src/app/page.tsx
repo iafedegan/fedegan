@@ -1,4 +1,4 @@
-import { Hero } from "@/components/blocks/Hero";
+import { HeroNews } from "@/components/blocks/HeroNews";
 import { QuickAccessGrid } from "@/components/blocks/QuickAccessGrid";
 import { MallDirectory } from "@/components/blocks/MallDirectory";
 import { StatsStrip } from "@/components/blocks/StatsStrip";
@@ -11,7 +11,7 @@ import { MembershipBanner } from "@/components/blocks/MembershipBanner";
 export default function Home() {
   return (
     <>
-      <Hero />
+      <HeroNews />
       <QuickAccessGrid />
       <MallDirectory />
       <StatsStrip />
