@@ -3,8 +3,9 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Search, UserCircle2, Menu, X, ChevronDown } from "lucide-react";
+import { Search, UserCircle2, Menu, X } from "lucide-react";
 import { Logo } from "./Logo";
+import { LoginMenu } from "./LoginMenu";
 import { mainNav } from "@/content/site";
 import { Container } from "@/components/ui/Container";
 
@@ -44,11 +45,7 @@ export function Header() {
           </form>
         </div>
 
-        <div className="hidden lg:flex items-center gap-1 ml-auto shrink-0 text-sm font-semibold text-[var(--text)]">
-          <UserCircle2 size={20} />
-          Iniciar sesión
-          <ChevronDown size={14} />
-        </div>
+        <LoginMenu />
 
         <button
           className="md:hidden ml-auto text-[var(--fg-green-800)]"
@@ -103,7 +100,7 @@ export function Header() {
               </Link>
             ))}
             <Link
-              href="/mi-fedegan"
+              href="/ingresar"
               className="mt-3 flex items-center gap-2 text-sm font-semibold text-[var(--text)]"
             >
               <UserCircle2 size={20} />
