@@ -20,7 +20,7 @@ export function Header() {
   }
 
   return (
-    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-[var(--border)]">
+    <header className="sticky top-0 z-50 bg-[color-mix(in_srgb,var(--bg)_94%,transparent)] backdrop-blur border-b border-[var(--border)]">
       <Container className="py-3.5 flex items-center gap-4 sm:gap-6">
         <Logo />
 
@@ -44,7 +44,7 @@ export function Header() {
           </form>
         </div>
 
-        <div className="hidden lg:flex items-center gap-1 text-sm font-semibold text-[var(--fg-green-900)]">
+        <div className="hidden lg:flex items-center gap-1 text-sm font-semibold text-[var(--text)]">
           <UserCircle2 size={20} />
           Iniciar sesión
           <ChevronDown size={14} />
@@ -77,7 +77,7 @@ export function Header() {
       </nav>
 
       {open && (
-        <div className="md:hidden border-t border-[var(--border)] bg-white">
+        <div className="md:hidden border-t border-[var(--border)] bg-[var(--surface-solid)]">
           <Container className="py-4 flex flex-col gap-1">
             <form
               role="search"
@@ -104,7 +104,7 @@ export function Header() {
             ))}
             <Link
               href="/mi-fedegan"
-              className="mt-3 flex items-center gap-2 text-sm font-semibold text-[var(--fg-green-900)]"
+              className="mt-3 flex items-center gap-2 text-sm font-semibold text-[var(--text)]"
             >
               <UserCircle2 size={20} />
               Iniciar sesión

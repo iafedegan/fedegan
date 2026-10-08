@@ -14,9 +14,9 @@ export function InfoLinksRow() {
             <Link
               key={l.href}
               href={l.href}
-              className="group flex gap-4 rounded-[var(--radius-lg)] bg-white border border-[var(--border)] p-5 hover:border-[var(--fg-green-600)] hover:shadow-[var(--shadow-md)] transition-all duration-300"
+              className="group flex gap-4 rounded-[var(--radius-lg)] bg-[var(--surface-solid)] border border-[var(--border)] p-5 hover:border-[var(--fg-green-600)] hover:shadow-[var(--shadow-md)] transition-all duration-300"
             >
-              <span className="w-11 h-11 shrink-0 rounded-full bg-[var(--bg-muted)] text-[var(--fg-green-700)] flex items-center justify-center group-hover:bg-[var(--fg-green-700)] group-hover:text-white transition-colors">
+              <span className="w-11 h-11 shrink-0 rounded-full bg-[var(--bg-muted)] text-[var(--fg-green-700)] flex items-center justify-center group-hover:bg-[var(--fg-green-700)] group-hover:text-[var(--on-accent)] transition-colors">
                 <Icon size={20} />
               </span>
               <div>

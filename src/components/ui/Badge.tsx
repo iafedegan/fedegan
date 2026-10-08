@@ -1,7 +1,7 @@
 type Tone = "green" | "lime" | "teal" | "neutral";
 
 const tones: Record<Tone, string> = {
-  green: "bg-[var(--fg-green-700)] text-white",
+  green: "bg-[var(--fg-green-700)] text-[var(--on-accent)]",
   lime: "bg-[var(--fg-lime-500)] text-[var(--fg-green-900)]",
   teal: "bg-[var(--fg-teal-600)] text-white",
   neutral: "bg-[var(--bg-sunken)] text-[var(--text-muted)]",

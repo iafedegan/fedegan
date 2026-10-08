@@ -39,7 +39,7 @@ export default function ServiciosPage() {
               <Link key={s.title} href={s.href}>
                 <Card>
                   <CardBody>
-                    <span className="w-11 h-11 rounded-[var(--radius-sm)] bg-[var(--fg-green-700)] text-white flex items-center justify-center">
+                    <span className="w-11 h-11 rounded-[var(--radius-sm)] bg-[var(--fg-green-700)] text-[var(--on-accent)] flex items-center justify-center">
                       <Icon size={20} />
                     </span>
                     <h3 className="font-bold text-[var(--text)]">{s.title}</h3>

@@ -23,7 +23,7 @@ export function SectionHeading({
       {action && (
         <Link
           href={action.href}
-          className="text-sm font-semibold text-[var(--fg-green-700)] hover:text-[var(--fg-green-900)] inline-flex items-center gap-1 group"
+          className="text-sm font-semibold text-[var(--fg-green-700)] hover:text-[var(--text)] inline-flex items-center gap-1 group"
         >
           {action.label}
           <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>

@@ -19,7 +19,7 @@ export function MembershipBanner() {
             className="absolute inset-0 opacity-90 -z-10"
             style={{
               background:
-                "radial-gradient(90% 120% at 90% 100%, rgba(141,198,63,0.28), transparent 60%)",
+                "radial-gradient(90% 120% at 90% 100%, rgba(216,181,88,0.25), transparent 60%)",
             }}
           />
           <div>

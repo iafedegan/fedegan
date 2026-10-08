@@ -23,7 +23,7 @@ export default function NormatividadPage() {
         breadcrumbs={[{ label: "Normatividad" }]}
       />
       <Container className="py-12">
-        <div className="flex flex-col divide-y divide-[var(--border)] border border-[var(--border)] rounded-[var(--radius-lg)] overflow-hidden bg-white">
+        <div className="flex flex-col divide-y divide-[var(--border)] border border-[var(--border)] rounded-[var(--radius-lg)] overflow-hidden bg-[var(--surface-solid)]">
           {rules.map((r) => (
             <a
               key={r.ref}

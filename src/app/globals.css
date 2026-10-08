@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700;800&family=Inter+Tight:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
 /* =======================================================================
@@ -6,56 +6,90 @@
    Tokens base. Todo componente debe leer estas variables, nunca colores
    sueltos, para que un cambio de marca/tema no requiera tocar componentes.
    ======================================================================= */
-:root {
-  /* --- color de marca --- */
-  --fg-green-900: #0c3524;
-  --fg-green-800: #0f4a30;
-  --fg-green-700: #146238;
-  --fg-green-600: #1c7a42;
-  --fg-lime-500: #8dc63f;
-  --fg-lime-400: #a4d65e;
-  --fg-teal-600: #0e8f8a;
+:root,
+[data-theme="institucional"] {
+  /* Mármol & Verde Botella (tema institucional de CONtexto Ganadero) */
+  --fg-green-900: #0a2a20;
+  --fg-green-800: #0f3d2e;
+  --fg-green-700: #0f3d2e;
+  --fg-green-600: #1d5a45;
+  --fg-lime-500: #b08f4f;
+  --fg-lime-400: #cfae6a;
+  --fg-teal-600: #2f6f5e;
 
-  /* --- superficie / neutrales (sesgo verde, no gris puro) --- */
-  --bg: #ffffff;
-  --bg-muted: #f4f7f4;
-  --bg-sunken: #eef2ee;
+  --bg: #f5f4f0;
+  --bg-muted: #eceae3;
+  --bg-sunken: #e4e1d6;
   --surface: #ffffff;
-  --surface-2: #f7faf7;
-  --border: #dfe6e0;
-  --border-strong: #c4d0c8;
+  --surface-solid: #ffffff;
+  --surface-2: #f0efe8;
+  --border: #d9d6cb;
+  --border-strong: #0f3d2e;
 
-  /* --- texto --- */
-  --text: #12241a;
-  --text-muted: #4b5d52;
-  --text-faint: #7c8b81;
-  --text-on-brand: #ffffff;
+  --text: #13211a;
+  --text-muted: #5d6b62;
+  --text-faint: #7d8a81;
+  --text-on-brand: #f7f6f1;
+  --on-accent: #f7f6f1;
 
-  /* --- semántico --- */
   --accent: var(--fg-green-700);
   --accent-2: var(--fg-lime-500);
   --link: var(--fg-green-700);
-  --focus-ring: var(--fg-green-600);
+  --focus-ring: var(--fg-green-700);
 
-  /* --- forma --- */
-  --radius-sm: 0.375rem;
-  --radius-md: 0.625rem;
-  --radius-lg: 1rem;
+  --radius-sm: 0.2rem;
+  --radius-md: 0.25rem;
+  --radius-lg: 0.25rem;
   --radius-pill: 999px;
 
-  /* --- sombra --- */
-  --shadow-sm: 0 1px 2px rgba(12,53,36,0.06);
-  --shadow-md: 0 8px 24px -8px rgba(12,53,36,0.18);
-  --shadow-lg: 0 20px 44px -16px rgba(12,53,36,0.28);
+  --shadow-sm: 0 1px 2px rgba(19,33,26,0.07);
+  --shadow-md: 0 14px 34px -22px rgba(19,33,26,0.35);
+  --shadow-lg: 0 24px 50px -28px rgba(19,33,26,0.45);
 
-  /* --- tipografía --- */
-  --font-display: 'Poppins', 'Segoe UI', system-ui, sans-serif;
-  --font-body: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --font-body: 'Inter Tight', 'Segoe UI', system-ui, sans-serif;
 
-  /* --- movimiento --- */
   --ease-lux: cubic-bezier(0.22, 1, 0.36, 1);
-
   color-scheme: light;
+}
+
+[data-theme="esmeralda"] {
+  /* Esmeralda & oro (home de CONtexto Ganadero) */
+  --fg-green-900: #0b2a1c;
+  --fg-green-800: #e7cf8c;
+  --fg-green-700: #d8b558;
+  --fg-green-600: #e7cf8c;
+  --fg-lime-500: #d8b558;
+  --fg-lime-400: #e7cf8c;
+  --fg-teal-600: #2f9c62;
+
+  --bg: #05100b;
+  --bg-muted: #081a12;
+  --bg-sunken: #0d2418;
+  --surface: rgba(255,255,255,0.04);
+  --surface-solid: #0a1c13;
+  --surface-2: rgba(201,162,39,0.07);
+  --border: rgba(201,162,39,0.22);
+  --border-strong: rgba(201,162,39,0.5);
+
+  --text: #f4f2e9;
+  --text-muted: #9fb7a8;
+  --text-faint: #7f9a8b;
+  --text-on-brand: #f4f2e9;
+  --on-accent: #08140d;
+
+  --link: #e7cf8c;
+  --focus-ring: #d8b558;
+
+  --radius-sm: 0.25rem;
+  --radius-md: 0.3rem;
+  --radius-lg: 0.35rem;
+
+  --shadow-sm: 0 1px 0 rgba(216,181,88,0.12);
+  --shadow-md: 0 30px 70px -30px rgba(0,0,0,0.9), 0 0 0 1px rgba(216,181,88,0.35);
+  --shadow-lg: 0 30px 70px -30px rgba(0,0,0,0.9);
+
+  color-scheme: dark;
 }
 
 @theme inline {
@@ -71,6 +105,7 @@
   --color-bg-muted: var(--bg-muted);
   --color-bg-sunken: var(--bg-sunken);
   --color-surface: var(--surface);
+  --color-surface-solid: var(--surface-solid);
   --color-surface-2: var(--surface-2);
   --color-border: var(--border);
   --color-border-strong: var(--border-strong);
@@ -108,7 +143,9 @@ h1, h2, h3, h4, h5, h6 {
   text-wrap: balance;
 }
 
-a { color: var(--link); }
+@layer base {
+  a { color: var(--link); }
+}
 
 ::selection { background: var(--fg-lime-500); color: var(--fg-green-900); }
 

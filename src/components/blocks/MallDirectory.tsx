@@ -10,7 +10,7 @@ function Storefront({ local }: { local: Local }) {
   const open = local.status === "abierto";
   const content = (
     <div
-      className={`group relative h-full flex flex-col rounded-[var(--radius-md)] border bg-white overflow-hidden transition-all duration-500 [transition-timing-function:var(--ease-lux)] ${
+      className={`group relative h-full flex flex-col rounded-[var(--radius-md)] border bg-[var(--surface-solid)] overflow-hidden transition-all duration-500 [transition-timing-function:var(--ease-lux)] ${
         open
           ? "border-[var(--border)] hover:-translate-y-1.5 hover:shadow-[var(--shadow-md)] hover:border-[var(--fg-green-600)]"
           : "border-dashed border-[var(--border-strong)] bg-[var(--surface-2)]"
@@ -30,7 +30,7 @@ function Storefront({ local }: { local: Local }) {
           <span
             className={`w-11 h-11 rounded-[var(--radius-sm)] flex items-center justify-center transition-colors ${
               open
-                ? "bg-[var(--bg-muted)] text-[var(--fg-green-700)] group-hover:bg-[var(--fg-green-700)] group-hover:text-white"
+                ? "bg-[var(--bg-muted)] text-[var(--fg-green-700)] group-hover:bg-[var(--fg-green-700)] group-hover:text-[var(--on-accent)]"
                 : "bg-[var(--bg-sunken)] text-[var(--text-faint)]"
             }`}
           >

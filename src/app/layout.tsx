@@ -3,6 +3,7 @@ import "./globals.css";
 import { TopBar } from "@/components/layout/TopBar";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { ThemeScope } from "@/components/layout/ThemeScope";
 
 export const metadata: Metadata = {
   title: {
@@ -21,10 +22,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="es" className="h-full antialiased">
       <body className="min-h-full flex flex-col">
-        <TopBar />
-        <Header />
-        <main className="flex-1">{children}</main>
-        <Footer />
+        <ThemeScope>
+          <TopBar />
+          <Header />
+          <main className="flex-1">{children}</main>
+          <Footer />
+        </ThemeScope>
       </body>
     </html>
   );

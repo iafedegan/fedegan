@@ -29,7 +29,7 @@ export function EventsGrid() {
                 </div>
                 <Link
                   href={`/eventos/${e.slug}`}
-                  className="mt-auto inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--fg-green-700)] hover:text-[var(--fg-green-900)]"
+                  className="mt-auto inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--fg-green-700)] hover:text-[var(--text)]"
                 >
                   <CalendarPlus size={14} /> Agregar a mi calendario
                 </Link>

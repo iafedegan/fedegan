@@ -30,8 +30,8 @@ const colorTokens = [
   { name: "Verde 800", varName: "--fg-green-800" },
   { name: "Verde 700", varName: "--fg-green-700" },
   { name: "Verde 600", varName: "--fg-green-600" },
-  { name: "Lima 500", varName: "--fg-lime-500" },
-  { name: "Lima 400", varName: "--fg-lime-400" },
+  { name: "Acento 500 (bronce/oro)", varName: "--fg-lime-500" },
+  { name: "Acento 400", varName: "--fg-lime-400" },
   { name: "Teal 600", varName: "--fg-teal-600" },
   { name: "Fondo mudo", varName: "--bg-muted" },
 ];
@@ -60,11 +60,11 @@ export default function ComponentesPage() {
           <SectionHeading eyebrow="Tokens" title="Tipografía" />
           <div className="flex flex-col gap-4 border border-[var(--border)] rounded-[var(--radius-lg)] p-6 bg-[var(--surface-2)]">
             <div>
-              <p className="text-xs text-[var(--text-faint)] font-mono mb-1">--font-display · Poppins</p>
+              <p className="text-xs text-[var(--text-faint)] font-mono mb-1">--font-display · Playfair Display</p>
               <p className="text-3xl font-extrabold text-[var(--text)]">Modernización del portal FEDEGÁN</p>
             </div>
             <div>
-              <p className="text-xs text-[var(--text-faint)] font-mono mb-1">--font-body · Inter</p>
+              <p className="text-xs text-[var(--text-faint)] font-mono mb-1">--font-body · Inter Tight</p>
               <p className="text-base text-[var(--text-muted)] max-w-xl leading-relaxed">
                 Cuerpo de texto para artículos, descripciones y contenido editorial. Optimizado para
                 lectura prolongada con line-height generoso.

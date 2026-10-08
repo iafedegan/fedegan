@@ -9,7 +9,7 @@ export function QuickAccessGrid() {
   return (
     <section className="-mt-8 relative z-10">
       <Container>
-        <div className="bg-white rounded-[var(--radius-lg)] border border-[var(--border)] shadow-[var(--shadow-md)] grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 divide-x divide-y sm:divide-y-0 divide-[var(--border)]">
+        <div className="bg-[var(--surface-solid)] rounded-[var(--radius-lg)] border border-[var(--border)] shadow-[var(--shadow-md)] grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 divide-x divide-y sm:divide-y-0 divide-[var(--border)]">
           {quickAccess.map((item) => {
             const Icon = iconMap[item.icon];
             return (
@@ -24,7 +24,7 @@ export function QuickAccessGrid() {
                     Próximamente
                   </Badge>
                 )}
-                <span className="w-10 h-10 rounded-[var(--radius-sm)] bg-[var(--bg-muted)] text-[var(--fg-green-700)] flex items-center justify-center group-hover:bg-[var(--fg-green-700)] group-hover:text-white transition-colors">
+                <span className="w-10 h-10 rounded-[var(--radius-sm)] bg-[var(--bg-muted)] text-[var(--fg-green-700)] flex items-center justify-center group-hover:bg-[var(--fg-green-700)] group-hover:text-[var(--on-accent)] transition-colors">
                   <Icon size={20} />
                 </span>
                 <span className="font-bold text-sm text-[var(--text)]">{item.label}</span>

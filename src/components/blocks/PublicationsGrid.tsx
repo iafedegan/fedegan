@@ -24,7 +24,7 @@ export function PublicationsGrid() {
                 <p className="text-sm text-[var(--text-muted)]">{p.dek}</p>
                 <Link
                   href={`/publicaciones/${p.slug}`}
-                  className="mt-auto inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--fg-green-700)] hover:text-[var(--fg-green-900)]"
+                  className="mt-auto inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--fg-green-700)] hover:text-[var(--text)]"
                 >
                   <Download size={14} /> Descargar
                 </Link>

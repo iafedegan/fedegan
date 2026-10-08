@@ -25,8 +25,8 @@ export function LayoutSwitchDemo() {
             onClick={() => setLayout(l.id)}
             className={`text-xs font-semibold px-3.5 py-2 rounded-[var(--radius-pill)] border transition-colors ${
               layout === l.id
-                ? "bg-[var(--fg-green-700)] text-white border-[var(--fg-green-700)]"
-                : "bg-white text-[var(--text-muted)] border-[var(--border-strong)] hover:border-[var(--fg-green-600)]"
+                ? "bg-[var(--fg-green-700)] text-[var(--on-accent)] border-[var(--fg-green-700)]"
+                : "bg-[var(--surface-solid)] text-[var(--text-muted)] border-[var(--border-strong)] hover:border-[var(--fg-green-600)]"
             }`}
           >
             {l.label}
