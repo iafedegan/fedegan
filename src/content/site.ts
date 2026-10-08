@@ -252,34 +252,3 @@ export const pisos: Piso[] = [
     ],
   },
 ];
-
-// Temas del portal (cada uno es una tarjeta 3D en el vestíbulo de la home).
-export type Tema = {
-  slug: string;
-  nombre: string;
-  kicker: string;
-  descripcion: string;
-  icon: string;
-  href: string;
-  external?: boolean;
-  proximamente?: boolean;
-};
-
-export const temas: Tema[] = [
-  { slug: "nosotros", nombre: "Nosotros", kicker: "El gremio", descripcion: "Misión, visión, valores y buen gobierno de FEDEGÁN.", icon: "building", href: "/quienes-somos" },
-  { slug: "programas", nombre: "Programas", kicker: "Proyectos", descripcion: "Sostenibilidad, sanidad animal y fomento al consumo.", icon: "leaf", href: "/programas" },
-  { slug: "normatividad", nombre: "Normatividad", kicker: "Marco legal", descripcion: "Leyes, decretos y resoluciones del sector ganadero.", icon: "scale", href: "/normatividad" },
-  { slug: "publicaciones", nombre: "Publicaciones", kicker: "Biblioteca", descripcion: "Informes, manuales, boletines y documentos técnicos.", icon: "book", href: "/publicaciones" },
-  { slug: "cifras-del-sector", nombre: "Cifras del sector", kicker: "Datos", descripcion: "Inventario bovino y bufalino, precios y estadísticas.", icon: "database", href: "/seccion/cifras-del-sector" },
-  { slug: "fng", nombre: "FNG", kicker: "Fondo Nacional del Ganado", descripcion: "Recaudo de la cuota de fomento y su inversión en el sector.", icon: "landmark", href: "/seccion/fng" },
-  { slug: "fep", nombre: "FEP", kicker: "Fondo de Estabilización", descripcion: "Fondo de Estabilización de Precios: mecanismo y resultados.", icon: "bar-chart", href: "/seccion/fep" },
-  { slug: "sig", nombre: "Sistema Integrado de Gestión", kicker: "Calidad", descripcion: "Políticas, procesos y certificaciones de la entidad.", icon: "file-check", href: "/seccion/sistema-integrado-de-gestion" },
-  { slug: "seguridad-ganadera", nombre: "Seguridad ganadera", kicker: "Protección", descripcion: "Alertas, prevención del abigeato y seguridad rural.", icon: "shield", href: "/seccion/seguridad-ganadera" },
-  { slug: "sala-de-prensa", nombre: "Sala de prensa", kicker: "Noticias y cartas", descripcion: "Noticias, comunicados y cartas de Presidencia.", icon: "newspaper", href: "/noticias" },
-  { slug: "consulta-ruv", nombre: "Consulta RUV", kicker: "Trámite", descripcion: "Verifique su Registro Único de Vacunación.", icon: "search", href: "/servicios" },
-  { slug: "pqrsd", nombre: "PQRSD", kicker: "Atención", descripcion: "Peticiones, quejas, reclamos, sugerencias y denuncias.", icon: "message", href: "/contacto" },
-  { slug: "escuela-virtual", nombre: "Escuela Virtual", kicker: "Formación", descripcion: "Cursos para productores, técnicos y profesionales.", icon: "graduation-cap", href: "/escuela-virtual" },
-  { slug: "tvgan", nombre: "TVGAN", kicker: "Medios", descripcion: "El canal del ganadero: programas y transmisiones.", icon: "tv", href: "/tvgan" },
-  { slug: "contexto-ganadero", nombre: "Contexto Ganadero", kicker: "Periodismo", descripcion: "Información estratégica y periodismo del sector.", icon: "newspaper", href: "https://contexto-olive.vercel.app/", external: true },
-  { slug: "mi-fedegan", nombre: "Mi FEDEGÁN", kicker: "Membresía", descripcion: "Su espacio personalizado, trámites y beneficios.", icon: "user-circle", href: "/mi-fedegan", proximamente: true },
-];

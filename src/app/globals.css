@@ -162,18 +162,3 @@ h1, h2, h3, h4, h5, h6 {
     scroll-behavior: auto !important;
   }
 }
-
-@keyframes tilt-spin {
-  to { transform: translate(-50%, -50%) rotate(360deg); }
-}
-@keyframes tilt-float {
-  0%, 100% { translate: 0 0; }
-  50% { translate: 0 -5px; }
-}
-@keyframes scroll-cue {
-  0%, 100% { transform: translateY(0); opacity: 0.4; }
-  50% { transform: translateY(8px); opacity: 1; }
-}
-.tilt-spin { animation: tilt-spin 7s linear infinite; }
-.tilt-float { animation: tilt-float 4s ease-in-out infinite; }
-.scroll-cue { animation: scroll-cue 1.8s ease-in-out infinite; }
