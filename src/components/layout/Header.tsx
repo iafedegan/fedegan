@@ -63,7 +63,7 @@ export function Header() {
         className="hidden md:block border-t border-[var(--border)] bg-[var(--bg-muted)]"
         aria-label="Navegación principal"
       >
-        <Container className="flex items-center gap-6 overflow-x-auto py-2.5 text-sm font-semibold text-[var(--text)]">
+        <Container className="flex items-center gap-6 overflow-x-auto py-2.5 [&>:first-child]:ml-auto [&>:last-child]:mr-auto text-sm font-semibold text-[var(--text)]">
           {mainNav.map((item) => (
             <Link
               key={item.href}
