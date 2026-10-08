@@ -11,6 +11,13 @@ import {
   Newspaper,
   Database,
   Store,
+  ShieldCheck,
+  FileText,
+  Landmark,
+  Search,
+  MessageSquareWarning,
+  Leaf,
+  BookOpen,
   type LucideIcon,
 } from "lucide-react";
 
@@ -27,4 +34,11 @@ export const iconMap: Record<string, LucideIcon> = {
   newspaper: Newspaper,
   database: Database,
   store: Store,
+  shield: ShieldCheck,
+  file: FileText,
+  landmark: Landmark,
+  search: Search,
+  message: MessageSquareWarning,
+  leaf: Leaf,
+  book: BookOpen,
 };
