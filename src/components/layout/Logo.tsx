@@ -22,7 +22,7 @@ export function Logo({
         <span className="font-[var(--font-display)] font-extrabold text-xl tracking-tight text-[var(--fg-green-800)]">
           FEDEGÁN <span className="text-[var(--fg-lime-500)]">FNG</span>
         </span>
-        <span className="whitespace-nowrap text-[0.6rem] font-semibold uppercase tracking-[0.12em] text-[var(--text-faint)]">
+        <span className="hidden whitespace-nowrap text-[0.6rem] sm:block font-semibold uppercase tracking-[0.12em] text-[var(--text-faint)]">
           Federación Colombiana de Ganaderos
         </span>
       </span>

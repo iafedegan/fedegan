@@ -32,6 +32,12 @@ export function Header() {
   }, []);
 
   useEffect(() => {
+    const onMenu = () => setOpenAt((cur) => (cur === pathname ? null : pathname));
+    window.addEventListener("fedegan:menu", onMenu);
+    return () => window.removeEventListener("fedegan:menu", onMenu);
+  }, [pathname]);
+
+  useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setOpenAt(null);
@@ -93,13 +99,21 @@ export function Header() {
 
         <LoginMenu />
 
+        <Link
+          href={user ? "/mi-fedegan" : "/ingresar"}
+          aria-label={user ? "Mi FEDEGÁN" : "Iniciar sesión"}
+          className="ml-auto flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-[var(--border-strong)] text-[var(--fg-lime-400)] transition-colors active:bg-[var(--bg-muted)] md:hidden"
+        >
+          <UserCircle2 size={22} />
+        </Link>
+
         <button
           type="button"
           aria-expanded={open}
           aria-controls="menu-movil"
           aria-label={open ? "Cerrar menú" : "Abrir menú"}
           onClick={() => setOpenAt(open ? null : pathname)}
-          className="ml-auto flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-[var(--border-strong)] text-[var(--text)] transition-colors hover:bg-[var(--bg-muted)] md:ml-0 lg:hidden"
+          className="ml-0 hidden h-11 w-11 shrink-0 items-center justify-center rounded-full border border-[var(--border-strong)] text-[var(--text)] transition-colors hover:bg-[var(--bg-muted)] md:flex lg:hidden"
         >
           {open ? <X size={22} /> : <Menu size={22} />}
         </button>
@@ -130,7 +144,7 @@ export function Header() {
           id="menu-movil"
           className="menu-sheet absolute inset-x-0 top-full max-h-[calc(100dvh-4.4rem)] overflow-y-auto overscroll-contain border-t border-[var(--border)] bg-[var(--bg)] lg:hidden"
         >
-          <Container className="flex flex-col gap-7 py-6">
+          <Container className="flex flex-col gap-7 pb-32 pt-6">
             <form
               role="search"
               onSubmit={submitSearch}

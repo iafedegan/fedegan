@@ -1,12 +1,20 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Providers } from "@/components/layout/Providers";
 import { ChromeGate } from "@/components/layout/ChromeGate";
+import { MobileTabBar } from "@/components/layout/MobileTabBar";
 import { BackToTop } from "@/components/layout/BackToTop";
 
+export const viewport: Viewport = {
+  themeColor: "#05100b",
+  colorScheme: "dark",
+  viewportFit: "cover",
+};
+
 export const metadata: Metadata = {
+  appleWebApp: { capable: true, title: "FEDEGÁN", statusBarStyle: "black-translucent" },
   title: {
     default: "FEDEGÁN–FNG · Federación Colombiana de Ganaderos",
     template: "%s · FEDEGÁN–FNG",
@@ -22,7 +30,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="es" data-theme="esmeralda" className="h-full antialiased">
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-full flex flex-col pb-[calc(5.5rem+env(safe-area-inset-bottom))] md:pb-0">
         <Providers>
           <a
             href="#contenido"
@@ -36,6 +44,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             <Footer />
           </ChromeGate>
           <BackToTop />
+          <MobileTabBar />
         </Providers>
       </body>
     </html>
