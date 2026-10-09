@@ -11,19 +11,15 @@ export function SectionHeading({
   action?: { label: string; href: string };
 }) {
   return (
-    <div className="flex flex-wrap items-end justify-between gap-4 mb-6">
+    <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
       <div>
-        {eyebrow && (
-          <span className="text-[0.72rem] font-bold uppercase tracking-[0.16em] text-[var(--fg-green-600)]">
-            {eyebrow}
-          </span>
-        )}
-        <h2 className="text-2xl sm:text-[1.7rem] font-bold text-[var(--text)] mt-1">{title}</h2>
+        {eyebrow && <span className="eyebrow">{eyebrow}</span>}
+        <h2 className="mt-3 font-[var(--font-display)] text-3xl font-bold leading-tight text-[var(--text)] sm:text-4xl">{title}</h2>
       </div>
       {action && (
         <Link
           href={action.href}
-          className="text-sm font-semibold text-[var(--fg-green-700)] hover:text-[var(--text)] inline-flex items-center gap-1 group"
+          className="group inline-flex items-center gap-2 rounded-full border border-[var(--border-strong)] px-5 py-2.5 text-sm font-semibold text-[var(--fg-lime-400)] transition-colors hover:bg-[var(--fg-lime-500)] hover:text-[var(--on-accent)]"
         >
           {action.label}
           <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
@@ -34,9 +30,5 @@ export function SectionHeading({
 }
 
 export function Eyebrow({ children }: { children: ReactNode }) {
-  return (
-    <span className="text-[0.72rem] font-bold uppercase tracking-[0.16em] text-[var(--fg-green-600)]">
-      {children}
-    </span>
-  );
+  return <span className="eyebrow">{children}</span>;
 }

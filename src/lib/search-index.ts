@@ -1,4 +1,4 @@
-import { featuredNews, publications, events } from "@/content/site";
+import { publications, events } from "@/content/site";
 
 export type SearchResult = {
   title: string;
@@ -16,19 +16,17 @@ const staticPages: SearchResult[] = [
   { title: "Contacto", excerpt: "Canales de atención y formulario de contacto.", href: "/contacto", type: "Página" },
 ];
 
-export function buildSearchIndex(): SearchResult[] {
+export function buildSearchIndex(news: { slug: string; title: string; dek: string }[]): SearchResult[] {
   return [
-    ...featuredNews.map((n) => ({ title: n.title, excerpt: n.dek, href: `/noticias/${n.slug}`, type: "Noticia" as const })),
+    ...news.map((n) => ({ title: n.title, excerpt: n.dek, href: `/noticias/${n.slug}`, type: "Noticia" as const })),
     ...publications.map((p) => ({ title: p.title, excerpt: p.dek, href: `/publicaciones/${p.slug}`, type: "Publicación" as const })),
     ...events.map((e) => ({ title: e.title, excerpt: `${e.kind} · ${e.place}`, href: `/eventos/${e.slug}`, type: "Evento" as const })),
     ...staticPages,
   ];
 }
 
-export function search(query: string): SearchResult[] {
+export function search(index: SearchResult[], query: string): SearchResult[] {
   const q = query.trim().toLowerCase();
   if (!q) return [];
-  return buildSearchIndex().filter(
-    (r) => r.title.toLowerCase().includes(q) || r.excerpt.toLowerCase().includes(q)
-  );
+  return index.filter((r) => r.title.toLowerCase().includes(q) || r.excerpt.toLowerCase().includes(q));
 }

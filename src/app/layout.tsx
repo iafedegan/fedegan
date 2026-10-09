@@ -3,7 +3,6 @@ import "./globals.css";
 import { TopBar } from "@/components/layout/TopBar";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { ThemeScope } from "@/components/layout/ThemeScope";
 import { Providers } from "@/components/layout/Providers";
 
 export const metadata: Metadata = {
@@ -21,15 +20,13 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="es" className="h-full antialiased">
+    <html lang="es" data-theme="esmeralda" className="h-full antialiased">
       <body className="min-h-full flex flex-col">
         <Providers>
-        <ThemeScope>
           <TopBar />
           <Header />
           <main className="flex-1">{children}</main>
           <Footer />
-        </ThemeScope>
         </Providers>
       </body>
     </html>

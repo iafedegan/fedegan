@@ -27,7 +27,7 @@ export function ContactForm() {
           name="message"
           rows={5}
           placeholder="Escriba su mensaje aquí"
-          className="w-full rounded-[var(--radius-sm)] border border-[var(--border-strong)] bg-[var(--surface-solid)] px-3.5 py-2.5 text-sm outline-none focus:shadow-[0_0_0_4px_rgba(28,122,66,0.15)] focus:border-[var(--fg-green-600)]"
+          className="w-full rounded-[var(--radius-sm)] border border-[var(--border-strong)] bg-[var(--surface)] px-3.5 py-2.5 text-sm text-[var(--text)] placeholder:text-[var(--text-faint)] outline-none focus:shadow-[0_0_0_4px_rgba(216,181,88,0.18)] focus:border-[var(--fg-lime-500)]"
         />
       </label>
       <Button type="submit" className="self-start">Enviar mensaje</Button>

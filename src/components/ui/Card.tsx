@@ -1,23 +1,19 @@
-import { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 
 export function Card({
   children,
   className = "",
   hover = true,
+  accent,
 }: {
   children: ReactNode;
   className?: string;
   hover?: boolean;
+  accent?: string;
 }) {
   return (
-    <div
-      className={`rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-sm)] overflow-hidden flex flex-col ${
-        hover
-          ? "transition-all duration-500 [transition-timing-function:var(--ease-lux)] hover:-translate-y-1.5 hover:shadow-[var(--shadow-md)] hover:border-[var(--fg-green-600)]"
-          : ""
-      } ${className}`}
-    >
-      {children}
+    <div className={`gl ${hover ? "gl-hover" : ""}`} style={accent ? ({ ["--acc-rgb" as string]: accent } as CSSProperties) : undefined}>
+      <div className={`gl-face ${className}`}>{children}</div>
     </div>
   );
 }
@@ -29,5 +25,5 @@ export function CardBody({
   children: ReactNode;
   className?: string;
 }) {
-  return <div className={`p-5 flex flex-col gap-2.5 flex-1 ${className}`}>{children}</div>;
+  return <div className={`flex flex-1 flex-col gap-2.5 p-5 ${className}`}>{children}</div>;
 }

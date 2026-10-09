@@ -6,8 +6,8 @@ import type { Noticia } from "@/lib/contexto";
 export function NoticiaCard({ n }: { n: Noticia }) {
   return (
     <Link href={`/noticias/${n.slug}`} className="block h-full">
-      <Card className="h-full">
-        <div className="aspect-[16/10] relative bg-[var(--fg-green-900)] overflow-hidden">
+      <Card>
+        <div className="relative aspect-[16/10] overflow-hidden bg-[var(--fg-green-900)]">
           {n.image ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={n.image} alt={n.imageAlt ?? ""} loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
@@ -20,14 +20,16 @@ export function NoticiaCard({ n }: { n: Noticia }) {
               />
             </>
           )}
-          <Badge tone="lime" className="absolute left-3 top-3">
-            {n.section}
-          </Badge>
+          <div className="absolute left-3 top-3 flex flex-wrap gap-1.5">
+            <Badge tone="lime">{n.section}</Badge>
+            {n.ultimaHora && <Badge tone="alert">Última hora</Badge>}
+            {n.enVivo && <Badge tone="alert">En vivo</Badge>}
+          </div>
         </div>
         <CardBody>
-          <span className="text-xs text-[var(--text-faint)] font-semibold">{n.date}</span>
-          <h3 className="font-bold text-[var(--text)] leading-snug">{n.title}</h3>
-          <p className="text-sm text-[var(--text-muted)] leading-relaxed line-clamp-3">{n.dek}</p>
+          <span className="text-xs font-semibold text-[var(--text-faint)]">{n.date}</span>
+          <h3 className="font-bold leading-snug text-[var(--text)]">{n.title}</h3>
+          <p className="line-clamp-3 text-sm leading-relaxed text-[var(--text-muted)]">{n.dek}</p>
         </CardBody>
       </Card>
     </Link>

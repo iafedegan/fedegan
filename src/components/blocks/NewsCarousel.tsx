@@ -37,7 +37,7 @@ export function NewsCarousel({ items }: { items: Noticia[] }) {
     <section
       ref={rootRef}
       aria-roledescription="carrusel"
-      aria-label="Notas de interés"
+      aria-label="Noticias de portada"
       className="relative overflow-hidden bg-[var(--fg-green-900)] pb-20 pt-8 sm:pb-24 sm:pt-12"
       onPointerEnter={(e) => e.pointerType === "mouse" && setHover(true)}
       onPointerLeave={() => setHover(false)}
@@ -65,7 +65,7 @@ export function NewsCarousel({ items }: { items: Noticia[] }) {
         <div className="mb-5 flex items-center justify-between gap-4">
           <span className="inline-flex items-center gap-2 text-[0.72rem] font-bold uppercase tracking-[0.2em] text-[var(--fg-lime-400)]">
             <span className="h-px w-6 bg-[var(--fg-lime-400)]" />
-            Notas de interés
+            Noticias de portada
           </span>
           <Link href="/noticias" className="text-sm font-semibold text-[var(--fg-lime-400)] hover:text-white">
             Ver todas →
@@ -105,7 +105,7 @@ export function NewsCarousel({ items }: { items: Noticia[] }) {
                       }}
                     />
                   )}
-                  <div className="absolute bottom-4 left-4 z-10 flex items-center gap-2 rounded-full bg-black/45 px-3 py-2 backdrop-blur">
+                  <div className={`absolute bottom-4 left-4 z-10 items-center gap-2 rounded-full bg-black/45 px-3 py-2 backdrop-blur ${count > 1 ? "flex" : "hidden"}`}>
                     {items.map((_, d) => (
                       <button
                         key={d}
@@ -135,6 +135,8 @@ export function NewsCarousel({ items }: { items: Noticia[] }) {
                 <div className="flex flex-col gap-4 text-white">
                   <div className="flex items-center gap-3">
                     <Badge tone="lime">{n.section}</Badge>
+                    {n.ultimaHora && <Badge tone="alert">Última hora</Badge>}
+                    {n.enVivo && <Badge tone="alert">En vivo</Badge>}
                     <span className="text-xs font-semibold text-white/60">{n.date}</span>
                   </div>
                   <h2 className="line-clamp-4 font-[var(--font-display)] text-2xl font-bold leading-[1.15] text-white sm:text-3xl lg:text-[2.1rem]">
@@ -148,7 +150,7 @@ export function NewsCarousel({ items }: { items: Noticia[] }) {
                     >
                       Ver más <ArrowRight size={16} />
                     </Link>
-                    <div className="ml-auto flex gap-2">
+                    <div className={`ml-auto gap-2 ${count > 1 ? "flex" : "hidden"}`}>
                       <button
                         type="button"
                         aria-label={userPaused ? "Reanudar el carrusel" : "Pausar el carrusel"}

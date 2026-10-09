@@ -230,3 +230,17 @@ export const pisos: Piso[] = [
     ],
   },
 ];
+
+
+// Portadas (foto + enfoque + color) por tipo de publicación y color por tipo de evento.
+export const publicationCovers: Record<string, { image: string; pos: string; accent: string }> = {
+  Informe: { image: "/locales/publicaciones.jpg", pos: "65% 55%", accent: "230,160,108" },
+  Documento: { image: "/locales/programas.jpg", pos: "70% 50%", accent: "92,205,134" },
+  Boletín: { image: "/locales/cifras.jpg", pos: "25% 50%", accent: "112,214,196" },
+};
+
+export const eventAccents: Record<string, string> = {
+  Webinar: "216,181,88",
+  Seminario: "92,205,134",
+  Foro: "230,160,108",
+};

@@ -1,16 +1,17 @@
 import type { Metadata } from "next";
-import { GraduationCap } from "lucide-react";
+import { Clock, GraduationCap } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { PageHeader } from "@/components/ui/PageHeader";
+import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
-import { Card, CardBody } from "@/components/ui/Card";
+import { Card } from "@/components/ui/Card";
 
 export const metadata: Metadata = { title: "Escuela Virtual" };
 
 const courses = [
-  { title: "Manejo sanitario del hato bovino", level: "Básico", duration: "6 horas" },
-  { title: "Sistemas silvopastoriles aplicados", level: "Intermedio", duration: "10 horas" },
-  { title: "Gestión financiera de la finca ganadera", level: "Intermedio", duration: "8 horas" },
+  { accent: "92,205,134", title: "Manejo sanitario del hato bovino", level: "Básico", duration: "6 horas" },
+  { accent: "216,181,88", title: "Sistemas silvopastoriles aplicados", level: "Intermedio", duration: "10 horas" },
+  { accent: "230,160,108", title: "Gestión financiera de la finca ganadera", level: "Intermedio", duration: "8 horas" },
 ];
 
 export default function EscuelaVirtualPage() {
@@ -20,31 +21,38 @@ export default function EscuelaVirtualPage() {
         eyebrow="Formación"
         title="Escuela Virtual FEDEGÁN"
         description="Capacitación técnica y gerencial para productores, técnicos y profesionales del sector ganadero colombiano."
+        image="/locales/sig.jpg"
+        imagePos="45% 50%"
         breadcrumbs={[{ label: "Escuela Virtual" }]}
       />
-      <Container className="py-12 flex flex-col gap-8">
-        <div className="rounded-[var(--radius-lg)] bg-[var(--fg-green-900)] text-white p-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
-          <div className="flex items-center gap-4">
-            <span className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center">
-              <GraduationCap size={24} className="text-[var(--fg-lime-400)]" />
-            </span>
-            <div>
-              <h2 className="font-bold text-lg">Acceda a la plataforma de formación</h2>
-              <p className="text-sm text-white/70">Este acceso lo dirige a la plataforma actual de la Escuela Virtual FEDEGÁN.</p>
+      <Container className="flex flex-col gap-14 py-14 sm:py-20">
+        <Card hover={false}>
+          <div className="flex flex-col items-start justify-between gap-6 p-7 sm:flex-row sm:items-center sm:p-9">
+            <div className="flex items-center gap-5">
+              <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-[var(--radius-md)] border border-[rgba(var(--acc-rgb),0.5)] bg-[rgba(var(--acc-rgb),0.12)] text-[rgb(var(--acc-rgb))]">
+                <GraduationCap size={26} strokeWidth={1.6} />
+              </span>
+              <div>
+                <h2 className="font-[var(--font-display)] text-xl font-bold text-[var(--text)]">Acceda a la plataforma de formación</h2>
+                <p className="mt-1 text-sm text-[var(--text-muted)]">Este acceso lo dirige a la plataforma actual de la Escuela Virtual FEDEGÁN.</p>
+              </div>
             </div>
+            <Button>Ir a la plataforma →</Button>
           </div>
-          <Button variant="lime">Ir a la plataforma →</Button>
-        </div>
+        </Card>
 
         <div>
-          <h2 className="text-xl font-bold text-[var(--text)] mb-4">Cursos destacados</h2>
-          <div className="grid sm:grid-cols-3 gap-5">
+          <SectionHeading eyebrow="Catálogo" title="Cursos destacados" />
+          <div className="grid gap-6 sm:grid-cols-3">
             {courses.map((c) => (
-              <Card key={c.title} hover={false}>
-                <CardBody>
-                  <span className="text-xs font-bold uppercase tracking-wide text-[var(--fg-green-600)]">{c.level} · {c.duration}</span>
-                  <h3 className="font-bold text-[var(--text)]">{c.title}</h3>
-                </CardBody>
+              <Card key={c.title} accent={c.accent}>
+                <div className="flex flex-1 flex-col gap-3 p-6">
+                  <span className="text-[0.66rem] font-bold uppercase tracking-[0.18em] text-[rgb(var(--acc-rgb))]">{c.level}</span>
+                  <h3 className="font-[var(--font-display)] text-xl font-bold leading-snug text-[var(--text)]">{c.title}</h3>
+                  <span className="mt-auto inline-flex items-center gap-1.5 text-sm text-[var(--text-muted)]">
+                    <Clock size={14} /> {c.duration}
+                  </span>
+                </div>
               </Card>
             ))}
           </div>

@@ -7,6 +7,7 @@ import { appsForRoles } from "@/lib/access";
 import { Container } from "@/components/ui/Container";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Badge } from "@/components/ui/Badge";
+import { Card } from "@/components/ui/Card";
 import { SignOutButton } from "@/components/layout/SignOutButton";
 
 export const metadata: Metadata = { title: "Mi FEDEGÁN" };
@@ -28,7 +29,7 @@ export default async function MiFedeganPage() {
         description="Estas son las aplicaciones habilitadas para su perfil."
         breadcrumbs={[{ label: "Mi FEDEGÁN" }]}
       />
-      <Container className="flex flex-col gap-8 py-12">
+      <Container className="flex flex-col gap-8 py-14 sm:py-20">
         <div className="flex flex-wrap items-center gap-2">
           {demoEnabled && !entraConfigured && <Badge tone="lime">Sesión de demostración</Badge>}
           <span className="text-sm text-[var(--text-muted)]">Su perfil:</span>
@@ -37,7 +38,7 @@ export default async function MiFedeganPage() {
         </div>
 
         {apps.length === 0 ? (
-          <p className="rounded-[var(--radius-lg)] border border-dashed border-[var(--border-strong)] p-8 text-[var(--text-muted)]">
+          <p className="rounded-[1.25rem] border border-dashed border-[var(--border-strong)] bg-[var(--surface-2)] p-8 text-[var(--text-muted)]">
             Su cuenta todavía no tiene aplicaciones habilitadas. Solicite acceso al área de Tecnología.
           </p>
         ) : (
@@ -45,20 +46,19 @@ export default async function MiFedeganPage() {
             {apps.map((a) => {
               const Icon = icons[a.icon];
               return (
-                <Link
-                  key={a.id}
-                  href={a.href}
-                  target={a.external ? "_blank" : undefined}
-                  className="group flex flex-col gap-3 rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-solid)] p-6 shadow-[var(--shadow-sm)] transition-all duration-300 hover:-translate-y-1 hover:border-[var(--fg-green-600)] hover:shadow-[var(--shadow-md)]"
-                >
-                  <span className="flex h-11 w-11 items-center justify-center rounded-[var(--radius-sm)] bg-[var(--fg-green-700)] text-[var(--on-accent)]">
-                    <Icon size={20} />
-                  </span>
-                  <h2 className="flex items-center gap-1.5 font-bold text-[var(--text)]">
-                    {a.nombre}
-                    <ArrowUpRight size={15} className="text-[var(--text-faint)] transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-                  </h2>
-                  <p className="text-sm leading-relaxed text-[var(--text-muted)]">{a.descripcion}</p>
+                <Link key={a.id} href={a.href} target={a.external ? "_blank" : undefined} className="group block h-full">
+                  <Card>
+                    <div className="flex flex-1 flex-col gap-3 p-6">
+                      <span className="flex h-12 w-12 items-center justify-center rounded-[var(--radius-md)] border border-[rgba(var(--acc-rgb),0.5)] bg-[rgba(var(--acc-rgb),0.12)] text-[rgb(var(--acc-rgb))]">
+                        <Icon size={22} strokeWidth={1.6} />
+                      </span>
+                      <h2 className="flex items-center gap-1.5 font-[var(--font-display)] text-lg font-bold text-[var(--text)]">
+                        {a.nombre}
+                        <ArrowUpRight size={15} className="text-[var(--text-faint)] transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                      </h2>
+                      <p className="text-sm leading-relaxed text-[var(--text-muted)]">{a.descripcion}</p>
+                    </div>
+                  </Card>
                 </Link>
               );
             })}

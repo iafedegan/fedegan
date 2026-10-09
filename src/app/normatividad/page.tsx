@@ -1,16 +1,17 @@
 import type { Metadata } from "next";
-import { FileText, ExternalLink } from "lucide-react";
+import { ArrowUpRight, FileText } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Badge } from "@/components/ui/Badge";
+import { Card } from "@/components/ui/Card";
 
 export const metadata: Metadata = { title: "Normatividad" };
 
 const rules = [
-  { tipo: "Ley", ref: "Ley 395 de 1997", title: "Erradicación de la fiebre aftosa en todo el territorio colombiano", fecha: "1997" },
-  { tipo: "Ley", ref: "Ley 89 de 1993", title: "Conformación de la Junta Directiva del Fondo Nacional del Ganado", fecha: "1993" },
-  { tipo: "Resolución", ref: "Res. ICA 3651", title: "Requisitos sanitarios para la movilización de bovinos y bufalinos", fecha: "2014" },
-  { tipo: "Decreto", ref: "Decreto 1071", title: "Reglamentación del sector agropecuario, pesquero y de desarrollo rural", fecha: "2015" },
+  { tipo: "Ley", accent: "216,181,88", ref: "Ley 395 de 1997", title: "Erradicación de la fiebre aftosa en todo el territorio colombiano", fecha: "1997" },
+  { tipo: "Ley", accent: "216,181,88", ref: "Ley 89 de 1993", title: "Conformación de la Junta Directiva del Fondo Nacional del Ganado", fecha: "1993" },
+  { tipo: "Resolución", accent: "230,160,108", ref: "Res. ICA 3651", title: "Requisitos sanitarios para la movilización de bovinos y bufalinos", fecha: "2014" },
+  { tipo: "Decreto", accent: "92,205,134", ref: "Decreto 1071", title: "Reglamentación del sector agropecuario, pesquero y de desarrollo rural", fecha: "2015" },
 ];
 
 export default function NormatividadPage() {
@@ -20,30 +21,31 @@ export default function NormatividadPage() {
         eyebrow="Marco legal"
         title="Normatividad"
         description="Consulte las leyes, decretos y resoluciones que rigen la actividad ganadera y la gestión del Fondo Nacional del Ganado."
+        image="/locales/normatividad.jpg"
+        imagePos="50% 40%"
         breadcrumbs={[{ label: "Normatividad" }]}
       />
-      <Container className="py-12">
-        <div className="flex flex-col divide-y divide-[var(--border)] border border-[var(--border)] rounded-[var(--radius-lg)] overflow-hidden bg-[var(--surface-solid)]">
-          {rules.map((r) => (
-            <a
-              key={r.ref}
-              href="#"
-              className="flex items-center gap-4 p-5 hover:bg-[var(--bg-muted)] transition-colors group"
-            >
-              <span className="w-10 h-10 shrink-0 rounded-[var(--radius-sm)] bg-[var(--bg-muted)] text-[var(--fg-green-700)] flex items-center justify-center">
-                <FileText size={18} />
-              </span>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-1">
-                  <Badge tone="neutral">{r.tipo}</Badge>
-                  <span className="text-xs text-[var(--text-faint)]">{r.fecha}</span>
+      <Container className="flex flex-col gap-4 py-14 sm:py-20">
+        {rules.map((r) => (
+          <a key={r.ref} href="#" className="group block">
+            <Card accent={r.accent}>
+              <div className="flex items-center gap-5 p-5 sm:p-6">
+                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[var(--radius-md)] border border-[rgba(var(--acc-rgb),0.5)] bg-[rgba(var(--acc-rgb),0.12)] text-[rgb(var(--acc-rgb))]">
+                  <FileText size={20} strokeWidth={1.6} />
+                </span>
+                <div className="min-w-0 flex-1">
+                  <div className="mb-1.5 flex items-center gap-2">
+                    <Badge tone="neutral">{r.tipo}</Badge>
+                    <span className="text-xs font-semibold text-[var(--text-faint)]">{r.fecha}</span>
+                  </div>
+                  <p className="font-[var(--font-display)] text-lg font-bold leading-snug text-[var(--text)]">{r.ref}</p>
+                  <p className="mt-0.5 text-sm text-[var(--text-muted)]">{r.title}</p>
                 </div>
-                <p className="font-semibold text-[var(--text)] truncate">{r.ref} — {r.title}</p>
+                <ArrowUpRight size={20} className="shrink-0 text-[var(--text-faint)] transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-[rgb(var(--acc-rgb))]" />
               </div>
-              <ExternalLink size={16} className="text-[var(--text-faint)] group-hover:text-[var(--fg-green-700)] shrink-0" />
-            </a>
-          ))}
-        </div>
+            </Card>
+          </a>
+        ))}
       </Container>
     </>
   );

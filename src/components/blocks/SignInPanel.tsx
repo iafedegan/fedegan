@@ -4,12 +4,12 @@ import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { Building2, Sprout } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
+import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 
-const card =
-  "flex flex-col gap-4 rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-solid)] p-7 shadow-[var(--shadow-sm)]";
+const card = "flex flex-col gap-4 p-7 sm:p-8";
 const iconBox =
-  "flex h-12 w-12 items-center justify-center rounded-[var(--radius-sm)] bg-[var(--fg-green-700)] text-[var(--on-accent)]";
+  "flex h-12 w-12 items-center justify-center rounded-[var(--radius-md)] border border-[rgba(var(--acc-rgb),0.5)] bg-[rgba(var(--acc-rgb),0.12)] text-[rgb(var(--acc-rgb))]";
 
 export function SignInPanel({ entra, demo }: { entra: boolean; demo: boolean }) {
   const [busy, setBusy] = useState(false);
@@ -22,7 +22,7 @@ export function SignInPanel({ entra, demo }: { entra: boolean; demo: boolean }) 
 
   return (
     <div className="grid gap-6 md:grid-cols-2">
-      <section id="ganaderos" className={card}>
+      <Card hover={false} accent="92,205,134"><section id="ganaderos" className={card}>
         <span className={iconBox}>
           <Sprout size={22} />
         </span>
@@ -36,9 +36,9 @@ export function SignInPanel({ entra, demo }: { entra: boolean; demo: boolean }) 
           <Button disabled>Ingresar</Button>
           <Button variant="secondary" disabled>Crear cuenta</Button>
         </div>
-      </section>
+      </section></Card>
 
-      <section id="funcionarios" className={card}>
+      <Card hover={false}><section id="funcionarios" className={card}>
         <span className={iconBox}>
           <Building2 size={22} />
         </span>
@@ -69,7 +69,7 @@ export function SignInPanel({ entra, demo }: { entra: boolean; demo: boolean }) 
             </>
           )}
         </div>
-      </section>
+      </section></Card>
 
     </div>
   );

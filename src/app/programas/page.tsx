@@ -1,17 +1,16 @@
 import type { Metadata } from "next";
-import { Leaf, Syringe, Landmark, GraduationCap } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { PageHeader } from "@/components/ui/PageHeader";
-import { Card, CardBody } from "@/components/ui/Card";
+import { PhotoCard } from "@/components/ui/PhotoCard";
 import { Badge } from "@/components/ui/Badge";
 
 export const metadata: Metadata = { title: "Programas" };
 
 const programs = [
-  { icon: Leaf, tag: "Sostenibilidad", title: "Ganadería Sostenible", text: "Sistemas silvopastoriles y buenas prácticas ambientales para una ganadería baja en carbono." },
-  { icon: Syringe, tag: "Sanidad animal", title: "Ciclos de vacunación", text: "Campañas nacionales contra la fiebre aftosa y la brucelosis bovina." },
-  { icon: Landmark, tag: "Gremio", title: "Fomento al consumo de carne", text: "Estrategia sectorial para fortalecer la demanda interna de carne bovina." },
-  { icon: GraduationCap, tag: "Formación", title: "Escuela Virtual FEDEGÁN", text: "Capacitación técnica y gerencial para productores y técnicos del sector." },
+  { image: "/locales/programas.jpg", pos: "70% 50%", accent: "92,205,134", tag: "Sostenibilidad", title: "Ganadería Sostenible", text: "Sistemas silvopastoriles y buenas prácticas ambientales para una ganadería baja en carbono." },
+  { image: "/locales/fng.jpg", pos: "40% 50%", accent: "216,181,88", tag: "Sanidad animal", title: "Ciclos de vacunación", text: "Campañas nacionales contra la fiebre aftosa y la brucelosis bovina." },
+  { image: "/headers/prensa.jpg", pos: "80% 70%", accent: "230,160,108", tag: "Gremio", title: "Fomento al consumo de carne", text: "Estrategia sectorial para fortalecer la demanda interna de carne bovina." },
+  { image: "/locales/sig.jpg", pos: "45% 50%", accent: "190,222,203", tag: "Formación", title: "Escuela Virtual FEDEGÁN", text: "Capacitación técnica y gerencial para productores y técnicos del sector." },
 ];
 
 export default function ProgramasPage() {
@@ -21,22 +20,23 @@ export default function ProgramasPage() {
         eyebrow="El gremio"
         title="Programas y proyectos"
         description="Iniciativas de FEDEGÁN–FNG para el desarrollo sanitario, ambiental y productivo del sector ganadero colombiano."
+        image="/headers/campo.jpg"
+        imagePos="50% 60%"
         breadcrumbs={[{ label: "Programas" }]}
       />
-      <Container className="py-12 grid sm:grid-cols-2 gap-5">
+      <Container className="grid gap-6 py-14 sm:grid-cols-2 sm:py-20">
         {programs.map((p) => (
-          <Card key={p.title}>
-            <CardBody>
-              <div className="flex items-center justify-between">
-                <span className="w-11 h-11 rounded-full bg-[var(--bg-muted)] text-[var(--fg-green-700)] flex items-center justify-center">
-                  <p.icon size={20} />
-                </span>
-                <Badge tone="teal">{p.tag}</Badge>
-              </div>
-              <h3 className="font-bold text-lg text-[var(--text)] mt-1">{p.title}</h3>
-              <p className="text-sm text-[var(--text-muted)] leading-relaxed">{p.text}</p>
-            </CardBody>
-          </Card>
+          <PhotoCard
+            key={p.title}
+            image={p.image}
+            imagePos={p.pos}
+            accent={p.accent}
+            kicker={p.tag}
+            title={p.title}
+            text={p.text}
+            aspect="aspect-[16/9]"
+            badge={<Badge tone="lime">{p.tag}</Badge>}
+          />
         ))}
       </Container>
     </>
