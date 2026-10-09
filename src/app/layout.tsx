@@ -3,6 +3,7 @@ import "./globals.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Providers } from "@/components/layout/Providers";
+import { ChromeGate } from "@/components/layout/ChromeGate";
 import { BackToTop } from "@/components/layout/BackToTop";
 
 export const metadata: Metadata = {
@@ -31,7 +32,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           </a>
           <Header />
           <main id="contenido" className="flex-1">{children}</main>
-          <Footer />
+          <ChromeGate>
+            <Footer />
+          </ChromeGate>
           <BackToTop />
         </Providers>
       </body>
