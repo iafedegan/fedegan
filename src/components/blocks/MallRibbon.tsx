@@ -1,28 +1,136 @@
 "use client";
 
-import { useEffect, useRef, useState, type CSSProperties, type PointerEvent } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent, type ReactNode } from "react";
 import Link from "next/link";
-import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowRight, ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
+import { Container } from "@/components/ui/Container";
 import { iconMap } from "@/components/ui/icon-map";
 import type { Local } from "@/content/site";
 
-const STEP_DESKTOP = 17.5;
-const STEP_MOBILE = 26;
+const COPIES = 3;
+const GAP = 0.12;
+const HIDE = 74;
+const FADE = 24;
+const SECONDS_PER_CARD = 5;
 
-export function MallRibbon({ locales }: { locales: Local[] }) {
+const wrap180 = (x: number) => ((((x + 180) % 360) + 360) % 360) - 180;
+const clamp01 = (v: number) => Math.min(Math.max(v, 0), 1);
+
+function slotStyle(j: number, step: number): CSSProperties {
+  const a = wrap180(j * step);
+  const abs = Math.abs(a);
+  return {
+    transform: `rotateY(${-a}deg) translateZ(calc(var(--R) * -1))`,
+    opacity: clamp01((HIDE - abs) / FADE),
+    visibility: abs < HIDE ? "visible" : "hidden",
+    ["--f" as string]: clamp01(1 - abs / (step * 2.2)),
+  };
+}
+
+function Card({ local, index, art }: { local: Local; index: number; art: ReactNode }) {
+  const Icon = iconMap[local.icon] ?? iconMap.store;
+  const open = local.status === "abierto";
+
+  function spot(e: ReactPointerEvent<HTMLDivElement>) {
+    const r = e.currentTarget.getBoundingClientRect();
+    e.currentTarget.style.setProperty("--mx", `${((e.clientX - r.left) / r.width) * 100}%`);
+    e.currentTarget.style.setProperty("--my", `${((e.clientY - r.top) / r.height) * 100}%`);
+  }
+
+  return (
+    <div
+      className={`mr-card ${open ? "" : "is-soon"}`}
+      style={{ ["--acc-rgb" as string]: local.accent ?? "216,181,88" }}
+      onPointerMove={spot}
+    >
+      <div className="mr-face">
+        <span className="mr-spot" />
+        <span className="mr-dim" />
+        <div className="mr-head">
+          <span className="mr-chip">LOCAL {local.numero}</span>
+          <span className="mr-status">
+            <i />
+            {open ? "Abierto" : "Próximamente"}
+          </span>
+        </div>
+        <div className="mr-art">
+          {art}
+          <span className="mr-glow" />
+          <span className="mr-orbit" />
+          <span className="mr-icon">
+            <Icon size={32} strokeWidth={1.5} />
+          </span>
+          <span className="mr-num" aria-hidden="true">
+            {String(index + 1).padStart(2, "0")}
+          </span>
+        </div>
+        <div className="mr-body">
+          <p className="mr-kicker">{local.rubro}</p>
+          <h3 className="mr-title">{local.nombre}</h3>
+          <p className="mr-desc">{local.descripcion}</p>
+          {local.tags && (
+            <ul className="mr-tags">
+              {local.tags.map((t) => (
+                <li key={t}>{t}</li>
+              ))}
+            </ul>
+          )}
+          <div className="mr-cta">
+            <span>{open ? "Entrar" : "Próxima apertura"}</span>
+            <span className="mr-arrow">
+              <ArrowRight size={16} />
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function MallRibbon({ locales, arts }: { locales: Local[]; arts: ReactNode[] }) {
   const n = locales.length;
-  const c = (n - 1) / 2;
-  const [step, setStep] = useState(STEP_DESKTOP);
-  const cap = c * step;
-  const [rot, setRot] = useState(0);
-  const [dragging, setDragging] = useState(false);
-  const drag = useRef({ x: 0, moved: false, active: false });
+  const M = n * COPIES;
+  const step = 360 / M;
+  const stepRad = (step * Math.PI) / 180;
+  const auto = step / SECONDS_PER_CARD;
+
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const ringRef = useRef<HTMLDivElement>(null);
+  const slotRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const sim = useRef({
+    phi: 0,
+    v: 0,
+    t: 0,
+    drag: false,
+    moved: false,
+    startX: 0,
+    lastX: 0,
+    lastT: 0,
+    flick: 0,
+    snap: null as number | null,
+    resumeAt: 0,
+    holdFor: 0,
+    nextJump: 0,
+    hover: false,
+    paused: false,
+    reduced: false,
+    visible: true,
+    R: 1050,
+    mx: 0,
+    my: 0,
+    tx: 0,
+    ty: 0,
+    active: 0,
+  });
+  const [active, setActive] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const [reduced, setReduced] = useState(false);
 
   useEffect(() => {
-    const mq = window.matchMedia("(min-width: 768px)");
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
     const apply = () => {
-      setStep(mq.matches ? STEP_DESKTOP : STEP_MOBILE);
-      setRot(0);
+      sim.current.reduced = mq.matches;
+      setReduced(mq.matches);
     };
     const raf = requestAnimationFrame(apply);
     mq.addEventListener("change", apply);
@@ -32,133 +140,253 @@ export function MallRibbon({ locales }: { locales: Local[] }) {
     };
   }, []);
 
-  const clamp = (v: number) => Math.min(Math.max(v, -cap), cap);
+  useEffect(() => {
+    const wrap = wrapRef.current;
+    const ring = ringRef.current;
+    if (!wrap || !ring) return;
+    const apply = () => {
+      const W = wrap.clientWidth;
+      const cw = W >= 900 ? Math.min(Math.max(W * 0.2, 252), 340) : Math.min(Math.max(W * 0.66, 210), 290);
+      const R = (cw * (1 + GAP)) / stepRad;
+      sim.current.R = R;
+      ring.style.setProperty("--cw", `${cw}px`);
+      ring.style.setProperty("--ch", `${cw * 1.5}px`);
+      ring.style.setProperty("--R", `${R}px`);
+    };
+    apply();
+    const ro = new ResizeObserver(apply);
+    ro.observe(wrap);
+    return () => ro.disconnect();
+  }, [stepRad]);
 
-  function onDown(e: PointerEvent<HTMLDivElement>) {
-    drag.current = { x: e.clientX, moved: false, active: true };
+  useEffect(() => {
+    const el = wrapRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([e]) => {
+      sim.current.visible = e.isIntersecting;
+    });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const el = wrapRef.current;
+    if (!el) return;
+    const onWheel = (e: WheelEvent) => {
+      if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
+      e.preventDefault();
+      const s = sim.current;
+      s.snap = null;
+      s.phi += e.deltaX * (180 / (Math.PI * s.R)) * 0.9;
+      s.holdFor = 3500;
+    };
+    el.addEventListener("wheel", onWheel, { passive: false });
+    return () => el.removeEventListener("wheel", onWheel);
+  }, []);
+
+  useEffect(() => {
+    const s = sim.current;
+    s.t = performance.now();
+    let raf = 0;
+
+    const tick = (now: number) => {
+      raf = requestAnimationFrame(tick);
+      const dt = Math.min((now - s.t) / 1000, 0.05);
+      s.t = now;
+      if (s.holdFor > 0) {
+        s.resumeAt = now + s.holdFor;
+        s.holdFor = 0;
+      }
+      if (!s.visible || document.hidden) return;
+
+      if (!s.drag) {
+        if (s.snap !== null) {
+          const d = s.snap - s.phi;
+          if (s.reduced || Math.abs(d) < 0.02) {
+            s.phi = s.snap;
+            s.snap = null;
+          } else {
+            s.phi += d * (1 - Math.exp(-dt * 5.5));
+          }
+          s.v = 0;
+        } else if (s.reduced) {
+          if (!s.paused && !s.hover && now > s.resumeAt && now > s.nextJump) {
+            s.phi += step;
+            s.nextJump = now + 4500;
+          }
+        } else {
+          const holding = s.paused || s.hover || now < s.resumeAt;
+          s.v += ((holding ? 0 : auto) - s.v) * (1 - Math.exp(-dt * (holding ? 4.5 : 1.4)));
+          s.phi += s.v * dt;
+        }
+      }
+
+      const slots = slotRefs.current;
+      for (let j = 0; j < M; j++) {
+        const el = slots[j];
+        if (!el) continue;
+        const a = wrap180(j * step - s.phi);
+        const abs = Math.abs(a);
+        if (abs >= HIDE) {
+          if (el.style.visibility !== "hidden") el.style.visibility = "hidden";
+          continue;
+        }
+        const bob = s.reduced ? 0 : Math.sin(now / 1300 + j * 0.9) * 5;
+        el.style.visibility = "visible";
+        el.style.opacity = String(clamp01((HIDE - abs) / FADE));
+        el.style.transform = `rotateY(${-a}deg) translateZ(calc(var(--R) * -1)) translateY(${bob}px)`;
+        el.style.setProperty("--f", String(clamp01(1 - abs / (step * 2.2))));
+      }
+
+      const ring = ringRef.current;
+      if (ring) {
+        s.tx += (s.mx - s.tx) * 0.06;
+        s.ty += (s.my - s.ty) * 0.06;
+        ring.style.transform = s.reduced
+          ? "translateZ(var(--R))"
+          : `translateZ(var(--R)) rotateX(${-s.ty * 1.6}deg) rotateY(${s.tx * 1.6}deg)`;
+      }
+
+      const idx = (((Math.round(s.phi / step) % M) + M) % M) % n;
+      if (idx !== s.active) {
+        s.active = idx;
+        setActive(idx);
+      }
+    };
+
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [M, n, step, auto]);
+
+  function holdAfterInteraction() {
+    sim.current.holdFor = 4500;
   }
-  function onMove(e: PointerEvent<HTMLDivElement>) {
-    const d = drag.current;
-    if (!d.active) return;
-    const dx = e.clientX - d.x;
-    if (!d.moved && Math.abs(dx) > 6) {
-      d.moved = true;
-      setDragging(true);
+
+  function goTo(k: number) {
+    const s = sim.current;
+    let best = s.phi;
+    let bestAbs = Infinity;
+    for (let c = 0; c < COPIES; c++) {
+      const d = wrap180((k + c * n) * step - s.phi);
+      if (Math.abs(d) < bestAbs) {
+        bestAbs = Math.abs(d);
+        best = s.phi + d;
+      }
+    }
+    s.snap = best;
+    holdAfterInteraction();
+  }
+
+  function nudge(dir: 1 | -1) {
+    const s = sim.current;
+    const base = s.snap ?? Math.round(s.phi / step) * step;
+    s.snap = base + dir * step;
+    holdAfterInteraction();
+  }
+
+  function togglePause() {
+    const next = !paused;
+    sim.current.paused = next;
+    setPaused(next);
+  }
+
+  function onPointerDown(e: ReactPointerEvent<HTMLDivElement>) {
+    if (e.pointerType === "mouse" && e.button !== 0) return;
+    const s = sim.current;
+    s.drag = true;
+    s.moved = false;
+    s.startX = e.clientX;
+    s.lastX = e.clientX;
+    s.lastT = e.timeStamp;
+    s.flick = 0;
+    s.snap = null;
+  }
+
+  function onPointerMove(e: ReactPointerEvent<HTMLDivElement>) {
+    const s = sim.current;
+    const r = e.currentTarget.getBoundingClientRect();
+    s.mx = ((e.clientX - r.left) / r.width - 0.5) * 2;
+    s.my = ((e.clientY - r.top) / r.height - 0.5) * 2;
+    if (!s.drag) return;
+    if (!s.moved && Math.abs(e.clientX - s.startX) > 6) {
+      s.moved = true;
       e.currentTarget.setPointerCapture(e.pointerId);
     }
-    if (d.moved) {
-      d.x = e.clientX;
-      setRot((r) => clamp(r + dx * 0.14));
+    if (!s.moved) return;
+    const now = e.timeStamp;
+    const dx = e.clientX - s.lastX;
+    const degPerPx = 180 / (Math.PI * s.R);
+    const dt = Math.max((now - s.lastT) / 1000, 0.001);
+    s.phi -= dx * degPerPx;
+    s.flick = s.flick * 0.6 + ((-dx * degPerPx) / dt) * 0.4;
+    s.lastX = e.clientX;
+    s.lastT = now;
+  }
+
+  function onPointerUp() {
+    const s = sim.current;
+    if (!s.drag) return;
+    s.drag = false;
+    if (s.moved) {
+      s.v = Math.max(Math.min(s.flick, 160), -160);
+      holdAfterInteraction();
     }
   }
-  function onUp() {
-    drag.current.active = false;
-    setDragging(false);
-  }
+
+  const accessibleLinks = locales.filter((l) => l.status === "abierto");
 
   return (
-    <div className="relative">
+    <div role="region" aria-roledescription="carrusel" aria-label="Locales del gremio" className="relative">
       <div
-        className="relative overflow-hidden select-none"
-        style={{ perspective: "1500px", perspectiveOrigin: "50% 45%", touchAction: "pan-y" }}
-        onPointerDown={onDown}
-        onPointerMove={onMove}
-        onPointerUp={onUp}
-        onPointerCancel={onUp}
+        ref={wrapRef}
+        className="mr-wrap"
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerUp}
+        onPointerCancel={onPointerUp}
+        onPointerEnter={(e) => {
+          if (e.pointerType === "mouse") sim.current.hover = true;
+        }}
+        onPointerLeave={() => {
+          const s = sim.current;
+          s.hover = false;
+          s.mx = 0;
+          s.my = 0;
+          onPointerUp();
+        }}
         onClickCapture={(e) => {
-          if (drag.current.moved) {
+          if (sim.current.moved) {
             e.preventDefault();
             e.stopPropagation();
-            drag.current.moved = false;
+            sim.current.moved = false;
           }
         }}
+        onKeyDown={(e) => {
+          if (e.key === "ArrowLeft") nudge(-1);
+          if (e.key === "ArrowRight") nudge(1);
+        }}
       >
-        <div
-          className="relative mx-auto [--cw:min(68vw,17rem)] [--ch:25rem] [--R:640px] md:[--R:1050px]"
-          style={
-            {
-              height: "var(--ch)",
-              margin: "2.5rem 0",
-              transformStyle: "preserve-3d",
-              transform: "translateZ(var(--R))",
-              "--c": c,
-              "--rot": `${rot}deg`,
-              "--step": `${step}deg`,
-            } as CSSProperties
-          }
-        >
-          {locales.map((l, i) => {
-            const Icon = iconMap[l.icon] ?? iconMap.store;
-            const open = l.status === "abierto";
-            const inner = (
-              <div
-                className={`group relative flex h-full flex-col justify-between overflow-hidden rounded-[1.4rem] border p-6 shadow-[0_30px_60px_-30px_rgba(0,0,0,0.7)] ${
-                  open
-                    ? "border-[var(--border-strong)] bg-[linear-gradient(165deg,var(--surface-solid),var(--bg-muted))]"
-                    : "border-dashed border-[var(--border-strong)] bg-[var(--surface-2)] opacity-80"
-                }`}
-              >
-                <span
-                  aria-hidden
-                  className="absolute inset-x-0 top-0 h-3"
-                  style={{
-                    background: open
-                      ? "repeating-linear-gradient(90deg, var(--fg-lime-500) 0 18px, var(--fg-lime-400) 18px 36px)"
-                      : "repeating-linear-gradient(90deg, var(--border-strong) 0 18px, var(--border) 18px 36px)",
-                  }}
-                />
-                <div className="mt-3 flex items-start justify-between gap-3">
-                  <span className="flex h-12 w-12 items-center justify-center rounded-[0.9rem] border border-[var(--border-strong)] bg-[var(--bg)] text-[var(--fg-green-700)] transition-colors group-hover:bg-[var(--fg-green-700)] group-hover:text-[var(--on-accent)]">
-                    <Icon size={22} />
-                  </span>
-                  <span className="rounded-[var(--radius-sm)] border border-[var(--border-strong)] px-1.5 py-0.5 font-mono text-[0.66rem] font-bold tracking-wider text-[var(--text-faint)]">
-                    LOCAL {l.numero}
-                  </span>
-                </div>
-
-                <div className="flex flex-col gap-2">
-                  <p className="text-[0.66rem] font-bold uppercase tracking-[0.14em] text-[var(--fg-green-600)]">{l.rubro}</p>
-                  <h3 className="font-[var(--font-display)] text-2xl font-bold leading-tight text-[var(--text)]">{l.nombre}</h3>
-                  <p className="text-sm leading-relaxed text-[var(--text-muted)]">{l.descripcion}</p>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <span className={`inline-flex items-center gap-1.5 text-xs font-bold ${open ? "text-[var(--fg-green-700)]" : "text-[var(--text-faint)]"}`}>
-                    <span className={`h-2 w-2 rounded-full ${open ? "bg-[var(--fg-lime-500)] shadow-[0_0_0_3px_rgba(216,181,88,0.25)]" : "bg-[var(--border-strong)]"}`} />
-                    {open ? "Abierto" : "Próxima apertura"}
-                  </span>
-                  {open && (
-                    <span className="inline-flex items-center gap-1 text-sm font-semibold text-[var(--fg-green-700)]">
-                      Entrar <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
-                    </span>
-                  )}
-                </div>
-              </div>
-            );
-
+        <span className="mr-floor" aria-hidden="true" />
+        <div ref={ringRef} className="mr-ring" aria-hidden="true">
+          {Array.from({ length: M }, (_, j) => {
+            const k = j % n;
+            const l = locales[k];
+            const card = <Card local={l} index={k} art={arts?.[k] ?? null} />;
             return (
               <div
-                key={l.id}
-                className="absolute top-0"
-                style={
-                  {
-                    "--i": i,
-                    left: "calc(50% - var(--cw) / 2)",
-                    width: "var(--cw)",
-                    height: "var(--ch)",
-                    transformStyle: "preserve-3d",
-                    transform:
-                      "rotateY(calc((var(--c) - var(--i)) * var(--step) - var(--rot))) translateZ(calc(var(--R) * -1))",
-                    transition: dragging ? "none" : "transform 0.7s var(--ease-lux)",
-                  } as CSSProperties
-                }
+                key={j}
+                ref={(el) => {
+                  slotRefs.current[j] = el;
+                }}
+                className="mr-slot"
+                style={slotStyle(j, step)}
               >
-                {open ? (
-                  <Link href={l.href} target={l.external ? "_blank" : undefined} draggable={false} className="block h-full outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-[1.4rem]">
-                    {inner}
+                {l.status === "abierto" ? (
+                  <Link href={l.href} target={l.external ? "_blank" : undefined} tabIndex={-1} draggable={false} className="block h-full rounded-[1.6rem] outline-none">
+                    {card}
                   </Link>
                 ) : (
-                  inner
+                  card
                 )}
               </div>
             );
@@ -166,25 +394,38 @@ export function MallRibbon({ locales }: { locales: Local[] }) {
         </div>
       </div>
 
-      <div className="mt-2 flex items-center justify-center gap-3">
-        <button
-          type="button"
-          aria-label="Locales anteriores"
-          onClick={() => setRot((r) => clamp(r + step * 2))}
-          className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border-strong)] text-[var(--fg-green-700)] transition-colors hover:bg-[var(--fg-green-700)] hover:text-[var(--on-accent)]"
+      <Container className="mt-2 flex flex-wrap items-center justify-between gap-4">
+        <div className="mr-pager" role="group" aria-label="Elegir local">
+          {locales.map((l, k) => (
+            <button key={l.id} type="button" aria-current={k === active} aria-label={`Ver ${l.nombre}`} className={k === active ? "is-active" : ""} onClick={() => goTo(k)}>
+              <span>{l.numero}</span>
+              <span className="mr-pager-name">{l.nombre}</span>
+            </button>
+          ))}
+        </div>
+        <div className="flex items-center gap-2">
+          {reduced && <span className="mr-2 text-xs text-[var(--text-faint)]">Movimiento reducido: cambia por saltos</span>}
+          <button type="button" className="mr-ctrl" aria-label="Locales anteriores" onClick={() => nudge(-1)}>
+            <ChevronLeft size={18} />
+          </button>
+          <button type="button" className="mr-ctrl" aria-pressed={paused} aria-label={paused ? "Reanudar movimiento automático" : "Pausar movimiento automático"} onClick={togglePause}>
+            {paused ? <Play size={16} /> : <Pause size={16} />}
+          </button>
+          <button type="button" className="mr-ctrl" aria-label="Locales siguientes" onClick={() => nudge(1)}>
+            <ChevronRight size={18} />
+          </button>
+        </div>
+        <nav
+          aria-label="Enlaces a los locales"
+          className="sr-only focus-within:not-sr-only focus-within:flex focus-within:basis-full focus-within:flex-wrap focus-within:gap-2"
         >
-          <ChevronLeft size={18} />
-        </button>
-        <span className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--text-faint)]">Arrastre o use las flechas</span>
-        <button
-          type="button"
-          aria-label="Locales siguientes"
-          onClick={() => setRot((r) => clamp(r - step * 2))}
-          className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border-strong)] text-[var(--fg-green-700)] transition-colors hover:bg-[var(--fg-green-700)] hover:text-[var(--on-accent)]"
-        >
-          <ChevronRight size={18} />
-        </button>
-      </div>
+          {accessibleLinks.map((l) => (
+            <Link key={l.id} href={l.href} target={l.external ? "_blank" : undefined} className="rounded-full border border-[var(--border-strong)] px-3 py-1 text-xs font-semibold text-[var(--text)]">
+              {l.nombre}
+            </Link>
+          ))}
+        </nav>
+      </Container>
     </div>
   );
 }

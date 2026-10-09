@@ -13,7 +13,7 @@ export default function DirectorioPage() {
         description="Una sola entrada, varios locales: cada línea de valor de FEDEGÁN–FNG tiene su espacio dentro del mismo portal, con buscador y navegación comunes."
         breadcrumbs={[{ label: "Directorio" }]}
       />
-      <MallDirectory showHeading={false} />
+      <MallDirectory showLink={false} />
     </>
   );
 }

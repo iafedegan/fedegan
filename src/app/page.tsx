@@ -1,5 +1,5 @@
 import { HeroNews } from "@/components/blocks/HeroNews";
-import { QuickAccessGrid } from "@/components/blocks/QuickAccessGrid";
+import { PortalesAliados } from "@/components/blocks/PortalesAliados";
 import { MallDirectory } from "@/components/blocks/MallDirectory";
 import { StatsStrip } from "@/components/blocks/StatsStrip";
 import { NewsGrid } from "@/components/blocks/NewsGrid";
@@ -12,7 +12,7 @@ export default function Home() {
   return (
     <>
       <HeroNews />
-      <QuickAccessGrid />
+      <PortalesAliados />
       <MallDirectory />
       <StatsStrip />
       <NewsGrid />

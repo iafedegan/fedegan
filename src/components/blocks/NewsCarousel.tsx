@@ -2,17 +2,19 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowRight, ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Badge } from "@/components/ui/Badge";
 import type { Noticia } from "@/lib/contexto";
 
-const INTERVAL_MS = 6500;
+const INTERVAL_MS = 5500;
 
 export function NewsCarousel({ items }: { items: Noticia[] }) {
   const [index, setIndex] = useState(0);
-  const [paused, setPaused] = useState(false);
+  const [hover, setHover] = useState(false);
+  const [userPaused, setUserPaused] = useState(false);
   const [reduced, setReduced] = useState(false);
+  const paused = hover || userPaused;
   const rootRef = useRef<HTMLElement>(null);
   const count = items.length;
 
@@ -24,10 +26,10 @@ export function NewsCarousel({ items }: { items: Noticia[] }) {
   }, []);
 
   useEffect(() => {
-    if (paused || reduced || count < 2) return;
-    const id = setInterval(() => setIndex((i) => (i + 1) % count), INTERVAL_MS);
-    return () => clearInterval(id);
-  }, [paused, reduced, count]);
+    if (paused || count < 2) return;
+    const id = setTimeout(() => setIndex((i) => (i + 1) % count), INTERVAL_MS);
+    return () => clearTimeout(id);
+  }, [paused, count, index]);
 
   if (count === 0) return null;
 
@@ -37,10 +39,8 @@ export function NewsCarousel({ items }: { items: Noticia[] }) {
       aria-roledescription="carrusel"
       aria-label="Notas de interés"
       className="relative overflow-hidden bg-[var(--fg-green-900)] pb-20 pt-8 sm:pb-24 sm:pt-12"
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
-      onFocusCapture={() => setPaused(true)}
-      onBlurCapture={() => setPaused(false)}
+      onPointerEnter={(e) => e.pointerType === "mouse" && setHover(true)}
+      onPointerLeave={() => setHover(false)}
       onKeyDown={(e) => {
         if (e.key === "ArrowLeft") go(index - 1);
         if (e.key === "ArrowRight") go(index + 1);
@@ -72,7 +72,7 @@ export function NewsCarousel({ items }: { items: Noticia[] }) {
           </Link>
         </div>
 
-        <div className="grid [&>*]:col-start-1 [&>*]:row-start-1" aria-live={paused ? "polite" : "off"}>
+        <div className="grid [&>*]:col-start-1 [&>*]:row-start-1" aria-live={userPaused ? "polite" : "off"}>
           {items.map((n, i) => {
             const active = i === index;
             return (
@@ -113,10 +113,21 @@ export function NewsCarousel({ items }: { items: Noticia[] }) {
                         aria-label={`Ir a la nota ${d + 1}`}
                         aria-current={d === index}
                         onClick={() => go(d)}
-                        className={`h-2.5 rounded-full transition-all duration-300 ${
-                          d === index ? "w-6 bg-[var(--fg-lime-500)]" : "w-2.5 bg-white/70 hover:bg-white"
+                        className={`relative h-2.5 overflow-hidden rounded-full transition-all duration-300 ${
+                          d === index ? "w-8 bg-white/30" : "w-2.5 bg-white/70 hover:bg-white"
                         }`}
-                      />
+                      >
+                        {d === index && (
+                          <span
+                            key={`${index}-${paused}`}
+                            className="carousel-fill absolute inset-0 origin-left rounded-full bg-[var(--fg-lime-500)]"
+                            style={{
+                              animationDuration: `${INTERVAL_MS}ms`,
+                              animationPlayState: paused ? "paused" : "running",
+                            }}
+                          />
+                        )}
+                      </button>
                     ))}
                   </div>
                 </div>
@@ -138,6 +149,14 @@ export function NewsCarousel({ items }: { items: Noticia[] }) {
                       Ver más <ArrowRight size={16} />
                     </Link>
                     <div className="ml-auto flex gap-2">
+                      <button
+                        type="button"
+                        aria-label={userPaused ? "Reanudar el carrusel" : "Pausar el carrusel"}
+                        onClick={() => setUserPaused((v) => !v)}
+                        className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border-strong)] text-[var(--fg-lime-400)] transition-colors hover:bg-[var(--fg-lime-500)] hover:text-[var(--on-accent)]"
+                      >
+                        {userPaused ? <Play size={16} /> : <Pause size={16} />}
+                      </button>
                       <button
                         type="button"
                         aria-label="Nota anterior"
