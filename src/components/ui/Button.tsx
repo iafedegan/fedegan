@@ -18,8 +18,8 @@ const variants: Record<Variant, string> = {
 };
 
 const sizes: Record<Size, string> = {
-  sm: "text-[0.72rem] px-3.5 py-2",
-  md: "text-[0.8rem] px-5 py-3",
+  sm: "text-[0.72rem] px-3.5 py-2 pointer-coarse:min-h-11",
+  md: "text-[0.8rem] px-5 py-3 pointer-coarse:min-h-12",
 };
 
 interface ButtonProps {

@@ -370,3 +370,30 @@ h1, h2, h3, h4, h5, h6 {
 .article-body img { border-radius: 1rem; max-width: 100%; height: auto; }
 .article-body figure { margin-block: 1.8rem; }
 .article-body figcaption { margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-faint); }
+
+/* =======================================================================
+   Pulido de UX: anclas bajo el header fijo, tipografía, menú móvil y revelado
+   ======================================================================= */
+html { scroll-padding-top: 6rem; -webkit-tap-highlight-color: transparent; }
+p { text-wrap: pretty; }
+
+@keyframes menu-in {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: none; }
+}
+.menu-sheet { animation: menu-in 0.3s var(--ease-lux) both; }
+
+/* Las tarjetas emergen al entrar en pantalla (mejora progresiva: sin soporte, se ven normales) */
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(2.2rem) scale(0.985); }
+  to { opacity: 1; transform: none; }
+}
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .gl, .reveal {
+      animation: rise-in linear backwards;
+      animation-timeline: view();
+      animation-range: entry 0% entry 38%;
+    }
+  }
+}

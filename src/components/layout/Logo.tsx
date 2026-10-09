@@ -9,7 +9,7 @@ export function Logo({
   imgClassName?: string;
 }) {
   return (
-    <Link href="/" className={`flex items-center gap-2.5 ${className}`} aria-label="Fedegán, inicio">
+    <Link href="/" className={`flex shrink-0 items-center gap-2.5 ${className}`} aria-label="Fedegán, inicio">
       <Image
         src="/brand/fedegan-logo.jpg"
         alt="FEDEGÁN, Federación Colombiana de Ganaderos"
@@ -22,7 +22,7 @@ export function Logo({
         <span className="font-[var(--font-display)] font-extrabold text-xl tracking-tight text-[var(--fg-green-800)]">
           FEDEGÁN <span className="text-[var(--fg-lime-500)]">FNG</span>
         </span>
-        <span className="text-[0.6rem] font-semibold uppercase tracking-[0.12em] text-[var(--text-faint)]">
+        <span className="whitespace-nowrap text-[0.6rem] font-semibold uppercase tracking-[0.12em] text-[var(--text-faint)]">
           Federación Colombiana de Ganaderos
         </span>
       </span>

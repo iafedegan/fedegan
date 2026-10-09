@@ -12,7 +12,7 @@ export default async function CuentaPage() {
   if (session?.user) redirect("/mi-fedegan");
 
   return (
-    <Container className="py-14">
+    <Container className="py-10 sm:py-14">
       <AccountPicker />
     </Container>
   );

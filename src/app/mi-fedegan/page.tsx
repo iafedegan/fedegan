@@ -28,8 +28,9 @@ export default async function MiFedeganPage() {
         title={`Hola, ${session.user.name?.split(" ")[0] ?? "bienvenido"}`}
         description="Estas son las aplicaciones habilitadas para su perfil."
         breadcrumbs={[{ label: "Mi FEDEGÁN" }]}
+        compact
       />
-      <Container className="flex flex-col gap-8 py-14 sm:py-20">
+      <Container className="flex flex-col gap-8 py-10 sm:py-14">
         <div className="flex flex-wrap items-center gap-2">
           {demoEnabled && !entraConfigured && <Badge tone="lime">Sesión de demostración</Badge>}
           <span className="text-sm text-[var(--text-muted)]">Su perfil:</span>

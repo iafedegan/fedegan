@@ -3,6 +3,7 @@ import "./globals.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Providers } from "@/components/layout/Providers";
+import { BackToTop } from "@/components/layout/BackToTop";
 
 export const metadata: Metadata = {
   title: {
@@ -22,9 +23,16 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="es" data-theme="esmeralda" className="h-full antialiased">
       <body className="min-h-full flex flex-col">
         <Providers>
+          <a
+            href="#contenido"
+            className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-[var(--fg-lime-500)] focus:px-5 focus:py-2.5 focus:text-sm focus:font-bold focus:text-[var(--fg-green-900)]"
+          >
+            Saltar al contenido
+          </a>
           <Header />
-          <main className="flex-1">{children}</main>
+          <main id="contenido" className="flex-1">{children}</main>
           <Footer />
+          <BackToTop />
         </Providers>
       </body>
     </html>

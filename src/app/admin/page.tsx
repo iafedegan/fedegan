@@ -22,8 +22,9 @@ export default async function AdminPage() {
         eyebrow="Administración"
         title="Administración del portal"
         breadcrumbs={[{ label: "Mi FEDEGÁN", href: "/mi-fedegan" }, { label: "Administración" }]}
+        compact
       />
-      <Container className="max-w-2xl py-14 sm:py-20">
+      <Container className="max-w-2xl py-10 sm:py-14">
         {allowed ? (
           <Card hover={false}><div className="flex flex-col items-start gap-4 p-8 sm:p-10">
             <Construction size={24} className="text-[var(--fg-green-700)]" />

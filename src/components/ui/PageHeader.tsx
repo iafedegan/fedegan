@@ -10,6 +10,7 @@ export function PageHeader({
   breadcrumbs = [],
   image,
   imagePos = "50% 50%",
+  compact = false,
 }: {
   eyebrow?: string;
   title: string;
@@ -17,6 +18,7 @@ export function PageHeader({
   breadcrumbs?: { label: string; href?: string }[];
   image?: string;
   imagePos?: string;
+  compact?: boolean;
 }) {
   return (
     <section className="pg-stage">
@@ -25,8 +27,8 @@ export function PageHeader({
           <Image src={image} alt="" fill priority sizes="(min-width: 1024px) 56vw, 100vw" style={{ objectPosition: imagePos }} />
         </div>
       )}
-      <Container className="relative py-12 sm:py-16 lg:py-24">
-        <nav aria-label="Ruta de navegación" className="mb-8 flex flex-wrap items-center gap-1.5 text-xs text-[var(--text-faint)]">
+      <Container className={`relative ${compact ? "py-8 sm:py-10 lg:py-12" : "py-12 sm:py-16 lg:py-24"}`}>
+        <nav aria-label="Ruta de navegación" className={`${compact ? "mb-5" : "mb-8"} flex flex-wrap items-center gap-1.5 text-xs text-[var(--text-faint)]`}>
           <Link href="/" className="transition-colors hover:text-[var(--fg-lime-400)]">Inicio</Link>
           {breadcrumbs.map((b) => (
             <span key={b.label} className="flex items-center gap-1.5">
@@ -41,7 +43,7 @@ export function PageHeader({
         </nav>
         <div className="max-w-3xl">
           {eyebrow && <span className="eyebrow">{eyebrow}</span>}
-          <h1 className="mt-4 text-balance font-[var(--font-display)] text-4xl font-bold leading-[1.06] text-[var(--text)] sm:text-5xl lg:text-6xl">
+          <h1 className={`mt-4 text-balance font-[var(--font-display)] font-bold leading-[1.06] text-[var(--text)] ${compact ? "text-3xl sm:text-4xl lg:text-5xl" : "text-4xl sm:text-5xl lg:text-6xl"}`}>
             {title}
           </h1>
           {description && <p className="mt-5 max-w-2xl text-lg leading-relaxed text-[var(--text-muted)]">{description}</p>}

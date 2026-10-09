@@ -18,8 +18,9 @@ export default async function IngresarPage() {
         title="Iniciar sesión"
         description="Elija cómo desea ingresar a los servicios personalizados de FEDEGÁN–FNG."
         breadcrumbs={[{ label: "Iniciar sesión" }]}
+        compact
       />
-      <Container className="py-14 sm:py-20">
+      <Container className="py-10 sm:py-14">
         <SignInPanel entra={entraConfigured} demo={demoEnabled} />
       </Container>
     </>
