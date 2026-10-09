@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { TopBar } from "@/components/layout/TopBar";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Providers } from "@/components/layout/Providers";
@@ -23,7 +22,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="es" data-theme="esmeralda" className="h-full antialiased">
       <body className="min-h-full flex flex-col">
         <Providers>
-          <TopBar />
           <Header />
           <main className="flex-1">{children}</main>
           <Footer />
