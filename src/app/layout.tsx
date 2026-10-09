@@ -12,8 +12,8 @@ export const metadata: Metadata = {
   description:
     "Portal institucional de FEDEGÁN–FNG, hub del ecosistema digital ganadero de Colombia: noticias, programas, publicaciones, servicios y cifras del sector.",
   icons: {
-    icon: "/brand/fedegan-logo.jpg",
-    apple: "/brand/fedegan-logo.jpg",
+    icon: [{ url: "/brand/fedegan-icon-round.png", type: "image/png" }],
+    apple: "/brand/fedegan-icon-round.png",
   },
 };
 
