@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent, type ReactNode } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
 import { Container } from "@/components/ui/Container";
@@ -27,7 +28,7 @@ function slotStyle(j: number, step: number): CSSProperties {
   };
 }
 
-function Card({ local, index, art }: { local: Local; index: number; art: ReactNode }) {
+function Card({ local, index, art, priority }: { local: Local; index: number; art: ReactNode; priority: boolean }) {
   const Icon = iconMap[local.icon] ?? iconMap.store;
   const open = local.status === "abierto";
 
@@ -46,26 +47,41 @@ function Card({ local, index, art }: { local: Local; index: number; art: ReactNo
       <div className="mr-face">
         <span className="mr-spot" />
         <span className="mr-dim" />
-        <div className="mr-head">
-          <span className="mr-chip">LOCAL {local.numero}</span>
-          <span className="mr-status">
-            <i />
-            {open ? "Abierto" : "Próximamente"}
-          </span>
-        </div>
-        <div className="mr-art">
+        <div className="mr-top">
+          <div className="mr-photo">
+            {local.imagen && (
+              <Image
+                src={local.imagen}
+                alt=""
+                fill
+                sizes="(min-width: 900px) 340px, 70vw"
+                priority={priority}
+                draggable={false}
+                className="mr-img"
+                style={{ objectPosition: local.imagenPos ?? "50% 50%" }}
+              />
+            )}
+          </div>
+          <span className="mr-shade" />
           {art}
-          <span className="mr-glow" />
-          <span className="mr-orbit" />
-          <span className="mr-icon">
-            <Icon size={32} strokeWidth={1.5} />
-          </span>
+          <div className="mr-head">
+            <span className="mr-chip">LOCAL {local.numero}</span>
+            <span className="mr-status">
+              <i />
+              {open ? "Abierto" : "Próximamente"}
+            </span>
+          </div>
           <span className="mr-num" aria-hidden="true">
             {String(index + 1).padStart(2, "0")}
           </span>
         </div>
         <div className="mr-body">
-          <p className="mr-kicker">{local.rubro}</p>
+          <div className="mr-pin">
+            <span className="mr-icon">
+              <Icon size={22} strokeWidth={1.6} />
+            </span>
+            <p className="mr-kicker">{local.rubro}</p>
+          </div>
           <h3 className="mr-title">{local.nombre}</h3>
           <p className="mr-desc">{local.descripcion}</p>
           {local.tags && (
@@ -150,7 +166,7 @@ export function MallRibbon({ locales, arts }: { locales: Local[]; arts: ReactNod
       const R = (cw * (1 + GAP)) / stepRad;
       sim.current.R = R;
       ring.style.setProperty("--cw", `${cw}px`);
-      ring.style.setProperty("--ch", `${cw * 1.5}px`);
+      ring.style.setProperty("--ch", `${cw * 1.7}px`);
       ring.style.setProperty("--R", `${R}px`);
     };
     apply();
@@ -371,7 +387,7 @@ export function MallRibbon({ locales, arts }: { locales: Local[]; arts: ReactNod
           {Array.from({ length: M }, (_, j) => {
             const k = j % n;
             const l = locales[k];
-            const card = <Card local={l} index={k} art={arts?.[k] ?? null} />;
+            const card = <Card local={l} index={k} art={arts?.[k] ?? null} priority={j <= 2 || j >= M - 2} />;
             return (
               <div
                 key={j}

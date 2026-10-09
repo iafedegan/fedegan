@@ -203,6 +203,8 @@ export type Local = {
   external?: boolean;
   tags?: string[];
   accent?: string;
+  imagen?: string;
+  imagenPos?: string;
 };
 
 export type Piso = {
@@ -218,13 +220,13 @@ export const pisos: Piso[] = [
     nombre: "Locales del gremio",
     descripcion: "Cada línea de valor de FEDEGÁN–FNG tiene su propio local dentro del portal.",
     locales: [
-      { id: "programas", numero: "101", nombre: "Programas", rubro: "Proyectos del gremio", descripcion: "Ganadería sostenible, sanidad animal y fomento al consumo.", href: "/programas", icon: "users", status: "abierto", ancla: true, tags: ["Sostenibilidad", "Sanidad", "Consumo"], accent: "92,205,134" },
-      { id: "normatividad", numero: "102", nombre: "Normatividad", rubro: "Marco legal", descripcion: "Leyes, decretos y resoluciones del sector ganadero.", href: "/normatividad", icon: "scale", status: "abierto", ancla: true, tags: ["Leyes", "Decretos", "Resoluciones"], accent: "216,181,88" },
-      { id: "publicaciones", numero: "103", nombre: "Publicaciones", rubro: "Biblioteca", descripcion: "Informes, manuales, boletines y documentos técnicos.", href: "/publicaciones", icon: "newspaper", status: "abierto", ancla: true, tags: ["Informes", "Manuales", "Boletines"], accent: "230,160,108" },
-      { id: "cifras", numero: "104", nombre: "Cifras del sector", rubro: "Datos", descripcion: "Inventario bovino y bufalino, precios y estadísticas.", href: "/seccion/cifras-del-sector", icon: "database", status: "abierto", ancla: true, tags: ["Inventario", "Precios", "Estadísticas"], accent: "112,214,196" },
-      { id: "fng", numero: "105", nombre: "FNG", rubro: "Fondo Nacional del Ganado", descripcion: "Recaudo de la cuota de fomento y su inversión en el sector.", href: "/seccion/fng", icon: "building", status: "abierto", ancla: true, tags: ["Cuota de fomento", "Inversión"], accent: "216,181,88" },
-      { id: "fep", numero: "106", nombre: "FEP", rubro: "Estabilización de precios", descripcion: "Fondo de Estabilización de Precios: mecanismo y resultados.", href: "/seccion/fep", icon: "bar-chart", status: "abierto", ancla: true, tags: ["Mecanismo", "Resultados"], accent: "92,205,134" },
-      { id: "sig", numero: "107", nombre: "Sistema Integrado de Gestión", rubro: "Calidad", descripcion: "Políticas, procesos y certificaciones de la entidad.", href: "/seccion/sistema-integrado-de-gestion", icon: "file-check", status: "abierto", ancla: true, tags: ["Políticas", "Procesos", "Certificaciones"], accent: "190,222,203" },
+      { id: "programas", numero: "101", nombre: "Programas", rubro: "Proyectos del gremio", descripcion: "Ganadería sostenible, sanidad animal y fomento al consumo.", href: "/programas", icon: "users", status: "abierto", ancla: true, tags: ["Sostenibilidad", "Sanidad", "Consumo"], accent: "92,205,134", imagen: "/locales/programas.jpg", imagenPos: "70% 50%" },
+      { id: "normatividad", numero: "102", nombre: "Normatividad", rubro: "Marco legal", descripcion: "Leyes, decretos y resoluciones del sector ganadero.", href: "/normatividad", icon: "scale", status: "abierto", ancla: true, tags: ["Leyes", "Decretos", "Resoluciones"], accent: "216,181,88", imagen: "/locales/normatividad.jpg", imagenPos: "50% 50%" },
+      { id: "publicaciones", numero: "103", nombre: "Publicaciones", rubro: "Biblioteca", descripcion: "Informes, manuales, boletines y documentos técnicos.", href: "/publicaciones", icon: "newspaper", status: "abierto", ancla: true, tags: ["Informes", "Manuales", "Boletines"], accent: "230,160,108", imagen: "/locales/publicaciones.jpg", imagenPos: "65% 55%" },
+      { id: "cifras", numero: "104", nombre: "Cifras del sector", rubro: "Datos", descripcion: "Inventario bovino y bufalino, precios y estadísticas.", href: "/seccion/cifras-del-sector", icon: "database", status: "abierto", ancla: true, tags: ["Inventario", "Precios", "Estadísticas"], accent: "112,214,196", imagen: "/locales/cifras.jpg", imagenPos: "25% 50%" },
+      { id: "fng", numero: "105", nombre: "FNG", rubro: "Fondo Nacional del Ganado", descripcion: "Recaudo de la cuota de fomento y su inversión en el sector.", href: "/seccion/fng", icon: "building", status: "abierto", ancla: true, tags: ["Cuota de fomento", "Inversión"], accent: "216,181,88", imagen: "/locales/fng.jpg", imagenPos: "40% 50%" },
+      { id: "fep", numero: "106", nombre: "FEP", rubro: "Estabilización de precios", descripcion: "Fondo de Estabilización de Precios: mecanismo y resultados.", href: "/seccion/fep", icon: "bar-chart", status: "abierto", ancla: true, tags: ["Mecanismo", "Resultados"], accent: "92,205,134", imagen: "/locales/fep.jpg", imagenPos: "70% 50%" },
+      { id: "sig", numero: "107", nombre: "Sistema Integrado de Gestión", rubro: "Calidad", descripcion: "Políticas, procesos y certificaciones de la entidad.", href: "/seccion/sistema-integrado-de-gestion", icon: "file-check", status: "abierto", ancla: true, tags: ["Políticas", "Procesos", "Certificaciones"], accent: "190,222,203", imagen: "/locales/sig.jpg", imagenPos: "45% 50%" },
     ],
   },
 ];
