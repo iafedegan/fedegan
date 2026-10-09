@@ -12,50 +12,47 @@ const bullets = [
 
 export function MembershipBanner() {
   return (
-    <section className="py-10 sm:py-12">
+    <section className="py-12 sm:py-16">
       <Container>
-        <div className="relative overflow-hidden rounded-[var(--radius-lg)] bg-[var(--fg-green-900)] text-white p-8 sm:p-12 grid lg:grid-cols-[1fr_0.9fr] gap-8 items-center">
-          <div
-            className="absolute inset-0 opacity-90 -z-10"
-            style={{
-              background:
-                "radial-gradient(90% 120% at 90% 100%, rgba(216,181,88,0.25), transparent 60%)",
-            }}
-          />
-          <div>
-            <Badge tone="lime">Próximamente</Badge>
-            <h2 className="mt-3 text-2xl sm:text-3xl font-extrabold leading-tight">
-              Mi FEDEGÁN, su espacio personalizado
-            </h2>
-            <p className="mt-3 text-white/75 max-w-lg leading-relaxed">
-              Un área exclusiva para nuestros afiliados y usuarios registrados, con acceso a
-              información, herramientas y beneficios del ecosistema FEDEGÁN–FNG.
-            </p>
-            <ul className="mt-5 grid sm:grid-cols-2 gap-x-6 gap-y-2.5">
-              {bullets.map((b) => (
-                <li key={b} className="flex items-center gap-2 text-sm text-white/85">
-                  <Check size={15} className="text-[var(--fg-lime-400)]" /> {b}
-                </li>
-              ))}
-            </ul>
-            <Button href="/mi-fedegan" variant="lime" className="mt-7">
-              Conozca más →
-            </Button>
-          </div>
+        <div className="gl">
+          <div className="gl-face">
+            <span
+              aria-hidden
+              className="pointer-events-none absolute inset-0"
+              style={{ background: "radial-gradient(90% 120% at 95% 100%, rgba(216,181,88,0.22), transparent 60%)" }}
+            />
+            <div className="relative grid items-center gap-10 p-8 sm:p-12 lg:grid-cols-[1fr_0.9fr]">
+              <div>
+                <Badge tone="lime">Próximamente</Badge>
+                <h2 className="mt-4 font-[var(--font-display)] text-3xl font-bold leading-tight text-[var(--text)] sm:text-4xl">
+                  Mi FEDEGÁN, su espacio personalizado
+                </h2>
+                <p className="mt-4 max-w-lg leading-relaxed text-[var(--text-muted)]">
+                  Un área exclusiva para nuestros afiliados y usuarios registrados, con acceso a
+                  información, herramientas y beneficios del ecosistema FEDEGÁN–FNG.
+                </p>
+                <ul className="mt-6 grid gap-x-6 gap-y-2.5 sm:grid-cols-2">
+                  {bullets.map((b) => (
+                    <li key={b} className="flex items-center gap-2 text-sm text-[var(--text-muted)]">
+                      <Check size={15} className="text-[var(--fg-lime-400)]" /> {b}
+                    </li>
+                  ))}
+                </ul>
+                <Button href="/mi-fedegan" variant="lime" className="mt-8">
+                  Conozca más →
+                </Button>
+              </div>
 
-          <div className="hidden lg:block relative aspect-[4/3] rounded-[var(--radius-md)] border border-white/15 bg-white/5 overflow-hidden">
-            <div className="absolute inset-4 rounded-[var(--radius-sm)] bg-white/95 shadow-[var(--shadow-lg)] p-4 flex flex-col gap-2">
-              <span className="text-[0.65rem] font-bold uppercase tracking-wide text-[var(--fg-green-700)]">
-                Mi FEDEGÁN
-              </span>
-              {[70, 45, 85].map((w, i) => (
-                <span key={i} className="h-2.5 rounded-full bg-[var(--bg-sunken)]">
-                  <span
-                    className="block h-full rounded-full bg-[var(--fg-lime-500)]"
-                    style={{ width: `${w}%` }}
-                  />
-                </span>
-              ))}
+              <div className="relative hidden aspect-[4/3] overflow-hidden rounded-[var(--radius-md)] border border-[var(--border-strong)] bg-[rgba(255,255,255,0.03)] lg:block">
+                <div className="absolute inset-4 flex flex-col gap-3 rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--surface-solid)] p-5 shadow-[var(--shadow-lg)]">
+                  <span className="text-[0.66rem] font-bold uppercase tracking-[0.18em] text-[var(--fg-lime-400)]">Mi FEDEGÁN</span>
+                  {[70, 45, 85].map((w, i) => (
+                    <span key={i} className="h-2.5 rounded-full bg-[var(--bg-sunken)]">
+                      <span className="block h-full rounded-full bg-[var(--fg-lime-500)]" style={{ width: `${w}%` }} />
+                    </span>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </div>
