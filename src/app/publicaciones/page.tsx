@@ -3,11 +3,13 @@ import { Container } from "@/components/ui/Container";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { PhotoCard } from "@/components/ui/PhotoCard";
 import { Badge } from "@/components/ui/Badge";
-import { publications, publicationCovers } from "@/content/site";
+import { publicationCovers } from "@/content/site";
+import { getPublications } from "@/lib/cms/content";
 
 export const metadata: Metadata = { title: "Publicaciones" };
 
-export default function PublicacionesPage() {
+export default async function PublicacionesPage() {
+  const publications = await getPublications();
   return (
     <>
       <PageHeader
@@ -24,8 +26,8 @@ export default function PublicacionesPage() {
           return (
             <PhotoCard
               key={p.slug}
-              image={c.image}
-              imagePos={c.pos}
+              image={p.coverImage ?? c.image}
+              imagePos={p.coverImage ? "50% 50%" : c.pos}
               accent={c.accent}
               kicker={p.type}
               title={p.title}

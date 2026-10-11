@@ -2,11 +2,12 @@ import type { Metadata } from "next";
 import { Container } from "@/components/ui/Container";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { EventCard } from "@/components/blocks/EventCard";
-import { events } from "@/content/site";
+import { getEvents } from "@/lib/cms/content";
 
 export const metadata: Metadata = { title: "Eventos" };
 
-export default function EventosPage() {
+export default async function EventosPage() {
+  const events = await getEvents();
   return (
     <>
       <PageHeader

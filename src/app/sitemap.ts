@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { publications, events } from "@/content/site";
+import { getEvents, getPublications } from "@/lib/cms/content";
 import { getNoticias } from "@/lib/contexto";
 
 const BASE_URL = "https://www.fedegan.org.co";
@@ -20,7 +20,7 @@ const staticRoutes = [
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const { items: noticias } = await getNoticias({ limit: 50 });
+  const [{ items: noticias }, publications, events] = await Promise.all([getNoticias({ limit: 50 }), getPublications(), getEvents()]);
   const dynamic = [
     ...noticias.map((n) => `/noticias/${n.slug}`),
     ...publications.map((p) => `/publicaciones/${p.slug}`),

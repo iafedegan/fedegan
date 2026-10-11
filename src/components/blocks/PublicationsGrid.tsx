@@ -2,9 +2,12 @@ import { Container } from "@/components/ui/Container";
 import { PhotoCard } from "@/components/ui/PhotoCard";
 import { Badge } from "@/components/ui/Badge";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { publications, publicationCovers } from "@/content/site";
+import { publicationCovers } from "@/content/site";
+import { getPublications } from "@/lib/cms/content";
 
-export function PublicationsGrid() {
+export async function PublicationsGrid() {
+  const publications = await getPublications();
+  if (!publications.length) return null;
   return (
     <section className="py-12 sm:py-16">
       <Container>
@@ -15,8 +18,8 @@ export function PublicationsGrid() {
             return (
               <PhotoCard
                 key={p.slug}
-                image={c.image}
-                imagePos={c.pos}
+                image={p.coverImage ?? c.image}
+                imagePos={p.coverImage ? "50% 50%" : c.pos}
                 accent={c.accent}
                 kicker={p.type}
                 title={p.title}

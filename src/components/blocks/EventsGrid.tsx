@@ -1,9 +1,11 @@
 import { Container } from "@/components/ui/Container";
 import { EventCard } from "@/components/blocks/EventCard";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { events } from "@/content/site";
+import { getEvents } from "@/lib/cms/content";
 
-export function EventsGrid() {
+export async function EventsGrid() {
+  const events = await getEvents();
+  if (!events.length) return null;
   return (
     <section className="py-12 sm:py-16">
       <Container>

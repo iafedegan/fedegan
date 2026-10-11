@@ -4,17 +4,16 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
-import { ArrowRight, Building2, LogIn, LogOut, Menu, Search, Sprout, UserCircle2, X } from "lucide-react";
+import { ArrowRight, LogIn, LogOut, Menu, Search, UserCircle2, X } from "lucide-react";
 import { Logo } from "./Logo";
 import { LoginMenu } from "./LoginMenu";
-import { mainNav } from "@/content/site";
 import { Container } from "@/components/ui/Container";
 
 function isActive(pathname: string, href: string) {
   return href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);
 }
 
-export function Header() {
+export function Header({ nav: mainNav }: { nav: { label: string; href: string }[] }) {
   const pathname = usePathname();
   const router = useRouter();
   const { data: session } = useSession();
@@ -222,22 +221,6 @@ export function Header() {
                     >
                       <LogIn size={17} /> Iniciar sesión
                     </Link>
-                    <div className="grid grid-cols-2 gap-3 text-sm">
-                      <Link
-                        href="/ingresar#ganaderos"
-                        onClick={() => setOpenAt(null)}
-                        className="flex min-h-12 items-center justify-center gap-2 rounded-[var(--radius-sm)] border border-[var(--border-strong)] px-3 text-center font-semibold text-[var(--text)]"
-                      >
-                        <Sprout size={16} className="shrink-0 text-[var(--fg-lime-400)]" /> Ganaderos
-                      </Link>
-                      <Link
-                        href="/ingresar#funcionarios"
-                        onClick={() => setOpenAt(null)}
-                        className="flex min-h-12 items-center justify-center gap-2 rounded-[var(--radius-sm)] border border-[var(--border-strong)] px-3 text-center font-semibold text-[var(--text)]"
-                      >
-                        <Building2 size={16} className="shrink-0 text-[var(--fg-lime-400)]" /> Funcionarios
-                      </Link>
-                    </div>
                   </>
                 )}
               </div>

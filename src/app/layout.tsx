@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { getNav } from "@/lib/cms/content";
 import { Providers } from "@/components/layout/Providers";
 import { ChromeGate } from "@/components/layout/ChromeGate";
 import { MobileTabBar } from "@/components/layout/MobileTabBar";
@@ -27,7 +28,8 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default async function RootLayout({ children }: LayoutProps<"/">) {
+  const nav = await getNav();
   return (
     <html lang="es" data-theme="esmeralda" className="h-full antialiased">
       <body className="min-h-full flex flex-col pb-[calc(5.5rem+env(safe-area-inset-bottom))] md:pb-0">
@@ -38,7 +40,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           >
             Saltar al contenido
           </a>
-          <Header />
+          <Header nav={nav} />
           <main id="contenido" className="flex-1">{children}</main>
           <ChromeGate>
             <Footer />

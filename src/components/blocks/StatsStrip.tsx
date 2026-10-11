@@ -1,8 +1,10 @@
 import { Container } from "@/components/ui/Container";
 import { Card } from "@/components/ui/Card";
-import { stats } from "@/content/site";
+import { getStats } from "@/lib/cms/content";
 
-export function StatsStrip() {
+export async function StatsStrip() {
+  const stats = await getStats();
+  if (!stats.length) return null;
   return (
     <section className="py-12 sm:py-16">
       <Container>

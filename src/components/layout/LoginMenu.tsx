@@ -3,14 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
-import { Building2, ChevronDown, LogIn, LogOut, Newspaper, ShieldCheck, Sprout, UserCircle2 } from "lucide-react";
+import { ChevronDown, LogIn, LogOut, Newspaper, ShieldCheck, UserCircle2 } from "lucide-react";
 import { appsForRoles } from "@/lib/access";
-
-const options = [
-  { href: "/ingresar", label: "Ganaderos y aliados", hint: "Ingreso o registro", icon: Sprout },
-  { href: "/ingresar#funcionarios", label: "Funcionarios FEDEGÁN", hint: "Cuenta institucional", icon: Building2 },
-  { href: "/mi-fedegan", label: "Mi FEDEGÁN", hint: "Su espacio personal", icon: UserCircle2 },
-];
 
 const appIcons = { shield: ShieldCheck, newspaper: Newspaper };
 
@@ -36,6 +30,17 @@ export function LoginMenu() {
       document.removeEventListener("keydown", onKey);
     };
   }, [open]);
+
+  if (!user) {
+    return (
+      <Link
+        href="/ingresar"
+        className="ml-auto hidden min-h-11 shrink-0 items-center gap-2 rounded-full bg-[var(--fg-lime-500)] px-5 text-[0.78rem] font-bold uppercase tracking-[0.1em] text-[var(--fg-green-900)] transition-colors hover:bg-[var(--fg-lime-400)] md:flex"
+      >
+        <LogIn size={17} /> Ingresar
+      </Link>
+    );
+  }
 
   return (
     <div ref={ref} className="relative ml-auto hidden shrink-0 md:block">
@@ -92,37 +97,7 @@ export function LoginMenu() {
                 <LogOut size={18} /> Cerrar sesión
               </button>
             </div>
-          ) : (
-            <>
-              <Link
-                href="/ingresar"
-                role="menuitem"
-                onClick={() => setOpen(false)}
-                className="flex items-center gap-2 bg-[var(--fg-lime-500)] px-4 py-3 text-sm font-bold uppercase tracking-[0.08em] text-[var(--fg-green-900)] hover:bg-[var(--fg-lime-400)]"
-              >
-                <LogIn size={16} /> Ingresar
-              </Link>
-              <div className="flex flex-col py-1">
-                {options.map(({ href, label, hint, icon: Icon }) => (
-                  <Link
-                    key={href}
-                    href={href}
-                    role="menuitem"
-                    onClick={() => setOpen(false)}
-                    className="flex items-center gap-3 px-4 py-2.5 transition-colors hover:bg-[var(--bg-muted)]"
-                  >
-                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[var(--radius-sm)] bg-[var(--bg-muted)] text-[var(--fg-lime-400)]">
-                      <Icon size={18} />
-                    </span>
-                    <span className="flex flex-col leading-tight">
-                      <span className="text-sm font-semibold text-[var(--text)]">{label}</span>
-                      <span className="text-xs text-[var(--text-faint)]">{hint}</span>
-                    </span>
-                  </Link>
-                ))}
-              </div>
-            </>
-          )}
+          ) : null}
         </div>
       )}
     </div>

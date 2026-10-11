@@ -6,21 +6,22 @@ import { PageHeader } from "@/components/ui/PageHeader";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
-import { events, eventAccents } from "@/content/site";
+import { eventAccents } from "@/content/site";
+import { getEvent, getEvents } from "@/lib/cms/content";
 
-export function generateStaticParams() {
-  return events.map((e) => ({ slug: e.slug }));
+export async function generateStaticParams() {
+  return (await getEvents()).map((e) => ({ slug: e.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const event = events.find((e) => e.slug === slug);
+  const event = await getEvent(slug);
   return { title: event?.title ?? "Evento" };
 }
 
 export default async function EventoDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const event = events.find((e) => e.slug === slug);
+  const event = await getEvent(slug);
   if (!event) notFound();
   const accent = eventAccents[event.kind] ?? "216,181,88";
 
@@ -45,9 +46,7 @@ export default async function EventoDetailPage({ params }: { params: Promise<{ s
             </div>
           </div>
         </Card>
-        <p className="mt-8 text-lg leading-relaxed text-[var(--text-muted)]">
-          Espacio organizado por FEDEGÁN–FNG dirigido a productores, técnicos y aliados del sector ganadero. Cupos limitados; se recomienda inscripción previa.
-        </p>
+        <p className="mt-8 text-lg leading-relaxed text-[var(--text-muted)]">{event.description}</p>
         <Button className="mt-8">
           <CalendarPlus size={16} /> Agregar a mi calendario
         </Button>

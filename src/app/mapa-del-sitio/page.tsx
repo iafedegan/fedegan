@@ -4,28 +4,29 @@ import { ArrowRight } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Card } from "@/components/ui/Card";
-import { footerLinks, mainNav, pisos } from "@/content/site";
+import { footerLinks } from "@/content/site";
+import { getLocales, getNav } from "@/lib/cms/content";
 
 export const metadata: Metadata = { title: "Mapa del sitio" };
 
-const groups = [
-  { title: "Principal", accent: "216,181,88", links: mainNav },
-  { title: "Locales del gremio", accent: "92,205,134", links: pisos.flatMap((p) => p.locales.map((l) => ({ label: l.nombre, href: l.href }))) },
-  { title: "Servicios y medios", accent: "230,160,108", links: footerLinks.servicios },
-  {
-    title: "Más del portal",
-    accent: "112,214,196",
-    links: [
-      { label: "Eventos", href: "/eventos" },
-      { label: "Publicaciones", href: "/publicaciones" },
-      { label: "Buscador", href: "/buscador" },
-      { label: "Contacto", href: "/contacto" },
-      { label: "Iniciar sesión", href: "/ingresar" },
-    ],
-  },
-];
-
-export default function MapaDelSitioPage() {
+export default async function MapaDelSitioPage() {
+  const [mainNav, locales] = await Promise.all([getNav(), getLocales()]);
+  const groups = [
+    { title: "Principal", accent: "216,181,88", links: mainNav },
+    { title: "Locales del gremio", accent: "92,205,134", links: locales.map((l) => ({ label: l.nombre, href: l.href })) },
+    { title: "Servicios y medios", accent: "230,160,108", links: footerLinks.servicios },
+    {
+      title: "Más del portal",
+      accent: "112,214,196",
+      links: [
+        { label: "Eventos", href: "/eventos" },
+        { label: "Publicaciones", href: "/publicaciones" },
+        { label: "Buscador", href: "/buscador" },
+        { label: "Contacto", href: "/contacto" },
+        { label: "Iniciar sesión", href: "/ingresar" },
+      ],
+    },
+  ];
   return (
     <>
       <PageHeader

@@ -2,9 +2,8 @@ import Link from "next/link";
 import { CalendarPlus, Clock, MapPin } from "lucide-react";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
-import { eventAccents, type events } from "@/content/site";
-
-type Evento = (typeof events)[number];
+import { eventAccents } from "@/content/site";
+import type { Evento } from "@/lib/cms/content";
 
 export function EventCard({ e, cta = "Ver evento" }: { e: Evento; cta?: string }) {
   const accent = eventAccents[e.kind] ?? "216,181,88";

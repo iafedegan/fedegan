@@ -3,9 +3,11 @@ import { ArrowRight } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { MallRibbon } from "./MallRibbon";
 import { MallArt } from "./MallArt";
-import { pisos } from "@/content/site";
+import { getPisos } from "@/lib/cms/content";
 
-export function MallDirectory({ showLink = true }: { showLink?: boolean }) {
+export async function MallDirectory({ showLink = true }: { showLink?: boolean }) {
+  const pisos = (await getPisos()).filter((p) => p.locales.length > 0);
+  if (!pisos.length) return null;
   return (
     <section data-theme="esmeralda" aria-labelledby="locales-title" className="mr-stage py-16 sm:py-24">
       <div className="relative flex flex-col gap-14">

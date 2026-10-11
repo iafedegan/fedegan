@@ -6,21 +6,22 @@ import { Container } from "@/components/ui/Container";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
-import { publications, publicationCovers } from "@/content/site";
+import { publicationCovers } from "@/content/site";
+import { getPublication, getPublications } from "@/lib/cms/content";
 
-export function generateStaticParams() {
-  return publications.map((p) => ({ slug: p.slug }));
+export async function generateStaticParams() {
+  return (await getPublications()).map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const pub = publications.find((p) => p.slug === slug);
+  const pub = await getPublication(slug);
   return { title: pub?.title ?? "Publicación" };
 }
 
 export default async function PublicacionDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const pub = publications.find((p) => p.slug === slug);
+  const pub = await getPublication(slug);
   if (!pub) notFound();
   const c = publicationCovers[pub.type] ?? publicationCovers.Informe;
 
@@ -35,7 +36,7 @@ export default async function PublicacionDetailPage({ params }: { params: Promis
         <div className="gl" style={{ ["--acc-rgb" as string]: c.accent }}>
           <div className="gl-face">
             <div className="relative aspect-[4/5] overflow-hidden">
-              <Image src={c.image} alt="" fill sizes="(min-width: 1024px) 34vw, 100vw" className="object-cover" style={{ objectPosition: c.pos }} />
+              <Image src={pub.coverImage ?? c.image} alt="" fill sizes="(min-width: 1024px) 34vw, 100vw" className="object-cover" style={{ objectPosition: pub.coverImage ? "50% 50%" : c.pos }} />
               <span aria-hidden className="absolute inset-0 bg-[linear-gradient(0deg,var(--card-b)_0%,transparent_60%),linear-gradient(135deg,rgba(var(--acc-rgb),0.28),transparent_55%)]" />
               <Badge tone="lime" className="absolute left-4 top-4">{pub.type}</Badge>
             </div>
@@ -46,9 +47,13 @@ export default async function PublicacionDetailPage({ params }: { params: Promis
           <p className="text-[var(--text-muted)]">
             Documento en formato digital, publicado por FEDEGÁN–FNG para consulta pública del sector ganadero.
           </p>
-          <Button variant="primary">
-            <Download size={16} /> Descargar PDF
-          </Button>
+          {pub.fileUrl ? (
+            <Button href={pub.fileUrl} variant="primary">
+              <Download size={16} /> Descargar PDF
+            </Button>
+          ) : (
+            <p className="text-sm text-[var(--text-faint)]">El archivo para descarga estará disponible próximamente.</p>
+          )}
         </div>
       </Container>
     </>

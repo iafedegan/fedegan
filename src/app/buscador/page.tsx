@@ -4,6 +4,7 @@ import { PageHeader } from "@/components/ui/PageHeader";
 import { SearchClient } from "@/components/blocks/SearchClient";
 import { buildSearchIndex } from "@/lib/search-index";
 import { getNoticias } from "@/lib/contexto";
+import { getEvents, getPublications } from "@/lib/cms/content";
 
 export const metadata: Metadata = { title: "Buscador" };
 
@@ -13,8 +14,8 @@ export default async function BuscadorPage({
   searchParams: Promise<{ q?: string }>;
 }) {
   const { q } = await searchParams;
-  const { items } = await getNoticias({ limit: 50 });
-  const index = buildSearchIndex(items);
+  const [{ items }, publications, events] = await Promise.all([getNoticias({ limit: 50 }), getPublications(), getEvents()]);
+  const index = buildSearchIndex(items, publications, events);
   return (
     <>
       <PageHeader

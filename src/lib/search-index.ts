@@ -1,4 +1,4 @@
-import { publications, events } from "@/content/site";
+import type { Evento, Publication } from "@/lib/cms/content";
 
 export type SearchResult = {
   title: string;
@@ -16,7 +16,11 @@ const staticPages: SearchResult[] = [
   { title: "Contacto", excerpt: "Canales de atención y formulario de contacto.", href: "/contacto", type: "Página" },
 ];
 
-export function buildSearchIndex(news: { slug: string; title: string; dek: string }[]): SearchResult[] {
+export function buildSearchIndex(
+  news: { slug: string; title: string; dek: string }[],
+  publications: Publication[],
+  events: Evento[],
+): SearchResult[] {
   return [
     ...news.map((n) => ({ title: n.title, excerpt: n.dek, href: `/noticias/${n.slug}`, type: "Noticia" as const })),
     ...publications.map((p) => ({ title: p.title, excerpt: p.dek, href: `/publicaciones/${p.slug}`, type: "Publicación" as const })),

@@ -1,17 +1,11 @@
 import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
 import { Container } from "@/components/ui/Container";
+import { getPartners } from "@/lib/cms/content";
 
-const portales = [
-  { nombre: "tvGAN", detalle: "Tu vitrina ganadera", href: "https://www.tvgan.com.co/", logo: "/brand/portales/tvgan.png" },
-  { nombre: "CONtexto Ganadero", detalle: "Periodismo del sector", href: "https://www.contextoganadero.com/", logo: "/brand/portales/contexto.png" },
-  { nombre: "Fundagán", detalle: "Fundación Fedegán", href: "https://fundagan.org.co/", logo: "/brand/portales/fundagan.png" },
-  { nombre: "Bursagán", detalle: "Bolsa ganadera", href: "https://bursagan.com.co/", logo: "/brand/portales/bursagan.png" },
-  { nombre: "Maestro de la Carne", detalle: "Friogán", href: "https://friogan.com/", logo: "/brand/portales/friogan.png" },
-  { nombre: "Colombian Beef", detalle: "Grass-fed", href: "https://static.fedegan.org.co/grassfed/index.html", logo: "/brand/portales/grassfed.png" },
-];
-
-export function PortalesAliados() {
+export async function PortalesAliados() {
+  const portales = await getPartners();
+  if (!portales.length) return null;
   return (
     <section aria-labelledby="portales-title" className="relative z-10">
       <Container>
