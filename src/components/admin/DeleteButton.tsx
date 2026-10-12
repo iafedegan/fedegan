@@ -2,16 +2,17 @@
 
 import { Trash2 } from "lucide-react";
 
-export function DeleteButton({ label }: { label: string }) {
+export function DeleteButton({ label, disabled }: { label: string; disabled?: boolean }) {
   return (
     <button
       type="submit"
+      disabled={disabled}
       aria-label={`Eliminar ${label}`}
       title="Eliminar"
       onClick={(e) => {
         if (!confirm(`¿Eliminar «${label}»? Esta acción no se puede deshacer.`)) e.preventDefault();
       }}
-      className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border)] text-[var(--text-muted)] transition-colors hover:border-[#d64545] hover:text-[#ff8a8a]"
+      className="ad-icon-btn hover:!border-[#d64545] hover:!text-[#d64545]"
     >
       <Trash2 size={16} />
     </button>

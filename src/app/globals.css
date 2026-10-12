@@ -414,3 +414,71 @@ p { text-wrap: pretty; }
 @media (hover: none) {
   .gl-hover:active { transform: scale(0.975); transition-duration: 0.15s; }
 }
+
+/* =======================================================================
+   Panel de administración (CMS): lienzo claro, barra lateral verde
+   ======================================================================= */
+.ad-shell {
+  --ad-bg: #f1f0e8; --ad-line: #e4e2d6; --ad-ink: #11271d; --ad-muted: #5d6e65; --ad-faint: #8a978f;
+  --ad-green: #0f3d2e; --ad-green-2: #165a43; --ad-gold: #b08f4f; --ad-gold-2: #d8b558;
+  min-height: 100dvh; background: var(--ad-bg); color: var(--ad-ink); color-scheme: light;
+  font-family: var(--font-body);
+}
+.ad-shell h1, .ad-shell h2, .ad-shell h3 { font-family: var(--font-display); color: var(--ad-ink); }
+.ad-side {
+  background:
+    radial-gradient(28rem 20rem at 0% 0%, rgba(216, 181, 88, 0.14), transparent 70%),
+    linear-gradient(180deg, #11523b 0%, #0b3a2b 100%);
+  color: #dcebe3;
+}
+.ad-card {
+  background: #fff; border: 1px solid var(--ad-line); border-radius: 1.25rem;
+  box-shadow: 0 1px 0 rgba(17, 39, 29, 0.04), 0 20px 44px -30px rgba(17, 39, 29, 0.32);
+}
+.ad-card-dark {
+  color: #fff; border-radius: 1.25rem; border: 1px solid rgba(255, 255, 255, 0.08);
+  background: radial-gradient(18rem 12rem at 100% 100%, rgba(216, 181, 88, 0.28), transparent 70%), linear-gradient(150deg, #166048 0%, #0b3a2b 100%);
+  box-shadow: 0 24px 50px -26px rgba(11, 58, 43, 0.7);
+}
+.ad-eyebrow { font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 700; color: var(--ad-faint); }
+.ad-input {
+  width: 100%; border: 1px solid #d8d5c6; background: #fff; border-radius: 0.75rem; padding: 0.65rem 0.9rem;
+  font-size: 0.92rem; color: var(--ad-ink); outline: none; transition: box-shadow 0.2s, border-color 0.2s;
+}
+.ad-input::placeholder { color: var(--ad-faint); }
+.ad-input:focus { border-color: var(--ad-gold); box-shadow: 0 0 0 4px rgba(176, 143, 79, 0.2); }
+.ad-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; min-height: 2.65rem; padding: 0 1.2rem;
+  border-radius: 0.8rem; font-weight: 700; font-size: 0.82rem; letter-spacing: 0.03em; cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+}
+.ad-btn:active { transform: scale(0.98); }
+.ad-btn:disabled { opacity: 0.55; cursor: not-allowed; }
+.ad-btn-primary { background: var(--ad-green); color: #fff; box-shadow: 0 10px 22px -14px rgba(15, 61, 46, 0.9); }
+.ad-btn-primary:hover:not(:disabled) { background: var(--ad-green-2); }
+.ad-btn-gold { background: var(--ad-gold-2); color: #11271d; }
+.ad-btn-gold:hover:not(:disabled) { background: #e3c36e; }
+.ad-btn-ghost { background: #fff; border: 1px solid var(--ad-line); color: var(--ad-ink); }
+.ad-btn-ghost:hover:not(:disabled) { border-color: var(--ad-gold); }
+.ad-icon-btn {
+  display: inline-flex; height: 2.4rem; width: 2.4rem; align-items: center; justify-content: center; border-radius: 0.7rem;
+  border: 1px solid var(--ad-line); background: #fff; color: var(--ad-muted); cursor: pointer; transition: all 0.2s;
+}
+.ad-icon-btn:hover:not(:disabled) { border-color: var(--ad-gold); color: var(--ad-green); }
+.ad-icon-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+.ad-pill { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.2rem 0.65rem; border-radius: 999px; font-size: 0.7rem; font-weight: 700; }
+.ad-pill-ok { background: #e1f1e7; color: #146040; }
+.ad-pill-off { background: #eceae0; color: #6a766f; }
+.ad-pill-gold { background: #f7edcf; color: #7c5f1f; }
+.ad-navlink {
+  display: flex; align-items: center; gap: 0.75rem; min-height: 2.6rem; padding: 0 0.85rem; border-radius: 0.8rem;
+  font-size: 0.92rem; font-weight: 500; color: #cfe2d8; transition: background-color 0.2s, color 0.2s; position: relative;
+}
+.ad-navlink:hover { background: rgba(255, 255, 255, 0.07); color: #fff; }
+.ad-navlink[aria-current="page"] { background: rgba(255, 255, 255, 0.12); color: #fff; font-weight: 600; }
+.ad-navlink[aria-current="page"]::before {
+  content: ""; position: absolute; left: -0.55rem; top: 0.55rem; bottom: 0.55rem; width: 3px; border-radius: 3px; background: var(--ad-gold-2);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .ad-rise { animation: rise-in 0.5s var(--ease-lux) both; }
+}

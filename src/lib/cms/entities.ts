@@ -25,6 +25,7 @@ export type Entity = {
   ordered: boolean; // se ordena a mano con subir/bajar
   orderBy: { column: string; ascending: boolean };
   slugFrom?: string; // campo del que se deriva el slug
+  thumbField?: string; // campo de imagen para la miniatura en la lista
   fields: Field[];
 };
 
@@ -59,6 +60,7 @@ export const entities: Entity[] = [
     description: "Las tarjetas de la cinta 3D del home y del directorio del portal.",
     titleField: "nombre",
     subtitleField: "rubro",
+    thumbField: "imagen",
     ordered: true,
     orderBy: { column: "sort_order", ascending: true },
     slugFrom: "nombre",
@@ -104,6 +106,7 @@ export const entities: Entity[] = [
     description: "Informes, manuales y boletines con su portada y su archivo PDF.",
     titleField: "title",
     subtitleField: "type",
+    thumbField: "cover_image",
     ordered: true,
     orderBy: { column: "sort_order", ascending: true },
     slugFrom: "title",
@@ -159,6 +162,7 @@ export const entities: Entity[] = [
     description: "Los logos enlazados de la franja «Portales aliados».",
     titleField: "name",
     subtitleField: "detail",
+    thumbField: "logo",
     ordered: true,
     orderBy: { column: "sort_order", ascending: true },
     fields: [

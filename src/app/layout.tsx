@@ -5,6 +5,7 @@ import { Footer } from "@/components/layout/Footer";
 import { getNav } from "@/lib/cms/content";
 import { Providers } from "@/components/layout/Providers";
 import { ChromeGate } from "@/components/layout/ChromeGate";
+import { SiteChrome } from "@/components/layout/SiteChrome";
 import { MobileTabBar } from "@/components/layout/MobileTabBar";
 import { BackToTop } from "@/components/layout/BackToTop";
 
@@ -32,21 +33,32 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   const nav = await getNav();
   return (
     <html lang="es" data-theme="esmeralda" className="h-full antialiased">
-      <body className="min-h-full flex flex-col pb-[calc(5.5rem+env(safe-area-inset-bottom))] md:pb-0">
+      <body className="min-h-full flex flex-col">
         <Providers>
-          <a
-            href="#contenido"
-            className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-[var(--fg-lime-500)] focus:px-5 focus:py-2.5 focus:text-sm focus:font-bold focus:text-[var(--fg-green-900)]"
+          <SiteChrome
+            top={
+              <>
+                <a
+                  href="#contenido"
+                  className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-[var(--fg-lime-500)] focus:px-5 focus:py-2.5 focus:text-sm focus:font-bold focus:text-[var(--fg-green-900)]"
+                >
+                  Saltar al contenido
+                </a>
+                <Header nav={nav} />
+              </>
+            }
+            bottom={
+              <>
+                <ChromeGate>
+                  <Footer />
+                </ChromeGate>
+                <BackToTop />
+                <MobileTabBar />
+              </>
+            }
           >
-            Saltar al contenido
-          </a>
-          <Header nav={nav} />
-          <main id="contenido" className="flex-1">{children}</main>
-          <ChromeGate>
-            <Footer />
-          </ChromeGate>
-          <BackToTop />
-          <MobileTabBar />
+            {children}
+          </SiteChrome>
         </Providers>
       </body>
     </html>

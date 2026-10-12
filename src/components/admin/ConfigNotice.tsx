@@ -1,19 +1,33 @@
 import { KeyRound } from "lucide-react";
-import { Card } from "@/components/ui/Card";
+import { cmsEnvStatus } from "@/lib/cms/client";
 
-export function ConfigNotice() {
+export function ConfigNotice({ compact = false }: { compact?: boolean }) {
+  const item = (ok: boolean, name: string) => (
+    <li className="flex items-center gap-2">
+      <span className={`h-2 w-2 rounded-full ${ok ? "bg-[#1f8a5b]" : "bg-[#d64545]"}`} />
+      <code className="font-mono text-[0.8rem]">{name}</code>
+      <span className="text-[#8a978f]">{ok ? "detectada" : "no detectada"}</span>
+    </li>
+  );
   return (
-    <Card hover={false} accent="230,160,108">
-      <div className="flex flex-col items-start gap-3 p-7">
-        <KeyRound size={24} className="text-[rgb(var(--acc-rgb))]" />
-        <h2 className="text-xl font-bold text-[var(--text)]">Falta la clave de servicio del CMS</h2>
-        <p className="leading-relaxed text-[var(--text-muted)]">
-          Para editar desde este panel el servidor necesita la variable{" "}
-          <code className="rounded bg-[var(--bg-muted)] px-1.5 py-0.5 font-mono text-sm">SUPABASE_SERVICE_ROLE_KEY</code>{" "}
-          (Supabase → Project Settings → API → service_role). Agréguela en Vercel (Settings → Environment Variables) y en el archivo{" "}
-          <code className="rounded bg-[var(--bg-muted)] px-1.5 py-0.5 font-mono text-sm">.env.local</code>, y vuelva a desplegar.
-        </p>
+    <div className="ad-card flex gap-4 border-l-4 border-l-[#d8b558] p-5 sm:p-6">
+      <KeyRound size={22} className="mt-0.5 shrink-0 text-[#b08f4f]" />
+      <div className="flex flex-col gap-3">
+        <div>
+          <h2 className="text-lg font-bold">Modo solo lectura: falta la clave de servicio</h2>
+          {!compact && (
+            <p className="mt-1 text-sm leading-relaxed text-[#5d6e65]">
+              Puede ver el contenido publicado, pero para guardar cambios el servidor necesita <code className="font-mono text-[0.8rem]">SUPABASE_SERVICE_ROLE_KEY</code>{" "}
+              (Supabase → Project Settings → API → service_role) en Vercel (entorno Production) y un Redeploy.
+            </p>
+          )}
+        </div>
+        <ul className="flex flex-col gap-1 text-sm text-[#11271d]">
+          {item(cmsEnvStatus.url, "SUPABASE_URL")}
+          {item(cmsEnvStatus.publicKey, "SUPABASE_PUBLISHABLE_KEY")}
+          {item(cmsEnvStatus.serviceKey, "SUPABASE_SERVICE_ROLE_KEY")}
+        </ul>
       </div>
-    </Card>
+    </div>
   );
 }

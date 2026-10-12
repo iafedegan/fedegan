@@ -8,10 +8,18 @@ const PUBLIC_KEY =
   process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ??
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ??
   process.env.SUPABASE_ANON_KEY;
-const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const SERVICE_KEY =
+  process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.SUPABASE_SECRET_KEY ?? process.env.SUPABASE_SERVICE_KEY;
 
 export const cmsReadable = Boolean(URL && PUBLIC_KEY);
 export const cmsWritable = Boolean(URL && SERVICE_KEY);
+
+/** Qué variables de entorno ve el servidor (solo presencia, nunca los valores). */
+export const cmsEnvStatus = {
+  url: Boolean(URL),
+  publicKey: Boolean(PUBLIC_KEY),
+  serviceKey: Boolean(SERVICE_KEY),
+};
 
 export const CMS_TAG = "cms";
 export const MEDIA_BUCKET = "media";
@@ -36,6 +44,13 @@ export function publicDb(): SupabaseClient | null {
 export function adminDb(): SupabaseClient | null {
   if (!cmsWritable) return null;
   return createClient(URL!, SERVICE_KEY!, { auth: { persistSession: false, autoRefreshToken: false } });
+}
+
+/** Para las vistas del panel: con la clave de servicio ve todo; sin ella, solo lo publicado (solo lectura). */
+export function readDb(): { db: SupabaseClient | null; writable: boolean } {
+  const admin = adminDb();
+  if (admin) return { db: admin, writable: true };
+  return { db: publicDb(), writable: false };
 }
 
 export function publicMediaUrl(path: string) {
