@@ -545,6 +545,14 @@ p { text-wrap: pretty; }
   background: linear-gradient(270deg, rgba(5, 16, 11, 0.62) 0%, rgba(5, 16, 11, 0.4) 55%, transparent 100%);
 }
 @media (min-width: 768px) { .sw-rail { display: flex; } }
+/* Móvil: la misma lista de secciones de la web, compacta, bajo el botón «Saltar recorrido». */
+@media (max-width: 767px) {
+  .sw-rail { display: flex; top: 4.4rem; transform: none; padding: 0.6rem 0.8rem 0.6rem 2rem; border-bottom-left-radius: 0.9rem; gap: 0; z-index: 2; }
+  .sw-counter { margin-bottom: 0.25rem; font-size: 0.62rem; }
+  .sw-dot { padding: 0.18rem 0; gap: 0.5rem; min-height: 1.5rem; }
+  .sw-dot-label { max-width: 9.5rem; font-size: 0.62rem; letter-spacing: 0.06em; }
+  .sw-chips { display: none; }
+}
 .sw-counter { margin-bottom: 0.5rem; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.18em; color: #f4f2e9; }
 .sw-dot { display: inline-flex; align-items: center; gap: 0.7rem; padding: 0.38rem 0; background: none; border: 0; cursor: pointer; color: #f4f2e9; }
 .sw-dot::after {
@@ -644,3 +652,23 @@ p { text-wrap: pretty; }
 [data-hero="centro"] .sw-block { margin-inline: auto; text-align: center; }
 [data-hero="centro"] .sw-tags, [data-hero="centro"] .sw-actions { justify-content: center; }
 [data-hero="centro"] .sw-hint { justify-content: center; }
+
+
+/* Cabecera de periódico (Masthead) */
+.mh { background: var(--bg); border-bottom: 1px solid var(--border); padding: 1rem 1rem 0.75rem; text-align: center; }
+.mh-row { display: flex; align-items: center; gap: clamp(0.75rem, 3vw, 2.5rem); max-width: 86rem; margin-inline: auto; }
+.mh-rule { flex: 1; height: 1px; margin-top: 0.4rem; }
+.mh-rule-l { background: linear-gradient(90deg, transparent, rgba(216, 181, 88, 0.55)); }
+.mh-rule-r { background: linear-gradient(270deg, transparent, rgba(216, 181, 88, 0.55)); }
+.mh-title {
+  font-family: var(--font-display); font-weight: 700; line-height: 1.05; letter-spacing: -0.01em; white-space: nowrap;
+  font-size: clamp(1.9rem, 5.2vw, 3.4rem);
+  background: linear-gradient(100deg, #b98f35 0%, #e7cf8c 35%, #fff2c8 55%, #d8b558 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.mh-title span { font-weight: 700; }
+.mh-tag { margin-top: 0.35rem; font-size: clamp(0.62rem, 1.6vw, 0.82rem); font-weight: 700; letter-spacing: 0.26em; text-transform: uppercase; color: var(--text-muted); }
+.mh-date { margin-top: 0.2rem; font-size: clamp(0.6rem, 1.4vw, 0.74rem); letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-faint); }
+
+/* La franja de chips queda reemplazada por la lista lateral en todos los anchos. */
+.sw-chips { display: none !important; }

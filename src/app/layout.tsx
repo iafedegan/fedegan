@@ -12,6 +12,7 @@ import { getPublishedDesign } from "@/lib/design/store";
 import { designCss } from "@/lib/design/regions";
 import { Ticker } from "@/components/design/Ticker";
 import { AdSlot } from "@/components/design/AdSlot";
+import { Masthead } from "@/components/layout/Masthead";
 import { PwaRegister } from "@/components/layout/PwaRegister";
 import { SitePopup } from "@/components/design/SitePopup";
 
@@ -59,6 +60,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
                 >
                   Saltar al contenido
                 </a>
+                <Masthead />
                 <Header nav={nav} />
                 <Ticker initial={design.ticker} />
                 <AdSlot zone="top" initial={design.ads.top} />

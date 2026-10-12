@@ -63,6 +63,30 @@ export function Header({ nav: mainNav }: { nav: { label: string; href: string }[
     setOpenAt(null);
   }
 
+  const searchForm = (cls: string) => (
+    <form
+      role="search"
+      onSubmit={submitSearch}
+      className={`group items-center gap-2 rounded-full border border-[var(--border-strong)] bg-[var(--bg-muted)] py-1.5 pl-4 pr-1.5 transition focus-within:border-[var(--fg-lime-500)] focus-within:shadow-[0_0_0_4px_rgba(216,181,88,0.14)] ${cls}`}
+    >
+      <Search size={17} className="shrink-0 text-[var(--text-faint)] transition-colors group-focus-within:text-[var(--fg-lime-400)]" />
+      <input
+        type="search"
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        placeholder="¿Qué está buscando?"
+        aria-label="Buscar en el portal"
+        className="min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-[var(--text-faint)] [&::-webkit-search-cancel-button]:hidden"
+      />
+      <button
+        type="submit"
+        className="rounded-full bg-[var(--fg-lime-500)] px-3.5 py-1.5 text-[0.68rem] font-bold uppercase tracking-[0.12em] text-[var(--fg-green-900)] transition-colors hover:bg-[var(--fg-lime-400)]"
+      >
+        Buscar
+      </button>
+    </form>
+  );
+
   return (
     <header
       data-region="navbar"
@@ -72,30 +96,10 @@ export function Header({ nav: mainNav }: { nav: { label: string; href: string }[
           : "border-[var(--border)] bg-[color-mix(in_srgb,var(--bg)_80%,transparent)]"
       }`}
     >
-      <Container className="flex items-center gap-3 py-3.5 sm:gap-6">
+      <Container className="flex items-center gap-3 py-3.5 sm:gap-6 lg:hidden">
         <Logo />
 
-        <form
-          role="search"
-          onSubmit={submitSearch}
-          className="group mx-auto hidden w-full min-w-0 max-w-xl items-center gap-2 rounded-full border border-[var(--border-strong)] bg-[var(--bg-muted)] py-1.5 pl-4 pr-1.5 transition focus-within:border-[var(--fg-lime-500)] focus-within:shadow-[0_0_0_4px_rgba(216,181,88,0.14)] md:flex"
-        >
-          <Search size={17} className="shrink-0 text-[var(--text-faint)] transition-colors group-focus-within:text-[var(--fg-lime-400)]" />
-          <input
-            type="search"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="¿Qué está buscando?"
-            aria-label="Buscar en el portal"
-            className="min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-[var(--text-faint)] [&::-webkit-search-cancel-button]:hidden"
-          />
-          <button
-            type="submit"
-            className="rounded-full bg-[var(--fg-lime-500)] px-3.5 py-1.5 text-[0.68rem] font-bold uppercase tracking-[0.12em] text-[var(--fg-green-900)] transition-colors hover:bg-[var(--fg-lime-400)]"
-          >
-            Buscar
-          </button>
-        </form>
+        {searchForm("mx-auto hidden w-full min-w-0 max-w-xl md:flex lg:hidden")}
 
         <LoginMenu />
 
@@ -119,8 +123,10 @@ export function Header({ nav: mainNav }: { nav: { label: string; href: string }[
         </button>
       </Container>
 
-      <nav className="hidden border-t border-[var(--border)] bg-[var(--bg-muted)] lg:block" aria-label="Navegación principal">
-        <Container className="flex items-center gap-1 overflow-x-auto py-1.5 text-sm font-semibold [scrollbar-width:none] [&>:first-child]:ml-auto [&>:last-child]:mr-auto">
+      <nav className="hidden bg-[var(--bg-muted)] lg:block" aria-label="Navegación principal">
+        <Container className="flex items-center gap-4 py-2 text-sm font-semibold">
+          {searchForm("hidden w-48 shrink-0 lg:flex xl:w-56")}
+          <div className="flex min-w-0 flex-1 items-center gap-0.5 overflow-x-auto text-[0.82rem] [scrollbar-width:none] [&>:first-child]:ml-auto [&>:last-child]:mr-auto">
           {mainNav.map((item) => {
             const active = isActive(pathname, item.href);
             return (
@@ -128,7 +134,7 @@ export function Header({ nav: mainNav }: { nav: { label: string; href: string }[
                 key={item.href}
                 href={item.href}
                 aria-current={active ? "page" : undefined}
-                className={`relative whitespace-nowrap rounded-full px-3.5 py-2 transition-colors after:absolute after:inset-x-3.5 after:bottom-1 after:h-px after:origin-left after:bg-[var(--fg-lime-500)] after:transition-transform after:duration-300 hover:text-[var(--fg-lime-400)] hover:after:scale-x-100 ${
+                className={`relative whitespace-nowrap rounded-full px-2.5 py-2 xl:px-3 transition-colors after:absolute after:inset-x-2.5 after:bottom-1 after:h-px after:origin-left after:bg-[var(--fg-lime-500)] after:transition-transform after:duration-300 hover:text-[var(--fg-lime-400)] hover:after:scale-x-100 ${
                   active ? "text-[var(--fg-lime-400)] after:scale-x-100" : "text-[var(--text)] after:scale-x-0"
                 }`}
               >
@@ -136,6 +142,8 @@ export function Header({ nav: mainNav }: { nav: { label: string; href: string }[
               </Link>
             );
           })}
+          </div>
+          <LoginMenu />
         </Container>
       </nav>
 
