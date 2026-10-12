@@ -12,8 +12,8 @@ import { MembershipBanner } from "@/components/blocks/MembershipBanner";
 export default function Home() {
   return (
     <>
-      <HeroNews />
       <PortalJourney />
+      <HeroNews />
       <PortalesAliados />
       <MallDirectory />
       <StatsStrip />

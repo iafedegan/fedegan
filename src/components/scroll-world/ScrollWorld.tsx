@@ -73,7 +73,7 @@ export function ScrollWorld({ scenes }: { scenes: JourneyScene[] }) {
     let activeIdx = -1;
 
     const header = document.querySelector("header");
-    const setTop = () => stage.style.setProperty("--sw-top", `${header ? header.getBoundingClientRect().height : 72}px`);
+    const setTop = () => track.style.setProperty("--sw-top", `${header ? header.getBoundingClientRect().height : 72}px`);
     setTop();
 
     const paint = (pv: number) => {
@@ -140,6 +140,7 @@ export function ScrollWorld({ scenes }: { scenes: JourneyScene[] }) {
       onScroll();
     });
     ro.observe(stage);
+    if (header) ro.observe(header);
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
 
