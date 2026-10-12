@@ -255,6 +255,7 @@ export function ScrollWorld({ scenes }: { scenes: JourneyScene[] }) {
                       blockRefs.current[i] = el;
                     }}
                     className="sw-block"
+                    data-local={s.id}
                     style={{ "--acc": s.accent } as React.CSSProperties}
                   >
                     <h2 className="sw-title">{s.nombre}</h2>

@@ -10,6 +10,9 @@ import { MobileTabBar } from "@/components/layout/MobileTabBar";
 import { BackToTop } from "@/components/layout/BackToTop";
 import { getPublishedDesign } from "@/lib/design/store";
 import { designCss } from "@/lib/design/regions";
+import { Ticker } from "@/components/design/Ticker";
+import { AdSlot } from "@/components/design/AdSlot";
+import { SitePopup } from "@/components/design/SitePopup";
 
 export const viewport: Viewport = {
   themeColor: "#05100b",
@@ -35,7 +38,14 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   const [nav, design] = await Promise.all([getNav(), getPublishedDesign()]);
   const css = designCss(design);
   return (
-    <html lang="es" data-theme="esmeralda" className="h-full antialiased">
+    <html
+      lang="es"
+      data-theme="esmeralda"
+      data-navbar={design.parts.navbar ?? "clasico"}
+      data-footer={design.parts.footer ?? "completo"}
+      data-hero={design.parts.hero ?? "izquierda"}
+      className="h-full antialiased"
+    >
       <body className="min-h-full flex flex-col">
         {css && <style id="design-css" dangerouslySetInnerHTML={{ __html: css }} />}
         <Providers>
@@ -49,13 +59,17 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
                   Saltar al contenido
                 </a>
                 <Header nav={nav} />
+                <Ticker initial={design.ticker} />
+                <AdSlot zone="top" initial={design.ads.top} />
               </>
             }
             bottom={
               <>
+                <AdSlot zone="bottom" initial={design.ads.bottom} />
                 <ChromeGate>
                   <Footer />
                 </ChromeGate>
+                <SitePopup initial={design.popup} />
                 <BackToTop />
                 <MobileTabBar />
               </>

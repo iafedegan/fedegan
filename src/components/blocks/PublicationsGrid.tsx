@@ -9,7 +9,7 @@ export async function PublicationsGrid() {
   const publications = await getPublications();
   if (!publications.length) return null;
   return (
-    <section className="py-12 sm:py-16">
+    <section data-region="cards" className="py-12 sm:py-16">
       <Container>
         <SectionHeading eyebrow="Recursos" title="Publicaciones y recursos" action={{ label: "Ver todas las publicaciones", href: "/publicaciones" }} />
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

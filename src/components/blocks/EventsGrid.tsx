@@ -7,7 +7,7 @@ export async function EventsGrid() {
   const events = await getEvents();
   if (!events.length) return null;
   return (
-    <section className="py-12 sm:py-16">
+    <section data-region="cards" className="py-12 sm:py-16">
       <Container>
         <SectionHeading eyebrow="Agenda" title="Eventos y agenda" action={{ label: "Ver todos los eventos", href: "/eventos" }} />
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

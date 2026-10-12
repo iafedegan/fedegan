@@ -9,7 +9,7 @@ export async function HeroNews() {
   if (carousel.length > 0) return <NewsCarousel items={carousel} />;
 
   return (
-    <section className="pg-stage pb-24 pt-14 sm:pb-28 sm:pt-20">
+    <section data-region="news" className="pg-stage pb-24 pt-14 sm:pb-28 sm:pt-20">
       <Container className="relative">
         <span className="eyebrow">Federación Colombiana de Ganaderos</span>
         <h1 className="mt-4 max-w-3xl text-balance font-[var(--font-display)] text-4xl font-bold leading-[1.06] text-[var(--text)] sm:text-5xl lg:text-6xl">

@@ -35,6 +35,7 @@ export function NewsCarousel({ items }: { items: Noticia[] }) {
 
   return (
     <section
+      data-region="news"
       ref={rootRef}
       aria-roledescription="carrusel"
       aria-label="Noticias de portada"

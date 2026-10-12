@@ -6,14 +6,18 @@ import { NewsGrid } from "@/components/blocks/NewsGrid";
 import { PublicationsGrid } from "@/components/blocks/PublicationsGrid";
 import { EventsGrid } from "@/components/blocks/EventsGrid";
 import { InfoLinksRow } from "@/components/blocks/InfoLinksRow";
+import { AdSlot } from "@/components/design/AdSlot";
+import { getPublishedDesign } from "@/lib/design/store";
 import { MembershipBanner } from "@/components/blocks/MembershipBanner";
 
-export default function Home() {
+export default async function Home() {
+  const design = await getPublishedDesign();
   return (
     <>
       <PortalJourney />
       <HeroNews />
       <PortalesAliados />
+      <AdSlot zone="mid" initial={design.ads.mid} />
       <StatsStrip />
       <NewsGrid />
       <PublicationsGrid />

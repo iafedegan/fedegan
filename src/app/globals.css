@@ -612,3 +612,35 @@ p { text-wrap: pretty; }
   .sw-static { display: block; }
 }
 @media (max-width: 420px) { .sw-kicker { display: none; } .sw-top > div { justify-content: flex-end; } }
+
+
+/* =======================================================================
+   Piezas intercambiables, cintillo (editor de diseño)
+   ======================================================================= */
+.tk { overflow: hidden; border-bottom: 1px solid var(--border); background: var(--bg-muted); }
+.tk-track { display: flex; width: max-content; gap: 2.5rem; padding: 0.55rem 0; animation: tk-run linear infinite; }
+.tk:hover .tk-track { animation-play-state: paused; }
+.tk-item { white-space: nowrap; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.04em; color: var(--text); }
+.tk-dot { display: inline-block; width: 0.4rem; height: 0.4rem; margin-right: 0.35rem; border-radius: 999px; background: var(--fg-lime-500); vertical-align: middle; }
+@keyframes tk-run { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) { .tk-track { animation: none; width: auto; flex-wrap: wrap; padding-inline: 1rem; } }
+
+/* Encabezado: compacta y centrada */
+[data-navbar="compacta"] [data-region="navbar"] form[role="search"] { display: none !important; }
+[data-navbar="compacta"] [data-region="navbar"] > div:first-child { padding-block: 0.4rem !important; }
+[data-navbar="compacta"] [data-region="navbar"] > nav > div { justify-content: center; }
+[data-navbar="centrada"] [data-region="navbar"] > div:first-child { justify-content: center; }
+[data-navbar="centrada"] [data-region="navbar"] form[role="search"] { display: none !important; }
+[data-navbar="centrada"] [data-region="navbar"] > nav > div { justify-content: center; text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.78rem; }
+
+/* Pie: sin contacto / mínimo */
+[data-footer="central"] [data-region="footer"] > div:first-child > div:nth-child(n+4) { display: none; }
+[data-footer="central"] [data-region="footer"] > div:first-child { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+[data-footer="minimo"] [data-region="footer"] > div:first-child > div:nth-child(n+2) { display: none; }
+[data-footer="minimo"] [data-region="footer"] > div:first-child { grid-template-columns: 1fr; justify-items: center; text-align: center; }
+[data-footer="minimo"] [data-region="footer"] > div:first-child > div:first-child { align-items: center; }
+
+/* Recorrido: texto centrado */
+[data-hero="centro"] .sw-block { margin-inline: auto; text-align: center; }
+[data-hero="centro"] .sw-tags, [data-hero="centro"] .sw-actions { justify-content: center; }
+[data-hero="centro"] .sw-hint { justify-content: center; }

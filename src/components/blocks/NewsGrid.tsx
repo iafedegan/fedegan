@@ -8,7 +8,7 @@ export async function NewsGrid() {
   if (latest.length === 0) return null;
 
   return (
-    <section className="py-4 sm:py-6">
+    <section data-region="cards" className="py-4 sm:py-6">
       <Container>
         <SectionHeading eyebrow="Actualidad" title="Últimas noticias" action={{ label: "Ver todas las noticias", href: "/noticias" }} />
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
