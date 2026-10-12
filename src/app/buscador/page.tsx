@@ -23,9 +23,8 @@ export default async function BuscadorPage({
         title="Buscar en el portal"
         description="Encuentre noticias, publicaciones, eventos y páginas institucionales de FEDEGÁN–FNG."
         breadcrumbs={[{ label: "Buscador" }]}
-        compact
       />
-      <Container className="max-w-3xl py-10 sm:py-14">
+      <Container className="max-w-3xl py-6 sm:py-10">
         <SearchClient initialQuery={q ?? ""} index={index} />
       </Container>
     </>

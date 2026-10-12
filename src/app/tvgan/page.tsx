@@ -24,7 +24,7 @@ export default function TvganPage() {
         imagePos="55% 40%"
         breadcrumbs={[{ label: "TVGAN" }]}
       />
-      <Container className="flex flex-col gap-10 py-14 sm:py-20">
+      <Container className="flex flex-col gap-8 py-8 sm:gap-10 sm:py-12">
         <div className="gl">
           <div className="gl-face">
             <div className="relative aspect-video overflow-hidden">

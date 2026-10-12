@@ -34,9 +34,8 @@ export default async function MapaDelSitioPage() {
         title="Mapa del sitio"
         description="Todas las secciones del portal en un solo lugar."
         breadcrumbs={[{ label: "Mapa del sitio" }]}
-        compact
       />
-      <Container className="grid gap-6 py-10 sm:grid-cols-2 sm:py-14">
+      <Container className="grid gap-6 py-6 sm:grid-cols-2 sm:py-10">
         {groups.map((g) => (
           <Card key={g.title} accent={g.accent} hover={false}>
             <div className="p-6 sm:p-8">

@@ -1,11 +1,12 @@
 import { getPisos } from "@/lib/cms/content";
+import { getHomeNews } from "@/lib/contexto";
 import { journeyPhotos } from "@/content/scroll-world";
 import { ScrollWorld, type JourneyScene } from "@/components/scroll-world/ScrollWorld";
 
-// Recorrido scroll por los locales del directorio (101–107) con fotos reales de finca.
+// Recorrido scroll por los locales del directorio y las noticias, con fotos reales de finca.
 // Los textos salen del CMS; la foto, de journeyPhotos (o la del propio local si no hay).
 export async function PortalJourney() {
-  const pisos = await getPisos();
+  const [pisos, news] = await Promise.all([getPisos(), getHomeNews()]);
   const scenes: JourneyScene[] = [];
   for (const l of pisos.flatMap((p) => p.locales)) {
     const photo = journeyPhotos[l.id];
@@ -13,7 +14,6 @@ export async function PortalJourney() {
     if (!image) continue;
     scenes.push({
       id: l.id,
-      numero: l.numero,
       nombre: l.nombre,
       rubro: l.rubro,
       descripcion: l.descripcion,
@@ -26,6 +26,22 @@ export async function PortalJourney() {
       alt: photo?.alt ?? l.nombre,
     });
   }
+
+  // Noticias cierra el recorrido: usa la foto de la última nota con imagen (sin las generadas con IA).
+  const lead = news.carousel.find((n) => n.image && !n.imageAlt?.toLowerCase().startsWith("imagen generada con ia"));
+  scenes.push({
+    id: "noticias",
+    nombre: "Noticias",
+    rubro: "Actualidad",
+    descripcion: "Notas, análisis y actualidad del sector ganadero colombiano, publicadas por CONtexto Ganadero.",
+    tags: ["CONtexto Ganadero"],
+    href: "/noticias",
+    accent: "216,181,88",
+    image: lead?.image ?? "/headers/campo.jpg",
+    pos: lead?.image ? "50% 50%" : "20% 45%",
+    alt: lead?.imageAlt ?? "Vacas pastando en un potrero con cerca de alambre y árboles",
+  });
+
   if (scenes.length < 2) return null;
   return <ScrollWorld scenes={scenes} />;
 }

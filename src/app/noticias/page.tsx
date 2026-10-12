@@ -43,9 +43,9 @@ export default async function NoticiasPage({ searchParams }: { searchParams: Pro
         imagePos="60% 40%"
         breadcrumbs={[{ label: "Noticias" }]}
       />
-      <Container className="py-12 sm:py-16">
+      <Container className="py-8 sm:py-12">
         {secciones.length > 0 && (
-          <nav aria-label="Secciones" className="-mx-1 mb-10 flex gap-2 overflow-x-auto px-1 pb-2">
+          <nav aria-label="Secciones" className="-mx-1 mb-6 flex gap-2 overflow-x-auto px-1 pb-2 [scrollbar-width:none] sm:mb-8 [&::-webkit-scrollbar]:hidden">
             <Link href="/noticias" className={chip(!categoria)}>Todas</Link>
             {secciones.map((s) => (
               <Link key={s.slug} href={href({ categoria: s.slug })} className={chip(categoria === s.slug)}>

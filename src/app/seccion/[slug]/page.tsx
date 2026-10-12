@@ -40,7 +40,7 @@ export default async function SeccionPage({ params }: { params: Promise<{ slug: 
         imagePos={seccion.pos}
         breadcrumbs={[{ label: "Directorio", href: "/directorio" }, { label: seccion.nombre }]}
       />
-      <Container className="max-w-2xl py-14 sm:py-20">
+      <Container className="max-w-2xl py-8 sm:py-12">
         <Card hover={false}>
           <div className="flex flex-col items-start gap-5 p-8 sm:p-10">
             <span className="flex h-12 w-12 items-center justify-center rounded-[var(--radius-md)] border border-[rgba(var(--acc-rgb),0.5)] bg-[rgba(var(--acc-rgb),0.12)] text-[rgb(var(--acc-rgb))]">

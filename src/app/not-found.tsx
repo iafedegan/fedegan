@@ -13,7 +13,7 @@ export default function NotFound() {
         imagePos="50% 55%"
         breadcrumbs={[{ label: "Página no encontrada" }]}
       />
-      <Container className="flex flex-wrap gap-3 py-14 sm:py-20">
+      <Container className="flex flex-wrap gap-3 py-8 sm:py-12">
         <Button href="/">Ir al inicio</Button>
         <Button href="/buscador" variant="secondary">Buscar en el portal</Button>
         <Button href="/noticias" variant="secondary">Ver noticias</Button>

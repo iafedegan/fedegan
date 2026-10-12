@@ -25,7 +25,7 @@ export default function EscuelaVirtualPage() {
         imagePos="45% 50%"
         breadcrumbs={[{ label: "Escuela Virtual" }]}
       />
-      <Container className="flex flex-col gap-14 py-14 sm:py-20">
+      <Container className="flex flex-col gap-10 py-8 sm:gap-12 sm:py-12">
         <Card hover={false}>
           <div className="flex flex-col items-start justify-between gap-6 p-7 sm:flex-row sm:items-center sm:p-9">
             <div className="flex items-center gap-5">

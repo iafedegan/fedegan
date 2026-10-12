@@ -16,7 +16,7 @@ export default async function FaqPage() {
         description="Resuelva sus dudas más comunes sobre trámites, servicios y procesos de FEDEGÁN–FNG."
         breadcrumbs={[{ label: "Preguntas frecuentes" }]}
       />
-      <Container className="max-w-3xl py-14 sm:py-20">
+      <Container className="max-w-3xl py-8 sm:py-12">
         <FaqAccordion items={faqs} />
       </Container>
     </>

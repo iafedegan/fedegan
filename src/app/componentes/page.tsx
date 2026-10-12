@@ -49,7 +49,7 @@ export default function ComponentesPage() {
         breadcrumbs={[{ label: "Catálogo de componentes" }]}
       />
 
-      <Container className="flex flex-col gap-16 py-14 sm:py-20">
+      <Container className="flex flex-col gap-12 py-8 sm:gap-14 sm:py-12">
         <section>
           <SectionHeading eyebrow="Tokens" title="Color de marca" />
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">

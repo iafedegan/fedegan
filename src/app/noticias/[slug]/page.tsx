@@ -39,9 +39,9 @@ export default async function NoticiaDetailPage({ params }: { params: Promise<{ 
 
   return (
     <article>
-      <section className="pg-stage">
-        <Container className="relative max-w-4xl py-12 sm:py-16 lg:py-20">
-          <nav aria-label="Ruta de navegación" className="mb-8 flex flex-wrap items-center gap-1.5 text-xs text-[var(--text-faint)]">
+      <section className="ph">
+        <Container className="relative max-w-4xl py-5 sm:py-7 lg:py-8">
+          <nav aria-label="Ruta de navegación" className="mb-4 flex flex-wrap items-center gap-1.5 text-xs text-[var(--text-faint)]">
             <Link href="/" className="transition-colors hover:text-[var(--fg-lime-400)]">Inicio</Link>
             <ChevronRight size={12} />
             <Link href="/noticias" className="transition-colors hover:text-[var(--fg-lime-400)]">Noticias</Link>
@@ -57,16 +57,16 @@ export default async function NoticiaDetailPage({ params }: { params: Promise<{ 
             {n.ultimaHora && <Badge tone="alert">Última hora</Badge>}
             {n.enVivo && <Badge tone="alert">En vivo</Badge>}
           </div>
-          <h1 className="mt-5 text-balance font-[var(--font-display)] text-3xl font-bold leading-[1.1] text-[var(--text)] sm:text-5xl">{n.title}</h1>
-          <p className="mt-5 max-w-3xl text-lg leading-relaxed text-[var(--text-muted)]">{n.dek}</p>
-          <p className="mt-6 text-sm text-[var(--text-faint)]">
+          <h1 className="mt-3 text-balance font-[var(--font-display)] text-2xl font-bold leading-[1.12] text-[var(--text)] sm:text-4xl">{n.title}</h1>
+          <p className="mt-3 max-w-3xl text-base leading-relaxed text-[var(--text-muted)] sm:text-lg">{n.dek}</p>
+          <p className="mt-4 text-sm text-[var(--text-faint)]">
             Por <span className="font-semibold text-[var(--text-muted)]">{n.author}</span> · {n.date}
             {updatedLater && <> · Actualizada el {new Intl.DateTimeFormat("es-CO", { day: "numeric", month: "long", year: "numeric", timeZone: "America/Bogota" }).format(new Date(n.updatedAt!))}</>}
           </p>
         </Container>
       </section>
 
-      <Container className="max-w-3xl py-12 sm:py-16">
+      <Container className="max-w-3xl py-8 sm:py-12">
         {n.image && (
           <figure className="mb-10">
             {/* eslint-disable-next-line @next/next/no-img-element */}

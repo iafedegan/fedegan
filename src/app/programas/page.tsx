@@ -24,7 +24,7 @@ export default function ProgramasPage() {
         imagePos="50% 60%"
         breadcrumbs={[{ label: "Programas" }]}
       />
-      <Container className="grid gap-6 py-14 sm:grid-cols-2 sm:py-20">
+      <Container className="grid gap-6 py-8 sm:grid-cols-2 sm:py-12">
         {programs.map((p) => (
           <PhotoCard
             key={p.title}

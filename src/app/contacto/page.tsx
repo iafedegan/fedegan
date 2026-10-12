@@ -24,7 +24,7 @@ export default function ContactoPage() {
         description="Escríbanos por PQRS o comuníquese directamente con la Federación Colombiana de Ganaderos."
         breadcrumbs={[{ label: "Contacto" }]}
       />
-      <Container className="grid gap-8 py-14 sm:py-20 lg:grid-cols-[1.1fr_0.9fr]">
+      <Container className="grid gap-6 py-8 sm:gap-8 sm:py-12 lg:grid-cols-[1.1fr_0.9fr]">
         <Card hover={false}>
           <div className="p-7 sm:p-10">
             <h2 className="mb-6 font-[var(--font-display)] text-2xl font-bold text-[var(--text)]">Escríbanos</h2>

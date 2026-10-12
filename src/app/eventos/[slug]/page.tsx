@@ -32,7 +32,7 @@ export default async function EventoDetailPage({ params }: { params: Promise<{ s
         title={event.title}
         breadcrumbs={[{ label: "Eventos", href: "/eventos" }, { label: event.kind }]}
       />
-      <Container className="max-w-3xl py-14 sm:py-20">
+      <Container className="max-w-3xl py-8 sm:py-12">
         <Card accent={accent} hover={false}>
           <div className="flex flex-col gap-6 p-7 sm:flex-row sm:items-center sm:p-9">
             <div className="flex h-28 w-28 shrink-0 flex-col items-center justify-center rounded-[var(--radius-lg)] border border-[rgba(var(--acc-rgb),0.45)] bg-[rgba(var(--acc-rgb),0.12)] text-[rgb(var(--acc-rgb))]">

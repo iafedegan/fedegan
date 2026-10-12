@@ -27,7 +27,7 @@ export default function QuienesSomosPage() {
         breadcrumbs={[{ label: "Quiénes somos" }]}
       />
 
-      <section className="py-14 sm:py-20">
+      <section className="py-8 sm:py-12">
         <Container>
           <SectionHeading eyebrow="Identidad" title="Lo que nos guía" />
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
@@ -46,7 +46,7 @@ export default function QuienesSomosPage() {
         </Container>
       </section>
 
-      <section className="pb-20 sm:pb-28">
+      <section className="pb-10 pt-2 sm:pb-16">
         <Container className="grid items-center gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
           <div>
             <span className="eyebrow">Nuestra historia</span>

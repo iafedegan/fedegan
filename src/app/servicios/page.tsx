@@ -33,7 +33,7 @@ export default function ServiciosPage() {
         imagePos="60% 40%"
         breadcrumbs={[{ label: "Servicios" }]}
       />
-      <Container className="flex flex-col gap-16 py-14 sm:py-20">
+      <Container className="flex flex-col gap-10 py-8 sm:gap-12 sm:py-12">
         <div className="grid gap-6 sm:grid-cols-3">
           {services.map((s) => {
             const Icon = iconMap[s.icon];

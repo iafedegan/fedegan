@@ -9,7 +9,6 @@ import { warp } from "./timing";
 
 export interface JourneyScene {
   id: string;
-  numero: string;
   nombre: string;
   rubro: string;
   descripcion: string;
@@ -110,6 +109,9 @@ export function ScrollWorld({ scenes }: { scenes: JourneyScene[] }) {
         if (counterRef.current) counterRef.current.textContent = `${two(idx + 1)} / ${two(K + 1)}`;
         dotRefs.current.forEach((d, j) => d?.classList.toggle("is-active", j === idx));
         chipRefs.current.forEach((d, j) => d?.classList.toggle("is-active", j === idx));
+        const chip = chipRefs.current[idx];
+        const strip = chip?.parentElement;
+        if (chip && strip) strip.scrollTo({ left: chip.offsetLeft - (strip.clientWidth - chip.offsetWidth) / 2, behavior: "smooth" });
       }
     };
 
@@ -189,6 +191,7 @@ export function ScrollWorld({ scenes }: { scenes: JourneyScene[] }) {
                 fill
                 sizes="100vw"
                 priority={i < 2}
+                unoptimized={s.image.startsWith("http")}
                 style={{ objectFit: "cover", objectPosition: s.pos }}
               />
             </div>
@@ -215,9 +218,9 @@ export function ScrollWorld({ scenes }: { scenes: JourneyScene[] }) {
                 type="button"
                 onClick={() => goTo(i)}
                 className={`sw-chip${i === 0 ? " is-active" : ""}`}
-                aria-label={`Ir al local ${s.numero}: ${s.nombre}`}
+                aria-label={`Ir a ${s.nombre}`}
               >
-                {s.numero}
+                {s.nombre}
               </button>
             ))}
           </nav>
@@ -235,11 +238,9 @@ export function ScrollWorld({ scenes }: { scenes: JourneyScene[] }) {
                 type="button"
                 onClick={() => goTo(i)}
                 className={`sw-dot${i === 0 ? " is-active" : ""}`}
-                aria-label={`Ir al local ${s.numero}: ${s.nombre}`}
+                aria-label={`Ir a ${s.nombre}`}
               >
-                <span className="sw-dot-label">
-                  {s.numero} · {s.nombre}
-                </span>
+                <span className="sw-dot-label">{s.nombre}</span>
               </button>
             ))}
           </nav>
@@ -256,9 +257,6 @@ export function ScrollWorld({ scenes }: { scenes: JourneyScene[] }) {
                     className="sw-block"
                     style={{ "--acc": s.accent } as React.CSSProperties}
                   >
-                    <span className="sw-num" aria-hidden>
-                      {s.numero}
-                    </span>
                     <span className="eyebrow">{s.rubro}</span>
                     <h2 className="sw-title">{s.nombre}</h2>
                     <p className="sw-body">{s.descripcion}</p>
@@ -300,9 +298,7 @@ export function ScrollWorld({ scenes }: { scenes: JourneyScene[] }) {
                   <Image src={s.image} alt={s.alt} fill sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" style={{ objectFit: "cover", objectPosition: s.pos }} />
                 </div>
                 <div className="p-6">
-                  <span className="eyebrow">
-                    {s.numero} · {s.rubro}
-                  </span>
+                  <span className="eyebrow">{s.rubro}</span>
                   <h3 className="mt-3 font-[var(--font-display)] text-2xl font-bold text-[var(--text)]">{s.nombre}</h3>
                   <p className="mt-2 text-[var(--text-muted)]">{s.descripcion}</p>
                   <EnterLink scene={s} className="sw-enter mt-5" />

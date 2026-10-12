@@ -32,7 +32,7 @@ export default async function PublicacionDetailPage({ params }: { params: Promis
         title={pub.title}
         breadcrumbs={[{ label: "Publicaciones", href: "/publicaciones" }, { label: pub.type }]}
       />
-      <Container className="grid items-center gap-10 py-14 sm:py-20 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
+      <Container className="grid items-center gap-8 py-8 sm:py-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-14">
         <div className="gl" style={{ ["--acc-rgb" as string]: c.accent }}>
           <div className="gl-face">
             <div className="relative aspect-[4/5] overflow-hidden">

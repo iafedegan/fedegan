@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/ui/Container";
 import { PageHeader } from "@/components/ui/PageHeader";
-import { PhotoCard } from "@/components/ui/PhotoCard";
-import { Badge } from "@/components/ui/Badge";
+import { PublicationsExplorer } from "@/components/blocks/PublicationsExplorer";
 import { publicationCovers } from "@/content/site";
 import { getPublications } from "@/lib/cms/content";
 
@@ -10,6 +9,18 @@ export const metadata: Metadata = { title: "Publicaciones" };
 
 export default async function PublicacionesPage() {
   const publications = await getPublications();
+  const items = publications.map((p) => {
+    const c = publicationCovers[p.type] ?? publicationCovers.Informe;
+    return {
+      slug: p.slug,
+      type: p.type,
+      title: p.title,
+      dek: p.dek,
+      image: p.coverImage ?? c.image,
+      pos: p.coverImage ? "50% 50%" : c.pos,
+      accent: c.accent,
+    };
+  });
   return (
     <>
       <PageHeader
@@ -18,26 +29,11 @@ export default async function PublicacionesPage() {
         description="Informes, manuales y boletines institucionales del sector ganadero."
         image="/locales/publicaciones.jpg"
         imagePos="65% 55%"
+        meta={`${items.length} ${items.length === 1 ? "documento" : "documentos"}`}
         breadcrumbs={[{ label: "Publicaciones" }]}
       />
-      <Container className="grid gap-6 py-14 sm:grid-cols-2 sm:py-20 lg:grid-cols-3">
-        {publications.map((p) => {
-          const c = publicationCovers[p.type] ?? publicationCovers.Informe;
-          return (
-            <PhotoCard
-              key={p.slug}
-              image={p.coverImage ?? c.image}
-              imagePos={p.coverImage ? "50% 50%" : c.pos}
-              accent={c.accent}
-              kicker={p.type}
-              title={p.title}
-              text={p.dek}
-              href={`/publicaciones/${p.slug}`}
-              cta="Ver publicación"
-              badge={<Badge tone="lime">{p.type}</Badge>}
-            />
-          );
-        })}
+      <Container className="py-8 sm:py-12">
+        <PublicationsExplorer items={items} />
       </Container>
     </>
   );
