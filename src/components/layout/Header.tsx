@@ -65,6 +65,7 @@ export function Header({ nav: mainNav }: { nav: { label: string; href: string }[
 
   return (
     <header
+      data-region="navbar"
       className={`sticky top-0 z-50 border-b backdrop-blur-xl transition-[background-color,box-shadow,border-color] duration-300 ${
         scrolled || open
           ? "border-[var(--border-strong)] bg-[color-mix(in_srgb,var(--bg)_92%,transparent)] shadow-[0_18px_40px_-28px_rgba(0,0,0,0.9)]"

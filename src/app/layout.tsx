@@ -8,6 +8,8 @@ import { ChromeGate } from "@/components/layout/ChromeGate";
 import { SiteChrome } from "@/components/layout/SiteChrome";
 import { MobileTabBar } from "@/components/layout/MobileTabBar";
 import { BackToTop } from "@/components/layout/BackToTop";
+import { getPublishedDesign } from "@/lib/design/store";
+import { designCss } from "@/lib/design/regions";
 
 export const viewport: Viewport = {
   themeColor: "#05100b",
@@ -30,10 +32,12 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {
-  const nav = await getNav();
+  const [nav, design] = await Promise.all([getNav(), getPublishedDesign()]);
+  const css = designCss(design);
   return (
     <html lang="es" data-theme="esmeralda" className="h-full antialiased">
       <body className="min-h-full flex flex-col">
+        {css && <style id="design-css" dangerouslySetInnerHTML={{ __html: css }} />}
         <Providers>
           <SiteChrome
             top={

@@ -173,7 +173,7 @@ export function ScrollWorld({ scenes }: { scenes: JourneyScene[] }) {
   }, []);
 
   return (
-    <section className="sw" aria-label="Recorrido por los locales del portal">
+    <section className="sw" data-region="hero" aria-label="Recorrido por los locales del portal">
       <div ref={trackRef} className="sw-track" style={{ "--sw-k": K } as React.CSSProperties}>
         <div ref={stageRef} className="sw-stage" style={{ "--acc": scenes[0].accent } as React.CSSProperties}>
           {scenes.map((s, i) => (

@@ -10,7 +10,7 @@ export function SiteChrome({ top, bottom, children }: { top: ReactNode; bottom: 
   return (
     <div className="flex min-h-dvh flex-1 flex-col pb-[calc(5.5rem+env(safe-area-inset-bottom))] md:pb-0">
       {top}
-      <main id="contenido" className="flex-1">{children}</main>
+      <main id="contenido" data-region="body" className="flex-1">{children}</main>
       {bottom}
     </div>
   );

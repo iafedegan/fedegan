@@ -8,7 +8,7 @@ import { NewsletterForm } from "@/components/blocks/NewsletterForm";
 
 export function Footer() {
   return (
-    <footer className="bg-[var(--fg-green-900)] text-white/85 mt-16">
+    <footer data-region="footer" className="bg-[var(--fg-green-900)] text-white/85 mt-16">
       <Container className="py-14 grid gap-x-6 gap-y-10 grid-cols-2 lg:grid-cols-5">
         <div className="col-span-2 lg:col-span-1 flex flex-col gap-3">
           <div className="[&_span]:text-white [&_span:last-child]:text-white/60">
