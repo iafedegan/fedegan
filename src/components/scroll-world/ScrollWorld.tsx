@@ -201,7 +201,7 @@ export function ScrollWorld({ scenes }: { scenes: JourneyScene[] }) {
 
           <div className="sw-top">
             <Container className="flex items-center justify-between gap-4">
-              <span className="eyebrow sw-kicker">Directorio del portal</span>
+              <span />
               <button type="button" onClick={skip} className="sw-skip">
                 Saltar recorrido <ArrowDown size={14} aria-hidden />
               </button>
@@ -257,7 +257,6 @@ export function ScrollWorld({ scenes }: { scenes: JourneyScene[] }) {
                     className="sw-block"
                     style={{ "--acc": s.accent } as React.CSSProperties}
                   >
-                    <span className="eyebrow">{s.rubro}</span>
                     <h2 className="sw-title">{s.nombre}</h2>
                     <p className="sw-body">{s.descripcion}</p>
                     {s.tags.length > 0 && (
