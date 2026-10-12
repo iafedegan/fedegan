@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { PublicationsExplorer } from "@/components/blocks/PublicationsExplorer";
@@ -34,6 +36,16 @@ export default async function PublicacionesPage() {
       />
       <Container className="py-8 sm:py-12">
         <PublicationsExplorer items={items} />
+        <Link
+          href="/seccion/publicaciones"
+          className="group mt-10 flex items-center justify-between gap-4 rounded-[var(--radius-md)] border border-[var(--border-strong)] bg-[var(--surface-2)] p-5 transition-colors hover:border-[var(--fg-lime-500)] sm:p-6"
+        >
+          <span>
+            <span className="block font-[var(--font-display)] text-lg font-bold text-[var(--text)]">Catálogo histórico de publicaciones</span>
+            <span className="mt-1 block text-sm text-[var(--text-muted)]">Libros, cartillas, Carta Fedegán, cuadernos ganaderos y presentaciones del gremio.</span>
+          </span>
+          <ArrowRight size={20} className="shrink-0 text-[var(--fg-lime-400)] transition-transform group-hover:translate-x-1" />
+        </Link>
       </Container>
     </>
   );

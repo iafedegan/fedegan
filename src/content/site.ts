@@ -145,13 +145,13 @@ export const infoLinks = [
     icon: "users" as const,
     title: "Programas y proyectos",
     description: "Conozca nuestras iniciativas para el desarrollo y competitividad del sector.",
-    href: "/programas",
+    href: "/seccion/programas",
   },
   {
     icon: "scale" as const,
     title: "Normatividad",
     description: "Consulte la normatividad vigente que aplica al sector ganadero.",
-    href: "/normatividad",
+    href: "/seccion/normatividad",
   },
   {
     icon: "help-circle" as const,
@@ -164,7 +164,7 @@ export const infoLinks = [
 export const footerLinks = {
   enlaces: [
     { label: "Quiénes somos", href: "/quienes-somos" },
-    { label: "Programas", href: "/programas" },
+    { label: "Programas", href: "/seccion/programas" },
     { label: "Noticias", href: "/noticias" },
     { label: "Publicaciones", href: "/publicaciones" },
     { label: "Eventos", href: "/eventos" },
@@ -175,7 +175,7 @@ export const footerLinks = {
     { label: "Escuela Virtual", href: "/escuela-virtual" },
     { label: "Contexto Ganadero", href: "https://contexto-olive.vercel.app/" },
     { label: "TVGAN", href: "/tvgan" },
-    { label: "Normatividad", href: "/normatividad" },
+    { label: "Normatividad", href: "/seccion/normatividad" },
     { label: "Preguntas frecuentes", href: "/preguntas-frecuentes" },
   ],
 };
@@ -220,8 +220,8 @@ export const pisos: Piso[] = [
     nombre: "Locales del gremio",
     descripcion: "Cada línea de valor de FEDEGÁN–FNG tiene su propio local dentro del portal.",
     locales: [
-      { id: "programas", numero: "101", nombre: "Programas", rubro: "Proyectos del gremio", descripcion: "Ganadería sostenible, sanidad animal y fomento al consumo.", href: "/programas", icon: "users", status: "abierto", ancla: true, tags: ["Sostenibilidad", "Sanidad", "Consumo"], accent: "92,205,134", imagen: "/locales/programas.jpg", imagenPos: "70% 50%" },
-      { id: "normatividad", numero: "102", nombre: "Normatividad", rubro: "Marco legal", descripcion: "Leyes, decretos y resoluciones del sector ganadero.", href: "/normatividad", icon: "scale", status: "abierto", ancla: true, tags: ["Leyes", "Decretos", "Resoluciones"], accent: "216,181,88", imagen: "/locales/normatividad.jpg", imagenPos: "50% 50%" },
+      { id: "programas", numero: "101", nombre: "Programas", rubro: "Proyectos del gremio", descripcion: "Ganadería sostenible, sanidad animal y fomento al consumo.", href: "/seccion/programas", icon: "users", status: "abierto", ancla: true, tags: ["Sostenibilidad", "Sanidad", "Consumo"], accent: "92,205,134", imagen: "/locales/programas.jpg", imagenPos: "70% 50%" },
+      { id: "normatividad", numero: "102", nombre: "Normatividad", rubro: "Marco legal", descripcion: "Leyes, decretos y resoluciones del sector ganadero.", href: "/seccion/normatividad", icon: "scale", status: "abierto", ancla: true, tags: ["Leyes", "Decretos", "Resoluciones"], accent: "216,181,88", imagen: "/locales/normatividad.jpg", imagenPos: "50% 50%" },
       { id: "publicaciones", numero: "103", nombre: "Publicaciones", rubro: "Biblioteca", descripcion: "Informes, manuales, boletines y documentos técnicos.", href: "/publicaciones", icon: "newspaper", status: "abierto", ancla: true, tags: ["Informes", "Manuales", "Boletines"], accent: "230,160,108", imagen: "/locales/publicaciones.jpg", imagenPos: "65% 55%" },
       { id: "cifras", numero: "104", nombre: "Cifras del sector", rubro: "Datos", descripcion: "Inventario bovino y bufalino, precios y estadísticas.", href: "/seccion/cifras-del-sector", icon: "database", status: "abierto", ancla: true, tags: ["Inventario", "Precios", "Estadísticas"], accent: "112,214,196", imagen: "/locales/cifras.jpg", imagenPos: "25% 50%" },
       { id: "fng", numero: "105", nombre: "FNG", rubro: "Fondo Nacional del Ganado", descripcion: "Recaudo de la cuota de fomento y su inversión en el sector.", href: "/seccion/fng", icon: "building", status: "abierto", ancla: true, tags: ["Cuota de fomento", "Inversión"], accent: "216,181,88", imagen: "/locales/fng.jpg", imagenPos: "40% 50%" },

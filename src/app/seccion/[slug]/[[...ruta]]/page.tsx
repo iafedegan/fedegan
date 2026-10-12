@@ -6,30 +6,38 @@ import { PageHeader } from "@/components/ui/PageHeader";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
+import { LegacySectionPage } from "@/components/legacy/LegacySectionPage";
+import { getLegacyPage, getLegacySection, legacyParams } from "@/content/legacy";
 
-const secciones: Record<string, { nombre: string; kicker: string; descripcion: string; image: string; pos: string }> = {
+// Secciones aún sin contenido copiado del portal actual.
+const pendientes: Record<string, { nombre: string; kicker: string; descripcion: string; image: string; pos: string }> = {
   "cartas-de-presidencia": { nombre: "Cartas de Presidencia", kicker: "Sala de prensa", descripcion: "Columnas y cartas del presidente ejecutivo de FEDEGÁN.", image: "/headers/prensa.jpg", pos: "60% 40%" },
-  "cifras-del-sector": { nombre: "Cifras del sector", kicker: "Datos", descripcion: "Inventario bovino y bufalino, precios y estadísticas del sector.", image: "/locales/cifras.jpg", pos: "25% 50%" },
-  fng: { nombre: "FNG", kicker: "Fondo Nacional del Ganado", descripcion: "Recaudo de la cuota de fomento y su inversión en el sector.", image: "/locales/fng.jpg", pos: "40% 50%" },
-  fep: { nombre: "FEP", kicker: "Estabilización de precios", descripcion: "Fondo de Estabilización de Precios: mecanismo y resultados.", image: "/locales/fep.jpg", pos: "70% 50%" },
-  "sistema-integrado-de-gestion": { nombre: "Sistema Integrado de Gestión", kicker: "Calidad", descripcion: "Políticas, procesos y certificaciones de la entidad.", image: "/locales/sig.jpg", pos: "45% 50%" },
   "seguridad-ganadera": { nombre: "Seguridad Ganadera", kicker: "Protección", descripcion: "Alertas, prevención del abigeato y seguridad rural.", image: "/headers/campo.jpg", pos: "50% 60%" },
 };
 
+type Params = { slug: string; ruta?: string[] };
+
 export function generateStaticParams() {
-  return Object.keys(secciones).map((slug) => ({ slug }));
+  return [...legacyParams(), ...Object.keys(pendientes).map((slug) => ({ slug, ruta: [] as string[] }))];
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-  const { slug } = await params;
-  return { title: secciones[slug]?.nombre ?? "Sección" };
+export async function generateMetadata({ params }: { params: Promise<Params> }): Promise<Metadata> {
+  const { slug, ruta = [] } = await params;
+  const section = getLegacySection(slug);
+  if (section) {
+    const key = ruta.length ? ruta.map((s) => decodeURIComponent(s)).join("/") : section.landing;
+    const page = getLegacyPage(key);
+    return { title: ruta.length && page ? page.title : section.label };
+  }
+  return { title: pendientes[slug]?.nombre ?? "Sección" };
 }
 
-export default async function SeccionPage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
-  const seccion = secciones[slug];
-  if (!seccion) notFound();
+export default async function SeccionPage({ params }: { params: Promise<Params> }) {
+  const { slug, ruta = [] } = await params;
+  if (getLegacySection(slug)) return <LegacySectionPage slug={slug} ruta={ruta} />;
 
+  const seccion = pendientes[slug];
+  if (!seccion || ruta.length) notFound();
   return (
     <>
       <PageHeader

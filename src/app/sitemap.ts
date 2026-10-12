@@ -1,18 +1,17 @@
 import type { MetadataRoute } from "next";
 import { getEvents, getPublications } from "@/lib/cms/content";
 import { getNoticias } from "@/lib/contexto";
+import { allLegacyPages, legacyHref } from "@/content/legacy";
 
 const BASE_URL = "https://www.fedegan.org.co";
 
 const staticRoutes = [
   "",
   "/quienes-somos",
-  "/programas",
   "/noticias",
   "/publicaciones",
   "/eventos",
   "/servicios",
-  "/normatividad",
   "/contacto",
   "/preguntas-frecuentes",
   "/escuela-virtual",
@@ -25,6 +24,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...noticias.map((n) => `/noticias/${n.slug}`),
     ...publications.map((p) => `/publicaciones/${p.slug}`),
     ...events.map((e) => `/eventos/${e.slug}`),
+    ...allLegacyPages().map(({ key, slug }) => legacyHref(slug, key)),
   ];
 
   return [...staticRoutes, ...dynamic].map((path) => ({

@@ -9,8 +9,8 @@ export type SearchResult = {
 
 const staticPages: SearchResult[] = [
   { title: "Quiénes somos", excerpt: "Misión, visión y valores de FEDEGÁN–FNG.", href: "/quienes-somos", type: "Página" },
-  { title: "Programas", excerpt: "Programas y proyectos del gremio ganadero.", href: "/programas", type: "Página" },
-  { title: "Normatividad", excerpt: "Leyes, decretos y resoluciones del sector.", href: "/normatividad", type: "Página" },
+  { title: "Programas", excerpt: "Programas y proyectos del gremio ganadero.", href: "/seccion/programas", type: "Página" },
+  { title: "Normatividad", excerpt: "Leyes, decretos y resoluciones del sector.", href: "/seccion/normatividad", type: "Página" },
   { title: "Servicios en línea", excerpt: "Trámites, PQRS, RUV y recaudo biológico.", href: "/servicios", type: "Página" },
   { title: "Preguntas frecuentes", excerpt: "Dudas comunes sobre trámites y servicios.", href: "/preguntas-frecuentes", type: "Página" },
   { title: "Contacto", excerpt: "Canales de atención y formulario de contacto.", href: "/contacto", type: "Página" },
@@ -20,12 +20,14 @@ export function buildSearchIndex(
   news: { slug: string; title: string; dek: string }[],
   publications: Publication[],
   events: Evento[],
+  extra: SearchResult[] = [],
 ): SearchResult[] {
   return [
     ...news.map((n) => ({ title: n.title, excerpt: n.dek, href: `/noticias/${n.slug}`, type: "Noticia" as const })),
     ...publications.map((p) => ({ title: p.title, excerpt: p.dek, href: `/publicaciones/${p.slug}`, type: "Publicación" as const })),
     ...events.map((e) => ({ title: e.title, excerpt: `${e.kind} · ${e.place}`, href: `/eventos/${e.slug}`, type: "Evento" as const })),
     ...staticPages,
+    ...extra,
   ];
 }
 
