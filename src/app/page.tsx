@@ -1,4 +1,5 @@
 import { HeroNews } from "@/components/blocks/HeroNews";
+import { PortalJourney } from "@/components/blocks/PortalJourney";
 import { PortalesAliados } from "@/components/blocks/PortalesAliados";
 import { MallDirectory } from "@/components/blocks/MallDirectory";
 import { StatsStrip } from "@/components/blocks/StatsStrip";
@@ -12,6 +13,7 @@ export default function Home() {
   return (
     <>
       <HeroNews />
+      <PortalJourney />
       <PortalesAliados />
       <MallDirectory />
       <StatsStrip />
