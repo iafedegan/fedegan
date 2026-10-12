@@ -12,6 +12,7 @@ import { getPublishedDesign } from "@/lib/design/store";
 import { designCss } from "@/lib/design/regions";
 import { Ticker } from "@/components/design/Ticker";
 import { AdSlot } from "@/components/design/AdSlot";
+import { PwaRegister } from "@/components/layout/PwaRegister";
 import { SitePopup } from "@/components/design/SitePopup";
 
 export const viewport: Viewport = {
@@ -70,6 +71,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
                   <Footer />
                 </ChromeGate>
                 <SitePopup initial={design.popup} />
+                <PwaRegister build={process.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 8) ?? "local"} />
                 <BackToTop />
                 <MobileTabBar />
               </>

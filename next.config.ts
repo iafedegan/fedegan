@@ -13,6 +13,12 @@ const legacyRedirects = [
 ];
 
 const nextConfig: NextConfig = {
+  async headers() {
+    return [
+      // El service worker nunca debe quedar en caché del navegador: así cada despliegue lo renueva.
+      { source: "/sw.js", headers: [{ key: "Cache-Control", value: "no-cache, no-store, must-revalidate" }, { key: "Service-Worker-Allowed", value: "/" }] },
+    ];
+  },
   async redirects() {
     return legacyRedirects;
   },

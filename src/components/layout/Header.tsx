@@ -78,7 +78,7 @@ export function Header({ nav: mainNav }: { nav: { label: string; href: string }[
         <form
           role="search"
           onSubmit={submitSearch}
-          className="group mx-auto hidden w-full max-w-xl items-center gap-2 rounded-full border border-[var(--border-strong)] bg-[var(--bg-muted)] py-1.5 pl-4 pr-1.5 transition focus-within:border-[var(--fg-lime-500)] focus-within:shadow-[0_0_0_4px_rgba(216,181,88,0.14)] md:flex"
+          className="group mx-auto hidden w-full min-w-0 max-w-xl items-center gap-2 rounded-full border border-[var(--border-strong)] bg-[var(--bg-muted)] py-1.5 pl-4 pr-1.5 transition focus-within:border-[var(--fg-lime-500)] focus-within:shadow-[0_0_0_4px_rgba(216,181,88,0.14)] md:flex"
         >
           <Search size={17} className="shrink-0 text-[var(--text-faint)] transition-colors group-focus-within:text-[var(--fg-lime-400)]" />
           <input
