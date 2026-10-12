@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { Play, Tv } from "lucide-react";
-import { Container } from "@/components/ui/Container";
+import { CalendarClock, Play } from "lucide-react";
 import { PageHeader } from "@/components/ui/PageHeader";
-import { Button } from "@/components/ui/Button";
-import { Card } from "@/components/ui/Card";
+import { CtaBand, Section } from "@/components/ui/Editorial";
 
 export const metadata: Metadata = { title: "TVGAN" };
 
@@ -22,45 +20,55 @@ export default function TvganPage() {
         description="El canal del ganadero colombiano: programas, entrevistas y contenido audiovisual del sector."
         image="/headers/prensa.jpg"
         imagePos="55% 40%"
+        meta="Canal"
         breadcrumbs={[{ label: "TVGAN" }]}
       />
-      <Container className="flex flex-col gap-8 py-8 sm:gap-10 sm:py-12">
-        <div className="gl">
-          <div className="gl-face">
-            <div className="relative aspect-video overflow-hidden">
-              <Image src="/headers/prensa.jpg" alt="" fill sizes="(min-width: 1280px) 1200px, 100vw" className="object-cover" style={{ objectPosition: "55% 40%" }} />
-              <span aria-hidden className="absolute inset-0 bg-[linear-gradient(0deg,rgba(5,15,9,0.85)_0%,rgba(5,15,9,0.35)_55%,rgba(5,15,9,0.55)_100%)]" />
-              <button
-                type="button"
-                aria-label="Reproducir"
-                className="absolute left-1/2 top-1/2 flex h-20 w-20 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-[var(--border-strong)] bg-[rgba(216,181,88,0.2)] text-[var(--fg-lime-400)] backdrop-blur transition-transform duration-500 [transition-timing-function:var(--ease-lux)] hover:scale-110"
-              >
-                <Play size={30} className="translate-x-0.5" />
-              </button>
-              <span className="absolute bottom-5 left-6 font-[var(--font-display)] text-xl font-bold text-[var(--text)]">Tu Vitrina Ganadera</span>
+
+      <Section>
+        <div className="grid items-start gap-6 lg:grid-cols-[1.6fr_1fr] lg:gap-8">
+          <div className="relative isolate aspect-video overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border-strong)]">
+            <Image src="/headers/prensa.jpg" alt="" fill priority sizes="(min-width: 1024px) 60vw, 100vw" className="-z-10 object-cover" style={{ objectPosition: "55% 40%" }} />
+            <span aria-hidden className="absolute inset-0 -z-10 bg-[linear-gradient(0deg,rgba(5,15,9,0.85)_0%,rgba(5,15,9,0.3)_55%,rgba(5,15,9,0.45)_100%)]" />
+            <button
+              type="button"
+              aria-label="Reproducir Tu Vitrina Ganadera"
+              className="absolute left-1/2 top-1/2 flex h-20 w-20 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-[var(--border-strong)] bg-[rgba(216,181,88,0.22)] text-[var(--fg-lime-400)] backdrop-blur transition-transform duration-500 [transition-timing-function:var(--ease-lux)] hover:scale-110"
+            >
+              <Play size={30} className="translate-x-0.5" />
+            </button>
+            <div className="absolute bottom-4 left-5 right-5">
+              <p className="text-[0.68rem] font-bold uppercase tracking-[0.18em] text-[var(--fg-lime-400)]">Destacado</p>
+              <p className="font-[var(--font-display)] text-xl font-bold text-[var(--text)] sm:text-2xl">Tu Vitrina Ganadera</p>
             </div>
           </div>
-        </div>
 
-        <div className="grid gap-6 sm:grid-cols-2">
-          {programs.map((p) => (
-            <Card key={p.title} accent={p.accent} hover={false}>
-              <div className="flex items-center gap-4 p-6">
-                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[var(--radius-md)] border border-[rgba(var(--acc-rgb),0.5)] bg-[rgba(var(--acc-rgb),0.12)] text-[rgb(var(--acc-rgb))]">
-                  <Tv size={20} strokeWidth={1.6} />
-                </span>
-                <div>
-                  <h3 className="font-[var(--font-display)] text-lg font-bold text-[var(--text)]">{p.title}</h3>
-                  <p className="text-sm text-[var(--text-muted)]">{p.schedule}</p>
-                </div>
-              </div>
-            </Card>
-          ))}
+          <div>
+            <h2 className="mb-3 text-[0.72rem] font-bold uppercase tracking-[0.2em] text-[var(--text-faint)]">Programación</h2>
+            <ul className="divide-y divide-[var(--border)] border-y border-[var(--border)]">
+              {programs.map((p) => (
+                <li key={p.title} className="flex items-start gap-4 py-5" style={{ ["--acc-rgb" as string]: p.accent } as React.CSSProperties}>
+                  <span className="mt-0.5 flex h-11 w-11 shrink-0 items-center justify-center rounded-[var(--radius-md)] border border-[rgba(var(--acc-rgb),0.5)] bg-[rgba(var(--acc-rgb),0.12)] text-[rgb(var(--acc-rgb))]">
+                    <CalendarClock size={19} strokeWidth={1.7} />
+                  </span>
+                  <div>
+                    <h3 className="font-[var(--font-display)] text-lg font-bold text-[var(--text)]">{p.title}</h3>
+                    <p className="text-sm text-[var(--text-muted)]">{p.schedule}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
-        <Button href="https://www.contextoganadero.com/" variant="secondary" className="self-start">
-          Ver más en CONtexto Ganadero →
-        </Button>
-      </Container>
+      </Section>
+
+      <CtaBand
+        eyebrow="Más contenido"
+        title="Noticias y periodismo del sector en CONtexto Ganadero"
+        actions={[
+          { label: "Ir a CONtexto Ganadero", href: "https://www.contextoganadero.com/" },
+          { label: "Ver noticias", href: "/noticias" },
+        ]}
+      />
     </>
   );
 }
