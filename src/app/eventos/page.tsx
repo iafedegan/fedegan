@@ -19,7 +19,7 @@ export default async function EventosPage() {
         meta={`${events.length} ${events.length === 1 ? "evento" : "eventos"}`}
         breadcrumbs={[{ label: "Eventos" }]}
       />
-      <Container className="py-8 sm:py-12">
+      <Container className="py-5 sm:py-8">
         <EventsExplorer events={events} />
       </Container>
     </>

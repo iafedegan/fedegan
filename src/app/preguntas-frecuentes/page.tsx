@@ -19,7 +19,7 @@ export default async function FaqPage() {
         meta={`${faqs.length} preguntas`}
         breadcrumbs={[{ label: "Preguntas frecuentes" }]}
       />
-      <Container className="grid items-start gap-8 py-8 sm:py-12 lg:grid-cols-[minmax(0,1fr)_19rem] lg:gap-12">
+      <Container className="grid items-start gap-8 py-5 sm:py-8 lg:grid-cols-[minmax(0,1fr)_19rem] lg:gap-12">
         <div className="min-w-0">
           <FaqAccordion items={faqs} />
         </div>

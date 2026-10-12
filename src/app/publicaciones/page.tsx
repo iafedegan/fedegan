@@ -34,7 +34,7 @@ export default async function PublicacionesPage() {
         meta={`${items.length} ${items.length === 1 ? "documento" : "documentos"}`}
         breadcrumbs={[{ label: "Publicaciones" }]}
       />
-      <Container className="py-8 sm:py-12">
+      <Container className="py-5 sm:py-8">
         <PublicationsExplorer items={items} />
         <Link
           href="/seccion/publicaciones"

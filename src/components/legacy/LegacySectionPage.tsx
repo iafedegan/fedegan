@@ -80,7 +80,7 @@ export function LegacySectionPage({ slug, ruta }: { slug: string; ruta: string[]
         imagePos={photo?.pos}
         breadcrumbs={crumbs}
       />
-      <Container className={`grid gap-8 py-8 sm:py-12 ${hasMenu ? "lg:grid-cols-[minmax(0,1fr)_17rem] lg:gap-14" : ""}`}>
+      <Container className={`grid gap-8 py-5 sm:py-8 ${hasMenu ? "lg:grid-cols-[minmax(0,1fr)_17rem] lg:gap-14" : ""}`}>
         {hasMenu && (
         <details className="rounded-[var(--radius-md)] border border-[var(--border-strong)] bg-[var(--surface-2)] lg:hidden">
           <summary className="flex cursor-pointer list-none items-center gap-2 p-4 text-sm font-bold uppercase tracking-[0.1em] text-[var(--fg-lime-400)]">

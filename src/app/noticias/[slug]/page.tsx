@@ -66,7 +66,7 @@ export default async function NoticiaDetailPage({ params }: { params: Promise<{ 
         </Container>
       </section>
 
-      <Container className="max-w-3xl py-8 sm:py-12">
+      <Container className="max-w-3xl py-5 sm:py-8">
         {n.image && (
           <figure className="mb-10">
             {/* eslint-disable-next-line @next/next/no-img-element */}

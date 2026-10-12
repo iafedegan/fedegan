@@ -22,13 +22,13 @@ export function Section({
   tinted?: boolean;
 }) {
   return (
-    <section id={id} className={`py-10 sm:py-14 ${tinted ? "border-y border-[var(--border)] bg-[var(--bg-muted)]" : ""}`}>
+    <section id={id} className={`py-7 sm:py-9 ${tinted ? "border-y border-[var(--border)] bg-[var(--bg-muted)]" : ""}`}>
       <Container>
         {(eyebrow || title) && (
-          <header className="mb-8 max-w-2xl sm:mb-10">
+          <header className="mb-5 max-w-2xl sm:mb-6">
             {eyebrow && <span className="eyebrow">{eyebrow}</span>}
             {title && (
-              <h2 className="mt-3 text-balance font-[var(--font-display)] text-3xl font-bold leading-[1.1] text-[var(--text)] sm:text-4xl">{title}</h2>
+              <h2 className="mt-2 text-balance font-[var(--font-display)] text-2xl font-bold leading-tight text-[var(--text)] sm:text-3xl">{title}</h2>
             )}
             {intro && <p className="mt-3 text-base leading-relaxed text-[var(--text-muted)] sm:text-lg">{intro}</p>}
           </header>
@@ -145,10 +145,10 @@ export function CtaBand({
   actions: { label: string; href: string; variant?: "lime" | "secondary" }[];
 }) {
   return (
-    <section className="py-10 sm:py-14">
+    <section className="py-7 sm:py-9">
       <Container>
         <div
-          className="relative overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border-strong)] p-7 sm:p-10"
+          className="relative overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border-strong)] p-6 sm:p-8"
           style={{
             background:
               "radial-gradient(60% 140% at 100% 0%, rgba(216,181,88,0.2), transparent 70%), radial-gradient(50% 120% at 0% 100%, rgba(47,156,98,0.28), transparent 70%), var(--surface-solid)",
