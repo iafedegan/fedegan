@@ -1,15 +1,23 @@
 import "server-only";
 import { cache } from "react";
+import { getStoredSecret } from "@/lib/cms/integrations";
 
 // Cliente de la API pública de CONtexto Ganadero (solo lectura).
 // Documentación: https://contexto-olive.vercel.app/api-docs
 // La clave vive solo en el servidor (CONTEXTO_API_KEY); nunca se envía al navegador.
 
-const BASE = process.env.CONTEXTO_API_URL;
-const KEY = process.env.CONTEXTO_API_KEY;
+const DEFAULT_BASE = "https://contexto-olive.vercel.app/api/v1";
+const BASE = process.env.CONTEXTO_API_URL ?? DEFAULT_BASE;
+const ENV_KEY = process.env.CONTEXTO_API_KEY;
 const REVALIDATE_SECONDS = 300;
 
-export const contextoConfigured = Boolean(BASE && KEY);
+/** La clave guardada desde el panel (/admin/apis) tiene prioridad sobre la variable de entorno. */
+export async function contextoCredentials(): Promise<{ base: string; key: string | undefined; source: "panel" | "env" | "none" }> {
+  const stored = await getStoredSecret("contexto");
+  if (stored) return { base: BASE, key: stored, source: "panel" };
+  if (ENV_KEY) return { base: BASE, key: ENV_KEY, source: "env" };
+  return { base: BASE, key: undefined, source: "none" };
+}
 
 type ApiUbicacion = {
   portada?: { esta: boolean; zona: string | null; posicion: number | null; fijadaPorEditor: boolean };
@@ -101,11 +109,12 @@ type ApiResult<T> = { ok: true; data: T } | { ok: false; status: number | null }
 const lastGood = new Map<string, unknown>();
 
 async function api<T>(path: string): Promise<ApiResult<T>> {
-  if (!BASE || !KEY) return { ok: false, status: null };
+  const { base, key } = await contextoCredentials();
+  if (!key) return { ok: false, status: null };
   const route = path.split("?")[0];
   try {
-    const res = await fetch(`${BASE}${path}`, {
-      headers: { Authorization: `Bearer ${KEY}`, Accept: "application/json" },
+    const res = await fetch(`${base}${path}`, {
+      headers: { Authorization: `Bearer ${key}`, Accept: "application/json" },
       next: { revalidate: REVALIDATE_SECONDS },
     });
     if (res.ok) {

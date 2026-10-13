@@ -16,7 +16,7 @@ export default async function ActividadPage() {
     const { data } = await db.from("audit_log").select("*").order("at", { ascending: false }).limit(100);
     rows = (data ?? []) as Audit[];
   }
-  const label = (k: string) => entities.find((e) => e.key === k)?.plural ?? k;
+  const label = (k: string) => (k === "apis" ? "Conexiones (APIs)" : entities.find((e) => e.key === k)?.plural ?? k);
 
   return (
     <div className="flex flex-col gap-6">
