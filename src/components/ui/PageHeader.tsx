@@ -1,13 +1,19 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { Container } from "./Container";
 
-// Cabecera mínima de las páginas interiores: migas de pan, título y una línea de contexto.
-// `eyebrow`, `image`, `imagePos` y `meta` se aceptan por compatibilidad pero ya no se muestran.
+// Cabecera de las páginas interiores: foto a sangre con velo de color, ruta en cápsula,
+// título con degradado y datos clave. Compacta: la foto acompaña, no empuja el contenido.
 export function PageHeader({
+  eyebrow,
   title,
   description,
   breadcrumbs = [],
+  image,
+  imagePos = "50% 50%",
+  facts,
+  meta,
 }: {
   eyebrow?: string;
   title: string;
@@ -15,12 +21,20 @@ export function PageHeader({
   breadcrumbs?: { label: string; href?: string }[];
   image?: string;
   imagePos?: string;
+  facts?: string[];
   meta?: string;
 }) {
+  const chips = facts ?? (meta ? [meta] : []);
   return (
-    <section className="border-b border-[var(--border)] bg-[var(--bg)]" data-region="pagehead">
-      <Container className="py-4 sm:py-5">
-        <nav aria-label="Ruta de navegación" className="mb-1.5 flex flex-wrap items-center gap-1 text-xs text-[var(--text-faint)]">
+    <section className={`mx-hero ${image ? "mx-hero-photo" : ""}`} data-region="pagehead">
+      {image && (
+        <>
+          <Image src={image} alt="" fill priority sizes="100vw" className="-z-20 object-cover" style={{ objectPosition: imagePos }} />
+          <span aria-hidden className="mx-hero-shade" />
+        </>
+      )}
+      <Container className="relative flex min-h-[10.5rem] flex-col justify-end py-6 sm:min-h-[13rem] sm:py-8">
+        <nav aria-label="Ruta de navegación" className="mx-crumb mb-3 self-start text-xs">
           <Link href="/" className="rounded px-1 py-0.5 transition-colors hover:text-[var(--fg-lime-400)]">Inicio</Link>
           {breadcrumbs.map((b) => (
             <span key={b.label} className="flex items-center gap-1">
@@ -28,13 +42,21 @@ export function PageHeader({
               {b.href ? (
                 <Link href={b.href} className="rounded px-1 py-0.5 transition-colors hover:text-[var(--fg-lime-400)]">{b.label}</Link>
               ) : (
-                <span aria-current="page" className="px-1 py-0.5 font-medium text-[var(--text-muted)]">{b.label}</span>
+                <span aria-current="page" className="px-1 py-0.5 font-semibold">{b.label}</span>
               )}
             </span>
           ))}
         </nav>
-        <h1 className="text-balance font-[var(--font-display)] text-2xl font-bold leading-tight text-[var(--text)] sm:text-3xl">{title}</h1>
-        {description && <p className="mt-1.5 line-clamp-2 max-w-3xl text-sm leading-relaxed text-[var(--text-muted)]">{description}</p>}
+        {eyebrow && <span className="mx-kicker mb-2 self-start">{eyebrow}</span>}
+        <h1 className="mx-title text-balance font-[var(--font-display)] text-3xl font-bold leading-[1.05] sm:text-5xl">{title}</h1>
+        {description && <p className="mx-lead mt-2.5 line-clamp-3 max-w-2xl text-sm leading-relaxed sm:text-base">{description}</p>}
+        {chips.length > 0 && (
+          <ul className="mt-4 flex flex-wrap gap-2">
+            {chips.map((c) => (
+              <li key={c} className="mx-fact">{c}</li>
+            ))}
+          </ul>
+        )}
       </Container>
     </section>
   );

@@ -31,6 +31,7 @@ export default function ServiciosPage() {
         image="/headers/servicios.jpg"
         imagePos="60% 40%"
         meta="Trámites"
+        facts={["Trámites en línea", "RUV", "PQRSD"]}
         breadcrumbs={[{ label: "Servicios" }]}
       />
 

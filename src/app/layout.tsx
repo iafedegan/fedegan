@@ -13,6 +13,7 @@ import { designCss } from "@/lib/design/regions";
 import { Ticker } from "@/components/design/Ticker";
 import { AdSlot } from "@/components/design/AdSlot";
 import { Masthead } from "@/components/layout/Masthead";
+import { ThemeScript } from "@/components/layout/ThemeScript";
 import { PwaRegister } from "@/components/layout/PwaRegister";
 import { SitePopup } from "@/components/design/SitePopup";
 
@@ -47,7 +48,11 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
       data-footer={design.parts.footer ?? "completo"}
       data-hero={design.parts.hero ?? "izquierda"}
       className="h-full antialiased"
+      suppressHydrationWarning
     >
+      <head>
+        <ThemeScript />
+      </head>
       <body className="min-h-full flex flex-col">
         {css && <style id="design-css" dangerouslySetInnerHTML={{ __html: css }} />}
         <Providers>

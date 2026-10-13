@@ -35,9 +35,11 @@ export function LoginMenu() {
     return (
       <Link
         href="/ingresar"
-        className="ml-auto hidden min-h-11 shrink-0 items-center gap-2 rounded-full bg-[var(--fg-lime-500)] px-5 text-[0.78rem] font-bold uppercase tracking-[0.1em] text-[var(--fg-green-900)] transition-colors hover:bg-[var(--fg-lime-400)] md:flex"
+        aria-label="Ingresar"
+        title="Ingresar"
+        className="ml-auto hidden h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[var(--fg-lime-500)] text-[var(--fg-green-900)] transition-colors hover:bg-[var(--fg-lime-400)] md:flex"
       >
-        <LogIn size={17} /> Ingresar
+        <LogIn size={19} aria-hidden />
       </Link>
     );
   }

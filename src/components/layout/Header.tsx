@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
 import { ArrowRight, LogIn, LogOut, Menu, Search, UserCircle2, X } from "lucide-react";
 import { Logo } from "./Logo";
+import { ThemeToggle } from "./ThemeToggle";
 import { LoginMenu } from "./LoginMenu";
 import { Container } from "@/components/ui/Container";
 
@@ -103,10 +104,11 @@ export function Header({ nav: mainNav }: { nav: { label: string; href: string }[
 
         <LoginMenu />
 
+        <ThemeToggle className="ml-auto" />
         <Link
           href={user ? "/mi-fedegan" : "/ingresar"}
           aria-label={user ? "Mi FEDEGÁN" : "Iniciar sesión"}
-          className="ml-auto flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-[var(--border-strong)] text-[var(--fg-lime-400)] transition-colors active:bg-[var(--bg-muted)] md:hidden"
+          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-[var(--border-strong)] text-[var(--fg-lime-400)] transition-colors active:bg-[var(--bg-muted)] md:hidden"
         >
           <UserCircle2 size={22} />
         </Link>
@@ -125,7 +127,6 @@ export function Header({ nav: mainNav }: { nav: { label: string; href: string }[
 
       <nav className="hidden bg-[var(--bg-muted)] lg:block" aria-label="Navegación principal">
         <Container className="flex items-center gap-4 py-2 text-sm font-semibold">
-          {searchForm("hidden w-48 shrink-0 lg:flex xl:w-56")}
           <div className="flex min-w-0 flex-1 items-center gap-0.5 overflow-x-auto text-[0.82rem] [scrollbar-width:none] [&>:first-child]:ml-auto [&>:last-child]:mr-auto">
           {mainNav.map((item) => {
             const active = isActive(pathname, item.href);
@@ -143,7 +144,9 @@ export function Header({ nav: mainNav }: { nav: { label: string; href: string }[
             );
           })}
           </div>
+          {searchForm("hidden w-48 shrink-0 lg:flex xl:w-56")}
           <LoginMenu />
+          <ThemeToggle />
         </Container>
       </nav>
 

@@ -28,6 +28,9 @@ export default function ContactoPage() {
         title="Contacto"
         description="Escríbanos por PQRSD o comuníquese directamente con la Federación Colombiana de Ganaderos."
         meta="PQRSD"
+        image="/headers/servicios.jpg"
+        imagePos="50% 45%"
+        facts={["Lunes a viernes", "8:00 a.m. – 5:00 p.m.", "Bogotá D.C."]}
         breadcrumbs={[{ label: "Contacto" }]}
       />
       <Container className="grid gap-8 py-8 sm:gap-10 sm:py-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-14">

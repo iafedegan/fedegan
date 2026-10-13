@@ -30,6 +30,7 @@ export function Section({
             {title && (
               <h2 className="mt-2 text-balance font-[var(--font-display)] text-2xl font-bold leading-tight text-[var(--text)] sm:text-3xl">{title}</h2>
             )}
+            {title && <span aria-hidden className="mx-bar" />}
             {intro && <p className="mt-3 text-base leading-relaxed text-[var(--text-muted)] sm:text-lg">{intro}</p>}
           </header>
         )}

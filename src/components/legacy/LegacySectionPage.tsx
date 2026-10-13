@@ -3,7 +3,6 @@ import { notFound } from "next/navigation";
 import { ArrowRight, ExternalLink, Menu } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { PageHeader } from "@/components/ui/PageHeader";
-import { Card } from "@/components/ui/Card";
 import { LegacyContent } from "@/components/legacy/LegacyContent";
 import { journeyPhotos } from "@/content/scroll-world";
 import { excerptOf, findTrail, getLegacyPage, getLegacySection, legacyHref, type NavNode } from "@/content/legacy";
@@ -110,15 +109,15 @@ export function LegacySectionPage({ slug, ruta }: { slug: string; ruta: string[]
                   return (
                     <li key={n.key}>
                       <Link href={legacyHref(slug, n.key!)} className="group block h-full">
-                        <Card>
-                          <div className="flex flex-1 flex-col gap-2 p-5">
+                        <div className="mx-card mx-lift h-full">
+                          <div className="flex flex-1 flex-col gap-2">
                             <h3 className="font-[var(--font-display)] text-lg font-bold leading-snug text-[var(--text)]">{n.label}</h3>
                             {child && excerptOf(child, 130) && <p className="text-sm leading-relaxed text-[var(--text-muted)]">{excerptOf(child, 130)}</p>}
                             <span className="mt-auto inline-flex items-center gap-1.5 pt-1 text-sm font-semibold text-[rgb(var(--acc-rgb))]">
                               Ver más <ArrowRight size={15} className="transition-transform group-hover:translate-x-1" />
                             </span>
                           </div>
-                        </Card>
+                        </div>
                       </Link>
                     </li>
                   );
@@ -139,7 +138,7 @@ export function LegacySectionPage({ slug, ruta }: { slug: string; ruta: string[]
         <aside className="hidden lg:block">
           <nav
             aria-label={`Menú de ${section.label}`}
-            className="sticky top-36 max-h-[calc(100svh-10rem)] overflow-y-auto rounded-[var(--radius-md)] border border-[var(--border-strong)] bg-[var(--surface-2)] p-3"
+            className="mx-card sticky top-36 max-h-[calc(100svh-10rem)] overflow-y-auto !p-3"
           >
             <p className="px-2.5 pb-2 pt-1 text-[0.7rem] font-bold uppercase tracking-[0.18em] text-[var(--fg-lime-500)]">{section.label}</p>
             <NavTree nodes={section.tree} slug={slug} current={key} />

@@ -132,7 +132,7 @@ export function LegacyContent({ blocks }: { blocks: LegacyBlock[] }) {
         cards ? (
           <ul key={key} className="my-6 grid gap-3 sm:grid-cols-2">
             {rows.flat().filter(Boolean).map((c, n) => (
-              <li key={n} className="flex flex-col gap-1.5 rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface-2)] p-4 leading-relaxed text-[var(--text-muted)]">
+              <li key={n} className="mx-card mx-lift flex flex-col gap-1.5 !p-5 leading-relaxed text-[var(--text-muted)]">
                 <CellLines text={c} />
               </li>
             ))}
