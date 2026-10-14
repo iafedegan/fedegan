@@ -11,7 +11,6 @@ import { getLegacyPage, getLegacySection, legacyParams } from "@/content/legacy"
 
 // Secciones aún sin contenido copiado del portal actual.
 const pendientes: Record<string, { nombre: string; kicker: string; descripcion: string; image: string; pos: string }> = {
-  "cartas-de-presidencia": { nombre: "Cartas de Presidencia", kicker: "Sala de prensa", descripcion: "Columnas y cartas del presidente ejecutivo de FEDEGÁN.", image: "/headers/prensa.jpg", pos: "60% 40%" },
   "seguridad-ganadera": { nombre: "Seguridad Ganadera", kicker: "Protección", descripcion: "Alertas, prevención del abigeato y seguridad rural.", image: "/headers/campo.jpg", pos: "50% 60%" },
 };
 
