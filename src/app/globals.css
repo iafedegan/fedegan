@@ -760,3 +760,25 @@ a.mx-card:hover, .mx-lift:hover { transform: translateY(-6px); }
   }
 }
 @keyframes mx-rise { from { opacity: 0; transform: translateY(1.8rem) scale(0.97); } to { opacity: 1; transform: none; } }
+
+/* =======================================================================
+   Barra de navegación de escritorio: opciones en mayúsculas espaciadas, botón «Buscar» en píldora
+   ======================================================================= */
+.nv-link {
+  position: relative; white-space: nowrap; border-radius: 999px; padding: 0.55rem 0.9rem;
+  font-size: 0.74rem; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text);
+  transition: color 0.2s;
+}
+.nv-link::after {
+  content: ""; position: absolute; left: 0.9rem; right: 0.9rem; bottom: 0.2rem; height: 1px; background: var(--fg-lime-500);
+  transform: scaleX(0); transform-origin: left; transition: transform 0.3s var(--ease-lux);
+}
+.nv-link:hover { color: var(--fg-lime-400); }
+.nv-link:hover::after, .nv-link.nv-active::after { transform: scaleX(1); }
+.nv-pill {
+  display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; padding: 0.5rem 1.5rem;
+  border: 1px solid var(--border-strong); background: transparent; color: var(--text); cursor: pointer;
+  font-size: 0.74rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase;
+  transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+}
+.nv-pill:hover, .nv-pill:focus-within { border-color: var(--fg-lime-500); color: var(--fg-lime-400); background: rgba(216, 181, 88, 0.06); }

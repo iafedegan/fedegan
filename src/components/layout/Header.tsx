@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
-import { ArrowRight, LogIn, LogOut, Menu, Search, UserCircle2, X } from "lucide-react";
+import { ArrowRight, ChevronDown, LogIn, LogOut, Menu, Search, UserCircle2, X } from "lucide-react";
 import { Logo } from "./Logo";
 import { ThemeToggle } from "./ThemeToggle";
 import { LoginMenu } from "./LoginMenu";
@@ -12,6 +12,73 @@ import { Container } from "@/components/ui/Container";
 
 function isActive(pathname: string, href: string) {
   return href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);
+}
+
+// Primeras opciones visibles según el ancho; el resto va en «Más».
+const visibleFrom = (i: number) => (i < 3 ? "" : i < 5 ? "hidden xl:block" : "hidden");
+const inMoreOnlyBelow = (i: number) => (i < 5 ? "xl:hidden" : "");
+
+function MoreMenu({ items, pathname }: { items: { label: string; href: string }[]; pathname: string }) {
+  const [openAt, setOpenAt] = useState<string | null>(null);
+  const open = openAt === pathname;
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const onDown = (e: MouseEvent) => {
+      if (!ref.current?.contains(e.target as Node)) setOpenAt(null);
+    };
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpenAt(null);
+    document.addEventListener("mousedown", onDown);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onDown);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
+
+  const extra = items.slice(3);
+  if (!extra.length) return null;
+  const activeInside = extra.some((it) => isActive(pathname, it.href));
+
+  return (
+    <div ref={ref} className={`relative ${items.length <= 5 ? "xl:hidden" : ""}`}>
+      <button
+        type="button"
+        aria-haspopup="menu"
+        aria-expanded={open}
+        onClick={() => setOpenAt(open ? null : pathname)}
+        className={`nv-link flex items-center gap-1.5 ${activeInside || open ? "text-[var(--fg-lime-400)]" : ""}`}
+      >
+        Más <ChevronDown size={14} className={`transition-transform duration-300 ${open ? "rotate-180" : ""}`} />
+      </button>
+      {open && (
+        <ul
+          role="menu"
+          className="absolute right-0 top-full z-50 mt-3 w-64 overflow-hidden rounded-[1.1rem] border border-[var(--border-strong)] bg-[var(--surface-solid)] py-2 shadow-[var(--shadow-lg)]"
+        >
+          {extra.map((it, k) => {
+            const i = k + 3;
+            return (
+              <li key={it.href} role="none" className={inMoreOnlyBelow(i)}>
+                <Link
+                  href={it.href}
+                  role="menuitem"
+                  onClick={() => setOpenAt(null)}
+                  aria-current={isActive(pathname, it.href) ? "page" : undefined}
+                  className={`block px-5 py-2.5 text-[0.74rem] font-medium uppercase tracking-[0.16em] transition-colors hover:bg-[var(--bg-muted)] hover:text-[var(--fg-lime-400)] ${
+                    isActive(pathname, it.href) ? "text-[var(--fg-lime-400)]" : "text-[var(--text)]"
+                  }`}
+                >
+                  {it.label}
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      )}
+    </div>
+  );
 }
 
 export function Header({ nav: mainNav }: { nav: { label: string; href: string }[] }) {
@@ -24,6 +91,7 @@ export function Header({ nav: mainNav }: { nav: { label: string; href: string }[
   const open = openAt === pathname;
   const [scrolled, setScrolled] = useState(false);
   const [query, setQuery] = useState("");
+  const [pillOpen, setPillOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -125,28 +193,57 @@ export function Header({ nav: mainNav }: { nav: { label: string; href: string }[
         </button>
       </Container>
 
-      <nav className="hidden bg-[var(--bg-muted)] lg:block" aria-label="Navegación principal">
-        <Container className="flex items-center gap-4 py-2 text-sm font-semibold">
-          <div className="flex min-w-0 flex-1 items-center gap-0.5 overflow-x-auto text-[0.82rem] [scrollbar-width:none] [&>:first-child]:ml-auto [&>:last-child]:mr-auto">
-          {mainNav.map((item) => {
-            const active = isActive(pathname, item.href);
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                aria-current={active ? "page" : undefined}
-                className={`relative whitespace-nowrap rounded-full px-2.5 py-2 xl:px-3 transition-colors after:absolute after:inset-x-2.5 after:bottom-1 after:h-px after:origin-left after:bg-[var(--fg-lime-500)] after:transition-transform after:duration-300 hover:text-[var(--fg-lime-400)] hover:after:scale-x-100 ${
-                  active ? "text-[var(--fg-lime-400)] after:scale-x-100" : "text-[var(--text)] after:scale-x-0"
-                }`}
-              >
-                {item.label}
-              </Link>
-            );
-          })}
+      <nav className="hidden border-t border-[var(--border)] lg:block" aria-label="Navegación principal">
+        <Container className="flex items-center justify-between gap-6 py-3">
+          <div className="flex min-w-0 flex-1 items-center justify-center gap-1 xl:gap-2">
+            {mainNav.map((item, i) => {
+              const active = isActive(pathname, item.href);
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  aria-current={active ? "page" : undefined}
+                  className={`nv-link ${visibleFrom(i)} ${active ? "text-[var(--fg-lime-400)] nv-active" : ""}`}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
+            <MoreMenu items={mainNav} pathname={pathname} />
           </div>
-          {searchForm("hidden w-48 shrink-0 lg:flex xl:w-56")}
-          <LoginMenu />
-          <ThemeToggle />
+
+          <div className="flex shrink-0 items-center gap-3">
+            {pillOpen ? (
+              <form
+                role="search"
+                onSubmit={(e) => {
+                  submitSearch(e);
+                  setPillOpen(false);
+                }}
+                className="nv-pill flex w-60 items-center gap-2 !px-4 !py-1.5"
+              >
+                <Search size={15} className="shrink-0 text-[var(--fg-lime-400)]" />
+                <input
+                  autoFocus
+                  type="search"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  onBlur={() => !query && setPillOpen(false)}
+                  onKeyDown={(e) => e.key === "Escape" && setPillOpen(false)}
+                  placeholder="¿Qué está buscando?"
+                  aria-label="Buscar en el portal"
+                  className="min-w-0 flex-1 bg-transparent text-[0.82rem] normal-case tracking-normal outline-none placeholder:text-[var(--text-faint)] [&::-webkit-search-cancel-button]:hidden"
+                />
+              </form>
+            ) : (
+              <button type="button" onClick={() => setPillOpen(true)} className="nv-pill" aria-label="Abrir el buscador">
+                Buscar
+              </button>
+            )}
+            <span aria-hidden className="h-7 w-px bg-[var(--border-strong)]" />
+            <LoginMenu />
+            <ThemeToggle className="!h-9 !w-9 !border-transparent hover:!border-[var(--border-strong)]" />
+          </div>
         </Container>
       </nav>
 

@@ -13,6 +13,13 @@ const legacyRedirects = [
 ];
 
 const nextConfig: NextConfig = {
+  // Imágenes remotas permitidas para next/image: archivos subidos desde el CMS (Supabase Storage) y portadas de CONtexto.
+  images: {
+    remotePatterns: [
+      { protocol: "https", hostname: "*.supabase.co", pathname: "/storage/v1/object/public/**" },
+      { protocol: "https", hostname: "contexto-olive.vercel.app" },
+    ],
+  },
   async headers() {
     return [
       // El service worker nunca debe quedar en caché del navegador: así cada despliegue lo renueva.
