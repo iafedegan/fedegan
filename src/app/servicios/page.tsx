@@ -4,13 +4,14 @@ import { ArrowUpRight, FileCheck2, HelpCircle, Landmark, MapPinned, ShieldCheck,
 import { PageHeader } from "@/components/ui/PageHeader";
 import { CtaBand, Section } from "@/components/ui/Editorial";
 import { Badge } from "@/components/ui/Badge";
+import { getLegacyPage, getLegacySection, excerptOf, legacyHref } from "@/content/legacy";
 
 export const metadata: Metadata = { title: "Servicios en línea" };
 
 // Destinos tomados del menú del portal actual de FEDEGÁN.
 const main = [
   { icon: FileCheck2, accent: "92,205,134", title: "Consulta RUV", text: "Verifique su inscripción en el Registro Único de Vacunación.", href: "https://sagari.fedegan-fng.org.co/?#/cnl1", external: true },
-  { icon: HelpCircle, accent: "216,181,88", title: "PQRSD", text: "Radique peticiones, quejas, reclamos, sugerencias y denuncias.", href: "/contacto", external: false },
+  { icon: HelpCircle, accent: "216,181,88", title: "PQRSD", text: "Radique peticiones, quejas, reclamos, sugerencias y denuncias.", href: "/seccion/servicios-fedegan/servicios/peticiones-quejas-reclamos-sugerencias-y-denuncias", external: false },
   { icon: ShieldCheck, accent: "230,160,108", title: "Seguridad Ganadera", text: "Consulte alertas y reporte situaciones de seguridad rural.", href: "https://sagari.fedegan-fng.org.co/?#/seguridadGanadera", external: true },
 ];
 
@@ -22,6 +23,12 @@ const more = [
 ];
 
 export default function ServiciosPage() {
+  const legacy = getLegacySection("servicios-fedegan");
+  const extra = [
+    { label: "Atención y servicios a la ciudadanía", href: "/seccion/atencion-ciudadania" },
+    { label: "Sala de Prensa", href: "/seccion/sala-de-prensa" },
+    { label: "Políticas y reglamentos del SG-SST", href: "/seccion/sg-sst" },
+  ];
   return (
     <>
       <PageHeader
@@ -97,6 +104,35 @@ export default function ServiciosPage() {
           })}
         </ul>
       </Section>
+
+      {legacy && (
+        <Section eyebrow="Catálogo" title="Todos los servicios de FEDEGÁN">
+          <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {legacy.tree.map((n) => {
+              const pg = getLegacyPage(n.key!);
+              return (
+                <li key={n.key}>
+                  <Link href={legacyHref("servicios-fedegan", n.key!)} className="block h-full">
+                    <div className="mx-card mx-lift h-full">
+                      <h3 className="font-[var(--font-display)] text-lg font-bold text-[var(--text)]">{n.label}</h3>
+                      {pg && <p className="mt-1.5 text-sm leading-relaxed text-[var(--text-muted)]">{excerptOf(pg, 120)}</p>}
+                    </div>
+                  </Link>
+                </li>
+              );
+            })}
+            {extra.map((e) => (
+              <li key={e.href}>
+                <Link href={e.href} className="block h-full">
+                  <div className="mx-card mx-lift h-full">
+                    <h3 className="font-[var(--font-display)] text-lg font-bold text-[var(--text)]">{e.label}</h3>
+                  </div>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </Section>
+      )}
 
       <CtaBand
         eyebrow="¿Necesita ayuda?"

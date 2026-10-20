@@ -548,24 +548,24 @@ p { text-wrap: pretty; }
 /* Móvil: la misma lista de secciones de la web, compacta, bajo el botón «Saltar recorrido». */
 @media (max-width: 767px) {
   .sw-rail { display: flex; top: 4.4rem; transform: none; padding: 0.6rem 0.8rem 0.6rem 2rem; border-bottom-left-radius: 0.9rem; gap: 0; z-index: 2; }
-  .sw-counter { margin-bottom: 0.25rem; font-size: 0.62rem; }
-  .sw-dot { padding: 0.18rem 0; gap: 0.5rem; min-height: 1.5rem; }
-  .sw-dot-label { max-width: 9.5rem; font-size: 0.62rem; letter-spacing: 0.06em; }
+  .sw-counter { margin-bottom: 0.3rem; font-size: 0.74rem; }
+  .sw-dot { padding: 0.22rem 0; gap: 0.55rem; min-height: 1.7rem; }
+  .sw-dot-label { max-width: 11rem; font-size: 0.74rem; letter-spacing: 0.05em; }
   .sw-chips { display: none; }
 }
-.sw-counter { margin-bottom: 0.5rem; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.18em; color: #f4f2e9; }
-.sw-dot { display: inline-flex; align-items: center; gap: 0.7rem; padding: 0.38rem 0; background: none; border: 0; cursor: pointer; color: #f4f2e9; }
+.sw-counter { margin-bottom: 0.6rem; font-size: 0.85rem; font-weight: 700; letter-spacing: 0.18em; color: #f4f2e9; }
+.sw-dot { display: inline-flex; align-items: center; gap: 0.8rem; padding: 0.46rem 0; background: none; border: 0; cursor: pointer; color: #f4f2e9; }
 .sw-dot::after {
   content: ""; flex: none; width: 0.55rem; height: 0.55rem; border-radius: 999px; border: 1.5px solid #f4f2e9; background: transparent;
   transition: background 0.3s, transform 0.3s, border-color 0.3s;
 }
 .sw-dot.is-active::after { background: rgb(var(--acc)); border-color: rgb(var(--acc)); transform: scale(1.35); }
 .sw-dot-label {
-  max-width: 12rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; opacity: 0.78;
-  font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+  max-width: 14rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; opacity: 0.82;
+  font-size: 0.92rem; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase;
   transition: opacity 0.3s, color 0.3s;
 }
-@media (min-width: 1100px) { .sw-dot-label { max-width: 17rem; } }
+@media (min-width: 1100px) { .sw-dot-label { max-width: 21rem; } }
 .sw-dot:hover .sw-dot-label, .sw-dot:focus-visible .sw-dot-label { opacity: 1; }
 .sw-dot.is-active .sw-dot-label { opacity: 1; color: rgb(var(--acc)); }
 .sw-chips {
@@ -782,3 +782,9 @@ a.mx-card:hover, .mx-lift:hover { transform: translateY(-6px); }
   transition: background-color 0.2s, border-color 0.2s, color 0.2s;
 }
 .nv-pill:hover, .nv-pill:focus-within { border-color: var(--fg-lime-500); color: var(--fg-lime-400); background: rgba(216, 181, 88, 0.06); }
+
+/* Lista de secciones del recorrido en móvil (al final para ganar a las reglas base). */
+@media (max-width: 767px) {
+  .sw-dot-label { max-width: 11rem; font-size: 0.74rem; letter-spacing: 0.05em; }
+  .sw-counter { font-size: 0.74rem; }
+}
