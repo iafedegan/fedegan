@@ -682,8 +682,23 @@ p { text-wrap: pretty; }
 /* En escritorio la tira de chips se reemplaza por la lista lateral. */
 @media (min-width: 768px) { .sw-chips { display: none !important; } }
 @media (max-width: 767px) {
-  .sw-chips { top: 3.9rem; padding: 0 0.9rem; gap: 0.45rem; }
-  .sw-chip { max-width: 14rem; padding: 0.5rem 0.95rem; font-size: 0.76rem; background: rgba(5, 16, 11, 0.62); }
+  .sw-chips {
+    top: 3.9rem; left: 0.9rem; right: 0.9rem; gap: 1.25rem; padding: 0 1rem; border-radius: 0.9rem;
+    background: rgba(5, 16, 11, 0.5); border: 1px solid rgba(255, 255, 255, 0.14);
+    -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+    -webkit-mask-image: none; mask-image: none;
+  }
+  .sw-chip {
+    position: relative; max-width: none; overflow: visible; padding: 0.8rem 0; border: 0; border-radius: 0; background: none;
+    font-size: 0.72rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(244, 242, 233, 0.75);
+    -webkit-backdrop-filter: none; backdrop-filter: none;
+  }
+  .sw-chip::after {
+    content: ""; position: absolute; left: 0; right: 0; bottom: 0.4rem; height: 2px; border-radius: 2px; background: rgb(var(--acc));
+    transform: scaleX(0); transform-origin: left; transition: transform 0.3s var(--ease-lux);
+  }
+  .sw-chip.is-active { background: none; border: 0; color: rgb(var(--acc)); }
+  .sw-chip.is-active::after { transform: scaleX(1); }
   .sw-card { padding: 1rem 3.7rem 1rem 1.1rem; border-radius: 1.2rem; }
   .sw-title { font-size: clamp(1.75rem, 8vw, 2.3rem); }
   .sw-body { margin-top: 0.55rem; font-size: 0.95rem; line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
