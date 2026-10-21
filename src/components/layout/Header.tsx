@@ -165,7 +165,7 @@ export function Header({ nav: mainNav }: { nav: { label: string; href: string }[
           : "border-[var(--border)] bg-[color-mix(in_srgb,var(--bg)_80%,transparent)]"
       }`}
     >
-      <Container className="flex items-center gap-3 py-3.5 sm:gap-6 lg:hidden">
+      <Container className="flex items-center gap-3 py-3.5 max-md:hidden sm:gap-6 lg:hidden">
         <Logo />
 
         {searchForm("mx-auto hidden w-full min-w-0 max-w-xl md:flex lg:hidden")}

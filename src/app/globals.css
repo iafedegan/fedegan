@@ -666,6 +666,12 @@ p { text-wrap: pretty; }
 /* Cabecera de periódico (Masthead) */
 .mh { background: var(--bg); border-bottom: 1px solid var(--border); padding: 1rem 1rem 0.75rem; text-align: center; }
 .mh-row { display: flex; align-items: center; gap: clamp(0.75rem, 3vw, 2.5rem); max-width: 86rem; margin-inline: auto; }
+.mh-tools { display: none; }
+@media (max-width: 767px) {
+  .mh { padding-top: 0.55rem; }
+  .mh-tools { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.45rem; }
+  .mh-tools-date { font-size: 0.62rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-faint); text-align: left; }
+}
 .mh-rule { flex: 1; height: 1px; margin-top: 0.4rem; }
 .mh-rule-l { background: linear-gradient(90deg, transparent, rgba(216, 181, 88, 0.55)); }
 .mh-rule-r { background: linear-gradient(270deg, transparent, rgba(216, 181, 88, 0.55)); }
