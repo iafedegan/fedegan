@@ -29,6 +29,19 @@ const smooth = (a: number, b: number, x: number) => {
 };
 const two = (n: number) => String(n).padStart(2, "0");
 
+// Toda la tarjeta de la escena es el enlace a su sección.
+function SceneLink({ scene, className, children }: { scene: JourneyScene; className?: string; children: React.ReactNode }) {
+  return scene.external ? (
+    <a href={scene.href} target="_blank" rel="noreferrer" className={className} aria-label={`Ir a ${scene.nombre}`}>
+      {children}
+    </a>
+  ) : (
+    <Link href={scene.href} className={className} aria-label={`Ir a ${scene.nombre}`}>
+      {children}
+    </Link>
+  );
+}
+
 function EnterLink({ scene, className }: { scene: JourneyScene; className?: string }) {
   const content = (
     <>
@@ -258,23 +271,27 @@ export function ScrollWorld({ scenes }: { scenes: JourneyScene[] }) {
                     data-local={s.id}
                     style={{ "--acc": s.accent } as React.CSSProperties}
                   >
-                    <h2 className="sw-title">{s.nombre}</h2>
-                    <p className="sw-body">{s.descripcion}</p>
-                    {s.tags.length > 0 && (
-                      <ul className="sw-tags">
-                        {s.tags.map((t) => (
-                          <li key={t}>{t}</li>
-                        ))}
-                      </ul>
-                    )}
-                    <div className="sw-actions">
-                      <EnterLink scene={s} className="sw-enter" />
-                      {i === K && (
+                    <SceneLink scene={s} className="sw-card">
+                      <h2 className="sw-title">{s.nombre}</h2>
+                      <p className="sw-body">{s.descripcion}</p>
+                      {s.tags.length > 0 && (
+                        <ul className="sw-tags">
+                          {s.tags.map((t) => (
+                            <li key={t}>{t}</li>
+                          ))}
+                        </ul>
+                      )}
+                      <span className="sw-go" aria-hidden>
+                        <ArrowRight size={18} />
+                      </span>
+                    </SceneLink>
+                    {i === K && (
+                      <div className="sw-actions">
                         <Link href="/directorio" className="sw-more">
                           Ver directorio completo
                         </Link>
-                      )}
-                    </div>
+                      </div>
+                    )}
                     {i === 0 && (
                       <p className="sw-hint" aria-hidden>
                         Desliza para recorrer <ArrowDown size={14} />

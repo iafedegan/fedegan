@@ -602,6 +602,19 @@ p { text-wrap: pretty; }
   padding: 0.3rem 0.75rem; border-radius: 999px; border: 1px solid rgba(var(--acc), 0.7); background: rgba(5, 16, 11, 0.5);
   color: #f4f2e9; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
 }
+.sw-card {
+  position: relative; display: block; padding: clamp(1.1rem, 2.4vw, 1.7rem); padding-right: clamp(3.6rem, 6vw, 4.6rem); border-radius: 1.4rem;
+  background: rgba(5, 16, 11, 0.46); border: 1px solid rgba(255, 255, 255, 0.16);
+  -webkit-backdrop-filter: blur(14px) saturate(1.1); backdrop-filter: blur(14px) saturate(1.1);
+  box-shadow: 0 18px 50px -24px rgba(0, 0, 0, 0.7); transition: border-color 0.3s, background 0.3s, transform 0.3s var(--ease-lux);
+}
+.sw-card:hover, .sw-card:focus-visible { border-color: rgb(var(--acc)); background: rgba(5, 16, 11, 0.56); transform: translateY(-2px); }
+.sw-card .sw-title { margin-top: 0; }
+.sw-go {
+  position: absolute; right: 1.1rem; top: 50%; display: flex; height: 2.5rem; width: 2.5rem; align-items: center; justify-content: center; translate: 0 -50%;
+  border-radius: 999px; background: rgb(var(--acc)); color: #08140d; transition: transform 0.3s var(--ease-lux);
+}
+.sw-card:hover .sw-go { transform: translateX(3px); }
 .sw-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.9rem 1.4rem; margin-top: 1.4rem; }
 .sw-enter {
   display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.8rem 1.3rem; border-radius: var(--radius-sm);
