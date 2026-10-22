@@ -55,7 +55,7 @@ function MoreMenu({ items, pathname }: { items: { label: string; href: string }[
       {open && (
         <ul
           role="menu"
-          className="absolute right-0 top-full z-50 mt-3 w-64 overflow-hidden rounded-[1.1rem] border border-[var(--border-strong)] bg-[var(--surface-solid)] py-2 shadow-[var(--shadow-lg)]"
+          className="absolute right-0 top-full z-50 mt-3 w-64 overflow-hidden rounded-[0.25rem] border border-[var(--border-strong)] bg-[var(--surface-solid)] py-2 shadow-[var(--shadow-lg)]"
         >
           {extra.map((it) => {
             return (

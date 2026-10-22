@@ -172,7 +172,7 @@ export function LegacyContent({ blocks }: { blocks: LegacyBlock[] }) {
       nodes.push(
         <ul key={key} className="my-5 flex max-w-4xl flex-col gap-2.5 pl-1">
           {items.map((it, n) => (
-            <li key={n} className="relative pl-6 leading-relaxed text-[var(--text-muted)] before:absolute before:left-1 before:top-[0.7em] before:h-1.5 before:w-1.5 before:rounded-full before:bg-[var(--fg-lime-500)]">
+            <li key={n} className="read relative pl-6 text-[1.05rem] leading-relaxed text-[var(--text-muted)] before:absolute before:left-1 before:top-[0.7em] before:h-1.5 before:w-1.5 before:rounded-full before:bg-[var(--fg-lime-500)]">
               <Inline text={it.text ?? ""} />
             </li>
           ))}
@@ -285,7 +285,7 @@ export function LegacyContent({ blocks }: { blocks: LegacyBlock[] }) {
     }
 
     nodes.push(
-      <p key={key} className="my-4 max-w-4xl text-[1.02rem] leading-[1.75] text-[var(--text-muted)]">
+      <p key={key} className="read my-4 max-w-4xl text-[1.08rem] leading-[1.7] text-[var(--text-muted)]">
         <Inline text={b.text ?? ""} />
       </p>,
     );

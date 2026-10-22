@@ -42,9 +42,9 @@ export function TerritorialExplorer({ bovinos, predios, orientacion }: { bovinos
   return (
     <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:gap-12">
       <div>
-        <div role="tablist" aria-label="Qué contar" className="inline-flex rounded-[0.5rem] border border-[var(--border-strong)] p-1">
+        <div role="tablist" aria-label="Qué contar" className="inline-flex rounded-[0.25rem] border border-[var(--border-strong)] p-1">
           {opciones.map((o, k) => (
-            <button key={o.id} role="tab" type="button" aria-selected={k === tipo} onClick={() => { setTipo(k); setIdx(o.t.periodos.length - 1); setPlay(false); }} className={`rounded-[0.35rem] px-6 py-2 text-[0.78rem] font-bold uppercase tracking-[0.14em] transition-colors ${k === tipo ? "bg-[var(--fg-lime-500)] text-[#0a1a11]" : "text-[var(--text-muted)] hover:text-[var(--text)]"}`}>
+            <button key={o.id} role="tab" type="button" aria-selected={k === tipo} onClick={() => { setTipo(k); setIdx(o.t.periodos.length - 1); setPlay(false); }} className={`rounded-[0.25rem] px-6 py-2 text-[0.78rem] font-bold uppercase tracking-[0.14em] transition-colors ${k === tipo ? "bg-[var(--fg-lime-500)] text-[#0a1a11]" : "text-[var(--text-muted)] hover:text-[var(--text)]"}`}>
               {o.label}
             </button>
           ))}
@@ -104,7 +104,7 @@ export function TerritorialExplorer({ bovinos, predios, orientacion }: { bovinos
             </li>
           ))}
         </ol>
-        <details className="mt-5 rounded-[0.7rem] border border-[var(--border)] p-3 text-sm">
+        <details className="mt-5 rounded-[0.25rem] border border-[var(--border)] p-3 text-sm">
           <summary className="cursor-pointer font-bold text-[var(--fg-lime-400)]">Ver los {ranking.length} departamentos</summary>
           <ol className="mt-3 max-h-64 divide-y divide-[var(--border)] overflow-y-auto pr-1">
             {ranking.map((d, k) => (

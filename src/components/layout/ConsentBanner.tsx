@@ -38,7 +38,7 @@ export function ConsentBanner() {
   const usos = Object.values(getUso()).reduce((a, b) => a + b, 0);
 
   return (
-    <section role="dialog" aria-labelledby="consent-title" className="fixed bottom-24 left-4 z-[80] w-[min(26rem,calc(100vw-2rem))] rounded-[1rem] border border-[var(--border-strong)] bg-[var(--surface-solid)] p-5 shadow-[0_30px_60px_-30px_rgba(0,0,0,0.9)] md:bottom-6">
+    <section role="dialog" aria-labelledby="consent-title" className="fixed bottom-24 left-4 z-[80] w-[min(26rem,calc(100vw-2rem))] rounded-[0.25rem] border border-[var(--border-strong)] bg-[var(--surface-solid)] p-5 shadow-[0_30px_60px_-30px_rgba(0,0,0,0.9)] md:bottom-6">
       <button type="button" onClick={() => setAbierto(false)} aria-label="Cerrar" className="absolute right-3 top-3 rounded p-1 text-[var(--text-faint)] hover:text-[var(--text)]">
         <X size={16} />
       </button>
@@ -54,10 +54,10 @@ export function ConsentBanner() {
         <a href={legales[0].href} target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-[var(--fg-lime-400)]">Política de datos</a>
       </p>
       <div className="mt-4 flex flex-wrap items-center gap-2">
-        <button type="button" onClick={() => decidir(true)} className="rounded-[0.4rem] bg-[var(--fg-lime-500)] px-4 py-2.5 text-[0.76rem] font-bold uppercase tracking-[0.1em] text-[#0a1a11] hover:bg-[var(--fg-lime-400)]">
+        <button type="button" onClick={() => decidir(true)} className="rounded-[0.25rem] bg-[var(--fg-lime-500)] px-4 py-2.5 text-[0.76rem] font-bold uppercase tracking-[0.1em] text-[#0a1a11] hover:bg-[var(--fg-lime-400)]">
           {estado === true ? "Mantener activado" : "Aceptar"}
         </button>
-        <button type="button" onClick={() => decidir(false)} className="rounded-[0.4rem] border border-[var(--border-strong)] px-4 py-2.5 text-[0.76rem] font-bold uppercase tracking-[0.1em] text-[var(--text-muted)] hover:text-[var(--text)]">
+        <button type="button" onClick={() => decidir(false)} className="rounded-[0.25rem] border border-[var(--border-strong)] px-4 py-2.5 text-[0.76rem] font-bold uppercase tracking-[0.1em] text-[var(--text-muted)] hover:text-[var(--text)]">
           {estado === true ? "Desactivar" : "Ahora no"}
         </button>
         {estado === true && usos > 0 && (

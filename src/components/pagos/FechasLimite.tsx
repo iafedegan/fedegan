@@ -11,7 +11,7 @@ export function FechasLimite() {
   const hoy = useSyncExternalStore(quiet, today, () => "");
   const proxima = hoy ? fechasLimite.find((f) => f.iso >= hoy)?.iso : undefined;
   return (
-    <div className="overflow-hidden rounded-[0.9rem] border border-[var(--border-strong)] bg-[var(--surface-solid)]">
+    <div className="overflow-hidden rounded-[0.25rem] border border-[var(--border-strong)] bg-[var(--surface-solid)]">
       <table className="w-full border-collapse text-left">
         <caption className="sr-only">Fechas límite para la consignación de la cuota de fomento ganadero y lechero, año 2026</caption>
         <thead>

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Playfair+Display:wght@500;600;700;800&family=Inter+Tight:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&family=Playfair+Display:wght@500;600;700;800&family=Spectral:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap');
 @import "tailwindcss";
 
 /* =======================================================================
@@ -49,7 +49,9 @@
   --shadow-lg: 0 24px 50px -28px rgba(19,33,26,0.45);
 
   --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
-  --font-body: 'Inter Tight', 'Segoe UI', system-ui, sans-serif;
+  --font-body: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  --font-read: 'Spectral', Georgia, 'Times New Roman', serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
 
   --ease-lux: cubic-bezier(0.22, 1, 0.36, 1);
   color-scheme: light;
@@ -73,8 +75,9 @@
   --surface-2: rgba(201,162,39,0.07);
   --card-a: #0e281c;
   --card-b: #050f09;
-  --border: rgba(201,162,39,0.22);
-  --border-strong: rgba(201,162,39,0.5);
+  --border: rgba(216,181,88,0.14);
+  --border-strong: rgba(216,181,88,0.24);
+  --border-hover: rgba(216,181,88,0.5);
 
   --text: #f4f2e9;
   --text-muted: #9fb7a8;
@@ -85,13 +88,13 @@
   --link: #e7cf8c;
   --focus-ring: #d8b558;
 
-  --radius-sm: 0.45rem;
-  --radius-md: 0.85rem;
-  --radius-lg: 1.25rem;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.25rem;
+  --radius-lg: 0.25rem;
 
   --shadow-sm: 0 1px 0 rgba(216,181,88,0.12);
-  --shadow-md: 0 30px 70px -30px rgba(0,0,0,0.9), 0 0 0 1px rgba(216,181,88,0.35);
-  --shadow-lg: 0 30px 70px -30px rgba(0,0,0,0.9);
+  --shadow-md: 0 14px 34px -24px rgba(0,0,0,0.8);
+  --shadow-lg: 0 18px 44px -28px rgba(0,0,0,0.8);
 
   color-scheme: dark;
 }
@@ -358,7 +361,7 @@ h1, h2, h3, h4, h5, h6 {
   .ph-photo::after { background: linear-gradient(0deg, rgba(5, 16, 11, 0.55) 0%, rgba(5, 16, 11, 0.1) 70%), linear-gradient(135deg, rgba(47, 156, 98, 0.18), transparent 60%); }
 }
 .eyebrow {
-  display: inline-flex; align-items: center; gap: 0.6rem; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--fg-lime-500);
+  display: inline-flex; align-items: center; gap: 0.6rem; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.28em; text-transform: uppercase; color: var(--fg-lime-500);
 }
 .eyebrow::before { content: ""; width: 1.5rem; height: 1px; background: currentColor; }
 
@@ -750,7 +753,7 @@ p { text-wrap: pretty; }
 .mx-hero-photo .mx-lead { color: rgba(244, 242, 233, 0.86); }
 .mx-crumb { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 0.15rem; padding: 0; color: var(--text-muted); }
 .mx-hero-photo .mx-crumb { color: rgba(244, 242, 233, 0.88); }
-.mx-kicker { display: inline-flex; align-items: center; gap: 0.7rem; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.24em; text-transform: uppercase; color: var(--fg-lime-400); }
+.mx-kicker { display: inline-flex; align-items: center; gap: 0.7rem; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.28em; text-transform: uppercase; color: var(--fg-lime-400); }
 .mx-kicker::before { content: ""; width: 1.8rem; height: 1px; background: currentColor; opacity: 0.8; }
 .mx-fact { display: inline-flex; align-items: center; padding: 0.28rem 0.8rem; border-radius: 0.3rem; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.06em; border: 1px solid var(--border-strong); color: var(--text); }
 .mx-hero-photo .mx-fact { color: #f4f2e9; border-color: rgba(255, 255, 255, 0.35); background: rgba(8, 18, 12, 0.35); }
@@ -1035,7 +1038,7 @@ a.mx-card:hover, .mx-lift:hover { transform: translateY(-3px); }
 @media (max-width: 767px) { .sw-extra b { font-size: 1rem; } }
 
 /* Tarjeta central del recorrido: tipografía serif de lectura (Lora) en lugar de la sans */
-.sw-panel { --font-card: 'Lora', Georgia, 'Times New Roman', serif; }
+.sw-panel { --font-card: var(--font-read); }
 .sw-panel .sw-cta { font-family: var(--font-card); font-weight: 600; font-size: 0.82rem; letter-spacing: 0.16em; }
 .sw-panel .sw-cta-desc { font-family: var(--font-card); font-style: italic; font-weight: 500; font-size: 1.12rem; line-height: 1.55; letter-spacing: 0.005em; }
 .sw-panel .sw-extra span { font-family: var(--font-card); font-weight: 700; letter-spacing: 0.2em; }
@@ -1049,3 +1052,71 @@ a.mx-card:hover, .mx-lift:hover { transform: translateY(-3px); }
 .sw-panel .sw-cta b { white-space: normal; }
 
 .sw-pers { margin: -0.3rem 0 0.5rem; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: rgb(var(--acc)); opacity: 0.9; }
+
+/* Tarjeta central: mismo tamaño en todas las escenas (el contenido se centra dentro) */
+.sw-panel { width: min(32rem, calc(100% - 2rem)); max-width: none; height: 19.5rem; justify-content: center; box-sizing: border-box; overflow: hidden; }
+@media (min-width: 768px) { .sw-panel { width: min(32rem, 46vw); max-width: none; } }
+@media (max-width: 767px) { .sw-panel { height: 18rem; } }
+.sw-panel .sw-cta-desc { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.sw-panel:has(.sw-extra) .sw-cta-desc { -webkit-line-clamp: 2; }
+
+/* =======================================================================
+   Manual de identidad de CONtexto Ganadero: lectura en Spectral, cifras en JetBrains Mono,
+   filetes dorados finos (22 % en reposo, 50 % al enfocar) y esquinas casi rectas (0,25 rem)
+   ======================================================================= */
+.article-body, .mx-lead, .mx-quote p, .read { font-family: var(--font-read); }
+.article-body { line-height: 1.7; }
+.font-data { font-family: var(--font-mono); font-weight: 500; letter-spacing: 0; }
+.mx-stat > span { font-family: var(--font-mono); font-weight: 500; letter-spacing: 0.04em; }
+
+/* Tarjetas: se levantan con el filete dorado, sin sombras pesadas */
+.mx-card, .gl, .wc { border-radius: 0.25rem; box-shadow: none; }
+.gl { border-color: var(--border-strong); }
+.mx-card:hover, .gl-hover:hover, .wc:hover, .wc:focus-visible { box-shadow: none; border-color: var(--border-hover, var(--fg-lime-500)); }
+.wc:hover, .wc:focus-visible { transform: translateY(-4px); }
+a.mx-card:hover, .mx-lift:hover, .gl-hover:hover { transform: translateY(-2px); }
+.wc, .wp { border-radius: 0.25rem; }
+.sw-panel, .sw-card { border-radius: 0.25rem; }
+.sw-cta, .sw-panel .sw-cta { border-radius: 0.25rem; }
+
+/* Paleta de marca: esmeralda, oro y niebla verde (sin terracota ni turquesa) */
+.wc-esmeralda { --wa: 47, 156, 98; --wb: 12, 74, 46; }
+.wc-oro { --wa: 216, 181, 88; --wb: 126, 94, 24; }
+.wc-terracota { --wa: 159, 183, 168; --wb: 58, 88, 72; }
+.wc-turquesa { --wa: 47, 156, 98; --wb: 8, 52, 33; }
+
+/* Descripciones más largas: la tarjeta crece un poco (siempre del mismo tamaño) */
+.sw-panel { height: 22rem; }
+.sw-panel .sw-cta-desc { -webkit-line-clamp: 5; font-size: 1.04rem; line-height: 1.5; }
+.sw-panel:has(.sw-extra) .sw-cta-desc { -webkit-line-clamp: 3; }
+@media (min-width: 768px) { .sw-panel { width: min(36rem, 48vw); } }
+@media (max-width: 767px) { .sw-panel { height: 23rem; } .sw-panel .sw-cta-desc { font-size: 0.95rem; } }
+.sw-panel { height: 24.5rem; }
+.sw-panel .sw-cta-desc { -webkit-line-clamp: 7; font-size: 1rem; line-height: 1.48; }
+.sw-panel:has(.sw-extra) .sw-cta-desc { -webkit-line-clamp: 4; }
+@media (min-width: 768px) { .sw-panel { width: min(38rem, 50vw); } }
+@media (max-width: 767px) { .sw-panel { height: 26rem; } .sw-panel .sw-cta-desc { font-size: 0.92rem; } }
+
+/* Tarjeta central modernizada: kicker con el número de escena, título en Playfair, texto en Spectral y botón dorado */
+.sw-panel { align-items: flex-start; justify-content: flex-start; gap: 0.7rem; text-align: left; padding: 1.7rem 1.9rem 1.6rem; border-top: 2px solid rgb(var(--acc)); background: linear-gradient(180deg, rgba(5, 16, 11, 0.5), rgba(5, 16, 11, 0.34)); }
+.sw-p-kicker { display: flex; align-items: center; gap: 0.8rem; margin: 0; font-size: 0.68rem; font-weight: 600; letter-spacing: 0.28em; text-transform: uppercase; color: rgb(var(--acc)); animation: sw-desc-in 0.5s var(--ease-lux) both; }
+.sw-p-kicker span { font-family: var(--font-mono); font-weight: 500; letter-spacing: 0.12em; padding-right: 0.8rem; border-right: 1px solid rgba(255, 255, 255, 0.28); color: #f4f2e9; }
+.sw-p-title { margin: 0; font-family: var(--font-display); font-weight: 600; font-size: clamp(1.7rem, 2.4vw, 2.35rem); line-height: 1.08; letter-spacing: -0.005em; color: #f9f6ec; text-wrap: balance; text-shadow: 0 2px 18px rgba(0, 0, 0, 0.55); animation: sw-desc-in 0.5s 0.04s var(--ease-lux) both; }
+.sw-panel .sw-cta-desc { font-family: var(--font-read); font-style: normal; font-weight: 400; font-size: 1.02rem; line-height: 1.55; text-align: left; color: rgba(244, 242, 233, 0.9); max-width: none; text-shadow: none; text-wrap: pretty; }
+.sw-panel .sw-extra { text-align: left; }
+.sw-panel .sw-cta {
+  align-self: flex-start; margin-top: auto; justify-content: flex-start; flex-wrap: nowrap; gap: 0.75rem; max-width: none; padding: 0.85rem 1.35rem;
+  border: 0; border-radius: 0.25rem; background: rgb(var(--acc)); color: #08140d; font-family: var(--font-body); font-weight: 600; font-size: 0.76rem; letter-spacing: 0.16em; text-transform: uppercase;
+  -webkit-backdrop-filter: none; backdrop-filter: none; box-shadow: none; transition: filter 0.3s, transform 0.4s var(--ease-lux);
+}
+.sw-panel .sw-cta:hover, .sw-panel .sw-cta:focus-visible { background: rgb(var(--acc)); filter: brightness(1.12); transform: translateX(3px); color: #08140d; }
+.sw-panel .sw-cta svg { transition: transform 0.4s var(--ease-lux); }
+.sw-panel .sw-cta:hover svg { transform: translateX(4px); }
+.sw-panel { height: 23rem; }
+@media (max-width: 767px) { .sw-panel { height: 26rem; padding: 1.3rem 1.3rem 1.2rem; } .sw-p-title { font-size: 1.6rem; } }
+
+/* Sello sobre la foto de las fichas: pictograma, año o fecha */
+.wc-badge { display: inline-flex; flex-direction: column; align-items: center; justify-content: center; min-width: 2.7rem; height: 2.7rem; padding: 0 0.6rem; border-radius: 0.25rem; background: rgba(5, 16, 11, 0.62); border: 1px solid rgba(255, 255, 255, 0.3); color: #f4f2e9; -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+.wc-badge .pg { color: #f4f2e9; }
+.wc-badge-glyph { height: auto; min-height: 2.7rem; padding: 0.35rem 0.7rem; font-family: var(--font-display); font-size: 1.25rem; font-weight: 700; line-height: 1; font-variant-numeric: lining-nums; }
+.wc-badge-glyph small { display: block; margin-bottom: 0.15rem; font-family: var(--font-body); font-size: 0.58rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: rgb(var(--wa, 216, 181, 88)); }

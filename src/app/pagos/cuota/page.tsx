@@ -30,14 +30,14 @@ export default async function CuotaPage({ searchParams }: { searchParams: Promis
       />
       <Container className="grid gap-8 py-8 sm:py-10 lg:grid-cols-2 lg:gap-14">
         <div className="flex flex-col gap-5">
-          <div role="tablist" aria-label="Concepto" className="inline-flex w-fit rounded-[0.5rem] border border-[var(--border-strong)] p-1">
+          <div role="tablist" aria-label="Concepto" className="inline-flex w-fit rounded-[0.25rem] border border-[var(--border-strong)] p-1">
             {(["leche", "carne"] as const).map((k) => (
               <Link
                 key={k}
                 role="tab"
                 aria-selected={concepto === k}
                 href={`/pagos/cuota?c=${k}`}
-                className={`rounded-[0.35rem] px-6 py-2 text-[0.78rem] font-bold uppercase tracking-[0.14em] transition-colors ${concepto === k ? "bg-[var(--fg-lime-500)] text-[#0a1a11]" : "text-[var(--text-muted)] hover:text-[var(--text)]"}`}
+                className={`rounded-[0.25rem] px-6 py-2 text-[0.78rem] font-bold uppercase tracking-[0.14em] transition-colors ${concepto === k ? "bg-[var(--fg-lime-500)] text-[#0a1a11]" : "text-[var(--text-muted)] hover:text-[var(--text)]"}`}
               >
                 {k}
               </Link>

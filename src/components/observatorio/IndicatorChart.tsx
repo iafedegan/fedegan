@@ -117,7 +117,7 @@ export function IndicatorChart({ ind }: { ind: Indicador }) {
       )}
 
       {vista === "grafica" ? (
-        <div ref={box} className="relative mt-5 rounded-[0.9rem] border border-[var(--border)] bg-[var(--bg)] p-2 sm:p-4">
+        <div ref={box} className="relative mt-5 rounded-[0.25rem] border border-[var(--border)] bg-[var(--bg)] p-2 sm:p-4">
           {series.length === 0 ? (
             <p className="p-8 text-center text-[var(--text-muted)]">Elija al menos una serie para verla.</p>
           ) : (
@@ -133,13 +133,13 @@ export function IndicatorChart({ ind }: { ind: Indicador }) {
               {ejeY.map((t) => (
                 <g key={t}>
                   <line x1={M.l} x2={W - M.r} y1={y(t)} y2={y(t)} stroke="currentColor" strokeOpacity="0.12" />
-                  <text x={M.l - 8} y={y(t) + 4} textAnchor="end" fontSize="11" fill="currentColor" fillOpacity="0.62">
+                  <text x={M.l - 8} y={y(t) + 4} textAnchor="end" fontSize="11" fontFamily="var(--font-mono)" fill="currentColor" fillOpacity="0.62">
                     {nf(t, Math.abs(t) < 10 && t % 1 !== 0 ? 1 : 0)}
                   </text>
                 </g>
               ))}
               {periodos.map((p, i) => (i % paso === 0 || i === n - 1 ? (
-                <text key={p} x={x(i)} y={H - 10} textAnchor="middle" fontSize="11" fill="currentColor" fillOpacity="0.62">
+                <text key={p} x={x(i)} y={H - 10} textAnchor="middle" fontSize="11" fontFamily="var(--font-mono)" fill="currentColor" fillOpacity="0.62">
                   {etiqueta(p)}
                 </text>
               ) : null))}
@@ -169,7 +169,7 @@ export function IndicatorChart({ ind }: { ind: Indicador }) {
             </svg>
           )}
           {hover !== null && series.length > 0 && (
-            <div className="pointer-events-none absolute top-3 z-10 min-w-[10rem] rounded-[0.6rem] border border-[var(--border-strong)] bg-[var(--surface-solid)] px-3 py-2 text-xs shadow-[0_14px_30px_-16px_rgba(0,0,0,0.8)]" style={{ left: `${Math.min(78, Math.max(2, (hoverX / W) * 100 - 6))}%` }}>
+            <div className="pointer-events-none absolute top-3 z-10 min-w-[10rem] rounded-[0.25rem] border border-[var(--border-strong)] bg-[var(--surface-solid)] px-3 py-2 text-xs shadow-[0_14px_30px_-16px_rgba(0,0,0,0.8)]" style={{ left: `${Math.min(78, Math.max(2, (hoverX / W) * 100 - 6))}%` }}>
               <p className="mb-1 font-bold text-[var(--text)]">{periodos[hover]}</p>
               {series.map((s) => (
                 <p key={s.nombre} className="flex items-center justify-between gap-4">
@@ -181,7 +181,7 @@ export function IndicatorChart({ ind }: { ind: Indicador }) {
           )}
         </div>
       ) : (
-        <div className="mt-5 max-h-[22rem] overflow-auto rounded-[0.9rem] border border-[var(--border-strong)]">
+        <div className="mt-5 max-h-[22rem] overflow-auto rounded-[0.25rem] border border-[var(--border-strong)]">
           <table className="w-full min-w-[28rem] border-collapse text-left text-sm">
             <thead className="sticky top-0 bg-[var(--surface-solid)]">
               <tr className="border-b border-[var(--border-strong)] text-[0.68rem] font-bold uppercase tracking-[0.14em] text-[var(--text-faint)]">

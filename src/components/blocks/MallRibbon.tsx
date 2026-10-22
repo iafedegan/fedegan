@@ -398,7 +398,7 @@ export function MallRibbon({ locales, arts }: { locales: Local[]; arts: ReactNod
                 style={slotStyle(j, step)}
               >
                 {l.status === "abierto" ? (
-                  <Link href={l.href} target={l.external ? "_blank" : undefined} tabIndex={-1} draggable={false} className="block h-full rounded-[1.6rem] outline-none">
+                  <Link href={l.href} target={l.external ? "_blank" : undefined} tabIndex={-1} draggable={false} className="block h-full rounded-[0.25rem] outline-none">
                     {card}
                   </Link>
                 ) : (

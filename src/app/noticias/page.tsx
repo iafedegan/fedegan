@@ -58,7 +58,7 @@ export default async function NoticiasPage({ searchParams }: { searchParams: Pro
         {!ok ? (
           <NewsUnavailable />
         ) : items.length === 0 ? (
-          <div className="rounded-[1.25rem] border border-dashed border-[var(--border-strong)] bg-[var(--surface-2)] p-8 text-[var(--text-muted)]">
+          <div className="rounded-[0.25rem] border border-dashed border-[var(--border-strong)] bg-[var(--surface-2)] p-8 text-[var(--text-muted)]">
             {categoria || cursor ? "No hay notas para mostrar aquí." : "Todavía no hay notas publicadas."}{" "}
             {(categoria || cursor) && (
               <Link href="/noticias" className="font-semibold text-[var(--fg-lime-400)] underline">Ver todas las noticias</Link>

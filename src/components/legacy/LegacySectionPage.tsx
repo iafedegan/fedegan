@@ -97,7 +97,7 @@ export function LegacySectionPage({ slug, ruta }: { slug: string; ruta: string[]
           {page.blocks.length > 0 ? (
             <LegacyContent blocks={page.blocks} />
           ) : (
-            <p className="rounded-[1.25rem] border border-dashed border-[var(--border-strong)] bg-[var(--surface-2)] p-6 text-[var(--text-muted)]">
+            <p className="rounded-[0.25rem] border border-dashed border-[var(--border-strong)] bg-[var(--surface-2)] p-6 text-[var(--text-muted)]">
               Esta página reúne documentos y tableros del portal actual. Puede consultarla directamente allí.
             </p>
           )}

@@ -1,6 +1,6 @@
 import type { Indicador } from "@/lib/observatorio";
 
-export const PALETTE = ["#d6ac4e", "#34a868", "#de8650", "#38b0a0", "#c9d96b", "#8fb8e8", "#e08aa6", "#a58be0", "#9aa3a8"];
+export const PALETTE = ["#D8B558", "#2F9C62", "#9FB7A8", "#E7CF8C", "#5BBF8A", "#6F8F7E", "#B89A4A", "#7FD1A6", "#4C7A62"];
 
 export const nf = (v: number, d = 0) => v.toLocaleString("es-CO", { minimumFractionDigits: d, maximumFractionDigits: d });
 

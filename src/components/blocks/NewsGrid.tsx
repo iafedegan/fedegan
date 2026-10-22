@@ -16,7 +16,7 @@ export async function NewsGrid() {
         <SectionHeading eyebrow="Actualidad" title="Últimas noticias" action={{ label: "Todas las noticias", href: "/noticias" }} />
         <div className="grid gap-10 lg:grid-cols-[1.25fr_1fr] lg:gap-14">
           <Link href={`/noticias/${lead.slug}`} className="group block">
-            <div className="relative aspect-[16/10] overflow-hidden rounded-[0.9rem] border border-[var(--border-strong)] bg-[var(--bg-sunken)]">
+            <div className="relative aspect-[16/10] overflow-hidden rounded-[0.25rem] border border-[var(--border-strong)] bg-[var(--bg-sunken)]">
               {lead.image && (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={lead.image} alt={lead.imageAlt ?? ""} loading="lazy" className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] [transition-timing-function:var(--ease-lux)] group-hover:scale-[1.04]" />
@@ -35,7 +35,7 @@ export async function NewsGrid() {
             {rest.slice(0, 5).map((n) => (
               <li key={n.slug}>
                 <Link href={`/noticias/${n.slug}`} className="group grid grid-cols-[5.5rem_1fr] gap-4 py-4 sm:grid-cols-[7rem_1fr]">
-                  <span className="relative block aspect-[4/3] overflow-hidden rounded-[0.5rem] bg-[var(--bg-sunken)]">
+                  <span className="relative block aspect-[4/3] overflow-hidden rounded-[0.25rem] bg-[var(--bg-sunken)]">
                     {n.image && (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img src={n.image} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 [transition-timing-function:var(--ease-lux)] group-hover:scale-110" />

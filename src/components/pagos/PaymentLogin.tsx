@@ -48,7 +48,7 @@ export function PaymentLogin() {
         </div>
 
         {estado !== "idle" && (
-          <div role="status" className={`flex gap-3 rounded-[0.6rem] border p-4 text-sm leading-relaxed ${estado === "falta" ? "border-[rgba(230,160,108,0.6)] text-[var(--text)]" : "border-[var(--border-strong)] bg-[var(--bg-muted)] text-[var(--text-muted)]"}`}>
+          <div role="status" className={`flex gap-3 rounded-[0.25rem] border p-4 text-sm leading-relaxed ${estado === "falta" ? "border-[rgba(230,160,108,0.6)] text-[var(--text)]" : "border-[var(--border-strong)] bg-[var(--bg-muted)] text-[var(--text-muted)]"}`}>
             <Info size={18} className="mt-0.5 shrink-0 text-[var(--fg-lime-400)]" />
             <div>
               {estado === "falta" && <p>Escriba su identificación y su clave para continuar.</p>}

@@ -29,7 +29,7 @@ function Wrap({ to, external, className, children }: { to: string; external?: bo
 export function AccessHub({ tinted = false }: { tinted?: boolean }) {
   return (
     <Section eyebrow="Acceso directo" title="Pagos, trámites y servicios" intro="Lo más usado por ganaderos y aportantes, a un clic." tinted={tinted}>
-      <Link href="/pagos" className="group mb-2 flex flex-col items-start justify-between gap-4 rounded-[0.9rem] border border-[var(--border-strong)] border-l-[3px] border-l-[var(--fg-lime-500)] bg-[var(--surface-solid)] p-6 transition-colors hover:border-[var(--fg-lime-500)] sm:flex-row sm:items-center sm:p-7">
+      <Link href="/pagos" className="group mb-2 flex flex-col items-start justify-between gap-4 rounded-[0.25rem] border border-[var(--border-strong)] border-l-[3px] border-l-[var(--fg-lime-500)] bg-[var(--surface-solid)] p-6 transition-colors hover:border-[var(--fg-lime-500)] sm:flex-row sm:items-center sm:p-7">
         <span className="flex items-center gap-5">
           <span className="text-[var(--fg-lime-400)]"><Pictogram name="pago" size={46} /></span>
           <span>
@@ -56,7 +56,7 @@ export function AccessHub({ tinted = false }: { tinted?: boolean }) {
 function AvisoTile({ c, as: Tag = "li" }: { c: Campana; as?: "li" | "div" }) {
   return (
     <Tag>
-      <Wrap to={c.href} external={c.external} className="group relative block aspect-[4/5] overflow-hidden rounded-[0.9rem] border border-[var(--border-strong)] bg-[var(--bg-sunken)] transition-[transform,border-color,box-shadow] duration-500 [transition-timing-function:var(--ease-lux)] hover:-translate-y-1 hover:border-[var(--fg-lime-500)] hover:shadow-[0_26px_44px_-28px_rgba(0,0,0,0.85)]">
+      <Wrap to={c.href} external={c.external} className="group relative block aspect-[4/5] overflow-hidden rounded-[0.25rem] border border-[var(--border-strong)] bg-[var(--bg-sunken)] transition-[transform,border-color,box-shadow] duration-500 [transition-timing-function:var(--ease-lux)] hover:-translate-y-1 hover:border-[var(--fg-lime-500)] hover:shadow-[0_26px_44px_-28px_rgba(0,0,0,0.85)]">
         <Image src={c.image} alt={c.alt} fill unoptimized sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw" className="object-cover object-top transition-transform duration-[1200ms] [transition-timing-function:var(--ease-lux)] group-hover:scale-[1.05]" />
         <span aria-hidden className="absolute inset-x-0 bottom-0 h-[55%] bg-gradient-to-t from-[rgba(6,16,11,0.94)] via-[rgba(6,16,11,0.6)] to-transparent" />
         {c.ad && <span className="absolute left-3 top-3 rounded-full bg-black/60 px-2.5 py-1 text-[0.58rem] font-bold uppercase tracking-[0.16em] text-white backdrop-blur">Publicidad</span>}
@@ -161,7 +161,7 @@ export function PresidentColumn() {
 export function QuickRail({ className = "" }: { className?: string }) {
   const items = [pagos[0], tramites.find((t) => t.id === "pqrsd")!, tramites.find((t) => t.id === "ruv")!];
   return (
-    <div className={`rounded-[0.9rem] border border-[var(--border-strong)] border-t-2 border-t-[var(--fg-lime-500)] bg-[var(--surface-solid)] p-3 ${className}`}>
+    <div className={`rounded-[0.25rem] border border-[var(--border-strong)] border-t-2 border-t-[var(--fg-lime-500)] bg-[var(--surface-solid)] p-3 ${className}`}>
       <p className="px-2.5 pb-2 pt-1 text-[0.7rem] font-bold uppercase tracking-[0.2em] text-[var(--fg-lime-500)]">Accesos rápidos</p>
       <ul className="flex flex-col">
         {items.map((a) => (

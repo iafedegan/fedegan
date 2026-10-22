@@ -94,7 +94,7 @@ export default function PagosPage() {
               { src: "/accesos/aviso-cuota.webp", alt: "Aviso importante sobre la cuota 2026", href: "https://storage.googleapis.com/static-fedegan/recaudo_cfgl/aviso_cuota_fgl-2026.jpg", w: 960, h: 1690, t: "Aviso sobre la cuota 2026" },
             ].map((a) => (
               <li key={a.src}>
-                <a href={a.href} target="_blank" rel="noopener noreferrer" className="group block overflow-hidden rounded-[0.75rem] border border-[var(--border-strong)] bg-[var(--surface-solid)] transition-colors hover:border-[var(--fg-lime-500)]">
+                <a href={a.href} target="_blank" rel="noopener noreferrer" className="group block overflow-hidden rounded-[0.25rem] border border-[var(--border-strong)] bg-[var(--surface-solid)] transition-colors hover:border-[var(--fg-lime-500)]">
                   <Image src={a.src} alt={a.alt} width={a.w} height={a.h} unoptimized className="h-auto w-full" />
                   <span className="flex items-center justify-between gap-2 p-3 text-sm font-bold text-[var(--text)]">
                     {a.t} <ArrowUpRight size={14} className="shrink-0 text-[var(--text-faint)] transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />

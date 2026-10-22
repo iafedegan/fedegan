@@ -33,7 +33,7 @@ function Card({ e }: { e: ExplorerEntry }) {
   const pages = meta(e, /^p[áa]ginas$/i);
   const autor = meta(e, /^autor/i);
   return (
-    <Go entry={e} className="group relative flex h-full flex-col gap-3 overflow-hidden rounded-[0.9rem] border border-[var(--border-strong)] bg-[var(--surface-solid)] p-6 pl-7 transition-[transform,border-color,box-shadow] duration-500 [transition-timing-function:var(--ease-lux)] hover:-translate-y-1 hover:border-[var(--fg-lime-500)] hover:shadow-[0_26px_44px_-28px_rgba(0,0,0,0.85)]">
+    <Go entry={e} className="group relative flex h-full flex-col gap-3 overflow-hidden rounded-[0.25rem] border border-[var(--border-strong)] bg-[var(--surface-solid)] p-6 pl-7 transition-[transform,border-color,box-shadow] duration-500 [transition-timing-function:var(--ease-lux)] hover:-translate-y-1 hover:border-[var(--fg-lime-500)] hover:shadow-[0_26px_44px_-28px_rgba(0,0,0,0.85)]">
       <span aria-hidden className="absolute bottom-6 left-0 top-6 w-[3px] rounded-r bg-[var(--fg-lime-500)] opacity-60 transition-opacity group-hover:opacity-100" />
       <div className="flex items-baseline justify-between gap-3">
         <span className="font-[var(--font-display)] text-3xl font-bold leading-none text-[var(--fg-lime-400)]">{year ?? e.code ?? "—"}</span>
@@ -55,7 +55,7 @@ function Row({ e }: { e: ExplorerEntry }) {
     <li>
       <Go entry={e} className="group grid grid-cols-[1fr_auto] items-start gap-4 border-b border-[var(--border)] px-2 py-4 transition-colors hover:bg-[rgba(216,181,88,0.06)] sm:grid-cols-[8.5rem_1fr_auto] sm:gap-6">
         <span className="hidden pt-1 sm:block">
-          {e.code && <span className="inline-block rounded-[0.3rem] border border-[var(--border-strong)] px-2 py-1 text-[0.7rem] font-bold tracking-[0.06em] text-[var(--fg-lime-400)]">{e.code}</span>}
+          {e.code && <span className="inline-block rounded-[0.25rem] border border-[var(--border-strong)] px-2 py-1 text-[0.7rem] font-bold tracking-[0.06em] text-[var(--fg-lime-400)]">{e.code}</span>}
         </span>
         <span className="min-w-0">
           {e.code && <span className="mb-1 block text-[0.68rem] font-bold tracking-[0.08em] text-[var(--fg-lime-500)] sm:hidden">{e.code}</span>}
@@ -104,7 +104,7 @@ export function EntryExplorer({ entries }: { entries: ExplorerEntry[] }) {
       )}
 
       {list.length === 0 ? (
-        <p className="rounded-[0.9rem] border border-dashed border-[var(--border-strong)] p-6 text-[var(--text-muted)]">No hay documentos que coincidan con «{q}».</p>
+        <p className="rounded-[0.25rem] border border-dashed border-[var(--border-strong)] p-6 text-[var(--text-muted)]">No hay documentos que coincidan con «{q}».</p>
       ) : cards ? (
         <ul className="grid gap-5 md:grid-cols-2 2xl:grid-cols-3">
           {list.map((e) => (
@@ -121,7 +121,7 @@ export function EntryExplorer({ entries }: { entries: ExplorerEntry[] }) {
             ))}
           </ul>
           {list.length > shown && (
-            <button type="button" onClick={() => setShown((n) => n + PAGE)} className="mt-5 rounded-[0.4rem] border border-[var(--fg-lime-500)] px-6 py-3 text-[0.78rem] font-bold uppercase tracking-[0.12em] text-[var(--fg-lime-400)] transition hover:bg-[var(--fg-lime-500)] hover:text-[#0a1a11]">
+            <button type="button" onClick={() => setShown((n) => n + PAGE)} className="mt-5 rounded-[0.25rem] border border-[var(--fg-lime-500)] px-6 py-3 text-[0.78rem] font-bold uppercase tracking-[0.12em] text-[var(--fg-lime-400)] transition hover:bg-[var(--fg-lime-500)] hover:text-[#0a1a11]">
               Mostrar más · {list.length - shown} restantes
             </button>
           )}

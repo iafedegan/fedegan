@@ -62,7 +62,7 @@ export function LoginMenu() {
       {open && (
         <div
           role="menu"
-          className="absolute right-0 top-full z-50 mt-2 w-72 overflow-hidden rounded-[1.1rem] border border-[var(--border-strong)] bg-[var(--surface-solid)] shadow-[var(--shadow-lg)]"
+          className="absolute right-0 top-full z-50 mt-2 w-72 overflow-hidden rounded-[0.25rem] border border-[var(--border-strong)] bg-[var(--surface-solid)] shadow-[var(--shadow-lg)]"
         >
           {user ? (
             <div className="flex flex-col py-1">

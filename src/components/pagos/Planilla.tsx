@@ -70,7 +70,7 @@ export function Planilla({ initial = "leche" }: { initial?: Concepto }) {
   return (
     <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] lg:gap-12">
       <div className="flex flex-col gap-9">
-        <div role="tablist" aria-label="Concepto" className="inline-flex w-fit rounded-[0.5rem] border border-[var(--border-strong)] p-1">
+        <div role="tablist" aria-label="Concepto" className="inline-flex w-fit rounded-[0.25rem] border border-[var(--border-strong)] p-1">
           {(["leche", "carne"] as Concepto[]).map((c) => (
             <button
               key={c}
@@ -78,7 +78,7 @@ export function Planilla({ initial = "leche" }: { initial?: Concepto }) {
               type="button"
               aria-selected={concepto === c}
               onClick={() => cambiar(c)}
-              className={`rounded-[0.35rem] px-6 py-2 text-[0.78rem] font-bold uppercase tracking-[0.14em] transition-colors ${concepto === c ? "bg-[var(--fg-lime-500)] text-[#0a1a11]" : "text-[var(--text-muted)] hover:text-[var(--text)]"}`}
+              className={`rounded-[0.25rem] px-6 py-2 text-[0.78rem] font-bold uppercase tracking-[0.14em] transition-colors ${concepto === c ? "bg-[var(--fg-lime-500)] text-[#0a1a11]" : "text-[var(--text-muted)] hover:text-[var(--text)]"}`}
             >
               {c === "leche" ? "Leche" : "Carne"}
             </button>
@@ -146,7 +146,7 @@ export function Planilla({ initial = "leche" }: { initial?: Concepto }) {
           )}
 
           {origenes.length > 0 && (
-            <div className="overflow-x-auto rounded-[0.9rem] border border-[var(--border-strong)]">
+            <div className="overflow-x-auto rounded-[0.25rem] border border-[var(--border-strong)]">
               <table className="w-full min-w-[30rem] border-collapse text-left text-sm">
                 <thead>
                   <tr className="border-b border-[var(--border-strong)] text-[0.68rem] font-bold uppercase tracking-[0.14em] text-[var(--text-faint)]">
@@ -251,7 +251,7 @@ export function Planilla({ initial = "leche" }: { initial?: Concepto }) {
             ))}
           </dl>
           <div className="mt-5 flex flex-wrap gap-3">
-            <button type="button" disabled className="rounded-[0.4rem] border border-[var(--border-strong)] px-5 py-3 text-[0.78rem] font-bold uppercase tracking-[0.12em] text-[var(--text-muted)] opacity-60">
+            <button type="button" disabled className="rounded-[0.25rem] border border-[var(--border-strong)] px-5 py-3 text-[0.78rem] font-bold uppercase tracking-[0.12em] text-[var(--text-muted)] opacity-60">
               Calcular
             </button>
             <PrimaryButton type="button" disabled>

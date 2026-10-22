@@ -25,7 +25,7 @@ export function PaymentsBand() {
           <div className="mt-6">
             <NextDeadline />
           </div>
-          <Link href="/pagos" className="mt-7 inline-flex items-center gap-2 rounded-[0.4rem] bg-[var(--fg-lime-500)] px-6 py-3 text-[0.8rem] font-bold uppercase tracking-[0.12em] text-[#0a1a11] transition hover:bg-[var(--fg-lime-400)]">
+          <Link href="/pagos" className="mt-7 inline-flex items-center gap-2 rounded-[0.25rem] bg-[var(--fg-lime-500)] px-6 py-3 text-[0.8rem] font-bold uppercase tracking-[0.12em] text-[#0a1a11] transition hover:bg-[var(--fg-lime-400)]">
             Entrar a la zona de pagos <ArrowRight size={16} />
           </Link>
         </div>

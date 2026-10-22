@@ -16,7 +16,7 @@ export function NextDeadline({ size = "md" }: { size?: "md" | "lg" }) {
   const [, m, d] = (next?.iso ?? "").split("-");
   return (
     <div className="flex items-center gap-5" aria-live="polite">
-      <div className={`flex shrink-0 flex-col items-center justify-center rounded-[0.8rem] border border-[var(--border-strong)] border-t-2 border-t-[var(--fg-lime-500)] bg-[var(--surface-solid)] ${size === "lg" ? "h-28 w-28" : "h-24 w-24"}`}>
+      <div className={`flex shrink-0 flex-col items-center justify-center rounded-[0.25rem] border border-[var(--border-strong)] border-t-2 border-t-[var(--fg-lime-500)] bg-[var(--surface-solid)] ${size === "lg" ? "h-28 w-28" : "h-24 w-24"}`}>
         <span className="text-[0.66rem] font-bold uppercase tracking-[0.18em] text-[var(--fg-lime-500)]">{next ? MESES[Number(m) - 1] : "—"}</span>
         <span className={`font-[var(--font-display)] font-bold leading-none text-[var(--text)] ${size === "lg" ? "text-5xl" : "text-4xl"}`}>{next ? Number(d) : "—"}</span>
       </div>

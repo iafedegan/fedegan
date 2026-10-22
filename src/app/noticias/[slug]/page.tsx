@@ -72,7 +72,7 @@ export default async function NoticiaDetailPage({ params }: { params: Promise<{ 
         {n.image && (
           <figure className="mb-10">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={n.image} alt={n.imageAlt ?? ""} className="aspect-[16/9] w-full rounded-[1.25rem] border border-[var(--border)] object-cover shadow-[var(--shadow-lg)]" />
+            <img src={n.image} alt={n.imageAlt ?? ""} className="aspect-[16/9] w-full rounded-[0.25rem] border border-[var(--border)] object-cover shadow-[var(--shadow-lg)]" />
             {generatedByAi && <figcaption className="mt-3 text-xs text-[var(--text-faint)]">Imagen generada con IA</figcaption>}
           </figure>
         )}

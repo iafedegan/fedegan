@@ -91,7 +91,7 @@ export function FilterToolbar({
 
 export function EmptyResults({ onReset, children }: { onReset: () => void; children?: React.ReactNode }) {
   return (
-    <div className="rounded-[1.25rem] border border-dashed border-[var(--border-strong)] bg-[var(--surface-2)] p-8 text-center text-[var(--text-muted)]">
+    <div className="rounded-[0.25rem] border border-dashed border-[var(--border-strong)] bg-[var(--surface-2)] p-8 text-center text-[var(--text-muted)]">
       <p>{children ?? "No hay resultados con esos filtros."}</p>
       <button
         type="button"

@@ -24,8 +24,8 @@ function Spark({ valores }: { valores: number[] }) {
 function Kpi({ etiqueta, valor, delta, unidad, serie }: { etiqueta: string; valor: string; delta: number; unidad: string; serie: number[] }) {
   const sube = delta >= 0;
   return (
-    <li className="rounded-[0.9rem] border border-[var(--border-strong)] border-t-2 border-t-[var(--fg-lime-500)] bg-[var(--surface-solid)] p-5">
-      <p className="text-[0.68rem] font-bold uppercase tracking-[0.16em] text-[var(--text-faint)]">{etiqueta}</p>
+    <li className="rounded-[0.25rem] border border-[var(--border-strong)] border-t-2 border-t-[var(--fg-lime-500)] bg-[var(--surface-solid)] p-5">
+      <p className="font-data text-[0.68rem] uppercase tracking-[0.12em] text-[var(--text-faint)]">{etiqueta}</p>
       <p className="mt-2 flex flex-wrap items-baseline gap-x-2.5">
         <span className="font-[var(--font-display)] text-3xl font-bold leading-none tabular-nums text-[var(--text)] sm:text-[2.1rem]">{valor}</span>
         <span className={`inline-flex items-center gap-1 text-xs font-bold tabular-nums ${sube ? "text-[#5ccd86]" : "text-[#f08a8a]"}`}>
@@ -63,7 +63,7 @@ export async function Observatorio() {
   if (!obs) {
     return (
       <Container className="py-14">
-        <div className="rounded-[0.9rem] border border-dashed border-[var(--border-strong)] p-8">
+        <div className="rounded-[0.25rem] border border-dashed border-[var(--border-strong)] p-8">
           <h2 className="font-[var(--font-display)] text-2xl font-bold text-[var(--text)]">Las cifras no están disponibles por ahora</h2>
           <p className="mt-2 max-w-xl text-[var(--text-muted)]">No pudimos leer el Observatorio de CONtexto en este momento. Puede consultarlo directamente mientras se restablece.</p>
           <a href={OBSERVATORIO_URL} target="_blank" rel="noopener noreferrer" className="mt-5 inline-flex items-center gap-2 text-sm font-bold uppercase tracking-[0.12em] text-[var(--fg-lime-400)]">
@@ -136,7 +136,7 @@ export async function Observatorio() {
               <p className="mb-3 text-[0.7rem] font-bold uppercase tracking-[0.2em] text-[var(--fg-lime-500)]">Lo que dicen los datos</p>
               <ul className="grid gap-3 md:grid-cols-2">
                 {dichos.map((d) => (
-                  <li key={d} className="rounded-[0.7rem] border border-[var(--border)] bg-[var(--surface-solid)] px-4 py-3.5 leading-relaxed text-[var(--text)]">{d}</li>
+                  <li key={d} className="rounded-[0.25rem] border border-[var(--border)] bg-[var(--surface-solid)] px-4 py-3.5 leading-relaxed text-[var(--text)]">{d}</li>
                 ))}
               </ul>
             </div>

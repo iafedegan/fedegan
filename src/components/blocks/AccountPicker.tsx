@@ -32,7 +32,7 @@ export function AccountPicker() {
   const profile = demoProfiles[idx];
 
   return (
-    <div className="mx-auto w-full max-w-md overflow-hidden rounded-[1.6rem] border border-[rgba(216,181,88,0.35)] bg-[rgba(8,24,17,0.78)] shadow-[0_40px_90px_-30px_rgba(0,0,0,0.9)] backdrop-blur-xl">
+    <div className="mx-auto w-full max-w-md overflow-hidden rounded-[0.25rem] border border-[rgba(216,181,88,0.35)] bg-[rgba(8,24,17,0.78)] shadow-[0_40px_90px_-30px_rgba(0,0,0,0.9)] backdrop-blur-xl">
       <div className="flex items-center gap-2.5 border-b border-white/10 bg-[rgba(216,181,88,0.1)] px-5 py-3 text-xs text-white/75">
         <FlaskConical size={15} className="shrink-0 text-[var(--fg-lime-400)]" />
         Demostración: simula el ingreso con Microsoft Entra ID. No se piden contraseñas.

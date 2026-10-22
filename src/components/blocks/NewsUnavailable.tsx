@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/Button";
 export function NewsUnavailable({ compact = false }: { compact?: boolean }) {
   return (
     <div
-      className={`flex flex-col items-start gap-4 rounded-[1.25rem] border border-dashed border-[var(--border-strong)] bg-[var(--surface-2)] ${
+      className={`flex flex-col items-start gap-4 rounded-[0.25rem] border border-dashed border-[var(--border-strong)] bg-[var(--surface-2)] ${
         compact ? "p-6" : "p-8 sm:p-10"
       }`}
     >

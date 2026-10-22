@@ -20,7 +20,7 @@ export async function VoiceAndAgenda() {
               {events.map((e) => (
                 <li key={e.slug}>
                   <Link href={`/eventos/${e.slug}`} className="group grid grid-cols-[4rem_1fr] items-center gap-4 py-4">
-                    <span className="flex flex-col items-center rounded-[0.6rem] border border-[var(--border-strong)] py-2 transition-colors group-hover:border-[var(--fg-lime-500)]">
+                    <span className="flex flex-col items-center rounded-[0.25rem] border border-[var(--border-strong)] py-2 transition-colors group-hover:border-[var(--fg-lime-500)]">
                       <span className="text-[0.62rem] font-bold uppercase tracking-[0.16em] text-[var(--fg-lime-500)]">{e.month}</span>
                       <span className="font-[var(--font-display)] text-2xl font-bold leading-none text-[var(--text)]">{e.day}</span>
                     </span>

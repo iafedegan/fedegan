@@ -30,7 +30,7 @@ export function InstructivoTabs() {
   const data = instructivos[tab];
   return (
     <div>
-      <div role="tablist" aria-label="Concepto del recaudo" className="inline-flex rounded-[0.5rem] border border-[var(--border-strong)] p-1">
+      <div role="tablist" aria-label="Concepto del recaudo" className="inline-flex rounded-[0.25rem] border border-[var(--border-strong)] p-1">
         {(Object.keys(instructivos) as Clave[]).map((k) => (
           <button
             key={k}
@@ -38,7 +38,7 @@ export function InstructivoTabs() {
             type="button"
             aria-selected={tab === k}
             onClick={() => setTab(k)}
-            className={`rounded-[0.35rem] px-6 py-2 text-[0.78rem] font-bold uppercase tracking-[0.14em] transition-colors ${tab === k ? "bg-[var(--fg-lime-500)] text-[#0a1a11]" : "text-[var(--text-muted)] hover:text-[var(--text)]"}`}
+            className={`rounded-[0.25rem] px-6 py-2 text-[0.78rem] font-bold uppercase tracking-[0.14em] transition-colors ${tab === k ? "bg-[var(--fg-lime-500)] text-[#0a1a11]" : "text-[var(--text-muted)] hover:text-[var(--text)]"}`}
           >
             {instructivos[k].titulo}
           </button>

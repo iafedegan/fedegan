@@ -285,32 +285,36 @@ export function ScrollWorld({ scenes: base }: { scenes: JourneyScene[] }) {
 
 
           <div className="sw-center">
-            <div className="sw-panel">
-            <button type="button" onClick={() => navigate(scenes[current])} className="sw-cta" style={{ "--acc": scenes[current].accent } as React.CSSProperties}>
-              <span>Entrar a</span>
-              <b>{scenes[current].nombre}</b>
-              <ArrowRight size={18} aria-hidden />
-            </button>
-            <p className="sw-cta-desc" key={scenes[current].id}>{scenes[current].descripcion}</p>
-            {scenes[current].extra && (() => {
-              const x = scenes[current].extra!;
-              const body = (
-                <>
-                  <span>{x.etiqueta}</span>
-                  <b>{x.texto}</b>
-                </>
-              );
-              const href = x.href ?? scenes[current].href;
-              return href.startsWith("/") ? (
-                <Link href={href} className="sw-extra" key={`x-${scenes[current].id}`}>
-                  {body}
-                </Link>
-              ) : (
-                <a href={href} target="_blank" rel="noopener noreferrer" className="sw-extra" key={`x-${scenes[current].id}`}>
-                  {body}
-                </a>
-              );
-            })()}
+            <div className="sw-panel" style={{ "--acc": scenes[current].accent } as React.CSSProperties}>
+              <p className="sw-p-kicker" key={`k-${scenes[current].id}`}>
+                <span>{two(current + 1)} / {two(K + 1)}</span>
+                {scenes[current].rubro}
+              </p>
+              <h2 className="sw-p-title" key={`t-${scenes[current].id}`}>{scenes[current].nombre}</h2>
+              <p className="sw-cta-desc" key={scenes[current].id}>{scenes[current].descripcion}</p>
+              {scenes[current].extra && (() => {
+                const x = scenes[current].extra!;
+                const body = (
+                  <>
+                    <span>{x.etiqueta}</span>
+                    <b>{x.texto}</b>
+                  </>
+                );
+                const href = x.href ?? scenes[current].href;
+                return href.startsWith("/") ? (
+                  <Link href={href} className="sw-extra" key={`x-${scenes[current].id}`}>
+                    {body}
+                  </Link>
+                ) : (
+                  <a href={href} target="_blank" rel="noopener noreferrer" className="sw-extra" key={`x-${scenes[current].id}`}>
+                    {body}
+                  </a>
+                );
+              })()}
+              <button type="button" onClick={() => navigate(scenes[current])} className="sw-cta">
+                {scenes[current].external ? "Visitar sitio" : "Entrar a la sección"}
+                <ArrowRight size={16} aria-hidden />
+              </button>
             </div>
           </div>
 

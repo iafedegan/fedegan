@@ -47,14 +47,14 @@ export default function BiologicoPage() {
               href="https://micrositios.goupagos.com.co/fedegan-ma"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-[0.4rem] bg-[var(--fg-lime-500)] px-6 py-3 text-[0.8rem] font-bold uppercase tracking-[0.12em] text-[#0a1a11] transition hover:bg-[var(--fg-lime-400)]"
+              className="inline-flex items-center gap-2 rounded-[0.25rem] bg-[var(--fg-lime-500)] px-6 py-3 text-[0.8rem] font-bold uppercase tracking-[0.12em] text-[#0a1a11] transition hover:bg-[var(--fg-lime-400)]"
             >
               Pagar el recaudo <ArrowUpRight size={16} />
             </a>
             <p className="max-w-sm text-sm leading-relaxed text-[var(--text-faint)]">Por ahora el pago se hace en el sitio de pagos de FEDEGÁN; esta pantalla se conectará a ese sistema.</p>
           </div>
         </div>
-        <Image src="/accesos/recaudo-biologico.webp" alt="Biológico: recaudo de dosis aplicadas, aftosa, aftosa más rabia y RB51" width={640} height={784} unoptimized className="h-auto w-full max-w-sm justify-self-center rounded-[0.9rem] border border-[var(--border-strong)] shadow-[0_24px_44px_-28px_rgba(0,0,0,0.85)] lg:justify-self-end" />
+        <Image src="/accesos/recaudo-biologico.webp" alt="Biológico: recaudo de dosis aplicadas, aftosa, aftosa más rabia y RB51" width={640} height={784} unoptimized className="h-auto w-full max-w-sm justify-self-center rounded-[0.25rem] border border-[var(--border-strong)] shadow-[0_24px_44px_-28px_rgba(0,0,0,0.85)] lg:justify-self-end" />
       </Container>
     </>
   );
