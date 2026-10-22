@@ -4,7 +4,8 @@ import type { CSSProperties, ReactNode } from "react";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { Section } from "@/components/ui/Editorial";
 import { Pictogram } from "@/components/ui/Pictogram";
-import { avisosPortada, campanas, gruposAvisos, pagos, tramites, type Acceso, type Campana } from "@/content/accesos";
+import { ScrollRail } from "@/components/design/ScrollRail";
+import { campanas, gruposAvisos, pagos, tramites, type Acceso, type Campana } from "@/content/accesos";
 import { excerptOf, getLegacyPage, getLegacySection, legacyHref } from "@/content/legacy";
 
 const acc = (v: string) => ({ ["--acc-rgb" as string]: v }) as CSSProperties;
@@ -66,9 +67,9 @@ export function AccessHub({ tinted = false }: { tinted?: boolean }) {
 }
 
 // Aviso: ficha vertical de tamaño fijo; el cartel completo se abre al hacer clic.
-function AvisoTile({ c }: { c: Campana }) {
+function AvisoTile({ c, as: Tag = "li" }: { c: Campana; as?: "li" | "div" }) {
   return (
-    <li>
+    <Tag>
       <Wrap to={c.href} external={c.external} className="group relative block aspect-[4/5] overflow-hidden rounded-[0.9rem] border border-[var(--border-strong)] bg-[var(--bg-sunken)] transition-[transform,border-color,box-shadow] duration-500 [transition-timing-function:var(--ease-lux)] hover:-translate-y-1 hover:border-[var(--fg-lime-500)] hover:shadow-[0_26px_44px_-28px_rgba(0,0,0,0.85)]">
         <Image src={c.image} alt={c.alt} fill unoptimized sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw" className="object-cover object-top transition-transform duration-[1200ms] [transition-timing-function:var(--ease-lux)] group-hover:scale-[1.05]" />
         <span aria-hidden className="absolute inset-x-0 bottom-0 h-[55%] bg-gradient-to-t from-[rgba(6,16,11,0.94)] via-[rgba(6,16,11,0.6)] to-transparent" />
@@ -81,22 +82,21 @@ function AvisoTile({ c }: { c: Campana }) {
           <span className="mt-1 block font-[var(--font-display)] text-lg font-bold leading-snug text-white">{c.title}</span>
         </span>
       </Wrap>
-    </li>
+    </Tag>
   );
 }
 
-/** Portada: cuatro avisos destacados en fichas del mismo tamaño. */
+/** Portada: carrusel de avisos con fichas del mismo tamaño; se desliza con los botones o con el dedo. */
 export function CampaignWall() {
-  const list = avisosPortada.map((id) => campanas.find((c) => c.id === id)).filter(Boolean) as Campana[];
   return (
     <Section eyebrow="Avisos" title="Convocatorias y comunicados">
-      <ul className="grid grid-cols-2 gap-4 lg:grid-cols-4 lg:gap-5">
-        {list.map((c) => (
-          <AvisoTile key={c.id} c={c} />
+      <ScrollRail label="Avisos">
+        {campanas.map((c) => (
+          <AvisoTile key={c.id} c={c} as="div" />
         ))}
-      </ul>
-      <Link href="/avisos" className="group mt-6 inline-flex items-center gap-2 text-sm font-bold uppercase tracking-[0.12em] text-[var(--fg-lime-400)]">
-        Ver todos los avisos <ArrowRight size={15} className="transition-transform group-hover:translate-x-1" />
+      </ScrollRail>
+      <Link href="/avisos" className="group mt-4 inline-flex items-center gap-2 text-sm font-bold uppercase tracking-[0.12em] text-[var(--fg-lime-400)]">
+        Ver los avisos por tema <ArrowRight size={15} className="transition-transform group-hover:translate-x-1" />
       </Link>
     </Section>
   );

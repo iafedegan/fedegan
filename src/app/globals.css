@@ -848,5 +848,16 @@ a.mx-card:hover, .mx-lift:hover { transform: translateY(-3px); }
     -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
   }
   .sw-msubs .sw-sub { width: 100%; justify-content: flex-start; text-align: left; padding: 0.55rem 0; border-bottom: 1px solid rgba(255, 255, 255, 0.08); }
-  .sw-hint { top: auto; bottom: 6.5rem; }
+  .sw-hint { top: auto; bottom: 9rem; }
+}
+
+/* Portales aliados: franja al pie del recorrido */
+.sw-aliados { position: absolute; z-index: 3; left: 0; right: 0; bottom: 0; padding: 2.2rem 0 0.9rem; background: linear-gradient(0deg, rgba(5, 16, 11, 0.82), transparent); }
+.sw-aliados-label { flex: none; font-size: 0.66rem; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(244, 242, 233, 0.8); }
+.sw-aliado { display: inline-flex; align-items: center; gap: 0.6rem; font-size: 0.8rem; font-weight: 600; color: #f4f2e9; opacity: 0.88; transition: opacity 0.2s, transform 0.3s var(--ease-lux); }
+.sw-aliado:hover { opacity: 1; transform: translateY(-2px); }
+@media (max-width: 767px) {
+  .sw-aliados { bottom: calc(5.4rem + env(safe-area-inset-bottom)); padding-top: 0.5rem; background: none; }
+  .sw-aliados-label { display: none; }
+  .sw-aliado span { display: none; }
 }

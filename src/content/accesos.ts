@@ -72,9 +72,6 @@ export const gruposAvisos: { id: Campana["group"]; titulo: string; texto: string
   { id: "aliados", titulo: "Eventos y aliados", texto: "Gira técnica, remate y servicios de aliados." },
 ];
 
-/** Los cuatro avisos que se muestran en la portada. */
-export const avisosPortada = ["gira", "cuota", "convenios", "carne"];
-
 export const contacto = {
   direccion: "Calle 37 N° 14 - 31, Bogotá, Colombia",
   telefono: "+57 (601) 578 2020",

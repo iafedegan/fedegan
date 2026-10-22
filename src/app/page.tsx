@@ -1,6 +1,5 @@
 import { HeroNews } from "@/components/blocks/HeroNews";
 import { PortalJourney } from "@/components/blocks/PortalJourney";
-import { PortalesAliados } from "@/components/blocks/PortalesAliados";
 import { NewsGrid } from "@/components/blocks/NewsGrid";
 import { PublicationsGrid } from "@/components/blocks/PublicationsGrid";
 import { PaymentsBand } from "@/components/blocks/PaymentsBand";
@@ -23,7 +22,6 @@ export default async function Home() {
       <VoiceAndAgenda />
       <PublicationsGrid />
       <CampaignWall />
-      <PortalesAliados />
       <AccountStrip />
     </>
   );

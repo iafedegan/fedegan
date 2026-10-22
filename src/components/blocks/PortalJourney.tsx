@@ -1,4 +1,4 @@
-import { getPisos } from "@/lib/cms/content";
+import { getPartners, getPisos } from "@/lib/cms/content";
 import { getHomeNews, getSecciones } from "@/lib/contexto";
 import { getPublishedDesign } from "@/lib/design/store";
 import { journeyPhotos } from "@/content/scroll-world";
@@ -42,7 +42,7 @@ function subsOf(id: string): JourneySub[] {
 }
 
 export async function PortalJourney() {
-  const [pisos, news, design, secciones] = await Promise.all([getPisos(), getHomeNews(), getPublishedDesign(), getSecciones()]);
+  const [pisos, news, design, secciones, aliados] = await Promise.all([getPisos(), getHomeNews(), getPublishedDesign(), getSecciones(), getPartners()]);
   const scenes: JourneyScene[] = [];
   for (const l of pisos.flatMap((p) => p.locales)) {
     const photo = journeyPhotos[l.id];
@@ -89,5 +89,5 @@ export async function PortalJourney() {
   }
 
   if (scenes.length < 2) return null;
-  return <ScrollWorld scenes={scenes} />;
+  return <ScrollWorld scenes={scenes} aliados={aliados} />;
 }

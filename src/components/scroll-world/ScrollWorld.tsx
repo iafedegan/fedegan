@@ -69,7 +69,7 @@ function EnterLink({ scene, className }: { scene: JourneyScene; className?: stri
 
 // Recorrido a pantalla completa por los locales del portal: el scroll conduce una cámara que
 // avanza de foto en foto (cada una real, de finca), con un empuje continuo entre escenas.
-export function ScrollWorld({ scenes }: { scenes: JourneyScene[] }) {
+export function ScrollWorld({ scenes, aliados = [] }: { scenes: JourneyScene[]; aliados?: { nombre: string; href: string; logo: string }[] }) {
   const K = scenes.length - 1;
   const trackRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
@@ -277,6 +277,24 @@ export function ScrollWorld({ scenes }: { scenes: JourneyScene[] }) {
                 ))}
               </ul>
             </div>
+          )}
+
+          {aliados.length > 0 && (
+            <nav className="sw-aliados" aria-label="Portales aliados">
+              <Container className="flex items-center gap-x-6 gap-y-2">
+                <span className="sw-aliados-label">Portales aliados</span>
+                <ul className="flex min-w-0 flex-1 items-center gap-x-5 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                  {aliados.map((a) => (
+                    <li key={a.nombre} className="shrink-0">
+                      <a href={a.href} target="_blank" rel="noopener noreferrer" className="sw-aliado" title={a.nombre}>
+                        <Image src={a.logo} alt="" width={64} height={64} className="h-9 w-9 rounded-full border border-white/30 object-cover" />
+                        <span>{a.nombre}</span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </Container>
+            </nav>
           )}
 
           <nav className="sw-rail" aria-label="Secciones del portal">
