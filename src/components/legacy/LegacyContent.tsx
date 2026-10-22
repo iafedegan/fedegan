@@ -1,7 +1,8 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { ArrowRight, ArrowUpRight, ExternalLink, FileText } from "lucide-react";
+import { ArrowUpRight, ExternalLink, FileText } from "lucide-react";
 import type { LegacyBlock } from "@/content/legacy";
+import { EntryExplorer, type ExplorerEntry } from "./EntryExplorer";
 
 const TOKEN = /\*\*([^*]+)\*\*|\[([^\]]*)\]\((https?:\/\/[^)\s]+|\/[^)\s]*)\)/g;
 const FILE = /\.(pdf|docx?|xlsx?|pptx?|zip|rar)(\?|$)/i;
@@ -106,8 +107,9 @@ type Entry = { title: string; meta: [string, string][]; desc: string[] };
 
 const LINK_ONLY = /^\[([^\]]+)\]\((https?:\/\/[^)\s]+|\/[^)\s]*)\)$/;
 const MORE = /\[más›\]\([^)]*\)|más›/gi;
+const CODE = /^([A-Z]{1,5}[-–]\d{2,4}[-–]\d{4})\s*[:\-–]\s*(.+)$/;
 
-// Agrupa «título enlazado + datos + descripción» (publicaciones, columnas, comunicados) para pintarlos como tarjetas.
+// Agrupa «título enlazado + datos + descripción» (publicaciones, cartas, comunicados) para pintarlos como lista.
 function takeEntries(blocks: LegacyBlock[], from: number): { entries: Entry[]; next: number } | null {
   const entries: Entry[] = [];
   let i = from;
@@ -131,61 +133,20 @@ function takeEntries(blocks: LegacyBlock[], from: number): { entries: Entry[]; n
   return entries.length >= 2 ? { entries, next: i } : null;
 }
 
-const plain = (s: string) => s.replace(/\[([^\]]*)\]\([^)]*\)/g, "$1");
+const plain = (s: string) => s.replace(/\[([^\]]*)\]\([^)]*\)/g, "$1").replace(/\*\*/g, "").replace(/\s+/g, " ").trim();
 
-function EntryGrid({ entries }: { entries: Entry[] }) {
-  return (
-    <ul className="my-6 grid gap-4 md:grid-cols-2 2xl:grid-cols-3">
-      {entries.map((e, n) => {
-        const chips = e.meta.filter(([k]) => /^(año|páginas|paginas|isbn|fecha|edición|edicion)$/i.test(k));
-        const lines = e.meta.filter(([k]) => !/^(año|páginas|paginas|isbn|fecha|edición|edicion)$/i.test(k));
-        const link = LINK_ONLY.exec(e.title);
-        return (
-          <li key={n} className="mx-card mx-lift flex flex-col gap-3 !p-5">
-            <h3 className="font-[var(--font-display)] text-lg font-bold leading-snug text-[var(--text)]">
-              <Inline text={e.title.replace(/^\[(.*)\]\((.*)\)$/, "[$1]($2)")} />
-            </h3>
-            {chips.length > 0 && (
-              <ul className="flex flex-wrap gap-1.5">
-                {chips.map(([k, v]) => (
-                  <li key={k} className="rounded-full border border-[var(--border-strong)] bg-[var(--surface-2)] px-2.5 py-1 text-[0.7rem] font-semibold text-[var(--text-muted)]">
-                    <span className="mr-1 uppercase tracking-[0.1em] text-[var(--text-faint)]">{k}</span>
-                    {v}
-                  </li>
-                ))}
-              </ul>
-            )}
-            {lines.length > 0 && (
-              <dl className="flex flex-col gap-1 text-sm leading-snug">
-                {lines.map(([k, v]) => (
-                  <div key={k} className="flex flex-col sm:flex-row sm:gap-2">
-                    <dt className="shrink-0 text-[0.68rem] font-bold uppercase tracking-[0.12em] text-[var(--text-faint)] sm:w-14 sm:pt-0.5">{k}</dt>
-                    <dd className="line-clamp-2 text-[var(--text-muted)]">
-                      <Inline text={v} />
-                    </dd>
-                  </div>
-                ))}
-              </dl>
-            )}
-            {e.desc.length > 0 && <p className="line-clamp-4 text-sm leading-relaxed text-[var(--text-muted)]">{plain(e.desc.join(" "))}</p>}
-            {link && (
-              <span className="mt-auto pt-1">
-                {link[2].startsWith("/") ? (
-                  <Link href={link[2]} className="inline-flex items-center gap-1 text-sm font-bold text-[var(--fg-lime-400)]">
-                    Ver más <ArrowRight size={14} />
-                  </Link>
-                ) : (
-                  <a href={link[2]} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-sm font-bold text-[var(--fg-lime-400)]">
-                    Ver más <ArrowUpRight size={14} />
-                  </a>
-                )}
-              </span>
-            )}
-          </li>
-        );
-      })}
-    </ul>
-  );
+function toExplorer(entries: Entry[]): ExplorerEntry[] {
+  return entries.map((e) => {
+    const m = LINK_ONLY.exec(e.title)!;
+    const parsed = CODE.exec(m[1].trim());
+    return {
+      title: parsed ? parsed[2] : m[1].trim(),
+      code: parsed?.[1],
+      href: m[2],
+      desc: plain(e.desc.join(" ")),
+      meta: e.meta.map(([k, v]) => [k, plain(v)] as [string, string]),
+    };
+  });
 }
 
 // Pinta el texto copiado (títulos, párrafos, listas, tablas y tableros) con el estilo del portal.
@@ -198,7 +159,7 @@ export function LegacyContent({ blocks }: { blocks: LegacyBlock[] }) {
     if (b.t === "h3") {
       const grouped = takeEntries(blocks, i);
       if (grouped) {
-        nodes.push(<EntryGrid key={key} entries={grouped.entries} />);
+        nodes.push(<EntryExplorer key={key} entries={toExplorer(grouped.entries)} />);
         i = grouped.next - 1;
         continue;
       }
