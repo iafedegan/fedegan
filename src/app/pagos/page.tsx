@@ -1,21 +1,48 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { ArrowRight, ArrowUpRight, ShieldCheck } from "lucide-react";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Container } from "@/components/ui/Container";
 import { CtaBand, Section } from "@/components/ui/Editorial";
-import { PaymentLogin } from "@/components/pagos/PaymentLogin";
+import { Pictogram, type PictogramName } from "@/components/ui/Pictogram";
 import { FechasLimite } from "@/components/pagos/FechasLimite";
 import { InstructivoTabs } from "@/components/pagos/InstructivoTabs";
-import { ley, pagosActual } from "@/content/pagos";
+import { NextDeadline } from "@/components/pagos/NextDeadline";
 
-export const metadata: Metadata = { title: "Pago en línea de la cuota de fomento" };
+export const metadata: Metadata = { title: "Zona de pagos" };
 
-const pasos = [
-  { n: "1", t: "Ingrese", d: "Con su NIT o cédula de recaudador." },
-  { n: "2", t: "Diligencie la planilla", d: "Mes de recaudo, orígenes y totales de leche o carne." },
-  { n: "3", t: "Pague por PSE", d: "Elija su banco y siga el proceso seguro." },
+const opciones: { icon: PictogramName; acc: string; title: string; quien: string; text: string; need: string[]; href: string; cta: string; external?: boolean }[] = [
+  {
+    icon: "pago",
+    acc: "92,205,134",
+    title: "Cuota de fomento · Leche",
+    quien: "Recaudadores de leche",
+    text: "Reporte los litros comprados por municipio y pague el recaudo del mes por PSE.",
+    need: ["NIT o cédula de recaudador", "Litros y valor por municipio", "Mes de causación"],
+    href: "/pagos/cuota?c=leche",
+    cta: "Pagar cuota de leche",
+  },
+  {
+    icon: "res",
+    acc: "216,181,88",
+    title: "Cuota de fomento · Carne",
+    quien: "Recaudadores de carne",
+    text: "Reporte las cabezas sacrificadas por municipio, machos y hembras, y pague por PSE.",
+    need: ["NIT o cédula de recaudador", "Cabezas por municipio", "Machos y hembras del mes"],
+    href: "/pagos/cuota?c=carne",
+    cta: "Pagar cuota de carne",
+  },
+  {
+    icon: "biologico",
+    acc: "112,214,196",
+    title: "Recaudo biológico",
+    quien: "Vacunadores y organizaciones",
+    text: "Recaudo de las dosis aplicadas: aftosa, aftosa más rabia y brucelosis RB51.",
+    need: ["Dosis aplicadas del ciclo", "Datos de la organización"],
+    href: "/pagos/biologico",
+    cta: "Pagar recaudo biológico",
+  },
 ];
 
 export default function PagosPage() {
@@ -23,52 +50,58 @@ export default function PagosPage() {
     <>
       <PageHeader
         eyebrow="Fondo Nacional del Ganado"
-        title="Pago en línea"
-        description="Recaudo de la cuota de fomento ganadero y lechero para los recaudadores."
+        title="Zona de pagos"
+        description="Todos los pagos de FEDEGÁN–FNG en un solo lugar."
         image="/headers/servicios.jpg"
         imagePos="60% 40%"
-        facts={["PSE", "Leche y carne", "Fechas límite 2026"]}
-        breadcrumbs={[{ label: "Pagos y trámites", href: "/accesos" }, { label: "Pago en línea" }]}
+        facts={["PSE", "Cuota de fomento", "Recaudo biológico"]}
+        breadcrumbs={[{ label: "Zona de pagos" }]}
         compact
       />
 
-      <Container className="grid gap-8 py-8 sm:py-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-12">
-        <PaymentLogin />
-
-        <div className="flex flex-col gap-7">
+      <Container className="py-8 sm:py-12">
+        <div className="flex flex-col items-start justify-between gap-6 border-b border-[var(--border)] pb-8 lg:flex-row lg:items-center">
           <div>
-            <p className="eyebrow">{ley.titulo}</p>
-            <div className="mt-3 flex flex-col gap-3.5 leading-relaxed text-[var(--text-muted)]">
-              {ley.parrafos.map((p) => (
-                <p key={p.slice(0, 24)}>{p}</p>
-              ))}
-            </div>
+            <span className="eyebrow">Paso 1</span>
+            <h2 className="mt-2 font-[var(--font-display)] text-3xl font-bold text-[var(--text)] sm:text-4xl">¿Qué desea pagar?</h2>
           </div>
-
-          <ol className="grid gap-0 border-y border-[var(--border-strong)] sm:grid-cols-3 sm:divide-x sm:divide-[var(--border)]">
-            {pasos.map((p) => (
-              <li key={p.n} className="flex gap-3 py-4 sm:flex-col sm:gap-1.5 sm:px-4 sm:first:pl-0">
-                <span className="font-[var(--font-display)] text-3xl font-bold leading-none text-[var(--fg-lime-400)]">{p.n}</span>
-                <span>
-                  <span className="block font-bold text-[var(--text)]">{p.t}</span>
-                  <span className="block text-sm leading-snug text-[var(--text-muted)]">{p.d}</span>
-                </span>
-              </li>
-            ))}
-          </ol>
-
-          <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
-            <Link href="/pagos/planilla" className="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-[0.12em] text-[var(--fg-lime-400)] hover:text-[var(--text)]">
-              Ver la planilla de recaudo <ArrowRight size={16} />
-            </Link>
-            <a href={pagosActual} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--text-muted)] hover:text-[var(--fg-lime-400)]">
-              Sistema actual de pagos <ArrowUpRight size={14} />
-            </a>
-          </div>
+          <NextDeadline size="lg" />
         </div>
+
+        <ul className="mt-8 grid gap-5 lg:grid-cols-3">
+          {opciones.map((o) => (
+            <li key={o.title}>
+              <Link href={o.href} className="group block h-full">
+                <article className="mx-card mx-lift mx-rise flex h-full flex-col gap-5 !p-7" style={{ ["--acc-rgb" as string]: o.acc } as React.CSSProperties}>
+                  <span className="text-[rgb(var(--acc-rgb))]"><Pictogram name={o.icon} size={50} /></span>
+                  <div>
+                    <p className="text-[0.68rem] font-bold uppercase tracking-[0.18em] text-[var(--text-faint)]">{o.quien}</p>
+                    <h3 className="mt-1 font-[var(--font-display)] text-2xl font-bold leading-tight text-[var(--text)]">{o.title}</h3>
+                    <p className="mt-2 leading-relaxed text-[var(--text-muted)]">{o.text}</p>
+                  </div>
+                  <ul className="flex flex-col gap-1.5 border-t border-[var(--border)] pt-4 text-sm text-[var(--text-muted)]">
+                    {o.need.map((n) => (
+                      <li key={n} className="relative pl-5 before:absolute before:left-0 before:top-[0.6em] before:h-1.5 before:w-1.5 before:rounded-full before:bg-[rgb(var(--acc-rgb))]">
+                        {n}
+                      </li>
+                    ))}
+                  </ul>
+                  <span className="mt-auto inline-flex w-fit items-center gap-2 rounded-[0.4rem] bg-[rgb(var(--acc-rgb))] px-5 py-3 text-[0.78rem] font-bold uppercase tracking-[0.1em] text-[#0a1a11] transition-transform group-hover:translate-x-1">
+                    {o.cta} <ArrowRight size={16} />
+                  </span>
+                </article>
+              </Link>
+            </li>
+          ))}
+        </ul>
+
+        <p className="mt-8 flex items-center gap-3 text-sm text-[var(--text-muted)]">
+          <ShieldCheck size={20} className="shrink-0 text-[var(--fg-lime-400)]" />
+          Los pagos se hacen por PSE – Pagos Seguros en Línea, que maneja archivos encriptados y lo envía a la página de su banco.
+        </p>
       </Container>
 
-      <Section eyebrow="Calendario" title="Fechas límite de consignación 2026" intro="Consigne dentro de los primeros días del mes siguiente al recaudo. Pasada la fecha límite, el sistema liquida intereses de mora." tinted>
+      <Section id="calendario" eyebrow="Paso 2" title="Fechas límite de consignación 2026" intro="Consigne dentro de los primeros días del mes siguiente al recaudo. Pasada la fecha límite, el sistema liquida intereses de mora." tinted>
         <div className="grid items-start gap-8 lg:grid-cols-[1.1fr_0.9fr]">
           <FechasLimite />
           <ul className="grid grid-cols-2 gap-4">
@@ -89,13 +122,13 @@ export default function PagosPage() {
         </div>
       </Section>
 
-      <Section eyebrow="Paso a paso" title="Instructivo del botón de pago PSE" intro="Elija el concepto que va a pagar.">
+      <Section eyebrow="Paso 3" title="Guía del botón de pago PSE" intro="Elija el concepto que va a pagar.">
         <InstructivoTabs />
       </Section>
 
       <CtaBand
         eyebrow="¿Necesita ayuda?"
-        title="Resolvemos sus dudas sobre el recaudo"
+        title="Resolvemos sus dudas sobre los pagos"
         text="Escríbanos o revise las preguntas frecuentes."
         actions={[
           { label: "Contacto", href: "/contacto" },

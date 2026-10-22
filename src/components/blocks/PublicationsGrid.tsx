@@ -13,7 +13,7 @@ export async function PublicationsGrid() {
       <Container>
         <SectionHeading eyebrow="Recursos" title="Publicaciones y recursos" action={{ label: "Ver todas las publicaciones", href: "/publicaciones" }} />
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {publications.map((p) => {
+          {publications.slice(0, 3).map((p) => {
             const c = publicationCovers[p.type] ?? publicationCovers.Informe;
             return (
               <PhotoCard

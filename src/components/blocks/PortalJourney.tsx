@@ -2,36 +2,40 @@ import { getPisos } from "@/lib/cms/content";
 import { getHomeNews, getSecciones } from "@/lib/contexto";
 import { getPublishedDesign } from "@/lib/design/store";
 import { journeyPhotos } from "@/content/scroll-world";
-import { getLegacySection, legacyHref, type NavNode } from "@/content/legacy";
+import { getLegacyPage, legacyHref } from "@/content/legacy";
+import menuData from "@/content/legacy/mainmenu.json";
 import { ScrollWorld, type JourneyScene, type JourneySub } from "@/components/scroll-world/ScrollWorld";
 
 // Recorrido scroll por los locales del directorio y las noticias, con fotos reales de finca.
 // Los textos salen del CMS; la foto, de journeyPhotos (o la del propio local si no hay).
-const SECTION_OF: Record<string, string> = {
-  programas: "programas",
-  normatividad: "normatividad",
-  publicaciones: "publicaciones",
-  cifras: "cifras-del-sector",
-  fng: "fng",
-  fep: "fep",
-  sig: "sistema-integrado-de-gestion",
+// Escena → opción del menú principal del portal actual.
+const MENU_OF: Record<string, string> = {
+  programas: "Programas",
+  normatividad: "Normatividad",
+  publicaciones: "Publicaciones",
+  cifras: "Cifras del Sector",
+  fng: "FNG",
+  fep: "FEP",
+  sig: "Sistema Integrado de Gestión",
 };
 
-const firstKey = (n: NavNode): string | undefined => n.key ?? n.children?.map(firstKey).find(Boolean);
+const menu = menuData as { label: string; href: string; subs: { label: string; href: string }[] }[];
 
-// Opciones de segundo nivel de cada escena: el menú de la sección con el texto del portal actual.
+// Opciones de segundo nivel de cada escena: las mismas del menú desplegable del portal actual.
+// Si la página ya se copió se abre dentro del portal; si no, en el sitio original.
 function subsOf(id: string): JourneySub[] {
-  const slug = SECTION_OF[id];
-  const section = slug ? getLegacySection(slug) : null;
-  if (!section || !slug) return [];
+  const item = menu.find((m) => m.label === MENU_OF[id]);
+  if (!item) return [];
   const seen = new Set<string>();
   const out: JourneySub[] = [];
-  for (const n of section.tree) {
-    const key = firstKey(n);
-    const sub: JourneySub | null = key ? { label: n.label, href: legacyHref(slug, key) } : n.href ? { label: n.label, href: n.href, external: true } : null;
-    if (sub && !seen.has(sub.href)) {
-      seen.add(sub.href);
-      out.push(sub);
+  for (const sub of item.subs) {
+    const key = sub.href.replace(/^https?:\/\/(www\.)?fedegan\.org\.co\//, "").replace(/\/$/, "");
+    const page = getLegacyPage(key);
+    const slug = page?.sections[0];
+    const entry: JourneySub = page && slug ? { label: sub.label, href: legacyHref(slug, key) } : { label: sub.label, href: sub.href.replace(/^http:/, "https:"), external: true };
+    if (!seen.has(entry.href)) {
+      seen.add(entry.href);
+      out.push(entry);
     }
   }
   return out;

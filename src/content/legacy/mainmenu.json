@@ -1,0 +1,207 @@
+[
+ {
+  "label": "Programas",
+  "href": "https://www.fedegan.org.co/programas",
+  "subs": [
+   {
+    "label": "Fedegán",
+    "href": "https://www.fedegan.org.co/programa/fedegan"
+   },
+   {
+    "label": "Fondo de Estabilización para el Fomento de la Exportación de Carne, Leche y sus Derivados",
+    "href": "https://www.fedegan.org.co/programa/fondo-de-estabilizacion-para-el-fomento-de-la-exportacion-de-carne-leche-y-sus-derivados"
+   },
+   {
+    "label": "Fondo Nacional del Ganado",
+    "href": "https://www.fedegan.org.co/programa/fondo-nacional-del-ganado"
+   },
+   {
+    "label": "Fundagán",
+    "href": "https://www.fedegan.org.co/programa/fundagan"
+   },
+   {
+    "label": "Proyecto Ganadería Colombiana Sostenible",
+    "href": "https://www.fedegan.org.co/programas/proyecto-ganaderia-colombiana-sostenible"
+   },
+   {
+    "label": "Sistema de Gestión de Calidad Fedegan",
+    "href": "https://www.fedegan.org.co/sistema-de-gestion-de-calidad-0"
+   }
+  ]
+ },
+ {
+  "label": "Normatividad",
+  "href": "https://www.fedegan.org.co/normatividad",
+  "subs": []
+ },
+ {
+  "label": "Publicaciones",
+  "href": "https://www.fedegan.org.co/publicaciones",
+  "subs": [
+   {
+    "label": "Libros",
+    "href": "https://www.fedegan.org.co/publicacion/publicaciones_libros/gremiales"
+   },
+   {
+    "label": "El Pensamiento Económico y Social de FEDEGÁN",
+    "href": "https://www.fedegan.org.co/libro-el-pensamiento-economico"
+   },
+   {
+    "label": "Cartillas",
+    "href": "https://www.fedegan.org.co/publicacion/publicaciones_cartillas/produccion"
+   },
+   {
+    "label": "Revista Carta Fedegán",
+    "href": "https://www.fedegan.org.co/publicacion/pub_revista_carta_fedegan/ultima-edicion"
+   },
+   {
+    "label": "Cuadernos Ganaderos",
+    "href": "https://www.fedegan.org.co/publicacion/pub_cuadernos_ganaderos/cuadernos-ganaderos"
+   },
+   {
+    "label": "Multimedia",
+    "href": "http://www.fedegan.org.co/multimedia-general"
+   },
+   {
+    "label": "Presentaciones",
+    "href": "https://www.fedegan.org.co/publicacion/publicaciones_presentaciones/presentaciones-gremiales"
+   }
+  ]
+ },
+ {
+  "label": "Cifras del Sector",
+  "href": "https://www.fedegan.org.co/estadisticas/general",
+  "subs": [
+   {
+    "label": "General",
+    "href": "http://www.fedegan.org.co/estadisticas/general"
+   },
+   {
+    "label": "Inventario Ganadero",
+    "href": "https://www.fedegan.org.co/estadisticas/inventario-ganadero"
+   },
+   {
+    "label": "Producción",
+    "href": "https://www.fedegan.org.co/estadisticas/produccion-0"
+   },
+   {
+    "label": "Precios",
+    "href": "https://www.fedegan.org.co/estadisticas/precios"
+   },
+   {
+    "label": "Costos de Producción",
+    "href": "https://www.fedegan.org.co/estadisticas/costos-produccion"
+   },
+   {
+    "label": "Consumo",
+    "href": "https://www.fedegan.org.co/estadisticas/consumo-0"
+   },
+   {
+    "label": "Importaciones y exportaciones",
+    "href": "https://www.fedegan.org.co/estadisticas/importaciones-y-exportaciones"
+   },
+   {
+    "label": "Indicadores económicos",
+    "href": "https://www.fedegan.org.co/estadisticas/indicadores-economicos"
+   },
+   {
+    "label": "Documentos de Estadística",
+    "href": "https://www.fedegan.org.co/estadisticas/documentos-de-estadistica"
+   },
+   {
+    "label": "Coyuntura Ganadera",
+    "href": "https://www.fedegan.org.co/coyuntura-ganadera"
+   },
+   {
+    "label": "Cifras Interactivas",
+    "href": "https://www.fedegan.org.co/cifras-interactivas"
+   }
+  ]
+ },
+ {
+  "label": "FNG",
+  "href": "https://www.fedegan.org.co/junta-directiva-fng",
+  "subs": [
+   {
+    "label": "Nosotros",
+    "href": "https://www.fedegan.org.co/junta-directiva-fng"
+   },
+   {
+    "label": "Transparencia y acceso a la información pública",
+    "href": "https://www.fedegan.org.co/transparencia-y-acceso-la-informacion-publica"
+   },
+   {
+    "label": "Atención y servicios a la ciudadanía",
+    "href": "https://www.fedegan.org.co/atencion-y-servicios-la-ciudadania"
+   },
+   {
+    "label": "Participa",
+    "href": "https://www.fedegan.org.co/identificacion-de-problemas-y-diagnostico-de-necesidades"
+   }
+  ]
+ },
+ {
+  "label": "FEP",
+  "href": "https://www.fedegan.org.co/programa/fondo-de-estabilizacion-para-el-fomento-de-la-exportacion-de-carne-leche-y-sus-derivados",
+  "subs": [
+   {
+    "label": "Estructura Organizacional",
+    "href": "https://www.fedegan.org.co/organigrama"
+   },
+   {
+    "label": "Nuestras Funciones",
+    "href": "https://www.fedegan.org.co/por-area"
+   },
+   {
+    "label": "Normatividad",
+    "href": "https://www.fedegan.org.co/normas-generales-y-reglamentarias"
+   },
+   {
+    "label": "Procesos",
+    "href": "https://www.fedegan.org.co/sistema-gestion-de-calidad"
+   },
+   {
+    "label": "Información Financiera",
+    "href": "https://www.fedegan.org.co/presupuesto"
+   },
+   {
+    "label": "Gestión Documental",
+    "href": "https://www.fedegan.org.co/gestion-documental"
+   },
+   {
+    "label": "Contratación",
+    "href": "https://www.fedegan.org.co/contratacion"
+   },
+   {
+    "label": "Vigilancia y Control",
+    "href": "https://www.fedegan.org.co/informes-de-gestion"
+   },
+   {
+    "label": "Atención al ciudadano y buen gobierno",
+    "href": "https://www.fedegan.org.co/atencion-al-ciudadano-y-buen-gobierno"
+   }
+  ]
+ },
+ {
+  "label": "Sistema Integrado de Gestión",
+  "href": "https://www.fedegan.org.co/sistema-integrado-de-gestion",
+  "subs": [
+   {
+    "label": "Introducción SIG",
+    "href": "https://www.fedegan.org.co/sistema-integrado-de-gestion"
+   },
+   {
+    "label": "Sistema de Gestión de Calidad",
+    "href": "https://www.fedegan.org.co/sistema-de-gestion-de-calidad"
+   },
+   {
+    "label": "Sistema de Seguridad y Salud en el trabajo",
+    "href": "https://www.fedegan.org.co/politicas-y-reglamentos-del-sg-sst"
+   },
+   {
+    "label": "Sistema de Gestión de la Calidad Estadística",
+    "href": "https://www.fedegan.org.co/sistema-de-gestion-de-la-calidad-estadistica"
+   }
+  ]
+ }
+]

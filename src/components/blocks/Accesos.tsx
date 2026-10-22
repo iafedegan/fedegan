@@ -21,36 +21,6 @@ function Wrap({ to, external, className, children }: { to: string; external?: bo
   );
 }
 
-// Pagos: dos paneles amplios; es lo primero que busca quien aporta la cuota.
-function PayPanel({ a }: { a: Acceso }) {
-  return (
-    <Wrap to={a.href} external={a.external} className="group block h-full">
-      <article
-        className="flex h-full flex-col overflow-hidden rounded-[0.9rem] border border-[var(--border-strong)] border-t-2 border-t-[rgb(var(--acc-rgb))] bg-[var(--surface-solid)] transition-shadow duration-300 group-hover:shadow-[0_22px_40px_-26px_rgba(0,0,0,0.85)] sm:flex-row"
-        style={acc(a.acc)}
-      >
-        <div className="flex flex-1 flex-col gap-4 p-6 sm:p-8">
-          <Pictogram name={a.icon} size={46} className="text-[rgb(var(--acc-rgb))]" />
-          <div>
-            <h3 className="font-[var(--font-display)] text-3xl font-bold leading-tight text-[var(--text)]">{a.title}</h3>
-            <p className="mt-2 max-w-md leading-relaxed text-[var(--text-muted)]">{a.text}</p>
-          </div>
-          <span className="mt-auto inline-flex w-fit items-center gap-2 rounded-[0.4rem] bg-[rgb(var(--acc-rgb))] px-5 py-3 text-[0.78rem] font-bold uppercase tracking-[0.12em] text-[#0a1a11] transition-transform duration-300 group-hover:translate-x-1">
-            {a.cta ?? "Ir al servicio"} {a.external ? <ArrowUpRight size={16} /> : <ArrowRight size={16} />}
-          </span>
-        </div>
-        <div className="relative flex items-center justify-center border-t border-[var(--border)] bg-[rgba(var(--acc-rgb),0.07)] p-6 sm:w-[40%] sm:border-l sm:border-t-0">
-          {a.id === "pago" ? (
-            <Image src="/accesos/pago-pse.webp" alt="Pago en línea PSE, cuota de fomento ganadero y lechero" width={500} height={250} className="h-auto w-full max-w-[17rem] rounded-[0.5rem] shadow-[0_14px_28px_-16px_rgba(0,0,0,0.7)]" />
-          ) : (
-            <Pictogram name={a.icon} size={132} className="text-[rgb(var(--acc-rgb))] opacity-30" />
-          )}
-        </div>
-      </article>
-    </Wrap>
-  );
-}
-
 function TramiteRow({ a }: { a: Acceso }) {
   return (
     <li>
@@ -74,11 +44,18 @@ function TramiteRow({ a }: { a: Acceso }) {
 export function AccessHub({ tinted = false }: { tinted?: boolean }) {
   return (
     <Section eyebrow="Acceso directo" title="Pagos, trámites y servicios" intro="Lo más usado por ganaderos y aportantes, a un clic." tinted={tinted}>
-      <div className="grid gap-5 lg:grid-cols-2">
-        {pagos.map((a) => (
-          <PayPanel key={a.id} a={a} />
-        ))}
-      </div>
+      <Link href="/pagos" className="group mb-2 flex flex-col items-start justify-between gap-4 rounded-[0.9rem] border border-[var(--border-strong)] border-l-[3px] border-l-[var(--fg-lime-500)] bg-[var(--surface-solid)] p-6 transition-colors hover:border-[var(--fg-lime-500)] sm:flex-row sm:items-center sm:p-7">
+        <span className="flex items-center gap-5">
+          <span className="text-[var(--fg-lime-400)]"><Pictogram name="pago" size={46} /></span>
+          <span>
+            <span className="block font-[var(--font-display)] text-2xl font-bold text-[var(--text)]">Zona de pagos</span>
+            <span className="mt-0.5 block text-[var(--text-muted)]">Cuota de fomento (leche y carne), recaudo biológico, fechas límite y guía PSE.</span>
+          </span>
+        </span>
+        <span className="inline-flex shrink-0 items-center gap-2 text-sm font-bold uppercase tracking-[0.12em] text-[var(--fg-lime-400)]">
+          Entrar <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
+        </span>
+      </Link>
       <ul className="mt-9 grid gap-x-14 border-t border-[var(--border-strong)] lg:grid-cols-2">
         {tramites.map((a) => (
           <TramiteRow key={a.id} a={a} />
@@ -136,27 +113,37 @@ export function CampaignWall({ limit, all = false }: { limit?: number; all?: boo
   );
 }
 
+/** La columna más reciente del presidente de FEDEGÁN. */
+export function PresidentQuote() {
+  const section = getLegacySection("columna-presidente");
+  if (!section || !section.tree.length) return null;
+  const latest = section.tree[0];
+  const page = getLegacyPage(latest.key!);
+  return (
+    <figure className="mx-quote mx-rise flex h-full flex-col gap-4">
+      <figcaption className="mx-kicker self-start">José Félix Lafaurie Rivera</figcaption>
+      <Link href={legacyHref("columna-presidente", latest.key!)} className="group">
+        <h3 style={{ fontFamily: "var(--font-display)" }} className="text-2xl font-bold leading-snug text-[var(--text)] sm:text-[2rem] sm:leading-[1.15]">
+          <span className="lnk">{latest.label}</span>
+        </h3>
+      </Link>
+      {page && <p className="max-w-2xl leading-relaxed text-[var(--text-muted)]">{excerptOf(page, 260)}</p>}
+      <Link href={legacyHref("columna-presidente", latest.key!)} className="mt-auto inline-flex w-fit items-center gap-2 text-sm font-bold uppercase tracking-[0.1em] text-[var(--fg-lime-400)]">
+        Leer la columna <ArrowRight size={15} />
+      </Link>
+    </figure>
+  );
+}
+
 /** La columna más reciente del presidente de FEDEGÁN y las anteriores. */
 export function PresidentColumn() {
   const section = getLegacySection("columna-presidente");
   if (!section || !section.tree.length) return null;
-  const [latest, ...older] = section.tree;
-  const page = getLegacyPage(latest.key!);
+  const older = section.tree.slice(1);
   return (
     <Section eyebrow="Opinión" title="Columna del Presidente">
       <div className="grid gap-5 lg:grid-cols-[1.4fr_1fr]">
-        <figure className="mx-quote mx-rise flex flex-col gap-4">
-          <figcaption className="mx-kicker self-start">José Félix Lafaurie Rivera</figcaption>
-          <Link href={legacyHref("columna-presidente", latest.key!)} className="group">
-            <h3 style={{ fontFamily: "var(--font-display)" }} className="text-2xl font-bold leading-snug text-[var(--text)] transition-colors group-hover:text-[var(--fg-lime-400)] sm:text-[2rem] sm:leading-[1.15]">
-              {latest.label}
-            </h3>
-          </Link>
-          {page && <p className="max-w-2xl leading-relaxed text-[var(--text-muted)]">{excerptOf(page, 260)}</p>}
-          <Link href={legacyHref("columna-presidente", latest.key!)} className="inline-flex w-fit items-center gap-2 text-sm font-bold uppercase tracking-[0.1em] text-[var(--fg-lime-400)]">
-            Leer la columna <ArrowRight size={15} />
-          </Link>
-        </figure>
+        <PresidentQuote />
         <div className="mx-card mx-rise !p-5">
           <p className="text-[0.7rem] font-bold uppercase tracking-[0.18em] text-[var(--fg-lime-500)]">Columnas anteriores</p>
           <ul className="mt-3 divide-y divide-[var(--border)]">

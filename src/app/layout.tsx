@@ -56,6 +56,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full flex flex-col">
         {css && <style id="design-css" dangerouslySetInnerHTML={{ __html: css }} />}
         <Providers>
+          <div className="read-progress" aria-hidden />
           <SiteChrome
             top={
               <>

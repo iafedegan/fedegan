@@ -5,7 +5,8 @@ import { Planilla } from "@/components/pagos/Planilla";
 
 export const metadata: Metadata = { title: "Planilla de recaudo" };
 
-export default function PlanillaPage() {
+export default async function PlanillaPage({ searchParams }: { searchParams: Promise<{ c?: string }> }) {
+  const { c } = await searchParams;
   return (
     <>
       <PageHeader
@@ -14,11 +15,11 @@ export default function PlanillaPage() {
         description="Diligencie el mes, los orígenes y los totales de leche o carne antes de pagar."
         image="/headers/servicios.jpg"
         imagePos="60% 40%"
-        breadcrumbs={[{ label: "Pago en línea", href: "/pagos" }, { label: "Planilla" }]}
+        breadcrumbs={[{ label: "Zona de pagos", href: "/pagos" }, { label: "Planilla" }]}
         compact
       />
       <Container className="py-8 sm:py-10">
-        <Planilla />
+        <Planilla initial={c === "carne" ? "carne" : "leche"} />
       </Container>
     </>
   );

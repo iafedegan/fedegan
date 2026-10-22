@@ -22,8 +22,8 @@ function StepTitle({ n, children }: { n: number; children: React.ReactNode }) {
 
 // Planilla de recaudo mensual: leche (litros) o carne (cabezas). Calcula los totales de lo digitado y
 // valida que cuadren; la liquidación del valor y el pago por PSE se activan al conectar el sistema.
-export function Planilla() {
-  const [concepto, setConcepto] = useState<Concepto>("leche");
+export function Planilla({ initial = "leche" }: { initial?: Concepto }) {
+  const [concepto, setConcepto] = useState<Concepto>(initial);
   const [anio, setAnio] = useState("2026");
   const [mes, setMes] = useState("");
   const [origenes, setOrigenes] = useState<Origen[]>([]);
