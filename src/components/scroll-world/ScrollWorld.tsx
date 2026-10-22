@@ -178,13 +178,6 @@ export function ScrollWorld({ scenes }: { scenes: JourneyScene[] }) {
     [K],
   );
 
-  const skip = useCallback(() => {
-    const track = trackRef.current;
-    if (!track) return;
-    const top = track.getBoundingClientRect().top + window.scrollY;
-    window.scrollTo({ top: top + track.offsetHeight, behavior: "auto" });
-  }, []);
-
   return (
     <section className="sw" data-region="hero" aria-label="Recorrido por los locales del portal">
       <div ref={trackRef} className="sw-track" style={{ "--sw-k": K } as React.CSSProperties}>
@@ -211,15 +204,6 @@ export function ScrollWorld({ scenes }: { scenes: JourneyScene[] }) {
           ))}
           <div className="sw-shade" aria-hidden />
           <span ref={barRef} className="sw-bar" aria-hidden />
-
-          <div className="sw-top">
-            <Container className="flex items-center justify-between gap-4">
-              <span />
-              <button type="button" onClick={skip} className="sw-skip">
-                Saltar recorrido <ArrowDown size={14} aria-hidden />
-              </button>
-            </Container>
-          </div>
 
           <nav className="sw-chips" aria-label="Locales del recorrido">
             {scenes.map((s, i) => (
