@@ -978,3 +978,9 @@ a.mx-card:hover, .mx-lift:hover { transform: translateY(-3px); }
 .sw-ally-logo { height: 2.7rem; width: 2.7rem; border-radius: 999px; border: 1px solid rgba(255, 255, 255, 0.4); object-fit: cover; }
 @media (min-width: 768px) { .sw-aliados { display: none; } }
 @media (max-width: 767px) { .sw-ally { display: none; } }
+
+/* Aliados en una sola línea */
+.sw-ally-grid { display: flex; flex-wrap: nowrap; justify-content: flex-end; gap: 0.55rem; }
+.sw-ally-grid li { width: 3.7rem; }
+.sw-ally-logo { height: 2.5rem; width: 2.5rem; }
+.sw-ally-grid a { font-size: 0.56rem; }

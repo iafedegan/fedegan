@@ -331,9 +331,6 @@ export function ScrollWorld({ scenes, aliados = [] }: { scenes: JourneyScene[]; 
                 )}
               </div>
             ))}
-            <Link href="/directorio" className="sw-more">
-              Ver directorio completo
-            </Link>
             {aliados.length > 0 && (
               <div className="sw-ally">
                 <span className="sw-ally-label">Portales aliados</span>
