@@ -15,8 +15,8 @@ function isActive(pathname: string, href: string) {
 }
 
 // Primeras opciones visibles según el ancho; el resto va en «Más».
-const visibleFrom = (i: number) => (i < 3 ? "" : i < 5 ? "hidden xl:block" : "hidden");
-const inMoreOnlyBelow = (i: number) => (i < 5 ? "xl:hidden" : "");
+const visibleFrom = (i: number) => (i < 3 ? "" : "hidden xl:block");
+const inMoreOnlyBelow = () => "xl:hidden";
 
 function MoreMenu({ items, pathname }: { items: { label: string; href: string }[]; pathname: string }) {
   const [openAt, setOpenAt] = useState<string | null>(null);
@@ -42,7 +42,7 @@ function MoreMenu({ items, pathname }: { items: { label: string; href: string }[
   const activeInside = extra.some((it) => isActive(pathname, it.href));
 
   return (
-    <div ref={ref} className={`relative ${items.length <= 5 ? "xl:hidden" : ""}`}>
+    <div ref={ref} className="relative xl:hidden">
       <button
         type="button"
         aria-haspopup="menu"
@@ -57,10 +57,9 @@ function MoreMenu({ items, pathname }: { items: { label: string; href: string }[
           role="menu"
           className="absolute right-0 top-full z-50 mt-3 w-64 overflow-hidden rounded-[1.1rem] border border-[var(--border-strong)] bg-[var(--surface-solid)] py-2 shadow-[var(--shadow-lg)]"
         >
-          {extra.map((it, k) => {
-            const i = k + 3;
+          {extra.map((it) => {
             return (
-              <li key={it.href} role="none" className={inMoreOnlyBelow(i)}>
+              <li key={it.href} role="none" className={inMoreOnlyBelow()}>
                 <Link
                   href={it.href}
                   role="menuitem"
@@ -195,7 +194,7 @@ export function Header({ nav: mainNav }: { nav: { label: string; href: string }[
 
       <nav className="hidden border-t border-[var(--border)] lg:block" aria-label="Navegación principal">
         <Container className="flex items-center justify-between gap-6 py-3">
-          <div className="flex min-w-0 flex-1 items-center justify-center gap-1 xl:gap-2">
+          <div className="flex min-w-0 flex-1 items-center justify-center gap-0.5">
             {mainNav.map((item, i) => {
               const active = isActive(pathname, item.href);
               return (

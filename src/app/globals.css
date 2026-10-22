@@ -619,7 +619,7 @@ p { text-wrap: pretty; }
 }
 .sw-enter:hover { transform: translateY(-2px); filter: brightness(1.08); }
 .sw-more { color: #f4f2e9; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; text-decoration: underline; text-underline-offset: 4px; text-shadow: 0 1px 8px rgba(0, 0, 0, 0.6); }
-.sw-hint { position: absolute; z-index: 3; left: 50%; top: 1.5rem; translate: -50% 0; white-space: nowrap; pointer-events: none; display: inline-flex; align-items: center; gap: 0.4rem; text-shadow: 0 1px 10px rgba(0, 0, 0, 0.7); color: rgba(244, 242, 233, 0.85); font-size: 0.74rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; }
+.sw-hint { position: absolute; z-index: 3; left: 50%; top: 1.5rem; translate: -50% 0; white-space: nowrap; pointer-events: none; display: inline-flex; flex-direction: column; align-items: center; gap: 0.3rem; text-shadow: 0 1px 10px rgba(0, 0, 0, 0.7); color: rgba(244, 242, 233, 0.85); font-size: 0.74rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; }
 @media (prefers-reduced-motion: no-preference) { .sw-hint svg { animation: sw-nudge 1.6s ease-in-out infinite; } }
 @keyframes sw-nudge { 0%, 100% { transform: translateY(-2px); } 50% { transform: translateY(3px); } }
 
@@ -806,12 +806,13 @@ a.mx-card:hover, .mx-lift:hover { transform: translateY(-6px); }
    Barra de navegación de escritorio: opciones en mayúsculas espaciadas, botón «Buscar» en píldora
    ======================================================================= */
 .nv-link {
-  position: relative; white-space: nowrap; border-radius: 999px; padding: 0.55rem 0.9rem;
-  font-size: 0.74rem; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text);
+  position: relative; white-space: nowrap; border-radius: 999px; padding: 0.55rem 0.7rem;
+  font-size: 0.72rem; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text);
   transition: color 0.2s;
 }
+@media (min-width: 1536px) { .nv-link { font-size: 0.76rem; padding: 0.55rem 1rem; } .nv-link::after { left: 1rem; right: 1rem; } }
 .nv-link::after {
-  content: ""; position: absolute; left: 0.9rem; right: 0.9rem; bottom: 0.2rem; height: 1px; background: var(--fg-lime-500);
+  content: ""; position: absolute; left: 0.7rem; right: 0.7rem; bottom: 0.2rem; height: 1px; background: var(--fg-lime-500);
   transform: scaleX(0); transform-origin: left; transition: transform 0.3s var(--ease-lux);
 }
 .nv-link:hover { color: var(--fg-lime-400); }
