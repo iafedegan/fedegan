@@ -287,7 +287,7 @@ export function ScrollWorld({ scenes, aliados = [] }: { scenes: JourneyScene[]; 
                   {aliados.map((a) => (
                     <li key={a.nombre} className="shrink-0">
                       <a href={a.href} target="_blank" rel="noopener noreferrer" className="sw-aliado" title={a.nombre}>
-                        <Image src={a.logo} alt="" width={96} height={96} className="h-14 w-14 rounded-full border border-white/35 object-cover shadow-[0_8px_18px_-8px_rgba(0,0,0,0.8)]" />
+                        <Image src={a.logo} alt="" width={128} height={128} className="h-[4.5rem] w-[4.5rem] rounded-full border border-white/35 object-cover shadow-[0_8px_18px_-8px_rgba(0,0,0,0.8)]" />
                         <span>{a.nombre}</span>
                       </a>
                     </li>
