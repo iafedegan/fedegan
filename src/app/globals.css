@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700;800&family=Inter+Tight:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Playfair+Display:wght@500;600;700;800&family=Inter+Tight:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
 /* =======================================================================
@@ -984,3 +984,68 @@ a.mx-card:hover, .mx-lift:hover { transform: translateY(-3px); }
 .sw-ally-grid li { width: 3.7rem; }
 .sw-ally-logo { height: 2.5rem; width: 2.5rem; }
 .sw-ally-grid a { font-size: 0.56rem; }
+
+/* La opción activa crece con el tamaño de letra (no con scale) para que no se recorte; los nombres largos se parten en dos líneas */
+.sw-dot.is-active { transform: none; margin-block: 0.2rem; }
+.sw-item:has(+ .sw-item .sw-dot.is-active) .sw-dot, .sw-item:has(.sw-dot.is-active) + .sw-item .sw-dot { transform: none; }
+.sw-dot-label { white-space: normal; overflow: visible; text-overflow: clip; text-align: right; line-height: 1.15; max-width: min(24rem, 62vw); transition: font-size 0.35s var(--ease-lux), color 0.3s, opacity 0.3s; }
+.sw-dot.is-active .sw-dot-label { font-size: 1.18em; }
+@media (min-width: 1100px) { .sw-dot-label { max-width: min(24rem, 62vw); } }
+
+/* Portales aliados como opciones de la lista (enlaces externos), no como logos */
+.sw-ally { align-items: flex-end; gap: 0.35rem; margin-top: 0.9rem; padding-top: 0.8rem; }
+.sw-ally-list { display: flex; flex-direction: column; align-items: flex-end; gap: 0.05rem; margin-right: 1.35rem; padding-right: 0.95rem; border-right: 1px solid rgba(255, 255, 255, 0.25); }
+.sw-ally-link { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.3rem 0; font-size: 0.84rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #ece8da; opacity: 0.9; transition: color 0.2s, opacity 0.2s; }
+.sw-ally-link:hover, .sw-ally-link:focus-visible { color: rgb(var(--acc)); opacity: 1; }
+.sw-ally-grid, .sw-ally-logo { display: none; }
+
+/* Descripción breve de la sección, debajo del botón central */
+.sw-center { flex-direction: column; align-items: center; gap: 1rem; }
+.sw-cta-desc {
+  max-width: 30rem; padding: 0 1.2rem; text-align: center; font-size: 1.02rem; line-height: 1.5; color: #f4f2e9;
+  text-shadow: 0 1px 14px rgba(0, 0, 0, 0.85), 0 0 3px rgba(0, 0, 0, 0.6); text-wrap: balance; animation: sw-desc-in 0.5s var(--ease-lux) both;
+}
+@keyframes sw-desc-in { from { opacity: 0; transform: translateY(0.5rem); } to { opacity: 1; transform: none; } }
+@media (max-width: 767px) { .sw-cta-desc { font-size: 0.92rem; max-width: 20rem; } }
+@media (prefers-reduced-motion: reduce) { .sw-cta-desc { animation: none; } }
+
+/* Portales aliados: mismas filas que las secciones, con una flecha externa en lugar del punto */
+.sw-dot-ext::after { display: none; }
+.sw-dot-ext svg { flex: none; width: 0.9rem; height: 0.9rem; margin-right: -0.2rem; opacity: 0.8; }
+.sw-dot-ext:hover { transform: none; }
+.sw-dot-ext:hover .sw-dot-label, .sw-dot-ext:focus-visible .sw-dot-label { color: rgb(var(--acc)); opacity: 1; }
+
+/* Botón y descripción dentro de una tarjeta translúcida con desenfoque */
+.sw-panel {
+  pointer-events: auto; display: flex; flex-direction: column; align-items: center; gap: 1rem; max-width: min(36rem, calc(100% - 2rem)); padding: 1.5rem 1.8rem 1.4rem;
+  border-radius: 1.5rem; background: rgba(5, 16, 11, 0.38); border: 1px solid rgba(255, 255, 255, 0.2);
+  -webkit-backdrop-filter: blur(18px) saturate(1.15); backdrop-filter: blur(18px) saturate(1.15); box-shadow: 0 30px 60px -34px rgba(0, 0, 0, 0.85);
+}
+.sw-panel .sw-cta { background: rgba(255, 255, 255, 0.06); backdrop-filter: none; -webkit-backdrop-filter: none; box-shadow: none; border-color: rgba(255, 255, 255, 0.35); }
+.sw-panel .sw-cta-desc { padding: 0; }
+@media (max-width: 767px) { .sw-panel { padding: 1.1rem 1.2rem; } }
+
+.sw-aliados, .sw-ally, .sw-dot-ext { display: none !important; }
+
+/* Destacado bajo la descripción: la noticia del día */
+.sw-extra { display: block; width: 100%; padding-top: 0.9rem; border-top: 1px solid rgba(255, 255, 255, 0.2); text-align: center; color: #f4f2e9; animation: sw-desc-in 0.5s 0.1s var(--ease-lux) both; }
+.sw-extra span { display: block; font-size: 0.64rem; font-weight: 800; letter-spacing: 0.22em; text-transform: uppercase; color: rgb(var(--acc, 216, 181, 88)); }
+.sw-extra b { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; margin-top: 0.3rem; font-family: var(--font-display); font-size: 1.12rem; font-weight: 700; line-height: 1.3; text-wrap: balance; text-shadow: 0 1px 12px rgba(0, 0, 0, 0.8); background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat; transition: background-size 0.4s var(--ease-lux); }
+.sw-extra:hover b { background-size: 100% 1px; }
+@media (max-width: 767px) { .sw-extra b { font-size: 1rem; } }
+
+/* Tarjeta central del recorrido: tipografía serif de lectura (Lora) en lugar de la sans */
+.sw-panel { --font-card: 'Lora', Georgia, 'Times New Roman', serif; }
+.sw-panel .sw-cta { font-family: var(--font-card); font-weight: 600; font-size: 0.82rem; letter-spacing: 0.16em; }
+.sw-panel .sw-cta-desc { font-family: var(--font-card); font-style: italic; font-weight: 500; font-size: 1.12rem; line-height: 1.55; letter-spacing: 0.005em; }
+.sw-panel .sw-extra span { font-family: var(--font-card); font-weight: 700; letter-spacing: 0.2em; }
+.sw-panel .sw-extra b { font-family: var(--font-card); font-style: italic; font-weight: 600; font-size: 1.06rem; line-height: 1.4; }
+@media (max-width: 767px) { .sw-panel .sw-cta-desc { font-size: 1rem; } .sw-panel .sw-extra b { font-size: 0.98rem; } }
+
+/* Nombres largos: el botón se parte en dos líneas dentro de la tarjeta y la tarjeta deja libre el menú lateral */
+.sw-panel { max-width: min(30rem, calc(100% - 2rem)); }
+@media (min-width: 768px) { .sw-panel { max-width: min(30rem, 46vw); } }
+.sw-panel .sw-cta { max-width: 100%; flex-wrap: wrap; justify-content: center; text-align: center; gap: 0.3rem 0.7rem; border-radius: 1.6rem; padding: 0.85rem 1.4rem; letter-spacing: 0.13em; }
+.sw-panel .sw-cta b { white-space: normal; }
+
+.sw-pers { margin: -0.3rem 0 0.5rem; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: rgb(var(--acc)); opacity: 0.9; }

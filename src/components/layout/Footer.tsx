@@ -6,6 +6,7 @@ import { footerLinks } from "@/content/site";
 import { aliados, contacto, legales, pqrsdForm, redes } from "@/content/accesos";
 import { Logo } from "./Logo";
 import { FooterAccess } from "./FooterAccess";
+import { PrivacyButton } from "./PrivacyButton";
 import { FacebookIcon, XIcon, InstagramIcon, YoutubeIcon } from "@/components/ui/SocialIcons";
 import { NewsletterForm } from "@/components/blocks/NewsletterForm";
 
@@ -117,6 +118,7 @@ export function Footer() {
             <Link href="/transparencia" className="hover:text-white">Transparencia</Link>
             <Link href="/contacto" className="hover:text-white">Contacto</Link>
             <FooterAccess />
+            <PrivacyButton className="hover:text-white" />
             <a href="https://www.gov.co/" target="_blank" rel="noopener noreferrer" className="rounded-full border border-white/25 px-3 py-1 font-bold tracking-[0.08em] text-white hover:border-[var(--fg-lime-400)]">GOV.CO</a>
             <span>Realizado por <a href="http://interlat.co/" target="_blank" rel="noopener noreferrer" className="font-semibold text-[var(--fg-lime-400)] hover:underline">Interlat.co</a></span>
           </div>

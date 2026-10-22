@@ -16,6 +16,8 @@ import { Masthead } from "@/components/layout/Masthead";
 import { ThemeScript } from "@/components/layout/ThemeScript";
 import { PwaRegister } from "@/components/layout/PwaRegister";
 import { SitePopup } from "@/components/design/SitePopup";
+import { ConsentBanner } from "@/components/layout/ConsentBanner";
+import { UsageTracker } from "@/components/layout/UsageTracker";
 
 export const viewport: Viewport = {
   themeColor: "#05100b",
@@ -57,6 +59,8 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
         {css && <style id="design-css" dangerouslySetInnerHTML={{ __html: css }} />}
         <Providers>
           <div className="read-progress" aria-hidden />
+          <UsageTracker />
+          <ConsentBanner />
           <SiteChrome
             top={
               <>

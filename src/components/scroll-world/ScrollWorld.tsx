@@ -1,12 +1,13 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowDown, ArrowRight } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { warp } from "./timing";
+import { instantaneaUso, ordenarPorUso, parseUso, registrarUso, suscribirUso } from "@/lib/uso";
 
 export interface JourneySub {
   label: string;
@@ -22,6 +23,8 @@ export interface JourneyScene {
   tags: string[];
   href: string;
   external?: boolean;
+  /** Destacado bajo la descripción (p. ej. la noticia del día). */
+  extra?: { etiqueta: string; texto: string; href?: string };
   /** Opciones de segundo nivel que se despliegan al elegir la escena. */
   subs?: JourneySub[];
   /** Triple RGB "r,g,b" del local. */
@@ -69,7 +72,11 @@ function EnterLink({ scene, className }: { scene: JourneyScene; className?: stri
 
 // Recorrido a pantalla completa por los locales del portal: el scroll conduce una cámara que
 // avanza de foto en foto (cada una real, de finca), con un empuje continuo entre escenas.
-export function ScrollWorld({ scenes, aliados = [] }: { scenes: JourneyScene[]; aliados?: { nombre: string; href: string; logo: string }[] }) {
+export function ScrollWorld({ scenes: base }: { scenes: JourneyScene[] }) {
+  // Con permiso de la persona, las secciones que más visita pasan primero en el recorrido y en la lista.
+  const usoTxt = useSyncExternalStore(suscribirUso, instantaneaUso, () => "");
+  const scenes = useMemo(() => ordenarPorUso(base, parseUso(usoTxt)), [base, usoTxt]);
+  const personalizado = scenes.some((s, i) => s.id !== base[i].id);
   const K = scenes.length - 1;
   const trackRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
@@ -193,6 +200,7 @@ export function ScrollWorld({ scenes, aliados = [] }: { scenes: JourneyScene[]; 
 
   const navigate = useCallback(
     (s: JourneyScene | JourneySub) => {
+      if ("id" in s) registrarUso(s.id);
       if (s.external) window.open(s.href, "_blank", "noopener,noreferrer");
       else router.push(s.href);
     },
@@ -276,36 +284,42 @@ export function ScrollWorld({ scenes, aliados = [] }: { scenes: JourneyScene[]; 
             </div>
           )}
 
-          {aliados.length > 0 && (
-            <nav className="sw-aliados" aria-label="Portales aliados">
-              <Container className="flex flex-col items-center gap-3">
-                <span className="sw-aliados-label">Portales aliados</span>
-                <ul className="flex max-w-full items-start justify-center gap-x-7 overflow-x-auto px-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-                  {aliados.map((a) => (
-                    <li key={a.nombre} className="shrink-0">
-                      <a href={a.href} target="_blank" rel="noopener noreferrer" className="sw-aliado" title={a.nombre}>
-                        <Image src={a.logo} alt="" width={128} height={128} className="h-[4.5rem] w-[4.5rem] rounded-full border border-white/35 object-cover shadow-[0_8px_18px_-8px_rgba(0,0,0,0.8)]" />
-                        <span>{a.nombre}</span>
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </Container>
-            </nav>
-          )}
 
           <div className="sw-center">
+            <div className="sw-panel">
             <button type="button" onClick={() => navigate(scenes[current])} className="sw-cta" style={{ "--acc": scenes[current].accent } as React.CSSProperties}>
               <span>Entrar a</span>
               <b>{scenes[current].nombre}</b>
               <ArrowRight size={18} aria-hidden />
             </button>
+            <p className="sw-cta-desc" key={scenes[current].id}>{scenes[current].descripcion}</p>
+            {scenes[current].extra && (() => {
+              const x = scenes[current].extra!;
+              const body = (
+                <>
+                  <span>{x.etiqueta}</span>
+                  <b>{x.texto}</b>
+                </>
+              );
+              const href = x.href ?? scenes[current].href;
+              return href.startsWith("/") ? (
+                <Link href={href} className="sw-extra" key={`x-${scenes[current].id}`}>
+                  {body}
+                </Link>
+              ) : (
+                <a href={href} target="_blank" rel="noopener noreferrer" className="sw-extra" key={`x-${scenes[current].id}`}>
+                  {body}
+                </a>
+              );
+            })()}
+            </div>
           </div>
 
           <nav className="sw-rail" aria-label="Secciones del portal">
             <span ref={counterRef} className="sw-counter" aria-hidden>
               {two(1)} / {two(K + 1)}
             </span>
+            {personalizado && <span className="sw-pers">Ordenado según su uso</span>}
             {scenes.map((s, i) => (
               <div key={s.id} className="sw-item" style={{ "--acc": s.accent } as React.CSSProperties}>
                 <button
@@ -331,21 +345,6 @@ export function ScrollWorld({ scenes, aliados = [] }: { scenes: JourneyScene[]; 
                 )}
               </div>
             ))}
-            {aliados.length > 0 && (
-              <div className="sw-ally">
-                <span className="sw-ally-label">Portales aliados</span>
-                <ul className="sw-ally-grid">
-                  {aliados.map((a) => (
-                    <li key={a.nombre}>
-                      <a href={a.href} target="_blank" rel="noopener noreferrer" title={a.nombre}>
-                        <Image src={a.logo} alt="" width={96} height={96} className="sw-ally-logo" />
-                        <span>{a.nombre}</span>
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
           </nav>
         </div>
       </div>
