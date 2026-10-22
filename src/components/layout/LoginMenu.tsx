@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
-import { ChevronDown, LogOut, Newspaper, ShieldCheck, UserCircle2 } from "lucide-react";
+import { ChevronDown, LogIn, LogOut, Newspaper, ShieldCheck, UserCircle2 } from "lucide-react";
 import { appsForRoles } from "@/lib/access";
 
 const appIcons = { shield: ShieldCheck, newspaper: Newspaper };
@@ -31,8 +31,18 @@ export function LoginMenu() {
     };
   }, [open]);
 
-  // Sin sesión no hay botón en la barra: el acceso está en el pie de página y en el menú móvil.
-  if (!user) return null;
+  if (!user) {
+    return (
+      <Link
+        href="/ingresar"
+        aria-label="Ingresar"
+        title="Ingresar"
+        className="ml-auto hidden h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[var(--fg-lime-500)] text-[var(--fg-green-900)] transition-colors hover:bg-[var(--fg-lime-400)] md:flex"
+      >
+        <LogIn size={19} aria-hidden />
+      </Link>
+    );
+  }
 
   return (
     <div ref={ref} className="relative ml-auto hidden shrink-0 md:block">
