@@ -12,16 +12,19 @@ export function WaveCard({
   external,
   accent = "esmeralda",
   icon,
+  glyph,
   title,
   tags = [],
   text,
   cta = "Ver más",
   children,
 }: {
-  href: string;
+  href?: string;
   external?: boolean;
   accent?: WaveAccent;
-  icon: PictogramName;
+  icon?: PictogramName;
+  /** Texto grande (un año, una fecha) en lugar del pictograma. */
+  glyph?: ReactNode;
   title: string;
   tags?: string[];
   text?: string;
@@ -31,7 +34,7 @@ export function WaveCard({
   const body = (
     <>
       <span className="wc-top">
-        <Pictogram name={icon} size={54} className="wc-icon" />
+        {glyph ? <span className="wc-glyph">{glyph}</span> : icon ? <Pictogram name={icon} size={54} className="wc-icon" /> : null}
         <span className="wc-title">{title}</span>
       </span>
       <span aria-hidden className="wc-wave2" />
@@ -42,21 +45,24 @@ export function WaveCard({
               <span key={t}>{t}</span>
             ))}
           </span>
-        ) : (
+        ) : href ? (
           <span className="wc-tags wc-tags-cta">{cta}</span>
-        )}
+        ) : null}
         <span className="wc-more">
           {text && <span className="wc-desc">{text}</span>}
           {children}
-          <span className="wc-arrow" aria-hidden>
-            {external ? <ArrowUpRight size={20} /> : <ArrowRight size={20} />}
-          </span>
-          <span className="sr-only">{cta}</span>
+          {href && (
+            <span className="wc-arrow" aria-hidden>
+              {external ? <ArrowUpRight size={20} /> : <ArrowRight size={20} />}
+            </span>
+          )}
+          {href && <span className="sr-only">{cta}</span>}
         </span>
       </span>
     </>
   );
   const cls = `wc wc-${accent}`;
+  if (!href) return <div className={cls}>{body}</div>;
   return external ? (
     <a href={href} target="_blank" rel="noopener noreferrer" className={cls}>
       {body}

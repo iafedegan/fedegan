@@ -942,3 +942,8 @@ a.mx-card:hover, .mx-lift:hover { transform: translateY(-3px); }
   .wp-more { max-height: 11rem; opacity: 1; }
   .wp-text { -webkit-line-clamp: 3; }
 }
+
+.wc-glyph { display: flex; flex-direction: column; align-items: center; min-height: 3.4rem; justify-content: center; font-family: var(--font-display); font-size: 2.7rem; font-weight: 700; line-height: 1; color: rgb(var(--wa)); font-variant-numeric: lining-nums; transition: color 0.4s; }
+.wc-glyph small { display: block; font-family: var(--font-sans, inherit); font-size: 0.7rem; font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase; }
+.wc:hover .wc-glyph, .wc:focus-visible .wc-glyph { color: #fff; }
+@media (hover: none) { .wc-glyph { color: inherit; } }

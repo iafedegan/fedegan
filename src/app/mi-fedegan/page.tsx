@@ -1,20 +1,16 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import type { CSSProperties } from "react";
-import { ArrowUpRight, FileCheck2, GraduationCap, Mail, Newspaper, ShieldCheck, Tv } from "lucide-react";
+import { FileCheck2, GraduationCap, Mail, Newspaper, Tv } from "lucide-react";
 import { auth, demoEnabled, entraConfigured } from "@/auth";
 import { appsForRoles } from "@/lib/access";
 import { Container } from "@/components/ui/Container";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { SignOutButton } from "@/components/layout/SignOutButton";
-import { Spotlight } from "@/components/design/Spotlight";
+import { WaveCard } from "@/components/ui/WaveCard";
 
 export const metadata: Metadata = { title: "Mi FEDEGÁN" };
 
-const icons = { shield: ShieldCheck, newspaper: Newspaper };
-const ACCENTS = ["216,181,88", "92,205,134", "230,160,108", "112,214,196"];
-const acc = (i: number) => ({ ["--acc-rgb" as string]: ACCENTS[i % ACCENTS.length] }) as CSSProperties;
 
 const quick = [
   { icon: Newspaper, label: "Noticias", href: "/noticias" },
@@ -70,26 +66,13 @@ export default async function MiFedeganPage() {
             {apps.length === 0 ? (
               <p className="mx-card text-[var(--text-muted)]">Su cuenta todavía no tiene aplicaciones habilitadas. Solicite acceso al área de Tecnología.</p>
             ) : (
-              <Spotlight as="ul" className="grid gap-4 sm:grid-cols-2">
-                {apps.map((a, i) => {
-                  const Icon = icons[a.icon as keyof typeof icons] ?? ShieldCheck;
-                  return (
-                    <li key={a.id}>
-                      <Link href={a.href} target={a.external ? "_blank" : undefined} rel={a.external ? "noopener noreferrer" : undefined} className="mx-card group flex h-full flex-col gap-4" style={acc(i)}>
-                        <span className="flex items-start justify-between">
-                          <span className="mx-icon"><Icon size={22} strokeWidth={1.7} /></span>
-                          <ArrowUpRight size={20} className="text-[var(--text-faint)] transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-[rgb(var(--acc-rgb))]" />
-                        </span>
-                        <div>
-                          <h3 className="font-[var(--font-display)] text-xl font-bold text-[var(--text)]">{a.nombre}</h3>
-                          <p className="mt-1.5 text-sm leading-relaxed text-[var(--text-muted)]">{a.descripcion}</p>
-                        </div>
-                        <span className="mt-auto text-xs font-bold uppercase tracking-[0.14em] text-[rgb(var(--acc-rgb))]">Abrir aplicación</span>
-                      </Link>
-                    </li>
-                  );
-                })}
-              </Spotlight>
+              <ul className="grid gap-6 sm:grid-cols-2">
+                {apps.map((a, i) => (
+                  <li key={a.id}>
+                    <WaveCard href={a.href} external={a.external} accent={(["oro", "esmeralda", "terracota", "turquesa"] as const)[i % 4]} icon={a.icon === "newspaper" ? "libro" : "porton"} title={a.nombre} text={a.descripcion} cta="Abrir aplicación" />
+                  </li>
+                ))}
+              </ul>
             )}
           </section>
 

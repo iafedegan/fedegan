@@ -5,6 +5,7 @@ import { PageHeader } from "@/components/ui/PageHeader";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { contacto, pqrsdForm } from "@/content/accesos";
+import { WaveCard } from "@/components/ui/WaveCard";
 
 export const metadata: Metadata = { title: "Contacto" };
 
@@ -87,12 +88,10 @@ export default function ContactoPage() {
           </Card>
           <div>
             <h2 className="mb-3 font-[var(--font-display)] text-xl font-bold text-[var(--text)]">O escriba al correo que corresponde</h2>
-            <ul className="grid gap-3 sm:grid-cols-2">
-              {contacto.correos.map((c) => (
-                <li key={c.email} className="mx-card flex flex-col gap-1.5 !p-5">
-                  <p className="text-[0.7rem] font-bold uppercase tracking-[0.16em] text-[var(--fg-lime-500)]">{c.label}</p>
-                  <a href={`mailto:${c.email}`} className="break-all font-bold text-[var(--text)] hover:text-[var(--fg-lime-400)]">{c.email}</a>
-                  <p className="text-sm leading-relaxed text-[var(--text-muted)]">{c.text}</p>
+            <ul className="grid gap-6 sm:grid-cols-2">
+              {contacto.correos.map((c, i) => (
+                <li key={c.email}>
+                  <WaveCard href={`mailto:${c.email}`} accent={(["esmeralda", "terracota", "oro", "turquesa"] as const)[i % 4]} icon="sobre" title={c.label} tags={["Escribir"]} text={`${c.email}. ${c.text}`} cta="Enviar correo" />
                 </li>
               ))}
             </ul>
