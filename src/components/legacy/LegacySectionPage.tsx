@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowRight, ExternalLink, Menu } from "lucide-react";
+import { ExternalLink, Menu } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { LegacyContent } from "@/components/legacy/LegacyContent";
 import { QuickRail } from "@/components/blocks/Accesos";
+import { WaveCard } from "@/components/ui/WaveCard";
 import { journeyPhotos } from "@/content/scroll-world";
 import { excerptOf, findTrail, getLegacyPage, getLegacySection, legacyHref, type NavNode } from "@/content/legacy";
 
@@ -104,22 +105,12 @@ export function LegacySectionPage({ slug, ruta }: { slug: string; ruta: string[]
           {children.length > 0 && (
             <div className="mt-12 border-t border-[var(--border)] pt-10">
               <h2 className="mb-5 font-[var(--font-display)] text-2xl font-bold text-[var(--text)]">Contenido de {section.label}</h2>
-              <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-                {children.map((n) => {
+              <ul className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+                {children.map((n, i) => {
                   const child = getLegacyPage(n.key!);
                   return (
                     <li key={n.key}>
-                      <Link href={legacyHref(slug, n.key!)} className="group block h-full">
-                        <div className="mx-card mx-lift h-full">
-                          <div className="flex flex-1 flex-col gap-2">
-                            <h3 className="font-[var(--font-display)] text-lg font-bold leading-snug text-[var(--text)]">{n.label}</h3>
-                            {child && excerptOf(child, 130) && <p className="text-sm leading-relaxed text-[var(--text-muted)]">{excerptOf(child, 130)}</p>}
-                            <span className="mt-auto inline-flex items-center gap-1.5 pt-1 text-sm font-semibold text-[rgb(var(--acc-rgb))]">
-                              Ver más <ArrowRight size={15} className="transition-transform group-hover:translate-x-1" />
-                            </span>
-                          </div>
-                        </div>
-                      </Link>
+                      <WaveCard href={legacyHref(slug, n.key!)} accent={(["esmeralda", "oro", "terracota", "turquesa"] as const)[i % 4]} icon="libro" title={n.label} text={child ? excerptOf(child, 150) : undefined} />
                     </li>
                   );
                 })}

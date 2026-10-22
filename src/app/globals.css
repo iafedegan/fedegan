@@ -863,3 +863,61 @@ a.mx-card:hover, .mx-lift:hover { transform: translateY(-3px); }
   .sw-aliado span { display: none; }
   .sw-aliado img { height: 2.6rem; width: 2.6rem; }
 }
+
+/* =======================================================================
+   Ficha con ola (WaveCard): parte superior clara, ola de color abajo que sube al pasar el cursor
+   ======================================================================= */
+.wc {
+  --wa: 47, 156, 98; --wb: 17, 92, 58;
+  position: relative; display: block; height: 21rem; overflow: hidden; border-radius: 1.4rem; isolation: isolate;
+  border: 1px solid var(--border-strong); background: var(--surface-solid);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04), 0 22px 36px -30px rgba(0, 0, 0, 0.8);
+  transition: transform 0.55s var(--ease-lux), box-shadow 0.55s var(--ease-lux);
+}
+.wc-esmeralda { --wa: 52, 168, 104; --wb: 14, 88, 56; }
+.wc-oro { --wa: 214, 172, 78; --wb: 138, 98, 24; }
+.wc-terracota { --wa: 222, 134, 80; --wb: 144, 70, 32; }
+.wc-turquesa { --wa: 56, 176, 160; --wb: 18, 100, 92; }
+.wc:hover, .wc:focus-visible { transform: translateY(-8px) scale(1.025); box-shadow: 0 34px 50px -28px rgba(var(--wa), 0.6); }
+.wc-top { position: absolute; inset: 0 0 auto 0; z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 0.7rem; padding: 1.7rem 1.3rem 0; text-align: center; transition: transform 0.55s var(--ease-lux); }
+.wc-icon { color: rgb(var(--wa)); transition: transform 0.55s var(--ease-lux); }
+.wc-title { font-family: var(--font-display); font-size: 1.32rem; font-weight: 700; line-height: 1.2; color: var(--text); text-wrap: balance; }
+.wc:hover .wc-top, .wc:focus-visible .wc-top { transform: translateY(-0.2rem); }
+.wc:hover .wc-icon { transform: translateY(-0.2rem) scale(0.92); }
+
+.wc-wave, .wc-wave2 {
+  position: absolute; left: 0; right: 0; bottom: 0; transition: height 0.6s var(--ease-lux);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 40' preserveAspectRatio='none'%3E%3Cpath d='M0 22C60 2 120 4 200 22s150 20 200-8v26H0z'/%3E%3C/svg%3E") top / 100% 2.6rem no-repeat, linear-gradient(#000, #000) bottom / 100% calc(100% - 2.55rem) no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 40' preserveAspectRatio='none'%3E%3Cpath d='M0 22C60 2 120 4 200 22s150 20 200-8v26H0z'/%3E%3C/svg%3E") top / 100% 2.6rem no-repeat, linear-gradient(#000, #000) bottom / 100% calc(100% - 2.55rem) no-repeat;
+}
+.wc-wave2 { z-index: 0; height: 60%; background: rgba(var(--wa), 0.22); transform: translateY(-0.55rem); }
+.wc-wave { z-index: 1; height: 54%; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; padding: 3rem 1.2rem 1.4rem; background: linear-gradient(180deg, rgb(var(--wa)) 0%, rgb(var(--wb)) 100%); color: #fff; }
+.wc:hover .wc-wave, .wc:focus-visible .wc-wave { height: 78%; }
+.wc:hover .wc-wave2, .wc:focus-visible .wc-wave2 { height: 84%; }
+
+.wc-tags { position: absolute; left: 1rem; right: 1rem; bottom: 1.5rem; display: flex; justify-content: center; gap: 1.4rem; font-size: 0.74rem; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; text-shadow: 0 1px 6px rgba(0, 0, 0, 0.3); transition: opacity 0.3s, transform 0.4s var(--ease-lux); }
+.wc-tags span { position: relative; padding-bottom: 0.4rem; }
+.wc-tags span::after { content: ""; position: absolute; left: 25%; right: 25%; bottom: 0; height: 1px; background: rgba(255, 255, 255, 0.55); }
+.wc-tags-cta { letter-spacing: 0.14em; }
+.wc:hover .wc-tags, .wc:focus-visible .wc-tags { opacity: 0; transform: translateY(0.6rem); }
+.wc-more { display: flex; flex-direction: column; align-items: center; gap: 0.9rem; text-align: center; opacity: 0; transform: translateY(0.9rem); transition: opacity 0.4s 0.08s, transform 0.5s 0.08s var(--ease-lux); }
+.wc:hover .wc-more, .wc:focus-visible .wc-more { opacity: 1; transform: none; }
+.wc-desc { display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden; font-size: 0.9rem; line-height: 1.5; text-shadow: 0 1px 4px rgba(0, 0, 0, 0.25); }
+.wc-arrow { display: inline-flex; height: 2.4rem; width: 2.4rem; align-items: center; justify-content: center; border-radius: 999px; border: 1px solid rgba(255, 255, 255, 0.7); transition: background 0.3s, color 0.3s; }
+.wc:hover .wc-arrow { background: #fff; color: rgb(var(--wb)); }
+
+/* Sin cursor (táctil): la ola ya viene alta y la descripción visible */
+@media (hover: none) {
+  .wc-wave { height: 66%; }
+  .wc-wave2 { height: 72%; }
+  .wc-tags { display: none; }
+  .wc-more { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wc, .wc-top, .wc-icon, .wc-wave, .wc-wave2, .wc-more, .wc-tags { transition: none; }
+  .wc:hover, .wc:focus-visible { transform: none; }
+}
+.wc-title, .wc-icon { transition: color 0.4s, transform 0.55s var(--ease-lux); }
+.wc:hover .wc-title, .wc:focus-visible .wc-title, .wc:hover .wc-icon, .wc:focus-visible .wc-icon { color: #fff; text-shadow: 0 1px 8px rgba(0, 0, 0, 0.25); }
+.wc:hover .wc-wave { height: 76%; }
+@media (hover: none) { .wc-title, .wc-icon { color: inherit; } }

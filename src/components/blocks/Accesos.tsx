@@ -4,9 +4,12 @@ import type { CSSProperties, ReactNode } from "react";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { Section } from "@/components/ui/Editorial";
 import { Pictogram } from "@/components/ui/Pictogram";
+import { WaveCard, type WaveAccent } from "@/components/ui/WaveCard";
 import { ScrollRail } from "@/components/design/ScrollRail";
-import { campanas, gruposAvisos, pagos, tramites, type Acceso, type Campana } from "@/content/accesos";
+import { campanas, gruposAvisos, pagos, tramites, type Campana } from "@/content/accesos";
 import { excerptOf, getLegacyPage, getLegacySection, legacyHref } from "@/content/legacy";
+
+const WAVES: WaveAccent[] = ["esmeralda", "oro", "terracota", "turquesa"];
 
 const acc = (v: string) => ({ ["--acc-rgb" as string]: v }) as CSSProperties;
 
@@ -19,25 +22,6 @@ function Wrap({ to, external, className, children }: { to: string; external?: bo
     <Link href={to} className={className}>
       {children}
     </Link>
-  );
-}
-
-function TramiteRow({ a }: { a: Acceso }) {
-  return (
-    <li>
-      <Wrap to={a.href} external={a.external} className="group grid grid-cols-[3rem_1fr_auto] items-center gap-4 border-b border-[var(--border)] px-1 py-5 transition-colors hover:bg-[rgba(216,181,88,0.05)] sm:grid-cols-[3.5rem_1fr_auto]" >
-        <span style={acc(a.acc)} className="flex justify-center text-[rgb(var(--acc-rgb))]">
-          <Pictogram name={a.icon} size={38} />
-        </span>
-        <span className="min-w-0">
-          <span className="block font-[var(--font-display)] text-xl font-bold leading-snug text-[var(--text)] transition-colors group-hover:text-[var(--fg-lime-400)]">{a.title}</span>
-          <span className="mt-0.5 block text-sm leading-relaxed text-[var(--text-muted)]">{a.text}</span>
-        </span>
-        <span className="text-[var(--text-faint)] transition-all duration-300 group-hover:translate-x-1 group-hover:text-[var(--fg-lime-400)]">
-          {a.external ? <ArrowUpRight size={20} /> : <ArrowRight size={20} />}
-        </span>
-      </Wrap>
-    </li>
   );
 }
 
@@ -57,9 +41,11 @@ export function AccessHub({ tinted = false }: { tinted?: boolean }) {
           Entrar <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
         </span>
       </Link>
-      <ul className="mt-9 grid gap-x-14 border-t border-[var(--border-strong)] lg:grid-cols-2">
-        {tramites.map((a) => (
-          <TramiteRow key={a.id} a={a} />
+      <ul className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {tramites.map((a, i) => (
+          <li key={a.id}>
+            <WaveCard href={a.href} external={a.external} accent={WAVES[i % WAVES.length]} icon={a.icon} title={a.title} text={a.text} cta={a.cta ?? "Ir al servicio"} />
+          </li>
         ))}
       </ul>
     </Section>

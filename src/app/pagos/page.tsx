@@ -1,21 +1,22 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
-import { ArrowRight, ArrowUpRight, ShieldCheck } from "lucide-react";
+import { ArrowUpRight, ShieldCheck } from "lucide-react";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Container } from "@/components/ui/Container";
 import { CtaBand, Section } from "@/components/ui/Editorial";
-import { Pictogram, type PictogramName } from "@/components/ui/Pictogram";
+import { type PictogramName } from "@/components/ui/Pictogram";
+import { WaveCard, type WaveAccent } from "@/components/ui/WaveCard";
 import { FechasLimite } from "@/components/pagos/FechasLimite";
 import { InstructivoTabs } from "@/components/pagos/InstructivoTabs";
 import { NextDeadline } from "@/components/pagos/NextDeadline";
 
 export const metadata: Metadata = { title: "Zona de pagos" };
 
-const opciones: { icon: PictogramName; acc: string; title: string; quien: string; text: string; need: string[]; href: string; cta: string; external?: boolean }[] = [
+const opciones: { icon: PictogramName; wave: WaveAccent; tags: string[]; title: string; quien: string; text: string; need: string[]; href: string; cta: string; external?: boolean }[] = [
   {
     icon: "pago",
-    acc: "92,205,134",
+    wave: "esmeralda",
+    tags: ["PSE", "Planilla"],
     title: "Cuota de fomento · Leche",
     quien: "Recaudadores de leche",
     text: "Reporte los litros comprados por municipio y pague el recaudo del mes por PSE.",
@@ -25,7 +26,8 @@ const opciones: { icon: PictogramName; acc: string; title: string; quien: string
   },
   {
     icon: "res",
-    acc: "216,181,88",
+    wave: "oro",
+    tags: ["PSE", "Planilla"],
     title: "Cuota de fomento · Carne",
     quien: "Recaudadores de carne",
     text: "Reporte las cabezas sacrificadas por municipio, machos y hembras, y pague por PSE.",
@@ -35,7 +37,8 @@ const opciones: { icon: PictogramName; acc: string; title: string; quien: string
   },
   {
     icon: "biologico",
-    acc: "112,214,196",
+    wave: "turquesa",
+    tags: ["Dosis", "Recaudo"],
     title: "Recaudo biológico",
     quien: "Vacunadores y organizaciones",
     text: "Recaudo de las dosis aplicadas: aftosa, aftosa más rabia y brucelosis RB51.",
@@ -68,29 +71,10 @@ export default function PagosPage() {
           <NextDeadline size="lg" />
         </div>
 
-        <ul className="mt-8 grid gap-5 lg:grid-cols-3">
+        <ul className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {opciones.map((o) => (
             <li key={o.title}>
-              <Link href={o.href} className="group block h-full">
-                <article className="mx-card mx-lift mx-rise flex h-full flex-col gap-5 !p-7" style={{ ["--acc-rgb" as string]: o.acc } as React.CSSProperties}>
-                  <span className="text-[rgb(var(--acc-rgb))]"><Pictogram name={o.icon} size={50} /></span>
-                  <div>
-                    <p className="text-[0.68rem] font-bold uppercase tracking-[0.18em] text-[var(--text-faint)]">{o.quien}</p>
-                    <h3 className="mt-1 font-[var(--font-display)] text-2xl font-bold leading-tight text-[var(--text)]">{o.title}</h3>
-                    <p className="mt-2 leading-relaxed text-[var(--text-muted)]">{o.text}</p>
-                  </div>
-                  <ul className="flex flex-col gap-1.5 border-t border-[var(--border)] pt-4 text-sm text-[var(--text-muted)]">
-                    {o.need.map((n) => (
-                      <li key={n} className="relative pl-5 before:absolute before:left-0 before:top-[0.6em] before:h-1.5 before:w-1.5 before:rounded-full before:bg-[rgb(var(--acc-rgb))]">
-                        {n}
-                      </li>
-                    ))}
-                  </ul>
-                  <span className="mt-auto inline-flex w-fit items-center gap-2 rounded-[0.4rem] bg-[rgb(var(--acc-rgb))] px-5 py-3 text-[0.78rem] font-bold uppercase tracking-[0.1em] text-[#0a1a11] transition-transform group-hover:translate-x-1">
-                    {o.cta} <ArrowRight size={16} />
-                  </span>
-                </article>
-              </Link>
+              <WaveCard href={o.href} accent={o.wave} icon={o.icon} title={o.title} tags={o.tags} text={`${o.quien}. ${o.text}`} cta={o.cta} />
             </li>
           ))}
         </ul>
