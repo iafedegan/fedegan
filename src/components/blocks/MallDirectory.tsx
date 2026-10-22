@@ -1,7 +1,7 @@
-import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Container } from "@/components/ui/Container";
+import { PhotoCard } from "@/components/ui/PhotoCard";
 import { journeyPhotos } from "@/content/scroll-world";
 import { getPisos } from "@/lib/cms/content";
 
@@ -34,40 +34,21 @@ export async function MallDirectory({ showLink = true }: { showLink?: boolean })
                 const photo = journeyPhotos[l.id];
                 const src = photo?.src ?? l.imagen;
                 const soon = l.status === "proximamente";
-                const card = (
-                  <article className="group flex h-full flex-col overflow-hidden rounded-[0.9rem] border border-[var(--border-strong)] bg-[var(--surface-solid)] transition-[transform,border-color,box-shadow] duration-500 [transition-timing-function:var(--ease-lux)] hover:-translate-y-1 hover:border-[var(--fg-lime-500)] hover:shadow-[0_26px_44px_-28px_rgba(0,0,0,0.85)]">
-                    <div className="relative aspect-[16/10] overflow-hidden bg-[var(--bg-sunken)]">
-                      {src && (
-                        <Image
-                          src={src}
-                          alt={photo?.alt ?? ""}
-                          fill
-                          sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                          style={{ objectPosition: photo?.pos ?? l.imagenPos ?? "50% 50%" }}
-                          className="object-cover transition-transform duration-[1200ms] [transition-timing-function:var(--ease-lux)] group-hover:scale-[1.05]"
-                        />
-                      )}
-                      {soon && <span className="absolute left-3 top-3 rounded-full bg-black/60 px-2.5 py-1 text-[0.62rem] font-bold uppercase tracking-[0.14em] text-white backdrop-blur">Próximamente</span>}
-                    </div>
-                    <div className="flex flex-1 flex-col gap-2 p-5">
-                      <p className="text-[0.66rem] font-bold uppercase tracking-[0.2em] text-[var(--fg-lime-500)]">{l.rubro}</p>
-                      <h3 className="font-[var(--font-display)] text-2xl font-bold leading-tight text-[var(--text)]">{l.nombre}</h3>
-                      <p className="text-sm leading-relaxed text-[var(--text-muted)]">{l.descripcion}</p>
-                      {l.tags && l.tags.length > 0 && <p className="text-xs text-[var(--text-faint)]">{l.tags.join(" · ")}</p>}
-                      <span className="mt-auto inline-flex items-center gap-1.5 pt-2 text-sm font-bold uppercase tracking-[0.1em] text-[var(--fg-lime-400)]">
-                        {soon ? "En preparación" : "Entrar"} {!soon && (l.external ? <ArrowUpRight size={15} /> : <ArrowRight size={15} className="transition-transform group-hover:translate-x-1" />)}
-                      </span>
-                    </div>
-                  </article>
-                );
                 return (
                   <li key={l.id}>
-                    {soon ? (
-                      card
-                    ) : l.external ? (
-                      <a href={l.href} target="_blank" rel="noopener noreferrer" className="block h-full">{card}</a>
-                    ) : (
-                      <Link href={l.href} className="block h-full">{card}</Link>
+                    {src && (
+                      <PhotoCard
+                        image={src}
+                        imagePos={photo?.pos ?? l.imagenPos ?? "50% 50%"}
+                        accent={l.accent ?? "47,156,98"}
+                        kicker={l.rubro}
+                        title={l.nombre}
+                        text={[l.descripcion, l.tags?.join(" · ")].filter(Boolean).join(" ")}
+                        href={soon ? undefined : l.href}
+                        external={l.external}
+                        cta="Entrar"
+                        badge={soon ? <span className="rounded-full bg-black/60 px-2.5 py-1 text-[0.62rem] font-bold uppercase tracking-[0.14em] text-white backdrop-blur">Próximamente</span> : undefined}
+                      />
                     )}
                   </li>
                 );

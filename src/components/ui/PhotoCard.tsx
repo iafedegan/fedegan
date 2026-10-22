@@ -1,8 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { CSSProperties, ReactNode } from "react";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
 
+// "r,g,b" → versión más oscura para el degradado de la ola.
+const darker = (rgb: string) => rgb.split(",").map((n) => Math.round(Number(n) * 0.5)).join(",");
+
+// Ficha con foto y ola de color: la foto arriba, una ola con el tipo y el título abajo; al pasar el cursor la ola
+// sube y muestra el texto y la flecha. En pantallas táctiles el texto se ve siempre.
 export function PhotoCard({
   image,
   imagePos = "50% 50%",
@@ -10,9 +15,9 @@ export function PhotoCard({
   title,
   text,
   href,
+  external,
   cta = "Ver más",
-  accent,
-  aspect = "aspect-[16/10]",
+  accent = "47,156,98",
   badge,
   children,
 }: {
@@ -22,53 +27,51 @@ export function PhotoCard({
   title: string;
   text?: string;
   href?: string;
+  external?: boolean;
   cta?: string;
   accent?: string;
   aspect?: string;
   badge?: ReactNode;
   children?: ReactNode;
 }) {
-  const card = (
-    <div className="gl gl-hover" style={accent ? ({ ["--acc-rgb" as string]: accent } as CSSProperties) : undefined}>
-      <div className="gl-face">
-        <div className={`relative ${aspect} overflow-hidden`}>
-          <Image
-            src={image}
-            alt=""
-            fill
-            sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-            className="object-cover transition-transform duration-700 [transition-timing-function:var(--ease-lux)] group-hover:scale-[1.07]"
-            style={{ objectPosition: imagePos }}
-          />
-          <span
-            aria-hidden
-            className="absolute inset-0"
-            style={{
-              background:
-                "linear-gradient(0deg, var(--card-b) 0%, rgba(5,15,9,0.55) 28%, rgba(5,15,9,0) 62%), linear-gradient(135deg, rgba(var(--acc-rgb), 0.24), transparent 55%)",
-            }}
-          />
-          {badge && <div className="absolute left-3 top-3 flex flex-wrap gap-1.5">{badge}</div>}
-        </div>
-        <div className="flex flex-1 flex-col gap-2.5 p-5">
-          {kicker && <p className="text-[0.66rem] font-bold uppercase tracking-[0.18em] text-[rgb(var(--acc-rgb))]">{kicker}</p>}
-          <h3 className="font-[var(--font-display)] text-xl font-bold leading-snug text-[var(--text)]">{title}</h3>
-          {text && <p className="text-sm leading-relaxed text-[var(--text-muted)]">{text}</p>}
+  const style = { ["--wa" as string]: accent, ["--wb" as string]: darker(accent) } as CSSProperties;
+  const body = (
+    <>
+      <span className="wp-img">
+        <Image src={image} alt="" fill unoptimized={image.startsWith("http")} sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="object-cover" style={{ objectPosition: imagePos }} />
+      </span>
+      {badge && <span className="absolute left-3 top-3 z-[3] flex flex-wrap gap-1.5">{badge}</span>}
+      <span aria-hidden className="wc-wave2" />
+      <span className="wc-wave">
+        {kicker && <span className="wp-kicker">{kicker}</span>}
+        <span className="wp-title">{title}</span>
+        <span className="wp-more">
+          {text && <span className="wp-text">{text}</span>}
           {children}
           {href && (
-            <span className="mt-auto inline-flex items-center gap-1.5 pt-2 text-sm font-semibold text-[rgb(var(--acc-rgb))]">
-              {cta} <ArrowRight size={15} className="transition-transform duration-300 group-hover:translate-x-1" />
+            <span className="wc-arrow" aria-hidden>
+              {external ? <ArrowUpRight size={18} /> : <ArrowRight size={18} />}
             </span>
           )}
-        </div>
-      </div>
-    </div>
+          {href && <span className="sr-only">{cta}</span>}
+        </span>
+      </span>
+    </>
   );
-  return href ? (
-    <Link href={href} className="group block h-full">
-      {card}
-    </Link>
+  if (!href) {
+    return (
+      <div className="wc wp" style={style}>
+        {body}
+      </div>
+    );
+  }
+  return external ? (
+    <a href={href} target="_blank" rel="noopener noreferrer" className="wc wp" style={style}>
+      {body}
+    </a>
   ) : (
-    <div className="group h-full">{card}</div>
+    <Link href={href} className="wc wp" style={style}>
+      {body}
+    </Link>
   );
 }
