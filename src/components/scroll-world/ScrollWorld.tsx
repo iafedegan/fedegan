@@ -68,6 +68,7 @@ export function ScrollWorld({ scenes }: { scenes: JourneyScene[] }) {
   const layerRefs = useRef<(HTMLDivElement | null)[]>([]);
   const blockRefs = useRef<(HTMLDivElement | null)[]>([]);
   const dotRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const hintRef = useRef<HTMLParagraphElement | null>(null);
   const chipRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const barRef = useRef<HTMLSpanElement>(null);
   const counterRef = useRef<HTMLSpanElement>(null);
@@ -114,6 +115,7 @@ export function ScrollWorld({ scenes }: { scenes: JourneyScene[] }) {
         el.style.pointerEvents = a > 0.6 ? "auto" : "none";
       });
 
+      if (hintRef.current) hintRef.current.style.opacity = String(clamp(1 - pv * 40));
       if (barRef.current) barRef.current.style.transform = `scaleX(${pv.toFixed(4)})`;
       const idx = clamp(Math.round(s), 0, K);
       if (idx !== activeIdx) {
@@ -204,6 +206,9 @@ export function ScrollWorld({ scenes }: { scenes: JourneyScene[] }) {
           ))}
           <div className="sw-shade" aria-hidden />
           <span ref={barRef} className="sw-bar" aria-hidden />
+          <p ref={hintRef} className="sw-hint" aria-hidden>
+            Desliza para recorrer <ArrowDown size={14} />
+          </p>
 
           <nav className="sw-chips" aria-label="Locales del recorrido">
             {scenes.map((s, i) => (
@@ -275,11 +280,6 @@ export function ScrollWorld({ scenes }: { scenes: JourneyScene[] }) {
                           Ver directorio completo
                         </Link>
                       </div>
-                    )}
-                    {i === 0 && (
-                      <p className="sw-hint" aria-hidden>
-                        Desliza para recorrer <ArrowDown size={14} />
-                      </p>
                     )}
                   </div>
                 ))}

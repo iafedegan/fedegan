@@ -3,6 +3,7 @@ import { MapPin, Phone, Mail, Clock } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { footerLinks } from "@/content/site";
 import { Logo } from "./Logo";
+import { FooterAccess } from "./FooterAccess";
 import { FacebookIcon, XIcon, InstagramIcon, YoutubeIcon, LinkedinIcon } from "@/components/ui/SocialIcons";
 import { NewsletterForm } from "@/components/blocks/NewsletterForm";
 
@@ -91,6 +92,7 @@ export function Footer() {
             <Link href="/terminos-y-condiciones" className="hover:text-white">Términos y condiciones</Link>
             <Link href="/mapa-del-sitio" className="hover:text-white">Mapa del sitio</Link>
             <Link href="/transparencia" className="hover:text-white">Transparencia</Link>
+            <FooterAccess />
           </div>
         </Container>
       </div>

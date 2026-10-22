@@ -619,7 +619,7 @@ p { text-wrap: pretty; }
 }
 .sw-enter:hover { transform: translateY(-2px); filter: brightness(1.08); }
 .sw-more { color: #f4f2e9; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; text-decoration: underline; text-underline-offset: 4px; text-shadow: 0 1px 8px rgba(0, 0, 0, 0.6); }
-.sw-hint { display: inline-flex; align-items: center; gap: 0.4rem; margin-top: 1.4rem; color: rgba(244, 242, 233, 0.85); font-size: 0.74rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; }
+.sw-hint { position: absolute; z-index: 3; left: 50%; top: 1.5rem; translate: -50% 0; white-space: nowrap; pointer-events: none; display: inline-flex; align-items: center; gap: 0.4rem; text-shadow: 0 1px 10px rgba(0, 0, 0, 0.7); color: rgba(244, 242, 233, 0.85); font-size: 0.74rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; }
 @media (prefers-reduced-motion: no-preference) { .sw-hint svg { animation: sw-nudge 1.6s ease-in-out infinite; } }
 @keyframes sw-nudge { 0%, 100% { transform: translateY(-2px); } 50% { transform: translateY(3px); } }
 
@@ -705,6 +705,7 @@ p { text-wrap: pretty; }
   }
   .sw-chip.is-active { background: none; border: 0; color: rgb(var(--acc)); }
   .sw-chip.is-active::after { transform: scaleX(1); }
+  .sw-hint { top: 4.1rem; }
   .sw-card { padding: 1rem 3.7rem 1rem 1.1rem; border-radius: 1.2rem; }
   .sw-title { font-size: clamp(1.75rem, 8vw, 2.3rem); }
   .sw-body { margin-top: 0.55rem; font-size: 0.95rem; line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
