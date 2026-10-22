@@ -281,13 +281,13 @@ export function ScrollWorld({ scenes, aliados = [] }: { scenes: JourneyScene[]; 
 
           {aliados.length > 0 && (
             <nav className="sw-aliados" aria-label="Portales aliados">
-              <Container className="flex items-center gap-x-6 gap-y-2">
+              <Container className="flex flex-col items-center gap-3">
                 <span className="sw-aliados-label">Portales aliados</span>
-                <ul className="flex min-w-0 flex-1 items-center gap-x-5 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                <ul className="flex max-w-full items-start justify-center gap-x-7 overflow-x-auto px-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                   {aliados.map((a) => (
                     <li key={a.nombre} className="shrink-0">
                       <a href={a.href} target="_blank" rel="noopener noreferrer" className="sw-aliado" title={a.nombre}>
-                        <Image src={a.logo} alt="" width={64} height={64} className="h-9 w-9 rounded-full border border-white/30 object-cover" />
+                        <Image src={a.logo} alt="" width={96} height={96} className="h-14 w-14 rounded-full border border-white/35 object-cover shadow-[0_8px_18px_-8px_rgba(0,0,0,0.8)]" />
                         <span>{a.nombre}</span>
                       </a>
                     </li>

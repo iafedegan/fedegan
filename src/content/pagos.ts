@@ -1,3 +1,5 @@
+import municipios from "./municipios.json";
+
 // Contenido del sistema de pago en línea de la cuota de fomento ganadero y lechero (CFGL),
 // copiado de pagos.fedegan.org.co y de la página de recaudo del portal actual.
 
@@ -134,8 +136,8 @@ export const instructivos = {
 
 export const importante = "El proceso por intermedio de PSE – Pagos Seguros en Línea maneja archivos encriptados y, como su nombre lo indica, es 100 % seguro.";
 
-export const departamentos = [
-  "Amazonas", "Antioquia", "Arauca", "Atlántico", "Bogotá D.C.", "Bolívar", "Boyacá", "Caldas", "Caquetá", "Casanare", "Cauca", "Cesar", "Chocó", "Córdoba", "Cundinamarca", "Guainía", "Guaviare", "Huila", "La Guajira", "Magdalena", "Meta", "Nariño", "Norte de Santander", "Putumayo", "Quindío", "Risaralda", "San Andrés y Providencia", "Santander", "Sucre", "Tolima", "Valle del Cauca", "Vaupés", "Vichada",
-];
+/** División político-administrativa oficial (DIVIPOLA, DANE): departamento → municipios. */
+export const municipiosPorDepartamento = municipios as Record<string, string[]>;
+export const departamentos = Object.keys(municipiosPorDepartamento);
 
 export const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];

@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { Check, Info, Plus, Trash2, X } from "lucide-react";
 import { Field, PrimaryButton, inputCls, panel } from "./ui";
-import { departamentos, meses } from "@/content/pagos";
+import { departamentos, meses, municipiosPorDepartamento } from "@/content/pagos";
 
 type Concepto = "leche" | "carne";
 type Origen = { id: number; depto: string; muni: string; cantidad: number; valor: number };
@@ -47,7 +47,7 @@ export function Planilla({ initial = "leche" }: { initial?: Concepto }) {
 
   function agregar() {
     if (!depto || !muni.trim() || !num(cantidad)) {
-      setError(`Elija departamento, escriba el municipio e indique ${leche ? "los litros" : "las cabezas"}.`);
+      setError(`Elija departamento y municipio, e indique ${leche ? "los litros" : "las cabezas"}.`);
       return;
     }
     if (leche && !num(valor)) {
@@ -110,7 +110,7 @@ export function Planilla({ initial = "leche" }: { initial?: Concepto }) {
           <StepTitle n={2}>Orígenes {leche ? "de la leche" : "de las cabezas"}</StepTitle>
           <div className={`${panel} grid gap-4 p-5 sm:grid-cols-2 ${leche ? "lg:grid-cols-4" : "lg:grid-cols-3"}`}>
             <Field label="Departamento" htmlFor="pl-depto">
-              <select id="pl-depto" value={depto} onChange={(e) => setDepto(e.target.value)} className={inputCls}>
+              <select id="pl-depto" value={depto} onChange={(e) => { setDepto(e.target.value); setMuni(""); }} className={inputCls}>
                 <option value="">Seleccione…</option>
                 {departamentos.map((d) => (
                   <option key={d}>{d}</option>
@@ -118,7 +118,12 @@ export function Planilla({ initial = "leche" }: { initial?: Concepto }) {
               </select>
             </Field>
             <Field label="Municipio" htmlFor="pl-muni">
-              <input id="pl-muni" value={muni} onChange={(e) => setMuni(e.target.value)} className={inputCls} placeholder="Ej. Montería" />
+              <select id="pl-muni" value={muni} onChange={(e) => setMuni(e.target.value)} disabled={!depto} className={`${inputCls} disabled:cursor-not-allowed disabled:opacity-55`}>
+                <option value="">{depto ? "Seleccione…" : "Elija primero el departamento"}</option>
+                {(municipiosPorDepartamento[depto] ?? []).map((m) => (
+                  <option key={m}>{m}</option>
+                ))}
+              </select>
             </Field>
             <Field label={leche ? "Número de litros" : "Número de cabezas"} htmlFor="pl-cant">
               <input id="pl-cant" inputMode="numeric" value={cantidad} onChange={(e) => setCantidad(e.target.value)} className={inputCls} />

@@ -852,12 +852,14 @@ a.mx-card:hover, .mx-lift:hover { transform: translateY(-3px); }
 }
 
 /* Portales aliados: franja al pie del recorrido */
-.sw-aliados { position: absolute; z-index: 3; left: 0; right: 0; bottom: 0; padding: 2.2rem 0 0.9rem; background: linear-gradient(0deg, rgba(5, 16, 11, 0.82), transparent); }
-.sw-aliados-label { flex: none; font-size: 0.66rem; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(244, 242, 233, 0.8); }
-.sw-aliado { display: inline-flex; align-items: center; gap: 0.6rem; font-size: 0.8rem; font-weight: 600; color: #f4f2e9; opacity: 0.88; transition: opacity 0.2s, transform 0.3s var(--ease-lux); }
+.sw-aliados { position: absolute; z-index: 3; left: 0; right: 0; bottom: 0; padding: 2.6rem 0 1rem; background: linear-gradient(0deg, rgba(5, 16, 11, 0.82), transparent); }
+.sw-aliados-label { flex: none; text-align: center; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(244, 242, 233, 0.8); }
+.sw-aliado { display: inline-flex; flex-direction: column; align-items: center; gap: 0.4rem; width: 6.2rem; text-align: center; line-height: 1.2; font-size: 0.76rem; font-weight: 600; color: #f4f2e9; opacity: 0.88; transition: opacity 0.2s, transform 0.3s var(--ease-lux); }
 .sw-aliado:hover { opacity: 1; transform: translateY(-2px); }
 @media (max-width: 767px) {
   .sw-aliados { bottom: calc(5.4rem + env(safe-area-inset-bottom)); padding-top: 0.5rem; background: none; }
   .sw-aliados-label { display: none; }
+  .sw-aliado { width: 3.4rem; }
   .sw-aliado span { display: none; }
+  .sw-aliado img { height: 2.6rem; width: 2.6rem; }
 }

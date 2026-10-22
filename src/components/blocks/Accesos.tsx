@@ -90,7 +90,7 @@ function AvisoTile({ c, as: Tag = "li" }: { c: Campana; as?: "li" | "div" }) {
 export function CampaignWall() {
   return (
     <Section eyebrow="Avisos" title="Convocatorias y comunicados">
-      <ScrollRail label="Avisos">
+      <ScrollRail label="Avisos" autoplay>
         {campanas.map((c) => (
           <AvisoTile key={c.id} c={c} as="div" />
         ))}
