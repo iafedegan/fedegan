@@ -76,7 +76,6 @@ export function ScrollWorld({ scenes: base }: { scenes: JourneyScene[] }) {
   // Con permiso de la persona, las secciones que más visita pasan primero en el recorrido y en la lista.
   const usoTxt = useSyncExternalStore(suscribirUso, instantaneaUso, () => "");
   const scenes = useMemo(() => ordenarPorUso(base, parseUso(usoTxt)), [base, usoTxt]);
-  const personalizado = scenes.some((s, i) => s.id !== base[i].id);
   const K = scenes.length - 1;
   const trackRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
@@ -157,7 +156,7 @@ export function ScrollWorld({ scenes: base }: { scenes: JourneyScene[] }) {
       raf = 0;
       const dt = Math.min(0.1, (now - (last || now)) / 1000);
       last = now;
-      current += (target - current) * (1 - Math.exp(-dt * 9));
+      current += (target - current) * (1 - Math.exp(-dt * 6));
       if (Math.abs(target - current) < 0.0002) current = target;
       paint(current);
       if (current !== target) raf = requestAnimationFrame(tick);
@@ -319,7 +318,6 @@ export function ScrollWorld({ scenes: base }: { scenes: JourneyScene[] }) {
             <span ref={counterRef} className="sw-counter" aria-hidden>
               {two(1)} / {two(K + 1)}
             </span>
-            {personalizado && <span className="sw-pers">Ordenado según su uso</span>}
             {scenes.map((s, i) => (
               <div key={s.id} className="sw-item" style={{ "--acc": s.accent } as React.CSSProperties}>
                 <button

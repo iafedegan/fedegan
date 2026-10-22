@@ -520,9 +520,9 @@ p { text-wrap: pretty; }
    ======================================================================= */
 .sw { position: relative; background: var(--bg); border-bottom: 1px solid var(--border); }
 /* --sw-top = alto del encabezado (se afina en JS); la escena ocupa exactamente el resto de la pantalla. */
-.sw-track { --sw-top: 4.4rem; position: relative; height: calc(100svh - var(--sw-top) + var(--sw-k, 6) * 115svh + 35svh); }
+.sw-track { --sw-top: 4.4rem; position: relative; height: calc(100svh - var(--sw-top) + var(--sw-k, 6) * 175svh + 45svh); }
 @media (min-width: 1024px) { .sw-track { --sw-top: 7.6rem; } }
-@media (max-width: 767px) { .sw-track { height: calc(100svh - var(--sw-top) + var(--sw-k, 6) * 95svh + 30svh); } }
+@media (max-width: 767px) { .sw-track { height: calc(100svh - var(--sw-top) + var(--sw-k, 6) * 140svh + 40svh); } }
 .sw-stage {
   --acc: 216, 181, 88;
   position: sticky; top: var(--sw-top); height: calc(100svh - var(--sw-top)); overflow: hidden; isolation: isolate; background: #05100b;
