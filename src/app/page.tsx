@@ -22,7 +22,7 @@ export default async function Home() {
       <AdSlot zone="mid" initial={design.ads.mid} />
       <VoiceAndAgenda />
       <PublicationsGrid />
-      <CampaignWall limit={4} />
+      <CampaignWall />
       <PortalesAliados />
       <AccountStrip />
     </>

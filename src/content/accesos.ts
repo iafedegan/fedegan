@@ -45,25 +45,35 @@ export type Campana = {
   external?: boolean;
   /** Banners comerciales de aliados: llevan la etiqueta «Publicidad». */
   ad?: boolean;
+  group: "recaudo" | "campanas" | "aliados";
   alt: string;
 };
 
 /** Campañas, avisos y convocatorias que el portal actual destaca con banners. */
 export const campanas: Campana[] = [
-  { id: "gira", title: "Gira técnica Magdalena Medio 2026", kicker: "Evento", image: "/accesos/gira-magdalena-medio.webp", ratio: "230 / 300", href: "/eventos", alt: "Gira Técnica Ganadera Magdalena Medio 2026" },
-  { id: "remate", title: "Remate de la Gira", kicker: "Aliados", image: "/accesos/remate-gira.webp", ratio: "1 / 2", href: "https://bit.ly/INFOIGREMATE", external: true, ad: true, alt: "Remate de la Gira Ganadera" },
-  { id: "tvgan", title: "Compra y venta bovina con TvGan", kicker: "Aliados", image: "/accesos/compra-venta-tvgan.webp", ratio: "1 / 2", href: "https://bit.ly/VERLOTESAQUI", external: true, ad: true, alt: "Compra y venta bovina con TvGan" },
-  { id: "cuota", title: "La cuota de fomento se mantiene", kicker: "Comunicado", image: "/accesos/cuota-se-mantiene.webp", ratio: "960 / 1200", href: "https://storage.googleapis.com/static-fedegan/banners/bnn-2026/bnn-cfgl-se-mantiene/Comunicado-recaudadores.jpg", external: true, alt: "Comunicado a recaudadores: la cuota se mantiene" },
-  { id: "aviso", title: "Aviso importante sobre la cuota 2026", kicker: "Importante", image: "/accesos/aviso-cuota.webp", ratio: "960 / 1690", href: "https://storage.googleapis.com/static-fedegan/recaudo_cfgl/aviso_cuota_fgl-2026.jpg", external: true, alt: "Aviso importante sobre la cuota de fomento 2026" },
-  { id: "fechas", title: "Fechas límite de la cuota", kicker: "Recaudo", image: "/accesos/fechas-limite.webp", ratio: "960 / 1408", href: "https://storage.googleapis.com/static-fedegan/recaudo_cfgl/tabla_cfgl_2026-home.jpg", external: true, alt: "Tabla de fechas límite de pago de la cuota de fomento 2026" },
-  { id: "convenios", title: "Convenios FEDEGÁN", kicker: "Beneficios", image: "/accesos/convenios.webp", ratio: "960 / 1566", href: "/seccion/pagos-y-campanas/noticias/convenios-fedegan", alt: "Convenios FEDEGÁN" },
-  { id: "carne", title: "Fomento al consumo de carne", kicker: "Campaña", image: "/accesos/fomento-carne.webp", ratio: "774 / 538", href: "/seccion/pagos-y-campanas/campana-de-fomento-al-consumo-de-carne", alt: "Campaña de fomento al consumo de carne" },
-  { id: "leche", title: "Fomento al consumo de leche", kicker: "Campaña", image: "/accesos/fomento-leche.webp", ratio: "774 / 538", href: "/seccion/pagos-y-campanas/campana-de-fomento-al-consumo-de-leche", alt: "Campaña de fomento al consumo de leche" },
-  { id: "precio-leche", title: "Reporte aquí irregularidades en el precio de la leche", kicker: "Denuncia", image: "/accesos/reporte-precio-leche.webp", ratio: "220 / 300", href: "/seccion/pagos-y-campanas/reporte-aqui-situaciones-irregulares-en-el-precio-de-la-leche", alt: "Reporte aquí situaciones irregulares en el precio de la leche" },
+  { id: "gira", group: "aliados", title: "Gira técnica Magdalena Medio 2026", kicker: "Evento", image: "/accesos/gira-magdalena-medio.webp", ratio: "230 / 300", href: "/eventos", alt: "Gira Técnica Ganadera Magdalena Medio 2026" },
+  { id: "remate", group: "aliados", title: "Remate de la Gira", kicker: "Aliados", image: "/accesos/remate-gira.webp", ratio: "1 / 2", href: "https://bit.ly/INFOIGREMATE", external: true, ad: true, alt: "Remate de la Gira Ganadera" },
+  { id: "tvgan", group: "aliados", title: "Compra y venta bovina con TvGan", kicker: "Aliados", image: "/accesos/compra-venta-tvgan.webp", ratio: "1 / 2", href: "https://bit.ly/VERLOTESAQUI", external: true, ad: true, alt: "Compra y venta bovina con TvGan" },
+  { id: "cuota", group: "recaudo", title: "La cuota de fomento se mantiene", kicker: "Comunicado", image: "/accesos/cuota-se-mantiene.webp", ratio: "960 / 1200", href: "https://storage.googleapis.com/static-fedegan/banners/bnn-2026/bnn-cfgl-se-mantiene/Comunicado-recaudadores.jpg", external: true, alt: "Comunicado a recaudadores: la cuota se mantiene" },
+  { id: "aviso", group: "recaudo", title: "Aviso importante sobre la cuota 2026", kicker: "Importante", image: "/accesos/aviso-cuota.webp", ratio: "960 / 1690", href: "https://storage.googleapis.com/static-fedegan/recaudo_cfgl/aviso_cuota_fgl-2026.jpg", external: true, alt: "Aviso importante sobre la cuota de fomento 2026" },
+  { id: "fechas", group: "recaudo", title: "Fechas límite de la cuota", kicker: "Recaudo", image: "/accesos/fechas-limite.webp", ratio: "960 / 1408", href: "https://storage.googleapis.com/static-fedegan/recaudo_cfgl/tabla_cfgl_2026-home.jpg", external: true, alt: "Tabla de fechas límite de pago de la cuota de fomento 2026" },
+  { id: "convenios", group: "campanas", title: "Convenios FEDEGÁN", kicker: "Beneficios", image: "/accesos/convenios.webp", ratio: "960 / 1566", href: "/seccion/pagos-y-campanas/noticias/convenios-fedegan", alt: "Convenios FEDEGÁN" },
+  { id: "carne", group: "campanas", title: "Fomento al consumo de carne", kicker: "Campaña", image: "/accesos/fomento-carne.webp", ratio: "774 / 538", href: "/seccion/pagos-y-campanas/campana-de-fomento-al-consumo-de-carne", alt: "Campaña de fomento al consumo de carne" },
+  { id: "leche", group: "campanas", title: "Fomento al consumo de leche", kicker: "Campaña", image: "/accesos/fomento-leche.webp", ratio: "774 / 538", href: "/seccion/pagos-y-campanas/campana-de-fomento-al-consumo-de-leche", alt: "Campaña de fomento al consumo de leche" },
+  { id: "precio-leche", group: "campanas", title: "Reporte aquí irregularidades en el precio de la leche", kicker: "Denuncia", image: "/accesos/reporte-precio-leche.webp", ratio: "220 / 300", href: "/seccion/pagos-y-campanas/reporte-aqui-situaciones-irregulares-en-el-precio-de-la-leche", alt: "Reporte aquí situaciones irregulares en el precio de la leche" },
 ];
 
 /** Formulario oficial de PQRSD (mesa de ayuda de FEDEGÁN-FNG). */
 export const pqrsdForm = "https://helpdesk.fedegan-fng.org.co/glpi/Form/Render/5?token=HUxXV3QPOfYdfwLaa5l7yk86yOkk2qXDDPvGRGTq";
+
+export const gruposAvisos: { id: Campana["group"]; titulo: string; texto: string }[] = [
+  { id: "recaudo", titulo: "Recaudo de la cuota", texto: "Comunicados, valores y fechas para los recaudadores." },
+  { id: "campanas", titulo: "Campañas y beneficios", texto: "Fomento al consumo, convenios y reportes del sector." },
+  { id: "aliados", titulo: "Eventos y aliados", texto: "Gira técnica, remate y servicios de aliados." },
+];
+
+/** Los cuatro avisos que se muestran en la portada. */
+export const avisosPortada = ["gira", "cuota", "convenios", "carne"];
 
 export const contacto = {
   direccion: "Calle 37 N° 14 - 31, Bogotá, Colombia",

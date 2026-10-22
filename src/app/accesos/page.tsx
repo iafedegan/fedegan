@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { PageHeader } from "@/components/ui/PageHeader";
-import { AccessHub, CampaignWall, PresidentColumn } from "@/components/blocks/Accesos";
+import { AccessHub, AvisosGrouped, PresidentColumn } from "@/components/blocks/Accesos";
 import { ContactChannels } from "@/components/blocks/ContactChannels";
 
 export const metadata: Metadata = { title: "Pagos, trámites y avisos" };
@@ -18,7 +18,7 @@ export default function AccesosPage() {
         compact
       />
       <AccessHub />
-      <CampaignWall all />
+      <AvisosGrouped />
       <PresidentColumn />
       <ContactChannels />
     </>

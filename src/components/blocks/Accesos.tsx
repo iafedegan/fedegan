@@ -4,7 +4,7 @@ import type { CSSProperties, ReactNode } from "react";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { Section } from "@/components/ui/Editorial";
 import { Pictogram } from "@/components/ui/Pictogram";
-import { campanas, pagos, tramites, type Acceso, type Campana } from "@/content/accesos";
+import { avisosPortada, campanas, gruposAvisos, pagos, tramites, type Acceso, type Campana } from "@/content/accesos";
 import { excerptOf, getLegacyPage, getLegacySection, legacyHref } from "@/content/legacy";
 
 const acc = (v: string) => ({ ["--acc-rgb" as string]: v }) as CSSProperties;
@@ -65,51 +65,57 @@ export function AccessHub({ tinted = false }: { tinted?: boolean }) {
   );
 }
 
-function CampanaCard({ c }: { c: Campana }) {
+// Aviso: ficha vertical de tamaño fijo; el cartel completo se abre al hacer clic.
+function AvisoTile({ c }: { c: Campana }) {
   return (
-    <li className="mb-4 break-inside-avoid">
-      <Wrap to={c.href} external={c.external} className="mx-rise group block overflow-hidden rounded-[0.75rem] border border-[var(--border-strong)] bg-[var(--surface-solid)] transition-colors hover:border-[var(--fg-lime-500)]">
-        <div className="relative w-full overflow-hidden bg-[var(--bg-muted)]" style={{ aspectRatio: c.ratio }}>
-          <Image
-            src={c.image}
-            alt={c.alt}
-            fill
-            unoptimized
-            sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
-            className="object-cover transition-transform duration-700 [transition-timing-function:var(--ease-lux)] group-hover:scale-[1.04]"
-          />
-          {c.ad && (
-            <span className="absolute left-2 top-2 rounded-full bg-black/60 px-2.5 py-1 text-[0.6rem] font-bold uppercase tracking-[0.16em] text-white backdrop-blur">Publicidad</span>
-          )}
-        </div>
-        <div className="p-3.5">
-          <p className="text-[0.64rem] font-bold uppercase tracking-[0.18em] text-[var(--fg-lime-500)]">{c.kicker}</p>
-          <h3 className="mt-1 flex items-start justify-between gap-2 text-sm font-bold leading-snug text-[var(--text)]">
-            {c.title}
-            {c.external ? <ArrowUpRight size={14} className="mt-0.5 shrink-0 text-[var(--text-faint)]" /> : <ArrowRight size={14} className="mt-0.5 shrink-0 text-[var(--text-faint)]" />}
-          </h3>
-        </div>
+    <li>
+      <Wrap to={c.href} external={c.external} className="group relative block aspect-[4/5] overflow-hidden rounded-[0.9rem] border border-[var(--border-strong)] bg-[var(--bg-sunken)] transition-[transform,border-color,box-shadow] duration-500 [transition-timing-function:var(--ease-lux)] hover:-translate-y-1 hover:border-[var(--fg-lime-500)] hover:shadow-[0_26px_44px_-28px_rgba(0,0,0,0.85)]">
+        <Image src={c.image} alt={c.alt} fill unoptimized sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw" className="object-cover object-top transition-transform duration-[1200ms] [transition-timing-function:var(--ease-lux)] group-hover:scale-[1.05]" />
+        <span aria-hidden className="absolute inset-x-0 bottom-0 h-[55%] bg-gradient-to-t from-[rgba(6,16,11,0.94)] via-[rgba(6,16,11,0.6)] to-transparent" />
+        {c.ad && <span className="absolute left-3 top-3 rounded-full bg-black/60 px-2.5 py-1 text-[0.58rem] font-bold uppercase tracking-[0.16em] text-white backdrop-blur">Publicidad</span>}
+        <span className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full border border-white/30 bg-black/35 text-white opacity-0 backdrop-blur transition-opacity duration-300 group-hover:opacity-100">
+          {c.external ? <ArrowUpRight size={15} /> : <ArrowRight size={15} />}
+        </span>
+        <span className="absolute inset-x-0 bottom-0 p-4">
+          <span className="block text-[0.62rem] font-bold uppercase tracking-[0.2em] text-[var(--fg-lime-400)]">{c.kicker}</span>
+          <span className="mt-1 block font-[var(--font-display)] text-lg font-bold leading-snug text-white">{c.title}</span>
+        </span>
       </Wrap>
     </li>
   );
 }
 
-/** Campañas, avisos y convocatorias (los banners de la columna lateral del portal actual). */
-export function CampaignWall({ limit, all = false }: { limit?: number; all?: boolean }) {
-  const list = limit ? campanas.slice(0, limit) : campanas;
+/** Portada: cuatro avisos destacados en fichas del mismo tamaño. */
+export function CampaignWall() {
+  const list = avisosPortada.map((id) => campanas.find((c) => c.id === id)).filter(Boolean) as Campana[];
   return (
-    <Section eyebrow="Avisos y campañas" title="Convocatorias, comunicados y aliados">
-      <ul className="columns-2 gap-4 md:columns-3 lg:columns-4">
+    <Section eyebrow="Avisos" title="Convocatorias y comunicados">
+      <ul className="grid grid-cols-2 gap-4 lg:grid-cols-4 lg:gap-5">
         {list.map((c) => (
-          <CampanaCard key={c.id} c={c} />
+          <AvisoTile key={c.id} c={c} />
         ))}
       </ul>
-      {!all && (
-        <Link href="/accesos" className="mt-2 inline-flex items-center gap-1.5 text-sm font-bold uppercase tracking-[0.1em] text-[var(--fg-lime-400)] hover:text-[var(--text)]">
-          Ver todos los accesos y avisos <ArrowRight size={15} />
-        </Link>
-      )}
+      <Link href="/avisos" className="group mt-6 inline-flex items-center gap-2 text-sm font-bold uppercase tracking-[0.12em] text-[var(--fg-lime-400)]">
+        Ver todos los avisos <ArrowRight size={15} className="transition-transform group-hover:translate-x-1" />
+      </Link>
     </Section>
+  );
+}
+
+/** Página de avisos: agrupados por tema, cada grupo con fichas iguales. */
+export function AvisosGrouped() {
+  return (
+    <>
+      {gruposAvisos.map((g, i) => (
+        <Section key={g.id} eyebrow="Avisos" title={g.titulo} intro={g.texto} tinted={i % 2 === 1}>
+          <ul className="grid grid-cols-2 gap-4 lg:grid-cols-4 lg:gap-5">
+            {campanas.filter((c) => c.group === g.id).map((c) => (
+              <AvisoTile key={c.id} c={c} />
+            ))}
+          </ul>
+        </Section>
+      ))}
+    </>
   );
 }
 
