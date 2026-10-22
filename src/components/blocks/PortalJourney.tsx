@@ -68,7 +68,7 @@ export async function PortalJourney() {
   const lead = news.carousel.find((n) => n.image && !n.imageAlt?.toLowerCase().startsWith("imagen generada con ia"));
   scenes.push({
     id: "noticias",
-    nombre: "Noticias",
+    nombre: "Noticias en CONtexto Ganadero",
     rubro: "Actualidad",
     descripcion: "Notas, análisis y actualidad del sector ganadero colombiano, publicadas por CONtexto Ganadero.",
     tags: ["CONtexto Ganadero"],
