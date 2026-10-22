@@ -82,6 +82,7 @@ export function ScrollWorld({ scenes, aliados = [] }: { scenes: JourneyScene[]; 
   const router = useRouter();
   // Escena cuyas opciones están desplegadas; «pending» evita cerrarla mientras el scroll llega a ella.
   const [open, setOpen] = useState<number | null>(null);
+  const [current, setCurrent] = useState(0);
   const openRef = useRef<number | null>(null);
   const pending = useRef<number | null>(null);
 
@@ -123,6 +124,7 @@ export function ScrollWorld({ scenes, aliados = [] }: { scenes: JourneyScene[]; 
       const idx = clamp(Math.round(s), 0, K);
       if (idx !== activeIdx) {
         activeIdx = idx;
+        setCurrent(idx);
         if (pending.current !== null) {
           if (pending.current === idx) pending.current = null;
         } else if (openRef.current !== null && openRef.current !== idx) {
@@ -265,11 +267,6 @@ export function ScrollWorld({ scenes, aliados = [] }: { scenes: JourneyScene[]; 
           {open !== null && scenes[open].subs && scenes[open].subs.length > 0 && (
             <div className="sw-msubs" style={{ "--acc": scenes[open].accent } as React.CSSProperties}>
               <ul>
-                <li>
-                  <button type="button" className="sw-sub sw-sub-main" onClick={() => navigate(scenes[open])}>
-                    Ver todo {scenes[open].nombre} <ArrowRight size={14} aria-hidden />
-                  </button>
-                </li>
                 {scenes[open].subs!.map((sub) => (
                   <li key={sub.href + sub.label}>
                     <SubLink sub={sub} />
@@ -297,6 +294,14 @@ export function ScrollWorld({ scenes, aliados = [] }: { scenes: JourneyScene[]; 
             </nav>
           )}
 
+          <div className="sw-center">
+            <button type="button" onClick={() => navigate(scenes[current])} className="sw-cta" style={{ "--acc": scenes[current].accent } as React.CSSProperties}>
+              <span>Entrar a</span>
+              <b>{scenes[current].nombre}</b>
+              <ArrowRight size={18} aria-hidden />
+            </button>
+          </div>
+
           <nav className="sw-rail" aria-label="Secciones del portal">
             <span ref={counterRef} className="sw-counter" aria-hidden>
               {two(1)} / {two(K + 1)}
@@ -317,11 +322,6 @@ export function ScrollWorld({ scenes, aliados = [] }: { scenes: JourneyScene[]; 
                 </button>
                 {open === i && (
                   <ul className="sw-subs">
-                    <li>
-                      <button type="button" className="sw-sub sw-sub-main" onClick={() => navigate(s)}>
-                        Ver todo {s.nombre} <ArrowRight size={14} aria-hidden />
-                      </button>
-                    </li>
                     {s.subs?.map((sub) => (
                       <li key={sub.href + sub.label}>
                         <SubLink sub={sub} />
@@ -334,6 +334,21 @@ export function ScrollWorld({ scenes, aliados = [] }: { scenes: JourneyScene[]; 
             <Link href="/directorio" className="sw-more">
               Ver directorio completo
             </Link>
+            {aliados.length > 0 && (
+              <div className="sw-ally">
+                <span className="sw-ally-label">Portales aliados</span>
+                <ul className="sw-ally-grid">
+                  {aliados.map((a) => (
+                    <li key={a.nombre}>
+                      <a href={a.href} target="_blank" rel="noopener noreferrer" title={a.nombre}>
+                        <Image src={a.logo} alt="" width={96} height={96} className="sw-ally-logo" />
+                        <span>{a.nombre}</span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </nav>
         </div>
       </div>

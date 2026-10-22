@@ -1,0 +1,35 @@
+import type { Indicador } from "@/lib/observatorio";
+
+export const PALETTE = ["#d6ac4e", "#34a868", "#de8650", "#38b0a0", "#c9d96b", "#8fb8e8", "#e08aa6", "#a58be0", "#9aa3a8"];
+
+export const nf = (v: number, d = 0) => v.toLocaleString("es-CO", { minimumFractionDigits: d, maximumFractionDigits: d });
+
+/** Texto de la unidad sin el «$$» doble del origen. */
+export const unidadLimpia = (u: string) => u.replace(/\$\$/g, "$");
+
+/** Formatea un valor según el formato y el prefijo del indicador. */
+export function fmtValor(ind: Pick<Indicador, "formato" | "prefijo" | "unidad">, v: number): string {
+  const d = ind.formato === "decimal2" ? 2 : ind.formato === "decimal1" ? 1 : ind.formato === "entero" ? 0 : Math.abs(v) >= 1000 ? 0 : Math.abs(v) >= 100 ? 1 : 2;
+  const prefijo = ind.prefijo ?? (ind.unidad.includes("$") ? "$" : "");
+  return `${prefijo}${nf(v, d)}`;
+}
+
+/** Etiqueta corta de un periodo: «sep/2026» → «sep ’26»; los años quedan igual. */
+export const etiqueta = (p: string) => {
+  const [m, y] = p.split("/");
+  return y ? `${m} ’${y.slice(2)}` : p;
+};
+
+export function ticks(min: number, max: number, n = 4): number[] {
+  if (min === max) return [min];
+  const raw = (max - min) / n;
+  const mag = 10 ** Math.floor(Math.log10(raw));
+  const step = [1, 2, 2.5, 5, 10].map((k) => k * mag).find((s) => s >= raw) ?? raw;
+  const start = Math.floor(min / step) * step;
+  const out: number[] = [];
+  for (let v = start; v <= max + step * 0.001; v += step) out.push(Number(v.toFixed(10)));
+  return out;
+}
+
+export const variacion = (now: number, prev: number) => (prev ? ((now - prev) / Math.abs(prev)) * 100 : 0);
+export const signo = (v: number) => `${v >= 0 ? "▲" : "▼"} ${v >= 0 ? "+" : "−"}${nf(Math.abs(v), 1)} %`;

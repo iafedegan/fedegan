@@ -947,3 +947,34 @@ a.mx-card:hover, .mx-lift:hover { transform: translateY(-3px); }
 .wc-glyph small { display: block; font-family: var(--font-sans, inherit); font-size: 0.7rem; font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase; }
 .wc:hover .wc-glyph, .wc:focus-visible .wc-glyph { color: #fff; }
 @media (hover: none) { .wc-glyph { color: inherit; } }
+
+/* La opción activa de la lista del recorrido crece; la siguiente y la anterior, un poco */
+.sw-dot { transform-origin: right center; transition: transform 0.45s var(--ease-lux); }
+.sw-dot.is-active { transform: scale(1.28); margin-block: 0.25rem; }
+.sw-item:has(+ .sw-item .sw-dot.is-active) .sw-dot, .sw-item:has(.sw-dot.is-active) + .sw-item .sw-dot { transform: scale(1.08); }
+.sw-dot.is-active .sw-dot-label { opacity: 1; letter-spacing: 0.1em; }
+@media (max-width: 767px) { .sw-dot.is-active { transform: none; } }
+
+/* Botón central: lleva a la sección de la escena activa */
+.sw-center { position: absolute; z-index: 3; left: 0; right: 0; top: 50%; display: flex; justify-content: center; transform: translateY(-50%); pointer-events: none; }
+.sw-cta {
+  pointer-events: auto; display: inline-flex; align-items: center; gap: 0.7rem; padding: 0.95rem 1.7rem; border-radius: 999px; cursor: pointer;
+  color: #fff; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase;
+  background: rgba(5, 16, 11, 0.5); border: 1px solid rgba(255, 255, 255, 0.4);
+  -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); box-shadow: 0 18px 40px -22px rgba(0, 0, 0, 0.8);
+  transition: background 0.35s, border-color 0.35s, color 0.35s, transform 0.4s var(--ease-lux);
+}
+.sw-cta b { font-family: var(--font-display); font-size: 1.15rem; font-weight: 700; letter-spacing: 0.02em; text-transform: none; color: rgb(var(--acc)); transition: color 0.35s; }
+.sw-cta:hover, .sw-cta:focus-visible { background: rgb(var(--acc)); border-color: rgb(var(--acc)); color: #08140d; transform: translateY(-3px) scale(1.03); }
+.sw-cta:hover b, .sw-cta:focus-visible b { color: #08140d; }
+@media (max-width: 767px) { .sw-center { top: 44%; } .sw-cta { padding: 0.8rem 1.3rem; } }
+
+/* Portales aliados dentro del menú derecho (escritorio); en móvil queda la franja inferior */
+.sw-ally { margin-top: 1.1rem; padding-top: 0.9rem; border-top: 1px solid rgba(255, 255, 255, 0.18); width: 100%; display: flex; flex-direction: column; align-items: flex-end; gap: 0.7rem; }
+.sw-ally-label { font-size: 0.64rem; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(244, 242, 233, 0.8); }
+.sw-ally-grid { display: grid; grid-template-columns: repeat(3, 4.4rem); gap: 0.8rem 0.6rem; justify-items: center; }
+.sw-ally-grid a { display: flex; flex-direction: column; align-items: center; gap: 0.3rem; text-align: center; font-size: 0.6rem; font-weight: 600; line-height: 1.15; color: #f4f2e9; opacity: 0.9; transition: opacity 0.2s, transform 0.3s var(--ease-lux); }
+.sw-ally-grid a:hover { opacity: 1; transform: translateY(-2px); }
+.sw-ally-logo { height: 2.7rem; width: 2.7rem; border-radius: 999px; border: 1px solid rgba(255, 255, 255, 0.4); object-fit: cover; }
+@media (min-width: 768px) { .sw-aliados { display: none; } }
+@media (max-width: 767px) { .sw-ally { display: none; } }

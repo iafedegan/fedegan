@@ -6,6 +6,7 @@ import { PageHeader } from "@/components/ui/PageHeader";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
+import { Observatorio } from "@/components/observatorio/Observatorio";
 import { LegacySectionPage } from "@/components/legacy/LegacySectionPage";
 import { getLegacyPage, getLegacySection, legacyParams } from "@/content/legacy";
 
@@ -33,6 +34,8 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
 
 export default async function SeccionPage({ params }: { params: Promise<Params> }) {
   const { slug, ruta = [] } = await params;
+  // Cifras del sector: el Observatorio ganadero con las cifras vivas de CONtexto.
+  if (slug === "cifras-del-sector" && ruta.length === 0) return <Observatorio />;
   if (getLegacySection(slug)) return <LegacySectionPage slug={slug} ruta={ruta} />;
 
   const seccion = pendientes[slug];
