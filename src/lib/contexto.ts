@@ -146,13 +146,48 @@ export async function getPortada(): Promise<Noticia[]> {
   return r.ok ? r.data.items.map(fromApi) : [];
 }
 
+// La API filtra por la categoría exacta de cada nota; una sección con subcategorías (p. ej. TV → Video) no devuelve
+// nada si se pide por su nombre. Estas son las subcategorías de cada sección principal de CONtexto.
+const HIJAS: Record<string, string[]> = {
+  ganaderia: ["sostenible", "produccion", "sistemas-silvopastoriles", "nutricion", "salud-animal", "razas"],
+  "sistemas-pecuarios": ["porcicola", "equino", "avicola", "ovino-caprino", "otros-sistemas-pecuarios"],
+  colombia: ["politica", "gremialidad", "regiones", "seguridad"],
+  economia: ["nacional", "internacional", "precio-del-ganado", "agricultura", "agroindustria"],
+  mundo: ["argentina", "eeuu", "espana", "mexico", "peru", "otros-mundo"],
+  tendencias: ["medioambiente", "gastronomia", "innovacion", "mascotas", "redes-sociales"],
+  opinion: ["columnas", "editorial", "blogs", "columnistas"],
+  agenda: ["congresos", "ferias", "tauromaquia", "otros-eventos"],
+  especiales: ["cronica", "reportaje", "informes", "gobierno-petro", "galeria"],
+  tv: ["video"],
+  radio: ["audio"],
+};
+
 /** Notas publicadas, de la más reciente a la más antigua, con paginación por cursor. */
 export async function getNoticias(opts: { limit?: number; categoria?: string; cursor?: string } = {}) {
   const { limit = 12, categoria, cursor } = opts;
-  const qs = new URLSearchParams({ limite: String(Math.min(Math.max(limit, 1), 50)) });
-  if (categoria) qs.set("categoria", categoria);
-  if (cursor) qs.set("cursor", cursor);
-  const r = await api<{ items: ApiArticulo[]; siguienteCursor: string | null }>(`/articulos?${qs}`);
+  const size = Math.min(Math.max(limit, 1), 50);
+  const page = async (cat?: string, cur?: string) => {
+    const qs = new URLSearchParams({ limite: String(size) });
+    if (cat) qs.set("categoria", cat);
+    if (cur) qs.set("cursor", cur);
+    return api<{ items: ApiArticulo[]; siguienteCursor: string | null }>(`/articulos?${qs}`);
+  };
+
+  const hijas = categoria ? HIJAS[categoria] : undefined;
+  if (categoria && hijas) {
+    // Sección con subcategorías: se juntan las notas de la sección y de cada subcategoría, de la más reciente a la más antigua.
+    const results = await Promise.all([categoria, ...hijas].map((c) => page(c)));
+    if (!results.some((r) => r.ok)) return { ok: false as const, items: [] as Noticia[], nextCursor: null as string | null };
+    const seen = new Set<string>();
+    const items = results
+      .flatMap((r) => (r.ok ? r.data.items.map(fromApi) : []))
+      .filter((n) => (seen.has(n.slug) ? false : (seen.add(n.slug), true)))
+      .sort((a, b) => (b.publishedAt ?? "").localeCompare(a.publishedAt ?? ""))
+      .slice(0, size);
+    return { ok: true as const, items, nextCursor: null as string | null };
+  }
+
+  const r = await page(categoria, cursor);
   if (!r.ok) return { ok: false as const, items: [] as Noticia[], nextCursor: null as string | null };
   return { ok: true as const, items: r.data.items.map(fromApi), nextCursor: r.data.siguienteCursor ?? null };
 }
