@@ -1374,6 +1374,78 @@
    "label": "Sala de Prensa",
    "landing": "sala-de-prensa/comunicados-y-boletines-de-prensa",
    "tree": []
+  },
+  "pagos-y-campanas": {
+   "label": "Pagos y campañas",
+   "landing": "recaudo-de-la-cuota-de-fomento-ganadero-y-lechero",
+   "tree": [
+    {
+     "label": "Campaña de fomento al consumo de carne",
+     "key": "campana-de-fomento-al-consumo-de-carne"
+    },
+    {
+     "label": "Campaña de fomento al consumo de Leche",
+     "key": "campana-de-fomento-al-consumo-de-leche"
+    },
+    {
+     "label": "Metodología para la autoevaluación del Sello Ambiental Colombiano",
+     "key": "metodologia-para-la-autoevaluacion-del-sello-ambiental-colombiano"
+    },
+    {
+     "label": "ABC Seguridad Ganadera - Frentes Solidarios de Seguridad y Paz",
+     "key": "abc-seguridad-ganadera-frentes-solidarios-de-seguridad-y-paz"
+    },
+    {
+     "label": "Datos e Indicadores",
+     "key": "datos-e-indicadores"
+    },
+    {
+     "label": "Convenios Fedegán",
+     "key": "noticias/convenios-fedegan"
+    },
+    {
+     "label": "¡¡Reporte AQUÍ!! situaciones irregulares en el precio de la leche",
+     "key": "reporte-aqui-situaciones-irregulares-en-el-precio-de-la-leche"
+    }
+   ]
+  },
+  "columna-presidente": {
+   "label": "Columna del Presidente",
+   "landing": "columna-presidente",
+   "tree": [
+    {
+     "label": "ES AHORA O NUNCA",
+     "key": "columna-presidente/es-ahora-o-nunca"
+    },
+    {
+     "label": "Las finanzas públicas y el campo",
+     "key": "columna-presidente/las-finanzas-publicas-y-el-campo"
+    },
+    {
+     "label": "Entre lo urgente y lo importante",
+     "key": "columna-presidente/entre-lo-urgente-y-lo-importante"
+    },
+    {
+     "label": "El Campo Milagro",
+     "key": "columna-presidente/el-campo-milagro"
+    },
+    {
+     "label": "Miguel Santamaría Dávila, marzo de 1933 – julio de 2026",
+     "key": "columna-presidente/miguel-santamaria-davila-marzo-de-1933-julio-de-2026"
+    },
+    {
+     "label": "Ganó la patria milagro",
+     "key": "columna-presidente/gano-la-patria-milagro-0"
+    },
+    {
+     "label": "Del desastre… a la incertidumbre",
+     "key": "columna-presidente/del-desastre-la-incertidumbre"
+    },
+    {
+     "label": "«La Impunidad Total»",
+     "key": "columna-presidente/la-impunidad-total"
+    }
+   ]
   }
  },
  "pages": {
@@ -5606,8 +5678,8 @@
      "text": "https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2026/tabla-datos-indicadores-ciclo-I-2026.html"
     },
     {
-     "t": "p",
-     "text": "**Escuche el Resultado de las cifras del Inventario Bovino y Bufalino Ciclo I - 2026**"
+     "t": "h4",
+     "text": "Escuche el Resultado de las cifras del Inventario Bovino y Bufalino Ciclo I - 2026"
     },
     {
      "t": "h2",
@@ -5618,8 +5690,8 @@
      "text": "https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2025/tabla-datos-indicadores-ciclo-2-2025v2.html"
     },
     {
-     "t": "p",
-     "text": "**Escuche el Resultado de las cifras del Inventario Bovino y Bufalino Ciclo II - 2025**"
+     "t": "h4",
+     "text": "Escuche el Resultado de las cifras del Inventario Bovino y Bufalino Ciclo II - 2025"
     },
     {
      "t": "h2",
@@ -5630,8 +5702,8 @@
      "text": "https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2025/tabla-datos-indicadores-ciclo-1-2025-08152025.html"
     },
     {
-     "t": "p",
-     "text": "**Escuche el Resultado de las cifras del Inventario Bovino y Bufalino Ciclo I - 2025**"
+     "t": "h4",
+     "text": "Escuche el Resultado de las cifras del Inventario Bovino y Bufalino Ciclo I - 2025"
     },
     {
      "t": "h2",
@@ -5642,8 +5714,8 @@
      "text": "https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2024/tabla-datos-indicadores-ciclo-2-2024-02162025.html"
     },
     {
-     "t": "p",
-     "text": "**Escuche el Resultado de las cifras del Inventario Bovino y Bufalino Ciclo II-2024**"
+     "t": "h4",
+     "text": "Escuche el Resultado de las cifras del Inventario Bovino y Bufalino Ciclo II-2024"
     },
     {
      "t": "h2",
@@ -5654,8 +5726,8 @@
      "text": "https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2024/tabla-datos-indicadores-ciclo-1-2024-23092024.html"
     },
     {
-     "t": "p",
-     "text": "**Escuche el Resultado de las cifras del Inventario Bovino y Bufalino Ciclo I - 2024**"
+     "t": "h4",
+     "text": "Escuche el Resultado de las cifras del Inventario Bovino y Bufalino Ciclo I - 2024"
     },
     {
      "t": "h2",
@@ -5736,11 +5808,16 @@
     {
      "t": "embed",
      "text": "https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2019/tabla-datos-indicadores-ciclo-I-2019-27032024.html"
+    },
+    {
+     "t": "p",
+     "text": "Visitas"
     }
    ],
    "sections": [
-    "sistema-integrado-de-gestion"
-   ]
+    "pagos-y-campanas"
+   ],
+   "parent": "recaudo-de-la-cuota-de-fomento-ganadero-y-lechero"
   },
   "calendario-de-publicaciones": {
    "title": "Calendario de Publicaciones",
@@ -12651,9 +12728,8 @@
     }
    ],
    "sections": [
-    "fng"
-   ],
-   "parent": "tramites"
+    "pagos-y-campanas"
+   ]
   },
   "tablas-de-retencion-0": {
    "title": "Tablas de Retención",
@@ -12945,10 +13021,6 @@
    "title": "Peticiones, quejas, reclamos, sugerencias y denuncias",
    "source": "https://www.fedegan.org.co/servicios/peticiones-quejas-reclamos-sugerencias-y-denuncias",
    "blocks": [
-    {
-     "t": "p",
-     "text": "[Inicio](https://www.fedegan.org.co/) ›\n[Servicios](/seccion/servicios-fedegan) ›\nPeticiones, quejas, reclamos, sugerencias y denuncias"
-    },
     {
      "t": "p",
      "text": "Apreciado usuario, por medio del sistema de PQRSD, usted podrá presentar peticiones, quejas, reclamos y sugerencias por motivos de interés general o particular. Como usuario registrado o usuario anónimo, el Fondo Nacional del Ganado (FNG) y el Fondo de Estabilización de Precios (FEP) a través de las Oficinas de Atención al Ciudadano atenderán su solicitud, por lo que requerimos tenga en cuenta los siguientes puntos antes de registrar su solicitud."
@@ -14303,10 +14375,6 @@
    "blocks": [
     {
      "t": "p",
-     "text": "[Inicio](https://www.fedegan.org.co/) ›\nServicios"
-    },
-    {
-     "t": "p",
      "text": "Los servicios de **FEDEGÁN** apoyan el desarrollo eficiente, sostenible y competitivo del sector ganadero del país, con lo que se consigue un mayor bienestar para el ganadero-productor, como consecuencia de la elevación de los índices de productividad y rentabilidad de su empresa ganadera."
     },
     {
@@ -14392,10 +14460,6 @@
    "blocks": [
     {
      "t": "p",
-     "text": "[Inicio](https://www.fedegan.org.co/) ›\n[Servicios](/seccion/servicios-fedegan) ›\nWhatsApp Ganadero"
-    },
-    {
-     "t": "p",
      "text": "La Federación Nacional de Ganaderos FEDEGAN, en la necesidad de establecer comunicación directa con todos los ganaderos del país, identificó que un número significativo de personas del sector no estaban recibiendo la información importante generada dentro de la institución."
     },
     {
@@ -14454,10 +14518,6 @@
    "blocks": [
     {
      "t": "p",
-     "text": "[Inicio](https://www.fedegan.org.co/) ›\n[Servicios](/seccion/servicios-fedegan) ›\nIngreso a Calidad"
-    },
-    {
-     "t": "p",
      "text": "En desarrollo de sus funciones y como gremio cúpula y administrador de los recursos parafiscales de la ganadería, **FEDEGÁN** ha logrado construir, consolidar y estandarizar un eficiente conjunto de procesos y procedimientos misionales y de apoyo administrativo, que son reconocidos por el gremio ganadero y la institucionalidad pública por su impacto positivo en el desarrollo cualitativo de la ganadería nacional durante la última década."
     },
     {
@@ -14486,10 +14546,6 @@
    "title": "Tarjeta de Crédito",
    "source": "https://www.fedegan.org.co/servicios/tarjeta-de-credito",
    "blocks": [
-    {
-     "t": "p",
-     "text": "[Inicio](https://www.fedegan.org.co/) ›\n[Servicios](/seccion/servicios-fedegan) ›\nTarjeta de Crédito"
-    },
     {
      "t": "p",
      "text": "Estas dos tarjetas de crédito hace parte de las estrategias de FEDEGÁN para llevar más recursos financieros al campo. De igual manera, se trata de fomentar la cultura de las transacciones virtuales. Así mismo, los ganaderos tendrán la oportunidad de tener un beneficio directo en cuanto a mejores precios en los insumos, los productos agrícolas, la maquinaria y los equipos."
@@ -14554,10 +14610,6 @@
    "blocks": [
     {
      "t": "p",
-     "text": "[Inicio](https://www.fedegan.org.co/) ›\n[Servicios](/seccion/servicios-fedegan) ›\nChats y foros"
-    },
-    {
-     "t": "p",
      "text": "En la era de las comunicaciones y la tecnología, FEDEGÁN ha diversificado sus medios de comunicación, siempre con el objetivo de llegar al ganadero, sin importar su condición, especialidad o ubicación en el territorio nacional. En foros y chat ofrecemos un espacio en el que se pueden compartir conocimientos, dialogar y acercarnos a ganaderos, estudiantes y todas aquellas personas interesadas en los temas el campo colombiano."
     },
     {
@@ -14578,10 +14630,6 @@
    "title": "Carné ganadero",
    "source": "https://www.fedegan.org.co/servicios/carne-ganadero",
    "blocks": [
-    {
-     "t": "p",
-     "text": "[Inicio](https://www.fedegan.org.co/) ›\n[Servicios](/seccion/servicios-fedegan) ›\nCarné ganadero"
-    },
     {
      "t": "h4",
      "text": "Requisitos"
@@ -14612,10 +14660,6 @@
    "title": "Vias terciarias",
    "source": "https://www.fedegan.org.co/servicios/vias-terciarias",
    "blocks": [
-    {
-     "t": "p",
-     "text": "[Inicio](https://www.fedegan.org.co/) ›\n[Servicios](/seccion/servicios-fedegan) ›\nVias terciarias"
-    },
     {
      "t": "h4",
      "text": "Es momento de recuperar la política vial rural"
@@ -14662,10 +14706,6 @@
    "title": "Monitoreo de Fincas",
    "source": "https://www.fedegan.org.co/servicios/monitoreo-de-fincas",
    "blocks": [
-    {
-     "t": "p",
-     "text": "[Inicio](https://www.fedegan.org.co/) ›\n[Servicios](/seccion/servicios-fedegan) ›\nMonitoreo de Fincas"
-    },
     {
      "t": "h4",
      "text": "Servicio especializado para el monitoreo de fincas"
@@ -14720,10 +14760,6 @@
    "title": "Centros de Servicios Tecnológicos Ganaderos Tecnig@n",
    "source": "https://www.fedegan.org.co/servicios/centros-de-servicios-tecnologicos-ganaderos-tecnign",
    "blocks": [
-    {
-     "t": "p",
-     "text": "[Inicio](https://www.fedegan.org.co/) ›\n[Servicios](/seccion/servicios-fedegan) ›\nCentros de Servicios Tecnológicos Ganaderos Tecnig@n"
-    },
     {
      "t": "p",
      "text": "Los **Centros de Servicios Tecnológicos Ganaderos TECNIG@N** son el instrumento diseñado, por el PEGA 2019, para apoyar los programas y servicios orientados a mejorar la productividad, la rentabilidad y, por ende, la competitividad del ganadero en su labor diaria. Hay 30 **TECNIG@N** en funcionamiento en todo el país que operan como una red para atender al ganadero en cualquier lugar del país."
@@ -14886,6 +14922,728 @@
    "sections": [
     "sala-de-prensa"
    ]
+  },
+  "campana-de-fomento-al-consumo-de-carne": {
+   "title": "Campaña de fomento al consumo de carne",
+   "source": "https://www.fedegan.org.co/campana-de-fomento-al-consumo-de-carne",
+   "blocks": [
+    {
+     "t": "p",
+     "text": "Así lo expresan cuatro cuñas que comenzarán a transmitirse desde hoy –noviembre 20 de 2019– en las emisoras radiales a nivel nacional en una campaña de Fedegán-FNG para contrarrestar información errada sobre su consumo y recordar el aporte nutritivo que hace la carne de res al cuerpo humano."
+    },
+    {
+     "t": "p",
+     "text": "Comer carne de res tres veces a la semana le permitirá mantener las defensas del cuerpo y estar más activo, es el consejo que realizan médicos especialistas de gran trayectoria en pediatría y en medicina cardiovascular, a través de diversas campañas radiales que comienzan a emitirse hoy en las principales emisoras radiales en todo el territorio colombiano producidos por Fedegán y el Fondo Nacional del Ganado."
+    },
+    {
+     "t": "p",
+     "text": "La campaña del gremio cúpula de la ganadería nacional emite estos mensajes basados en conceptos netamente científicos, todo para que las personas asimilen que la ingesta de carne de res en la dieta alimentaria solo aporta beneficios a la salud."
+    },
+    {
+     "t": "p",
+     "text": "Los mensajes radiales son diversos, pero en general, todos informan las bondades y la inmensa carga nutritiva que contiene este alimento al ser consumido por chicos y grandes."
+    },
+    {
+     "t": "h4",
+     "text": "Cuña radial 1"
+    },
+    {
+     "t": "h4",
+     "text": "Cuña radial 2"
+    },
+    {
+     "t": "h4",
+     "text": "Cuña radial 3"
+    },
+    {
+     "t": "h4",
+     "text": "Cuña radial 4"
+    },
+    {
+     "t": "p",
+     "text": "A continuación les compartimos los comerciales que se están mostrando en los medios de comunicación."
+    },
+    {
+     "t": "h4",
+     "text": "Comercial 1"
+    },
+    {
+     "t": "p",
+     "text": "Su navegador no soporta contenido multimedia."
+    },
+    {
+     "t": "h4",
+     "text": "Comercial 2"
+    },
+    {
+     "t": "p",
+     "text": "Su navegador no soporta contenido multimedia."
+    },
+    {
+     "t": "p",
+     "text": "Y por ultimo les motramos las imágenes publicitarias que acompañan esta campaña en las redes sociales."
+    }
+   ],
+   "sections": [
+    "pagos-y-campanas"
+   ],
+   "parent": "recaudo-de-la-cuota-de-fomento-ganadero-y-lechero"
+  },
+  "campana-de-fomento-al-consumo-de-leche": {
+   "title": "Campaña de fomento al consumo de Leche",
+   "source": "https://www.fedegan.org.co/campana-de-fomento-al-consumo-de-leche",
+   "blocks": [
+    {
+     "t": "p",
+     "text": "El gremio cúpula de la ganadería nacional lanza la campaña del fomento al consumo de leche. Por eso, no dejes de tomar leche. Disfrútala como y cuando quieras."
+    },
+    {
+     "t": "h4",
+     "text": "Comercial 1"
+    },
+    {
+     "t": "p",
+     "text": "Su navegador no soporta contenido multimedia."
+    },
+    {
+     "t": "h4",
+     "text": "Comercial 2"
+    },
+    {
+     "t": "p",
+     "text": "Su navegador no soporta contenido multimedia."
+    },
+    {
+     "t": "h4",
+     "text": "Comercial 3"
+    },
+    {
+     "t": "embed",
+     "text": "https://www.youtube.com/embed/F3q62N04b9E"
+    }
+   ],
+   "sections": [
+    "pagos-y-campanas"
+   ],
+   "parent": "recaudo-de-la-cuota-de-fomento-ganadero-y-lechero"
+  },
+  "metodologia-para-la-autoevaluacion-del-sello-ambiental-colombiano": {
+   "title": "Metodología para la autoevaluación del Sello Ambiental Colombiano",
+   "source": "https://www.fedegan.org.co/metodologia-para-la-autoevaluacion-del-sello-ambiental-colombiano",
+   "blocks": [
+    {
+     "t": "p",
+     "text": "La metodología para la autoevaluación del Sello Ambiental Colombiano es un modelo que hemos realizado para evaluar el cumplimiento de los criterios que establece la norma técnica NTC 6550:2021."
+    },
+    {
+     "t": "p",
+     "text": "Etiquetas ambientales Tipo I. Sello Ambiental Colombiano (SAC). Criterios para la ganadería sostenible bovina y bufalina."
+    },
+    {
+     "t": "p",
+     "text": "Aquí encontrará la matriz de autoevaluación y sus respectivas instrucciones."
+    },
+    {
+     "t": "p",
+     "text": "Descargue el archivo **[haciendo clic aquí](https://storage.googleapis.com/static-fedegan/publicaciones/2025/Fundagan-metodologia/METODOLOGIA-SAC-NTC-6550-2021.xlsx)**"
+    }
+   ],
+   "sections": [
+    "pagos-y-campanas"
+   ],
+   "parent": "recaudo-de-la-cuota-de-fomento-ganadero-y-lechero"
+  },
+  "abc-seguridad-ganadera-frentes-solidarios-de-seguridad-y-paz": {
+   "title": "ABC Seguridad Ganadera - Frentes Solidarios de Seguridad y Paz",
+   "source": "https://www.fedegan.org.co/abc-seguridad-ganadera-frentes-solidarios-de-seguridad-y-paz",
+   "blocks": [
+    {
+     "t": "p",
+     "text": "La cartilla “ABC de la Seguridad Ganadera – Frentes Solidarios de Seguridad y Paz” es una herramienta fácil y “de bolsillo”, no solo para que los ganaderos conozcan nuestra propuesta, sino para que se informen sobre los principales delitos que afectan a la ganadería y la forma de prevenirlos o de reaccionar ante ellos."
+    }
+   ],
+   "sections": [
+    "pagos-y-campanas"
+   ],
+   "parent": "recaudo-de-la-cuota-de-fomento-ganadero-y-lechero"
+  },
+  "noticias/convenios-fedegan": {
+   "title": "Convenios Fedegán",
+   "source": "https://www.fedegan.org.co/noticias/convenios-fedegan",
+   "blocks": [
+    {
+     "t": "p",
+     "text": "Publicado por Fedegán on Wednesday, 15 April 2026"
+    },
+    {
+     "t": "p",
+     "text": "FEDEGÁN se une con tres aliados estratégicos para responder a las necesidades clave del sector."
+    },
+    {
+     "t": "h4",
+     "text": "¡NO SE LOS PIERDA!"
+    },
+    {
+     "t": "h4",
+     "text": "[Consultar Ganadero](https://sagari.fedegan-fng.org.co/publico/)"
+    }
+   ],
+   "sections": [
+    "pagos-y-campanas"
+   ],
+   "parent": "recaudo-de-la-cuota-de-fomento-ganadero-y-lechero"
+  },
+  "reporte-aqui-situaciones-irregulares-en-el-precio-de-la-leche": {
+   "title": "¡¡Reporte AQUÍ!! situaciones irregulares en el precio de la leche",
+   "source": "https://www.fedegan.org.co/reporte-aqui-situaciones-irregulares-en-el-precio-de-la-leche",
+   "blocks": [
+    {
+     "t": "p",
+     "text": "Amigo ganadero, en el siguiente formulario puede reportar lo que esta sucediendo con el acopio y pago del litro de leche. Adjunte un máximo de 3 archivos para su evidencia donde incluye documentos de word, imágenes y video máximo de 2 megas. **No olvide que los campos con * son obligatorios.**"
+    }
+   ],
+   "sections": [
+    "pagos-y-campanas"
+   ],
+   "parent": "recaudo-de-la-cuota-de-fomento-ganadero-y-lechero"
+  },
+  "columna-presidente": {
+   "title": "Columna del Presidente",
+   "source": "https://www.fedegan.org.co/columna-presidente",
+   "blocks": [
+    {
+     "t": "h2",
+     "text": "Columna del Presidente"
+    },
+    {
+     "t": "table",
+     "rows": [
+      [
+       "",
+       "José Félix Lafaurie Rivera, ha realizado investigaciones sobre aspectos sociales y económicos publicadas en medios de comunicación prestigiosos de cobertura nacional e internacional y que han sido objeto de modificaciones en las políticas económicas y sociales del país."
+      ]
+     ]
+    },
+    {
+     "t": "h3",
+     "text": "[ES AHORA O NUNCA](/seccion/columna-presidente/columna-presidente/es-ahora-o-nunca)"
+    },
+    {
+     "t": "p",
+     "text": "Estados Unidos, uno de los grandes consumidores de carne bovina, atraviesa una escasez de ganado sin precedentes en su historia reciente, con un inventario que cayó a 86,2 millones de cabezas, el nivel más bajo en 75 años.\n[más›](/seccion/columna-presidente/columna-presidente/es-ahora-o-nunca)"
+    },
+    {
+     "t": "h3",
+     "text": "[Las finanzas públicas y el campo](/seccion/columna-presidente/columna-presidente/las-finanzas-publicas-y-el-campo)"
+    },
+    {
+     "t": "p",
+     "text": "Un terremoto no pregunta quién gobernaba cuando se deterioraron las finanzas públicas o quién se robó los recursos para gestionar esos riesgos imprevisibles de la naturaleza. Simplemente llega, destruye y obliga al Estado a responder.\n[más›](/seccion/columna-presidente/columna-presidente/las-finanzas-publicas-y-el-campo)"
+    },
+    {
+     "t": "h3",
+     "text": "[Entre lo urgente y lo importante](/seccion/columna-presidente/columna-presidente/entre-lo-urgente-y-lo-importante)"
+    },
+    {
+     "t": "p",
+     "text": "Un terremoto de magnitud 7,2 cambia las prioridades de cualquier gobierno. Hay vidas que proteger, familias que atender, infraestructura que recuperar y comunidades enteras esperando respuestas con urgencia.\n[más›](/seccion/columna-presidente/columna-presidente/entre-lo-urgente-y-lo-importante)"
+    },
+    {
+     "t": "h3",
+     "text": "[El Campo Milagro](/seccion/columna-presidente/columna-presidente/el-campo-milagro)"
+    },
+    {
+     "t": "p",
+     "text": "Esa es la expectativa con que recibimos al gobierno de Abelardo de la Espriella los productores agropecuarios y la población rural, porque el propósito de convertir a esta Patria nuestra en un Milagro de desarrollo económico y social pasa, necesariamente, porque ese milagro empiece en el campo abandonado.\n[más›](/seccion/columna-presidente/columna-presidente/el-campo-milagro)"
+    },
+    {
+     "t": "h3",
+     "text": "[Miguel Santamaría Dávila, marzo de 1933 – julio de 2026](/seccion/columna-presidente/columna-presidente/miguel-santamaria-davila-marzo-de-1933-julio-de-2026)"
+    },
+    {
+     "t": "p",
+     "text": "Llegando a Houston, donde me encuentro, vi el mensaje de Camila Santamaría y luego recibí una llamada de José Miguel, los hijos de Miguel Santamaria Dávila, que tuvieron el hermoso gesto de compartir conmigo la dolorosa noticia del fallecimiento de su padre.\n[más›](/seccion/columna-presidente/columna-presidente/miguel-santamaria-davila-marzo-de-1933-julio-de-2026)"
+    },
+    {
+     "t": "h3",
+     "text": "[Ganó la patria milagro](/seccion/columna-presidente/columna-presidente/gano-la-patria-milagro-0)"
+    },
+    {
+     "t": "p",
+     "text": "El país superó una campaña electoral tensa como pocas, desde las numerosas precandidaturas a las crisis en algunos partidos, el Centro Democrático entre ellos, hasta la victoria de Abelardo de la Espriella; un outsider que triunfa en un país que no olvida el chasco de Rodolfo Hernández, solo que en este caso… sí ganó la patria milagro.\n[más›](/seccion/columna-presidente/columna-presidente/gano-la-patria-milagro-0)"
+    },
+    {
+     "t": "h3",
+     "text": "[Del desastre… a la incertidumbre](/seccion/columna-presidente/columna-presidente/del-desastre-la-incertidumbre)"
+    },
+    {
+     "t": "p",
+     "text": "Teníamos el agua al cuello, y como no estábamos sino el par de viejos, yo le dije a mi esposa: Mujer…, yo no aguanto más. Hágase la voluntad de Dios, y si este es el momento…” Así relató a un medio local Don Pedro, de 71 años, las horas angustiosas que vivió en la casa inundada de su finca, en Tame, Arauca. Se perdieron las herramientas…, los motores…, todo.\n[más›](/seccion/columna-presidente/columna-presidente/del-desastre-la-incertidumbre)"
+    },
+    {
+     "t": "h3",
+     "text": "[«La Impunidad Total»](/seccion/columna-presidente/columna-presidente/la-impunidad-total)"
+    },
+    {
+     "t": "p",
+     "text": "Como si no tuviéramos suficiente con la impunidad de la JEP, las revelaciones de los medios sobre acuerdos secretos entre el Gobierno y bandas criminales –los congelados–, no son apenas otro de tantos escándalos con que este gobierno cierra con “broche de lata” su gestión, sino la evidencia de que, bajo el ropaje de la “Paz Total”, se construía un plan escondido de “Impunidad Total”, amparado en normas para debilitar aún más la justicia y favorecer a los criminales que compartían tarima con el Gobierno.\n[más›](/seccion/columna-presidente/columna-presidente/la-impunidad-total)"
+    },
+    {
+     "t": "h2",
+     "text": "Páginas"
+    },
+    {
+     "t": "li",
+     "text": "1"
+    },
+    {
+     "t": "li",
+     "text": "[2](https://www.fedegan.org.co/columna-presidente?page=1)"
+    },
+    {
+     "t": "li",
+     "text": "[3](https://www.fedegan.org.co/columna-presidente?page=2)"
+    },
+    {
+     "t": "li",
+     "text": "[4](https://www.fedegan.org.co/columna-presidente?page=3)"
+    },
+    {
+     "t": "li",
+     "text": "[5](https://www.fedegan.org.co/columna-presidente?page=4)"
+    },
+    {
+     "t": "li",
+     "text": "…"
+    },
+    {
+     "t": "li",
+     "text": "[siguiente ›](https://www.fedegan.org.co/columna-presidente?page=1)"
+    },
+    {
+     "t": "li",
+     "text": "[última »](https://www.fedegan.org.co/columna-presidente?page=85)"
+    }
+   ],
+   "sections": [
+    "columna-presidente"
+   ]
+  },
+  "columna-presidente/es-ahora-o-nunca": {
+   "title": "ES AHORA O NUNCA",
+   "source": "https://www.fedegan.org.co/columna-presidente/es-ahora-o-nunca",
+   "blocks": [
+    {
+     "t": "p",
+     "text": "Estados Unidos, uno de los grandes consumidores de carne bovina, atraviesa una escasez de ganado sin precedentes en su historia reciente, con un inventario que cayó a 86,2 millones de cabezas, el nivel más bajo en 75 años."
+    },
+    {
+     "t": "p",
+     "text": "Y como el mercado no perdona, la reducción del hato disparó los precios de la carne y de su expresión más popular: la hamburguesa, el “lunch” de la inmensa clase media de Estados Unidos, ante lo cual el olfato político de Trump, con los precios de la carne subiendo y las elecciones de noviembre a la vista, lo llevó a autorizar la importación adicional de 300.000 toneladas de carne bovina en 90 días."
+    },
+    {
+     "t": "p",
+     "text": "No parece, sin embargo, una necesidad pasajera, pues Estados Unidos puede recomponer rápidamente su economía ganadera, pero el crecimiento de la población mundial viene generando una escasez permanente que podría extender las importaciones adicionales más allá de los 90 días."
+    },
+    {
+     "t": "p",
+     "text": "Estados Unidos necesita carne y Colombia tiene ganado, lo cual representa una oportunidad para nuestra ganadería. Con cerca de 30 millones de bovinos y un gran componente de razas cebuinas alimentadas a pasto, tenemos lo que necesita el mercado estadounidense: carne magra para mezclar con sus cortes grasos y abastecer su gigantesco mercado de carne molida; necesidad que no es de poca monta en un país que consume 150 hamburguesas/habitante/año, para un total que ronda los ¡50 mil millones! Lo dicho: Trump parece estar resuelto a ganar las legislativas de noviembre."
+    },
+    {
+     "t": "p",
+     "text": "En este momento, cuando los dos gobiernos negocian un Acuerdo de Comercio Recíproco y muestran interés en avanzar en medio de una coyuntura política también favorable, nuestro ministro de Comercio llevó nuestra carne a esa mesa de negociación para que pueda llegar luego a la mesa de los estadounidenses, pues durante catorce años de vigencia del TLC con ese país, su carne ingresa a Colombia sin que la nuestra logre acceso a ese mercado."
+    },
+    {
+     "t": "p",
+     "text": "Y mientras esperamos, nuestros competidores siguen vendiéndole carne a Estados Unidos y aprovecharán el cupo adicional. Después de grandes logros sanitarios, no podemos perder esta oportunidad, que coincide con mi carta muy reciente a los ministros de Comercio y Agricultura, insistiendo precisamente en la necesidad de abrir ese mercado."
+    },
+    {
+     "t": "p",
+     "text": "En esta ocasión, el tema del acceso al mercado estadounidense no puede seguir patinando entre trámites y estudios mientras otros países ocupan el espacio que hoy se abre; una oportunidad a la que, además, se suma la creciente demanda de China, configurando una oferta insuficiente de carne en los principales mercados."
+    },
+    {
+     "t": "p",
+     "text": "El tema trasciende las exportaciones y es un factor impulsor de la ganadería con implicaciones sociales, pues una demanda sostenida de carne enviaría una señal económica a toda la cadena, hasta llegar al pequeño criador del Caribe y el trópico bajo para acelerar la reconversión de miles de productores que sobreviven ordeñando vacas de cuatro o cinco litros y destetando terneros de apenas 160 kilos. Con un mercado atractivo para la carne, producir a toda leche terneros de 200 kilos o más en menos tiempo, sería un mejor negocio."
+    },
+    {
+     "t": "p",
+     "text": "No pretendemos preferencias ni desconocer exigencias sanitarias. De ahí que los ministerios de Comercio y Agricultura, la Cancillería, el ICA y el INVIMA, de la mano con el gremio ganadero, deben sentarse a evaluar pendientes, con la trazabilidad regionalizada como prioridad inaplazable, como parte de una hoja de ruta con metas y responsables, para ser presentada en la negociación que se adelanta en Washington."
+    },
+    {
+     "t": "p",
+     "text": "Después de catorce años de TLC, nunca las circunstancias habían coincidido de manera tan favorable: Estados Unidos necesita carne, Colombia puede producirla y estamos negociando con ellos. Es ahora… o nunca."
+    }
+   ],
+   "sections": [
+    "columna-presidente"
+   ],
+   "parent": "columna-presidente"
+  },
+  "columna-presidente/las-finanzas-publicas-y-el-campo": {
+   "title": "Las finanzas públicas y el campo",
+   "source": "https://www.fedegan.org.co/columna-presidente/las-finanzas-publicas-y-el-campo",
+   "blocks": [
+    {
+     "t": "p",
+     "text": "Un terremoto no pregunta quién gobernaba cuando se deterioraron las finanzas públicas o quién se robó los recursos para gestionar esos riesgos imprevisibles de la naturaleza. Simplemente llega, destruye y obliga al Estado a responder."
+    },
+    {
+     "t": "p",
+     "text": "¿Qué será de los recursos para reconstruir? Más allá de loque investiguen los organismos de control, el Libro de la Verdad, resultado de un inédito empalme unilateral, tiene respuestas preocupantes sobre dos asuntos que considero estratégicos: las finanzas públicas y el campo."
+    },
+    {
+     "t": "p",
+     "text": "Primero las finanzas. A mayo de 2026, la caja del Gobiernoera de $16 billones de pesos, frente a niveles históricos de entre $30 y $40 billones, con una proyección para fin de año de apenas $7,1 billones."
+    },
+    {
+     "t": "p",
+     "text": "El “déficit primario”, que arroja la diferencia entre lo que el gobierno recibe y lo que gasta sin el servicio de la deuda,pasó del 0,3% en 2023 al 3,4% en 2025, es decir, semultiplicó por diez y significa que Petro gastó 63 billones más de lo que recibió. El déficit total fue del 6,4 % del PIB en 2025, el más alto en décadas, con excepción de 2020, del 7,8% por efectos de la pandemia, el mismo nivel que se estima para 2026. Sin duda, Petro resultó peor que la pandemia."
+    },
+    {
+     "t": "p",
+     "text": "La deuda pública creció más de 360 billones, pero como el problema no es solo cuánto se debe, sino cuánto cuesta deber, esa deuda, concentrada en pesos con tasas entre 13 % y 15%, más del doble de las tasas de la deuda externa, solo en 2025 costó 105 billones."
+    },
+    {
+     "t": "p",
+     "text": "Y ahora vayamos al campo, estratégico por varias razones: Porque su recuperación es condición necesaria para acabar con el narcotráfico y su violencia, más allá del esfuerzo del Estado por perseguir el delito. Porque, ante la situación de las finanzas públicas, no podría ser que la recuperación del campo siga en la lista de las cosas por hacer. Y, finalmente, por el enorme potencial de la producción agropecuaria como factor de recuperación económica."
+    },
+    {
+     "t": "p",
+     "text": "Sin embargo, durante cuatro años se habló de reforma agraria y de millones de hectáreas, un contexto en el que FEDEGÁN firmó con el gobierno un Acuerdo de Tierras para la compra de predios ganaderos. Sin embargo, ese proceso de compra y redistribución con proyectos productivos quedó enredado en la burocracia y hasta en sospechas de corrupción."
+    },
+    {
+     "t": "p",
+     "text": "El Libro de la Verdad registra un caso ilustrativo: La Agencia Nacional de Tierras le anticipó un billón de pesos a la SAE por 537 predios, pero a diciembre de 2025 apenas tres tenían títulos y no podían ser adjudicados formalmente. Al finalizar el gobierno, el 56,2 % de las hectáreas reportadas como entregadas tampoco tenían titularidad."
+    },
+    {
+     "t": "p",
+     "text": "Muy grave, porque una cosa es entregar tierra y otra crear propietarios y productores. Sin título no hay seguridad jurídica; sin ella no hay crédito y, sin crédito, vías, servicios, asistencia técnica y mercados; una parcela entregada modifica una estadística, pero no saca a nadie de la pobreza."
+    },
+    {
+     "t": "p",
+     "text": "De esa toma de conciencia deben partir los grandes cambios de la política agropecuaria: menos preocupación por contar hectáreas y más por convertirlas en factor de generación de ingreso y bienestar."
+    },
+    {
+     "t": "p",
+     "text": "Colombia necesita empresas rurales rentables; aprovechar mejor cada hectárea y producir alimentos para los colombianos, para exportar y generar empleo. Necesita un Estado que facilite la generación de riqueza rural, para que el campo deje de ser parte del problema y recupere su vocación de parte sustancial de las soluciones."
+    },
+    {
+     "t": "p",
+     "text": "Frente a un Estado sin chequera suficiente, aplazar la recuperación decidida del campo es poco menos que… “despreciar la gallina de los huevos de oro”."
+    }
+   ],
+   "sections": [
+    "columna-presidente"
+   ],
+   "parent": "columna-presidente"
+  },
+  "columna-presidente/entre-lo-urgente-y-lo-importante": {
+   "title": "Entre lo urgente y lo importante",
+   "source": "https://www.fedegan.org.co/columna-presidente/entre-lo-urgente-y-lo-importante",
+   "blocks": [
+    {
+     "t": "p",
+     "text": "Un terremoto de magnitud 7,2 cambia las prioridades de cualquier gobierno. Hay vidas que proteger, familias que atender, infraestructura que recuperar y comunidades enteras esperando respuestas con urgencia."
+    },
+    {
+     "t": "p",
+     "text": "Pero gobernar también consiste en que lo urgente no desplace a lo importante…"
+    },
+    {
+     "t": "p",
+     "text": "Y entre lo importante está la suerte de más de 300.000 productores de leche, en su mayoría pequeños ganaderos que hacen parte de la pobreza rural y hoy enfrentan una dura realidad, pues desde enero, en virtud del TLC con Estados Unidos, los productos lácteos son de libre comercio entre los dos países, sin cupos ni aranceles. El efecto, hoy apalancado por el dólar barato, es realmente amenazante: Al mes de mayo las importaciones aumentaron 56,4 % frente al mismo corte de 2025 y, solo desde Estados Unidos, ingresaron 18.820 toneladas de leche en polvo, frente a 25.016 durante todo 2025."
+    },
+    {
+     "t": "p",
+     "text": "Es una amenaza anunciada que además avanza. En 2028 habrá también desgravación total con la Unión Europea, lo cual amerita la acción conjunta de los ministerios de Agricultura y de Comercio para utilizar los instrumentos de defensa comercial cuando haya lugar y para vigilar las reglas de origen frente a las crecientes importaciones desde Chile y Bolivia."
+    },
+    {
+     "t": "p",
+     "text": "Por eso le escribí a los ministros de Agricultura, Indalecio Dangond, y de Comercio, Mauricio Gómez, pues ambos, junto con la Cancillería, pueden convertir la crisis en oportunidad, haciendo causa común para que el Tratado con Estados Unidos no siga siendo un embudo con el lado angosto para la ganadería colombiana."
+    },
+    {
+     "t": "p",
+     "text": "De una parte, después de 14 años de esfuerzos sanitarios, productivos y diplomáticos, es imperativo abrir el que debería ser el mercado natural para nuestra carne bovina: Estados Unidos, lo que representaría una oportunidad para el Caribe colombiano, no solo por la enorme ventaja comparativa de la vecindad, sino por sus extensas llanuras interiores donde hoy la ganadería es fuente de subsistencia para miles de familias a partir del llamado “doble propósito”."
+    },
+    {
+     "t": "p",
+     "text": "Las razas presentes en el Caribe tienen vocación cárnica, con buenos terneros que podrían ser excelentes si se criaran “a toda leche”, pero la de sus vacas, que no pasa de cinco litros diarios, es compartida para vender una parte y ayudar a los gastos. Así las cosas, un ternero que se desteta con alrededor de 160 kilos, podría salir con al menos 200 para los procesos de levante y ceba. Eso es ineficiencia y perpetúa bajos ingresos."
+    },
+    {
+     "t": "p",
+     "text": "Abrir el mercado estadounidense podría empezar a cambiar esa realidad, pues ante una demanda de buenos precios para más y mejores terneros con destino a la exportación de carne, muchos productores dejarán de ordeñar sus vacas para entregarles toda la leche a los terneros. Es un asunto de especialización."
+    },
+    {
+     "t": "p",
+     "text": "Para la ganadería del altiplano, con razas de vocación lechera, sustituir la producción del Caribe sería también una gran oportunidad, no solo de crecimiento a partir de un mayor acopio por parte de la industria láctea, sino para neutralizar el efecto de las importaciones y explorar mercados externos. Una vez más, es un asunto de especialización."
+    },
+    {
+     "t": "p",
+     "text": "Si a este enroque productivo le sumamos genética, buenas prácticas y sostenibilidad ambiental, que es una nueva exigencia de los mercados, estaríamos ante una verdadera reorganización estratégica de la ganadería colombiana, no solo en lo productivo, sino en lo espacial y en su orientación comercial. Cada quien a lo suyo, a lo que mejor hace y en donde mejor lo hace, para mercados claramente segmentados."
+    },
+    {
+     "t": "p",
+     "text": "El disparador de esta revolución sigue siendo, sin embargo, la apertura del mercado de Estados Unidos a la carne colombiana."
+    },
+    {
+     "t": "p",
+     "text": "Es algo que no solo es importante…, es también urgente."
+    }
+   ],
+   "sections": [
+    "columna-presidente"
+   ],
+   "parent": "columna-presidente"
+  },
+  "columna-presidente/el-campo-milagro": {
+   "title": "El Campo Milagro",
+   "source": "https://www.fedegan.org.co/columna-presidente/el-campo-milagro",
+   "blocks": [
+    {
+     "t": "p",
+     "text": "Esa es la expectativa con que recibimos al gobierno de Abelardo de la Espriella los productores agropecuarios y la población rural, porque el propósito de convertir a esta Patria nuestra en un Milagro de desarrollo económico y social pasa, necesariamente, porque ese milagro empiece en el campo abandonado."
+    },
+    {
+     "t": "p",
+     "text": "La esencia del milagro es obrar sobre situaciones extremas con soluciones que parecen imposibles, y esa es la situación del campo: extrema y ávida de soluciones ofrecidas y nunca cumplidas, mas no imposibles. Yo diría que el Campo Milagro, tiene otro nombre: verdadera voluntad política."
+    },
+    {
+     "t": "p",
+     "text": "En Colombia, la situación extrema del campo se asocia, por muchos y con mucho facilismo, con la violencia como causa principal. Igualmente, el narcotráfico y su entorno de ilegalidad total se presume como causa de esa violencia, cuando apenas es uno de sus actores."
+    },
+    {
+     "t": "p",
+     "text": "La seguridad se convierte entonces en prioridad; y la verdad que lo es, más no como objetivo final ni solución definitiva, sino como condición sine qua non para superar la violencia y, por ahí mismo, también el atraso rural. En ese orden de ideas, ni la violencia ni la situación extrema de campo se explican con la falta de seguridad (léase justicia y presencia policial y militar). Su verdadera explicación, su verdadera causa es la falta… de todo…, es el abandono."
+    },
+    {
+     "t": "p",
+     "text": "Y donde falta todo, el milagro es vistoso y transformador. La seguridad y una justicia efectiva que persiga y castigue a los bandidos, abrirá caminos a la inversión y el desarrollo rural, pero hay otros caminos por abrir: “Vías decentes para el campo” y “conectividad rural” deberían ser programas prioritarios para romper el aislamiento a que está condenada media Colombia."
+    },
+    {
+     "t": "p",
+     "text": "Ahí empieza el Milagro: reactivación de la producción agropecuaria con salida a los mercados, sumada a una presencia integral del Estado: Crédito de fomento con asistencia técnica exclusivo para productores rurales; política de asociatividad para pequeños productores; agua y energía para la producción rural; además de presencia social con programas de salud, educación y vivienda en el campo y para el campo."
+    },
+    {
+     "t": "p",
+     "text": "La ganadería espera también un milagro. Han pasado 20 años desde la firma del TLC con Estados Unidos y 14 años desde su entrada en vigor, sin que, a pesar de los inmensos esfuerzos por lograr admisibilidad para la carne colombiana, hayamos podido colocar un solo kilo en ese mercado, mientras, por otro lado, más de 77.000 toneladas de leche entraron al país en 2025 desde Estados Unidos, agravando la difícil situación de nuestros productores."
+    },
+    {
+     "t": "p",
+     "text": "Para la ganadería de la Costa Caribe, con cerca de 9 millones de animales, Estados Unidos debería ser un mercado natural para nuestra carne, por el precio competitivo, pues el costo de producción de nuestra ganadería en pastoreo es menor al de la ganadería texana a base de maíz; por nuestra calidad genética, por la cercanía a los puertos, etc."
+    },
+    {
+     "t": "p",
+     "text": "Ese milagro, que no debería ser excluyente del mercado chino para la carne y para cualquier otro producto colombiano, no solo representaría un impulso transformador para la ganadería colombiana, sino un factor importante de diversificación de la canasta exportadora y de generación de divisas, además de un dinamizador del desarrollo rural para los departamentos caribes que cuentan con la ganadería como una de sus principales actividades productivas."
+    },
+    {
+     "t": "p",
+     "text": "La solución definitiva a la trazabilidad con una reforma profunda del ICA, el fomento decidido a la Ganadería Sostenible y otros retos que no me caben en estas líneas, son parte de esa ganadería moderna y transformadora que hará parte del Campo Milagro que los productores agropecuarios, la población rural y el país se merecen."
+    }
+   ],
+   "sections": [
+    "columna-presidente"
+   ],
+   "parent": "columna-presidente"
+  },
+  "columna-presidente/miguel-santamaria-davila-marzo-de-1933-julio-de-2026": {
+   "title": "Miguel Santamaría Dávila, marzo de 1933 – julio de 2026",
+   "source": "https://www.fedegan.org.co/columna-presidente/miguel-santamaria-davila-marzo-de-1933-julio-de-2026",
+   "blocks": [
+    {
+     "t": "p",
+     "text": "Llegando a Houston, donde me encuentro, vi el mensaje de Camila Santamaría y luego recibí una llamada de José Miguel, los hijos de Miguel Santamaria Dávila, que tuvieron el hermoso gesto de compartir conmigo la dolorosa noticia del fallecimiento de su padre."
+    },
+    {
+     "t": "p",
+     "text": "La noticia de la muerte de Miguel Santamaría, cariñosamente “Miguel” para estas líneas y para mis recuerdos, me estremeció profundamente y, entonces, se agolparon los sentimientos, que iniciaron, cuando lo conocí, por el respeto, hicieron tránsito a la admiración, hasta llegar a la amistad y a un afecto genuino. Aunque la vida nos haya negado más momentos compartidos, su charla era un verdadero deleite."
+    },
+    {
+     "t": "p",
+     "text": "Miguel fue el primer presidente de la Federación Colombiana de Ganaderos, FEDEGÁN, después de nacer oficialmente a la institucionalidad gremial colombiana el 13 de diciembre de 1963, y por supuesto que me honra ser uno de sus sucesores."
+    },
+    {
+     "t": "p",
+     "text": "Con el gracejo muy cachaco que era de su esencia, me contó alguna vez la anécdota de su llegada a FEDEGÁN, cuando, un día cualquiera, a comienzos de 1964, tres amigos, Augusto Espinosa, Oliverio Lara y Pepe Lafaurie –José Vicente, mi padre– aparecieron por su casa a proponerle gerenciar una organización gremial recién nacida. Miguel, quien para entonces no distinguía entre un ternero y un perro grande, preguntó muchas cosas y, entre ellas, por los recursos con que contaría y… por su sueldo. ¡Cómo te parece ala…, no tenían un peso!, me dijo, mientras soltaba una de sus espontáneas carcajadas."
+    },
+    {
+     "t": "p",
+     "text": "Ya sea por su amistad con quienes lideraban esa iniciativa quijotesca, por intuición o por el reto de organizar el gremio nacional que levantaría la bandera en defensa de la propiedad privada de la tierra, frente a la reforma agraria expropiatoria de los gobiernos liberales de entonces; por lo que haya sido…, Miguel aceptó."
+    },
+    {
+     "t": "p",
+     "text": "Lo que vino después fue realmente épico. Miguel aplicó su liderazgo y bonhomía para conseguir apoyo de recursos públicos, en una primera aproximación a lo que 30 años después sería la parafiscalidad ganadera. Con esos recursos desarrolló muchos programas y servicios que hoy reseñan los medios a partir de un video que realizamos en su honor hace tres años, cuando le otorgamos la condecoración que, años atrás, habíamos creado con su nombre: La Gran Gruz al Liderazgo Ganadero Regional Miguel Santamaría Dávila."
+    },
+    {
+     "t": "p",
+     "text": "Porque, a mi juicio, ese fue quizás su mayor logro, el de “constructor de gremios”. Miguel recorrió el país durante diez años, promoviendo a FEDEGÁN como gremio nacional y convenciendo a los ganaderos de la importancia de unirse en comités locales y regionales que, a su vez, confluyeran en la Federación como gremio cúpula."
+    },
+    {
+     "t": "p",
+     "text": "Así que, más que su primer presidente, Miguel se llevó el honor intacto de haber sido “el gran arquitecto” de FEDEGÁN, su constructor durante la primera década de su existencia, hasta llevar a nuestra Federación al reconocimiento nacional e internacional como el gremio más representativo de la ganadería colombiana."
+    },
+    {
+     "t": "p",
+     "text": "Esa reconocida representatividad, que el gobierno Santos pretendió desconocer, tiene un nombre: Miguel Santamaría Dávila, razón de más para defenderla con la entereza con que Miguel la construyó."
+    },
+    {
+     "t": "p",
+     "text": "Quiero destacar otro logro realmente precursor de Miguel: el de unir a los ganaderos con la tecnología de comunicaciones de la época, un propósito que retomé hace varios años y cuya última fase: FEDEGÁN 5.0, lanzaremos en noviembre, en el Congreso Nacional de Ganaderos en Valledupar, un evento donde sentiremos su presencia y, por ello, lo haremos en su honor."
+    },
+    {
+     "t": "p",
+     "text": "Miguel Santamaría Dávila, presidente emérito de FEDEGÁN; su vida se apagó, pero la luz de sus luchas y realizaciones seguirá iluminando la historia de la ganadería colombiana. ¡Gracias Miguel!"
+    }
+   ],
+   "sections": [
+    "columna-presidente"
+   ],
+   "parent": "columna-presidente"
+  },
+  "columna-presidente/gano-la-patria-milagro-0": {
+   "title": "Ganó la patria milagro",
+   "source": "https://www.fedegan.org.co/columna-presidente/gano-la-patria-milagro-0",
+   "blocks": [
+    {
+     "t": "p",
+     "text": "El país superó una campaña electoral tensa como pocas, desde las numerosas precandidaturas a las crisis en algunos partidos, el Centro Democrático entre ellos, hasta la victoria de Abelardo de la Espriella; un outsider que triunfa en un país que no olvida el chasco de Rodolfo Hernández, solo que en este caso… sí ganó la patria milagro."
+    },
+    {
+     "t": "p",
+     "text": "A pesar de la virulencia de los ataques desde el gobierno mismo, de la descarada participación en política del primer mandatario y de la vergonzosa orientación de recursos públicos para darle algún brillo final al Gobierno del Cambio…, ganó la patria milagro."
+    },
+    {
+     "t": "p",
+     "text": "Más allá del estrecho margen, reflejo de la polarización que nos recuerda la victoria del NO en el plebiscito y el asalto de Santos a la democracia, en esta ocasión Petro se quedó sin margen para la trampa, gracias a una organización electoral que brilla en el mundo por su eficiencia y transparencia. Aunque Petro, en una suerte de traición a la patria, hizo lo imposible por deslegitimarla y hasta pedir la anulación de las elecciones por una absurda acusación de intervención extranjera, al final…, caló el mensaje de Bernie Moreno y… ganó esa patria traicionada."
+    },
+    {
+     "t": "p",
+     "text": "Ganó la Patria Milagro de Abelardo y sus propuestas de libertad en todas sus expresiones, de justicia que persiga y castigue el delito, de una economía que, sin olvidar a los verdaderamente vulnerables, entregue menos subsidios y genere más empleos; de seguridad como derecho fundamental y misión del Estado para alcanzar el desarrollo, y de un desarrollo integral, sin sesgos, que logre el milagro de rescatar al campo del abandono, porque la Paz de Colombia pasa necesariamente por la recuperación del campo."
+    },
+    {
+     "t": "p",
+     "text": "Hacia delante, las expectativas son proporcionales al desastre Petro en frentes como la salud, la situación fiscal, la destrucción del sistema minero energético y de Ecopetrol, la empresa más estratégica del país; la desmoralización de la Fuerza Pública, la crisis de la Inteligencia y el rezago en equipamiento verdaderamente necesario, mientras el país regresa a niveles agobiantes de inseguridad; la deslegitimación de la justicia en medio de negociaciones con delincuentes que dejan las cárceles como gestores de paz para volver a la guerra; y como siempre, el abandono del campo, disfrazado con la entrega de tierras desnudas, sin asistencia, sin crédito, sin salud y educación…, sin vías decentes…, sin nada."
+    },
+    {
+     "t": "p",
+     "text": "No tengo espacio para tantos vacíos y retos de reconstrucción y avance. FEDEGÁN, por su parte, en representación de los ganaderos y como gremio de la producción agropecuaria, ha preparado un “Libro blanco” que entregaremos al presidente, no solo como testimonio de promesas incumplidas, sino como expresión de nuestras propias expectativas y de colaboración con un gobierno al que le entregamos nuestra confianza."
+    },
+    {
+     "t": "p",
+     "text": "Porque el milagro no caerá del cielo; será resultado de un liderazgo claro que convoque a los mejores para concebirlo y dirigirlo, y a todo el país para construirlo. Las “patrias milagro” no son un embeleco del presidente electo; existen y son posibles cuando los pueblos se deciden a construirlas."
+    },
+    {
+     "t": "p",
+     "text": "En esta coyuntura, cómo no recordar la famosa proclama de Ortega y Gasset: “¡A las cosas!... Déjense de cuestiones previas personales, de suspicacias, de narcisismos. No presumen ustedes el brinco magnífico que dará este país el día que se resuelvan de una vez, bravamente, a abrirse el pecho a las cosas, a ocuparse y preocuparse de ellas directamente y sin más, en vez de vivir a la defensiva, de tener trabadas y paralizadas sus potencias espirituales, que son egregias”."
+    },
+    {
+     "t": "p",
+     "text": "A lo colombiano: Dejémonos de pendejadas y a trabajar por el futuro."
+    }
+   ],
+   "sections": [
+    "columna-presidente"
+   ],
+   "parent": "columna-presidente"
+  },
+  "columna-presidente/del-desastre-la-incertidumbre": {
+   "title": "Del desastre… a la incertidumbre",
+   "source": "https://www.fedegan.org.co/columna-presidente/del-desastre-la-incertidumbre",
+   "blocks": [
+    {
+     "t": "p",
+     "text": "Teníamos el agua al cuello, y como no estábamos sino el par de viejos, yo le dije a mi esposa: Mujer…, yo no aguanto más. Hágase la voluntad de Dios, y si este es el momento…” Así relató a un medio local Don Pedro, de 71 años, las horas angustiosas que vivió en la casa inundada de su finca, en Tame, Arauca. Se perdieron las herramientas…, los motores…, todo."
+    },
+    {
+     "t": "p",
+     "text": "Solo en Tame la alcaldía reportó 1.613 familias y 5.718 personas damnificadas, en tanto que las cifras de la UNGRD para todo el departamento dan cuenta de más de 9.000 familias afectadas y 6.000 más en Casanare. En toda la región, sumando Norte de Santander y Boyacá, la cifra sobrepasa las 16.000 familias, además de puentes colapsados, vías destrozadas, acueductos inservibles, niños sin escuela…"
+    },
+    {
+     "t": "p",
+     "text": "No ha sido fácil dimensionar la magnitud de la tragedia en una región rural y eminentemente ganadera, que suma 3.820.000 animales entre Arauca y Casanare, según datos del DANE soportados en cifras certificadas de vacunación suministradas por Fedegán. Sin embargo, con información muy preliminar, los técnicos de Fedegán han logrado establecer más de 191.000 animales desplazados en casi 233.000 hectáreas y más de 2.000 productores, que no solo perdieron animales, sino corrales, cercas, acueductos, herramientas, como Don Pedro, y lo más grave, sus tierras quedarán convertidas en lodazales cuando bajen las aguas y miles de hectáreas deberán ser renovadas desde cero."
+    },
+    {
+     "t": "p",
+     "text": "Y mientras en el oriente no escampa en el norte no llueve. Solamente en Sucre, por las altas temperaturas y la sequía extrema, han muerto más de 5.000 animales y por ahí pasa la cuenta, pues hay un gran subregistro entre los pequeños productores, que son el 70% de los 50.000 dedicados a la ganadería en el departamento."
+    },
+    {
+     "t": "p",
+     "text": "FEDEGÁN, al igual que los gremios ganaderos del oriente y los de la región Caribe, disparó las alarmas y, frente al riesgo de muerte y enfermedad de los animales, y la caída drástica de los ingresos, el reclamo es uno solo: ¿Dónde está el Gobierno?, ¿acaso esperando con los brazos cruzados a que termine su tiempo? Fueron cuatro años de peroratas presidenciales por el mundo, con un autoproclamado liderazgo internacional por la vida y la salvación del planeta, pero de soluciones aquí, en su tierra, nada; de prevención y reacción contra desastres predecibles, nada, porque la platica para gestionar ese riesgo se refundió entre la corrupción."
+    },
+    {
+     "t": "p",
+     "text": "¿Qué piden los productores agropecuarios? Recojo la propuesta de los ganaderos de Casanare y Arauca, muy en la línea de la que FEDEGÁN le presentó al Gobierno a raíz del desastre invernal en Córdoba. A partir de un censo de damnificados: 1. Reestructuración de créditos con 12 meses de tiempo muerto y hasta 5 años de plazo, con tasa preferencial o subsidiada. 2. Devolución de IVA en compra de insumos agropecuarios durante 12 meses. 3. Créditos con tasa diferencial, 12 meses de tiempo muerto y plazo extendido hasta 8 años para recuperación de praderas y de infraestructura de producción."
+    },
+    {
+     "t": "p",
+     "text": "¿Qué piden adicionalmente los ganaderos? Algo que funcionó en el pasado con éxito, a partir de un convenio con FEDEGÁN para la compra, almacenamiento y distribución subsidiada de silos y heno principalmente, porque los animales… no comen discursos. De hecho, la Junta Directiva de FEDEGÁN ya se reunió con el ministro designado, Indalecio Dangond, y los dos desastres climáticos fueron, por supuesto, tema obligado."
+    },
+    {
+     "t": "p",
+     "text": "Esperamos soluciones, para que a la frustración del desastre no le sumemos la incertidumbre frente a la recuperación."
+    },
+    {
+     "t": "p",
+     "text": "@jflafaurie"
+    }
+   ],
+   "sections": [
+    "columna-presidente"
+   ],
+   "parent": "columna-presidente"
+  },
+  "columna-presidente/la-impunidad-total": {
+   "title": "«La Impunidad Total»",
+   "source": "https://www.fedegan.org.co/columna-presidente/la-impunidad-total",
+   "blocks": [
+    {
+     "t": "p",
+     "text": "Como si no tuviéramos suficiente con la impunidad de la JEP, las revelaciones de los medios sobre acuerdos secretos entre el Gobierno y bandas criminales –los congelados–, no son apenas otro de tantos escándalos con que este gobierno cierra con “broche de lata” su gestión, sino la evidencia de que, bajo el ropaje de la “Paz Total”, se construía un plan escondido de “Impunidad Total”, amparado en normas para debilitar aún más la justicia y favorecer a los criminales que compartían tarima con el Gobierno."
+    },
+    {
+     "t": "p",
+     "text": "Por esa razón, María Fernanda Cabal acudió nuevamente a la Corte Constitucional para demandar la Ley 2272 de 2022, mal llamada de “Paz Total”, por sus graves vicios de trámite y por las facultades inconstitucionales que le otorgó al Ejecutivo."
+    },
+    {
+     "t": "p",
+     "text": "Los vicios de trámite fueron de bulto. La Ley nació en una plenaria casi clandestina, pasada la medianoche y citada con quince minutos de antelación, para votar una conciliación que revivía artículos derrotados. Además de omitir el concepto previo del Consejo Superior de Política Criminal, aquello fue una burla a la deliberación democrática, pues se forzó una conciliación que desconoció la voluntad de la Cámara, que ya había negado unas facultades exorbitantes al Ejecutivo."
+    },
+    {
+     "t": "p",
+     "text": "Tales facultades exorbitantes y, por ello, inconstitucionales, diluyeron la diferencia entre negociación política y sometimiento a la justicia, aunque, si me preguntan, ya no debería existir sino la segunda, porque ningún grupo armado dedicado al narcotráfico –y todos lo están– merece la prerrogativa de una negociación política."
+    },
+    {
+     "t": "p",
+     "text": "El último intento, en el cual inclusive participé, fue con el ELN, pero ya está bien, pues la realidad es que hace años que en Colombia no existen “organizaciones insurgentes”, y no podemos repetir la vergüenza de la entrega total del Estado de Derecho que protagonizó Santos en las negociaciones con las Farc, con asalto a la democracia incluido por el desconocimiento de la voluntad popular en las urnas. De otra parte, la Ley 2272 más parece un manual práctico para sacar bandidos de las cárceles a negociar la paz mientras hacen la guerra."
+    },
+    {
+     "t": "p",
+     "text": "De ahí la importancia de que esa norma se caiga por dictamen de inexequibilidad, para lo cual es menester que la Corte Constitucional, sin abandonar la consideración “en abstracto” de las normas frente al texto de la Carta, vuelva un poco los ojos a la realidad “concreta” de violencia que vive el país y a la urgencia de perseguirla con efectividad. Cabe recordar que, en su momento (2023), la Procuraduría General de la Nación solicitó a la Corte declarar la inexequibilidad total de la norma."
+    },
+    {
+     "t": "p",
+     "text": "Abora bien, el presidente electo, como responsable exclusivo de la preservación del orden público y, por ello, de la dirección de los procesos de paz (Ley 418/97, art. 10), ha anunciado la suspensión de toda negociación en curso y la derogatoria de todas las providencias de suspensión de órdenes de captura, con lo cual se podría decir que la Ley 2272 de 2022, de la Paz Total, o mejor, de la Impunidad Total, se caería por sustracción de materia."
+    },
+    {
+     "t": "p",
+     "text": "Sin embargo, una sentencia de inexequibilidad no sería apenas simbólica, sino el mensaje social de que la Ley, como expresión del Orden que pregona nuestro escudo y norma máxima de convivencia, no responde solamente a manipulados procesos legislativos y fríos exámenes de constitucionalidad en abstracto, sino a la realidad, expectativas y angustias de los ciudadanos …"
+    },
+    {
+     "t": "p",
+     "text": "Porque, además, en nuestro caso de paz esquiva y crónica violencia, ese ciudadano que la cumple…, también espera que la ley lo defienda de quienes no la acatan."
+    },
+    {
+     "t": "p",
+     "text": "Nota Bene: Hablando de impunidad total, Timochenko en España… sin comentarios."
+    },
+    {
+     "t": "p",
+     "text": "@jflafaurie"
+    }
+   ],
+   "sections": [
+    "columna-presidente"
+   ],
+   "parent": "columna-presidente"
   }
  }
 }

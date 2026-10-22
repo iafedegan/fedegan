@@ -4,20 +4,20 @@ import { Container } from "@/components/ui/Container";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
-import { ContactForm } from "@/components/blocks/ContactForm";
+import { contacto, pqrsdForm } from "@/content/accesos";
 
 export const metadata: Metadata = { title: "Contacto" };
 
 const channels = [
-  { icon: Phone, label: "Teléfono", value: "(601) 578 2020", href: "tel:+576015782020" },
+  { icon: Phone, label: "Teléfono", value: contacto.telefono, href: contacto.telefonoHref },
   { icon: Mail, label: "Correo", value: "fedegan@fedegan.org.co", href: "mailto:fedegan@fedegan.org.co" },
   {
     icon: MapPin,
     label: "Sede principal",
-    value: "Calle 37 # 14 - 31, Bogotá D.C.",
+    value: contacto.direccion,
     href: "https://www.google.com/maps/search/?api=1&query=Calle+37+%23+14-31+Bogot%C3%A1",
   },
-  { icon: Clock, label: "Horario", value: "Lunes a viernes, 8:00 a.m. a 5:00 p.m." },
+  { icon: Clock, label: "Horario", value: contacto.horario },
 ];
 
 export default function ContactoPage() {
@@ -30,7 +30,7 @@ export default function ContactoPage() {
         meta="PQRSD"
         image="/headers/servicios.jpg"
         imagePos="50% 45%"
-        facts={["Lunes a viernes", "8:00 a.m. – 5:00 p.m.", "Bogotá D.C."]}
+        facts={["Lunes a viernes", "8:30 a.m. – 5:30 p.m.", "Bogotá D.C."]}
         breadcrumbs={[{ label: "Contacto" }]}
       />
       <Container className="grid gap-8 py-8 sm:gap-10 sm:py-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-14">
@@ -75,13 +75,29 @@ export default function ContactoPage() {
           </Card>
         </aside>
 
-        <Card hover={false}>
-          <div className="p-6 sm:p-9">
-            <h2 className="font-[var(--font-display)] text-2xl font-bold text-[var(--text)]">Escríbanos</h2>
-            <p className="mb-6 mt-1.5 text-sm text-[var(--text-muted)]">Cuéntenos su solicitud y le responderemos por correo.</p>
-            <ContactForm />
+        <div className="flex flex-col gap-5">
+          <Card hover={false} accent="216,181,88">
+            <div className="flex flex-col items-start gap-4 p-6 sm:p-8">
+              <h2 className="font-[var(--font-display)] text-2xl font-bold text-[var(--text)]">Radique su solicitud</h2>
+              <p className="leading-relaxed text-[var(--text-muted)]">
+                Las peticiones, quejas, reclamos, sugerencias y denuncias se radican en el formulario oficial de FEDEGÁN-FNG. Recibirá un número de radicado para el seguimiento.
+              </p>
+              <Button href={pqrsdForm} external>Abrir el formulario PQRSD</Button>
+            </div>
+          </Card>
+          <div>
+            <h2 className="mb-3 font-[var(--font-display)] text-xl font-bold text-[var(--text)]">O escriba al correo que corresponde</h2>
+            <ul className="grid gap-3 sm:grid-cols-2">
+              {contacto.correos.map((c) => (
+                <li key={c.email} className="mx-card flex flex-col gap-1.5 !p-5">
+                  <p className="text-[0.7rem] font-bold uppercase tracking-[0.16em] text-[var(--fg-lime-500)]">{c.label}</p>
+                  <a href={`mailto:${c.email}`} className="break-all font-bold text-[var(--text)] hover:text-[var(--fg-lime-400)]">{c.email}</a>
+                  <p className="text-sm leading-relaxed text-[var(--text-muted)]">{c.text}</p>
+                </li>
+              ))}
+            </ul>
           </div>
-        </Card>
+        </div>
       </Container>
     </>
   );

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { ArrowUpRight, ExternalLink, FileText } from "lucide-react";
+import { ArrowRight, ArrowUpRight, ExternalLink, FileText } from "lucide-react";
 import type { LegacyBlock } from "@/content/legacy";
 
 const TOKEN = /\*\*([^*]+)\*\*|\[([^\]]*)\]\((https?:\/\/[^)\s]+|\/[^)\s]*)\)/g;
@@ -101,6 +101,93 @@ function embedInfo(raw: string): EmbedInfo {
 
 const isLabel = (b: LegacyBlock | undefined) => b?.t === "p" && /:$/.test(b.text ?? "") && (b.text ?? "").length <= 26;
 
+
+type Entry = { title: string; meta: [string, string][]; desc: string[] };
+
+const LINK_ONLY = /^\[([^\]]+)\]\((https?:\/\/[^)\s]+|\/[^)\s]*)\)$/;
+const MORE = /\[más›\]\([^)]*\)|más›/gi;
+
+// Agrupa «título enlazado + datos + descripción» (publicaciones, columnas, comunicados) para pintarlos como tarjetas.
+function takeEntries(blocks: LegacyBlock[], from: number): { entries: Entry[]; next: number } | null {
+  const entries: Entry[] = [];
+  let i = from;
+  while (i < blocks.length && blocks[i].t === "h3" && LINK_ONLY.test((blocks[i].text ?? "").trim())) {
+    const e: Entry = { title: (blocks[i].text ?? "").trim(), meta: [], desc: [] };
+    i++;
+    while (i < blocks.length && blocks[i].t === "p") {
+      const t = (blocks[i].text ?? "").trim();
+      const nx = blocks[i + 1];
+      if (isLabel(blocks[i]) && nx?.t === "p" && !isLabel(nx)) {
+        e.meta.push([t.replace(/:$/, ""), (nx.text ?? "").trim()]);
+        i += 2;
+        continue;
+      }
+      const clean = t.replace(MORE, "").trim();
+      if (clean) e.desc.push(clean);
+      i++;
+    }
+    entries.push(e);
+  }
+  return entries.length >= 2 ? { entries, next: i } : null;
+}
+
+const plain = (s: string) => s.replace(/\[([^\]]*)\]\([^)]*\)/g, "$1");
+
+function EntryGrid({ entries }: { entries: Entry[] }) {
+  return (
+    <ul className="my-6 grid gap-4 md:grid-cols-2 2xl:grid-cols-3">
+      {entries.map((e, n) => {
+        const chips = e.meta.filter(([k]) => /^(año|páginas|paginas|isbn|fecha|edición|edicion)$/i.test(k));
+        const lines = e.meta.filter(([k]) => !/^(año|páginas|paginas|isbn|fecha|edición|edicion)$/i.test(k));
+        const link = LINK_ONLY.exec(e.title);
+        return (
+          <li key={n} className="mx-card mx-lift flex flex-col gap-3 !p-5">
+            <h3 className="font-[var(--font-display)] text-lg font-bold leading-snug text-[var(--text)]">
+              <Inline text={e.title.replace(/^\[(.*)\]\((.*)\)$/, "[$1]($2)")} />
+            </h3>
+            {chips.length > 0 && (
+              <ul className="flex flex-wrap gap-1.5">
+                {chips.map(([k, v]) => (
+                  <li key={k} className="rounded-full border border-[var(--border-strong)] bg-[var(--surface-2)] px-2.5 py-1 text-[0.7rem] font-semibold text-[var(--text-muted)]">
+                    <span className="mr-1 uppercase tracking-[0.1em] text-[var(--text-faint)]">{k}</span>
+                    {v}
+                  </li>
+                ))}
+              </ul>
+            )}
+            {lines.length > 0 && (
+              <dl className="flex flex-col gap-1 text-sm leading-snug">
+                {lines.map(([k, v]) => (
+                  <div key={k} className="flex flex-col sm:flex-row sm:gap-2">
+                    <dt className="shrink-0 text-[0.68rem] font-bold uppercase tracking-[0.12em] text-[var(--text-faint)] sm:w-14 sm:pt-0.5">{k}</dt>
+                    <dd className="line-clamp-2 text-[var(--text-muted)]">
+                      <Inline text={v} />
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            )}
+            {e.desc.length > 0 && <p className="line-clamp-4 text-sm leading-relaxed text-[var(--text-muted)]">{plain(e.desc.join(" "))}</p>}
+            {link && (
+              <span className="mt-auto pt-1">
+                {link[2].startsWith("/") ? (
+                  <Link href={link[2]} className="inline-flex items-center gap-1 text-sm font-bold text-[var(--fg-lime-400)]">
+                    Ver más <ArrowRight size={14} />
+                  </Link>
+                ) : (
+                  <a href={link[2]} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-sm font-bold text-[var(--fg-lime-400)]">
+                    Ver más <ArrowUpRight size={14} />
+                  </a>
+                )}
+              </span>
+            )}
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
+
 // Pinta el texto copiado (títulos, párrafos, listas, tablas y tableros) con el estilo del portal.
 export function LegacyContent({ blocks }: { blocks: LegacyBlock[] }) {
   const nodes: ReactNode[] = [];
@@ -108,12 +195,21 @@ export function LegacyContent({ blocks }: { blocks: LegacyBlock[] }) {
     const b = blocks[i];
     const key = `b${i}`;
 
+    if (b.t === "h3") {
+      const grouped = takeEntries(blocks, i);
+      if (grouped) {
+        nodes.push(<EntryGrid key={key} entries={grouped.entries} />);
+        i = grouped.next - 1;
+        continue;
+      }
+    }
+
     if (b.t === "li") {
       const items: LegacyBlock[] = [];
       while (i < blocks.length && blocks[i].t === "li") items.push(blocks[i++]);
       i--;
       nodes.push(
-        <ul key={key} className="my-5 flex flex-col gap-2.5 pl-1">
+        <ul key={key} className="my-5 flex max-w-4xl flex-col gap-2.5 pl-1">
           {items.map((it, n) => (
             <li key={n} className="relative pl-6 leading-relaxed text-[var(--text-muted)] before:absolute before:left-1 before:top-[0.7em] before:h-1.5 before:w-1.5 before:rounded-full before:bg-[var(--fg-lime-500)]">
               <Inline text={it.text ?? ""} />
@@ -130,7 +226,7 @@ export function LegacyContent({ blocks }: { blocks: LegacyBlock[] }) {
       const cards = rows.some((r) => r.some((c) => c.includes("\n") || c.length > 90));
       nodes.push(
         cards ? (
-          <ul key={key} className="my-6 grid gap-3 sm:grid-cols-2">
+          <ul key={key} className="my-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
             {rows.flat().filter(Boolean).map((c, n) => (
               <li key={n} className="mx-card mx-lift flex flex-col gap-1.5 !p-5 leading-relaxed text-[var(--text-muted)]">
                 <CellLines text={c} />
@@ -218,7 +314,7 @@ export function LegacyContent({ blocks }: { blocks: LegacyBlock[] }) {
     // etiqueta + valor ("Autor:" / "José …") en una sola línea
     if (isLabel(b) && blocks[i + 1]?.t === "p" && !isLabel(blocks[i + 1])) {
       nodes.push(
-        <p key={key} className="my-1.5 leading-relaxed text-[var(--text-muted)]">
+        <p key={key} className="my-1.5 max-w-4xl leading-relaxed text-[var(--text-muted)]">
           <span className="mr-2 text-[0.72rem] font-bold uppercase tracking-[0.14em] text-[var(--text-faint)]">{b.text}</span>
           <Inline text={blocks[i + 1].text ?? ""} />
         </p>,
@@ -228,7 +324,7 @@ export function LegacyContent({ blocks }: { blocks: LegacyBlock[] }) {
     }
 
     nodes.push(
-      <p key={key} className="my-4 text-[1.02rem] leading-[1.75] text-[var(--text-muted)]">
+      <p key={key} className="my-4 max-w-4xl text-[1.02rem] leading-[1.75] text-[var(--text-muted)]">
         <Inline text={b.text ?? ""} />
       </p>,
     );

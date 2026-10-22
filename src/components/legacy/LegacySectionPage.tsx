@@ -4,6 +4,7 @@ import { ArrowRight, ExternalLink, Menu } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { LegacyContent } from "@/components/legacy/LegacyContent";
+import { QuickRail } from "@/components/blocks/Accesos";
 import { journeyPhotos } from "@/content/scroll-world";
 import { excerptOf, findTrail, getLegacyPage, getLegacySection, legacyHref, type NavNode } from "@/content/legacy";
 
@@ -79,7 +80,7 @@ export function LegacySectionPage({ slug, ruta }: { slug: string; ruta: string[]
         imagePos={photo?.pos}
         breadcrumbs={crumbs}
       />
-      <Container className={`grid gap-8 py-5 sm:py-8 ${hasMenu ? "lg:grid-cols-[minmax(0,1fr)_17rem] lg:gap-14" : ""}`}>
+      <Container className={`grid gap-8 py-5 sm:py-8 ${hasMenu ? "lg:grid-cols-[minmax(0,1fr)_18rem] lg:gap-10" : ""}`}>
         {hasMenu && (
         <details className="rounded-[var(--radius-md)] border border-[var(--border-strong)] bg-[var(--surface-2)] lg:hidden">
           <summary className="flex cursor-pointer list-none items-center gap-2 p-4 text-sm font-bold uppercase tracking-[0.1em] text-[var(--fg-lime-400)]">
@@ -91,7 +92,7 @@ export function LegacySectionPage({ slug, ruta }: { slug: string; ruta: string[]
         </details>
         )}
 
-        <article className="min-w-0 max-w-3xl lg:order-first">
+        <article className="min-w-0 lg:order-first">
           {page.blocks.length > 0 ? (
             <LegacyContent blocks={page.blocks} />
           ) : (
@@ -103,7 +104,7 @@ export function LegacySectionPage({ slug, ruta }: { slug: string; ruta: string[]
           {children.length > 0 && (
             <div className="mt-12 border-t border-[var(--border)] pt-10">
               <h2 className="mb-5 font-[var(--font-display)] text-2xl font-bold text-[var(--text)]">Contenido de {section.label}</h2>
-              <ul className="grid gap-4 sm:grid-cols-2">
+              <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
                 {children.map((n) => {
                   const child = getLegacyPage(n.key!);
                   return (
@@ -126,6 +127,8 @@ export function LegacySectionPage({ slug, ruta }: { slug: string; ruta: string[]
             </div>
           )}
 
+          <QuickRail className="mt-10 lg:hidden" />
+
           <p className="mt-12 border-t border-[var(--border)] pt-5 text-sm text-[var(--text-faint)]">
             Contenido copiado del portal actual de FEDEGÁN.{" "}
             <a href={page.source} target="_blank" rel="noopener noreferrer" className="font-semibold text-[var(--fg-lime-400)] underline underline-offset-[3px]">
@@ -136,13 +139,13 @@ export function LegacySectionPage({ slug, ruta }: { slug: string; ruta: string[]
 
         {hasMenu && (
         <aside className="hidden lg:block">
-          <nav
-            aria-label={`Menú de ${section.label}`}
-            className="mx-card sticky top-36 max-h-[calc(100svh-10rem)] overflow-y-auto !p-3"
-          >
-            <p className="px-2.5 pb-2 pt-1 text-[0.7rem] font-bold uppercase tracking-[0.18em] text-[var(--fg-lime-500)]">{section.label}</p>
-            <NavTree nodes={section.tree} slug={slug} current={key} />
-          </nav>
+          <div className="sticky top-36 flex max-h-[calc(100svh-10rem)] flex-col gap-3">
+            <nav aria-label={`Menú de ${section.label}`} className="mx-card min-h-0 flex-1 overflow-y-auto !p-3">
+              <p className="px-2.5 pb-2 pt-1 text-[0.7rem] font-bold uppercase tracking-[0.18em] text-[var(--fg-lime-500)]">{section.label}</p>
+              <NavTree nodes={section.tree} slug={slug} current={key} />
+            </nav>
+            <QuickRail />
+          </div>
         </aside>
         )}
       </Container>

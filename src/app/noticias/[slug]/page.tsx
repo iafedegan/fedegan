@@ -1,3 +1,4 @@
+import { QuickRail } from "@/components/blocks/Accesos";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -40,7 +41,7 @@ export default async function NoticiaDetailPage({ params }: { params: Promise<{ 
   return (
     <article>
       <section className="ph">
-        <Container className="relative max-w-4xl py-5 sm:py-7 lg:py-8">
+        <Container className="relative py-5 sm:py-7 lg:py-8">
           <nav aria-label="Ruta de navegación" className="mb-4 flex flex-wrap items-center gap-1.5 text-xs text-[var(--text-faint)]">
             <Link href="/" className="transition-colors hover:text-[var(--fg-lime-400)]">Inicio</Link>
             <ChevronRight size={12} />
@@ -57,8 +58,8 @@ export default async function NoticiaDetailPage({ params }: { params: Promise<{ 
             {n.ultimaHora && <Badge tone="alert">Última hora</Badge>}
             {n.enVivo && <Badge tone="alert">En vivo</Badge>}
           </div>
-          <h1 className="mt-3 text-balance font-[var(--font-display)] text-2xl font-bold leading-[1.12] text-[var(--text)] sm:text-4xl">{n.title}</h1>
-          <p className="mt-3 max-w-3xl text-base leading-relaxed text-[var(--text-muted)] sm:text-lg">{n.dek}</p>
+          <h1 className="mt-3 max-w-5xl text-balance font-[var(--font-display)] text-2xl font-bold leading-[1.12] text-[var(--text)] sm:text-4xl">{n.title}</h1>
+          <p className="mt-3 max-w-4xl text-base leading-relaxed text-[var(--text-muted)] sm:text-lg">{n.dek}</p>
           <p className="mt-4 text-sm text-[var(--text-faint)]">
             Por <span className="font-semibold text-[var(--text-muted)]">{n.author}</span> · {n.date}
             {updatedLater && <> · Actualizada el {new Intl.DateTimeFormat("es-CO", { day: "numeric", month: "long", year: "numeric", timeZone: "America/Bogota" }).format(new Date(n.updatedAt!))}</>}
@@ -66,7 +67,8 @@ export default async function NoticiaDetailPage({ params }: { params: Promise<{ 
         </Container>
       </section>
 
-      <Container className="max-w-3xl py-5 sm:py-8">
+      <Container className="grid gap-10 py-5 sm:py-8 lg:grid-cols-[minmax(0,1fr)_19rem] lg:gap-14">
+        <div className="min-w-0">
         {n.image && (
           <figure className="mb-10">
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -96,6 +98,12 @@ export default async function NoticiaDetailPage({ params }: { params: Promise<{ 
             <ArrowLeft size={16} /> Volver a las noticias
           </Link>
         </div>
+        </div>
+        <aside className="lg:pt-2">
+          <div className="sticky top-36 flex flex-col gap-3">
+            <QuickRail />
+          </div>
+        </aside>
       </Container>
     </article>
   );

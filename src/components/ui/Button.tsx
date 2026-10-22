@@ -25,6 +25,8 @@ const sizes: Record<Size, string> = {
 interface ButtonProps {
   children: ReactNode;
   href?: string;
+  /** Abre el enlace en una pestaña nueva (sitios externos). */
+  external?: boolean;
   variant?: Variant;
   size?: Size;
   className?: string;
@@ -36,6 +38,7 @@ interface ButtonProps {
 export function Button({
   children,
   href,
+  external,
   variant = "primary",
   size = "md",
   className = "",
@@ -44,6 +47,13 @@ export function Button({
   disabled,
 }: ButtonProps) {
   const cls = `${base} ${variants[variant]} ${sizes[size]} ${className}`;
+  if (href && external) {
+    return (
+      <a href={href} target="_blank" rel="noopener noreferrer" className={cls}>
+        {children}
+      </a>
+    );
+  }
   if (href) {
     return (
       <Link href={href} className={cls}>

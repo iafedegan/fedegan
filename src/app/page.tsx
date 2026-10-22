@@ -8,6 +8,7 @@ import { EventsGrid } from "@/components/blocks/EventsGrid";
 import { InfoLinksRow } from "@/components/blocks/InfoLinksRow";
 import { AdSlot } from "@/components/design/AdSlot";
 import { getPublishedDesign } from "@/lib/design/store";
+import { AccessHub, CampaignWall, PresidentColumn } from "@/components/blocks/Accesos";
 import { MembershipBanner } from "@/components/blocks/MembershipBanner";
 
 export default async function Home() {
@@ -16,12 +17,15 @@ export default async function Home() {
     <>
       <PortalJourney />
       <HeroNews />
-      <PortalesAliados />
-      <AdSlot zone="mid" initial={design.ads.mid} />
-      <StatsStrip />
+      <AccessHub />
       <NewsGrid />
-      <PublicationsGrid />
+      <AdSlot zone="mid" initial={design.ads.mid} />
+      <PresidentColumn />
       <EventsGrid />
+      <PublicationsGrid />
+      <CampaignWall limit={8} />
+      <StatsStrip />
+      <PortalesAliados />
       <InfoLinksRow />
       <MembershipBanner />
     </>
