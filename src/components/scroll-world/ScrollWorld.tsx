@@ -1,11 +1,18 @@
 "use client";
 
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowDown, ArrowRight } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { warp } from "./timing";
+
+export interface JourneySub {
+  label: string;
+  href: string;
+  external?: boolean;
+}
 
 export interface JourneyScene {
   id: string;
@@ -15,6 +22,8 @@ export interface JourneyScene {
   tags: string[];
   href: string;
   external?: boolean;
+  /** Opciones de segundo nivel que se despliegan al elegir la escena. */
+  subs?: JourneySub[];
   /** Triple RGB "r,g,b" del local. */
   accent: string;
   image: string;
@@ -29,15 +38,14 @@ const smooth = (a: number, b: number, x: number) => {
 };
 const two = (n: number) => String(n).padStart(2, "0");
 
-// Toda la tarjeta de la escena es el enlace a su sección.
-function SceneLink({ scene, className, children }: { scene: JourneyScene; className?: string; children: React.ReactNode }) {
-  return scene.external ? (
-    <a href={scene.href} target="_blank" rel="noreferrer" className={className} aria-label={`Ir a ${scene.nombre}`}>
-      {children}
+function SubLink({ sub }: { sub: JourneySub }) {
+  return sub.external ? (
+    <a href={sub.href} target="_blank" rel="noopener noreferrer" className="sw-sub">
+      {sub.label}
     </a>
   ) : (
-    <Link href={scene.href} className={className} aria-label={`Ir a ${scene.nombre}`}>
-      {children}
+    <Link href={sub.href} className="sw-sub">
+      {sub.label}
     </Link>
   );
 }
@@ -66,12 +74,16 @@ export function ScrollWorld({ scenes }: { scenes: JourneyScene[] }) {
   const trackRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const layerRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const blockRefs = useRef<(HTMLDivElement | null)[]>([]);
   const dotRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const hintRef = useRef<HTMLParagraphElement | null>(null);
   const chipRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const barRef = useRef<HTMLSpanElement>(null);
   const counterRef = useRef<HTMLSpanElement>(null);
+  const router = useRouter();
+  // Escena cuyas opciones están desplegadas; «pending» evita cerrarla mientras el scroll llega a ella.
+  const [open, setOpen] = useState<number | null>(null);
+  const openRef = useRef<number | null>(null);
+  const pending = useRef<number | null>(null);
 
   useEffect(() => {
     const track = trackRef.current;
@@ -106,20 +118,17 @@ export function ScrollWorld({ scenes }: { scenes: JourneyScene[] }) {
         el.style.filter = blur > 0.05 ? `blur(${blur.toFixed(2)}px)` : "none";
       });
 
-      blockRefs.current.forEach((el, i) => {
-        if (!el) return;
-        const a = clamp(1 - (Math.abs(s - i) - 0.16) / 0.32);
-        el.style.opacity = String(a);
-        el.style.transform = `translate3d(0, ${((i - s) * 36).toFixed(2)}px, 0)`;
-        el.style.visibility = a > 0.01 ? "visible" : "hidden";
-        el.style.pointerEvents = a > 0.6 ? "auto" : "none";
-      });
-
       if (hintRef.current) hintRef.current.style.opacity = String(clamp(1 - pv * 40));
       if (barRef.current) barRef.current.style.transform = `scaleX(${pv.toFixed(4)})`;
       const idx = clamp(Math.round(s), 0, K);
       if (idx !== activeIdx) {
         activeIdx = idx;
+        if (pending.current !== null) {
+          if (pending.current === idx) pending.current = null;
+        } else if (openRef.current !== null && openRef.current !== idx) {
+          openRef.current = null;
+          setOpen(null);
+        }
         stage.style.setProperty("--acc", scenes[idx].accent);
         if (counterRef.current) counterRef.current.textContent = `${two(idx + 1)} / ${two(K + 1)}`;
         dotRefs.current.forEach((d, j) => d?.classList.toggle("is-active", j === idx));
@@ -180,6 +189,32 @@ export function ScrollWorld({ scenes }: { scenes: JourneyScene[] }) {
     [K],
   );
 
+  const navigate = useCallback(
+    (s: JourneyScene | JourneySub) => {
+      if (s.external) window.open(s.href, "_blank", "noopener,noreferrer");
+      else router.push(s.href);
+    },
+    [router],
+  );
+
+  // Primer toque: lleva la cámara a la escena y despliega sus opciones. Segundo toque sobre la misma: abre la sección.
+  const pick = useCallback(
+    (i: number) => {
+      if (openRef.current === i) {
+        navigate(scenes[i]);
+        return;
+      }
+      pending.current = i;
+      window.setTimeout(() => {
+        if (pending.current === i) pending.current = null;
+      }, 1800);
+      openRef.current = i;
+      setOpen(i);
+      goTo(i);
+    },
+    [goTo, navigate, scenes],
+  );
+
   return (
     <section className="sw" data-region="hero" aria-label="Recorrido por los locales del portal">
       <div ref={trackRef} className="sw-track" style={{ "--sw-k": K } as React.CSSProperties}>
@@ -218,74 +253,70 @@ export function ScrollWorld({ scenes }: { scenes: JourneyScene[] }) {
                   chipRefs.current[i] = el;
                 }}
                 type="button"
-                onClick={() => goTo(i)}
+                onClick={() => pick(i)}
                 className={`sw-chip${i === 0 ? " is-active" : ""}`}
-                aria-label={`Ir a ${s.nombre}`}
+                aria-expanded={open === i}
               >
                 {s.nombre}
               </button>
             ))}
           </nav>
 
-          <nav className="sw-rail" aria-label="Locales del recorrido">
+          {open !== null && scenes[open].subs && scenes[open].subs.length > 0 && (
+            <div className="sw-msubs" style={{ "--acc": scenes[open].accent } as React.CSSProperties}>
+              <ul>
+                <li>
+                  <button type="button" className="sw-sub sw-sub-main" onClick={() => navigate(scenes[open])}>
+                    Ver todo {scenes[open].nombre} <ArrowRight size={14} aria-hidden />
+                  </button>
+                </li>
+                {scenes[open].subs!.map((sub) => (
+                  <li key={sub.href + sub.label}>
+                    <SubLink sub={sub} />
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          <nav className="sw-rail" aria-label="Secciones del portal">
             <span ref={counterRef} className="sw-counter" aria-hidden>
               {two(1)} / {two(K + 1)}
             </span>
             {scenes.map((s, i) => (
-              <button
-                key={s.id}
-                ref={(el) => {
-                  dotRefs.current[i] = el;
-                }}
-                type="button"
-                onClick={() => goTo(i)}
-                className={`sw-dot${i === 0 ? " is-active" : ""}`}
-                aria-label={`Ir a ${s.nombre}`}
-              >
-                <span className="sw-dot-label">{s.nombre}</span>
-              </button>
-            ))}
-          </nav>
-
-          <div className="sw-overlay">
-            <Container>
-              <div className="sw-grid">
-                {scenes.map((s, i) => (
-                  <div
-                    key={s.id}
-                    ref={(el) => {
-                      blockRefs.current[i] = el;
-                    }}
-                    className="sw-block"
-                    data-local={s.id}
-                    style={{ "--acc": s.accent } as React.CSSProperties}
-                  >
-                    <SceneLink scene={s} className="sw-card">
-                      <h2 className="sw-title">{s.nombre}</h2>
-                      <p className="sw-body">{s.descripcion}</p>
-                      {s.tags.length > 0 && (
-                        <ul className="sw-tags">
-                          {s.tags.map((t) => (
-                            <li key={t}>{t}</li>
-                          ))}
-                        </ul>
-                      )}
-                      <span className="sw-go" aria-hidden>
-                        <ArrowRight size={18} />
-                      </span>
-                    </SceneLink>
-                    {i === K && (
-                      <div className="sw-actions">
-                        <Link href="/directorio" className="sw-more">
-                          Ver directorio completo
-                        </Link>
-                      </div>
-                    )}
-                  </div>
-                ))}
+              <div key={s.id} className="sw-item" style={{ "--acc": s.accent } as React.CSSProperties}>
+                <button
+                  ref={(el) => {
+                    dotRefs.current[i] = el;
+                  }}
+                  type="button"
+                  onClick={() => pick(i)}
+                  className={`sw-dot${i === 0 ? " is-active" : ""}`}
+                  data-open={open === i}
+                  aria-expanded={open === i}
+                >
+                  <span className="sw-dot-label">{s.nombre}</span>
+                </button>
+                {open === i && (
+                  <ul className="sw-subs">
+                    <li>
+                      <button type="button" className="sw-sub sw-sub-main" onClick={() => navigate(s)}>
+                        Ver todo {s.nombre} <ArrowRight size={14} aria-hidden />
+                      </button>
+                    </li>
+                    {s.subs?.map((sub) => (
+                      <li key={sub.href + sub.label}>
+                        <SubLink sub={sub} />
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
-            </Container>
-          </div>
+            ))}
+            <Link href="/directorio" className="sw-more">
+              Ver directorio completo
+            </Link>
+          </nav>
         </div>
       </div>
 

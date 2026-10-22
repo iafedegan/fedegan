@@ -169,6 +169,7 @@ export const footerLinks = {
     { label: "Publicaciones", href: "/publicaciones" },
     { label: "Eventos", href: "/eventos" },
     { label: "Contacto", href: "/contacto" },
+    { label: "Pago en línea", href: "/pagos" },
   ],
   servicios: [
     { label: "Trámites y servicios", href: "/servicios" },

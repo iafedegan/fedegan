@@ -1376,7 +1376,7 @@
    "tree": []
   },
   "pagos-y-campanas": {
-   "label": "Pagos y campañas",
+   "label": "Campañas y avisos",
    "landing": "recaudo-de-la-cuota-de-fomento-ganadero-y-lechero",
    "tree": [
     {
@@ -12719,12 +12719,12 @@
    "parent": "tramites"
   },
   "recaudo-de-la-cuota-de-fomento-ganadero-y-lechero": {
-   "title": "Recaudo de la Cuota de Fomento Ganadero y Lechero",
+   "title": "Campañas, avisos y recaudo",
    "source": "https://www.fedegan.org.co/recaudo-de-la-cuota-de-fomento-ganadero-y-lechero",
    "blocks": [
     {
-     "t": "embed",
-     "text": "https://storage.googleapis.com/static-fedegan/recaudo_cfgl/recaudo_cfgl_2026.html"
+     "t": "p",
+     "text": "El recaudo de la cuota de fomento ganadero y lechero se paga en línea, con fechas límite e instructivo paso a paso. [Ir al sistema de pago en línea](/pagos)"
     }
    ],
    "sections": [

@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import type { CSSProperties } from "react";
-import { ArrowUpRight, Eye, HeartHandshake, ShieldCheck } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
+import { Pictogram, type PictogramName } from "@/components/ui/Pictogram";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { CtaBand, Section } from "@/components/ui/Editorial";
 import { Spotlight } from "@/components/design/Spotlight";
@@ -15,9 +16,9 @@ const FOUNDED = 1963;
 const YEARS = new Date().getFullYear() - FOUNDED;
 
 const pillars = [
-  { icon: Eye, acc: "92,205,134", title: "Visión", text: "Ser el gremio referente de la ganadería en Colombia, reconocido por su gestión, innovación y cercanía con el productor." },
-  { icon: HeartHandshake, acc: "230,160,108", title: "Valores", text: "Transparencia, servicio, sostenibilidad y compromiso con las comunidades ganaderas del país." },
-  { icon: ShieldCheck, acc: "112,214,196", title: "Buen gobierno", text: "Gestión institucional bajo el Código de Buen Gobierno y control ciudadano permanente." },
+  { icon: "amanecer" as PictogramName, acc: "92,205,134", title: "Visión", text: "Ser el gremio referente de la ganadería en Colombia, reconocido por su gestión, innovación y cercanía con el productor." },
+  { icon: "brotes" as PictogramName, acc: "230,160,108", title: "Valores", text: "Transparencia, servicio, sostenibilidad y compromiso con las comunidades ganaderas del país." },
+  { icon: "balanza" as PictogramName, acc: "112,214,196", title: "Buen gobierno", text: "Gestión institucional bajo el Código de Buen Gobierno y control ciudadano permanente." },
 ];
 
 // Hitos tomados de los textos del portal institucional (programas, normatividad y parafiscalidad).
@@ -72,7 +73,7 @@ export default function QuienesSomosPage() {
           <Spotlight as="ul" className="grid gap-4">
             {pillars.map((p) => (
               <li key={p.title} className="mx-card mx-lift mx-rise flex items-start gap-4" style={acc(p.acc)}>
-                <span className="mx-icon shrink-0"><p.icon size={22} strokeWidth={1.7} /></span>
+                <span className="mx-icon shrink-0"><Pictogram name={p.icon} size={28} /></span>
                 <div>
                   <h3 className="font-[var(--font-display)] text-xl font-bold text-[var(--text)]">{p.title}</h3>
                   <p className="mt-1 text-sm leading-relaxed text-[var(--text-muted)]">{p.text}</p>

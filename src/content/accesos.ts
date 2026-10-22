@@ -1,13 +1,15 @@
 // Accesos, pagos, campañas y datos de contacto que el portal actual (fedegan.org.co) muestra en sus
 // columnas laterales y en el pie de página. Las imágenes se copiaron optimizadas a /public/accesos.
 
+import type { PictogramName } from "@/components/ui/Pictogram";
+
 export type Acceso = {
   id: string;
   title: string;
   text: string;
   href: string;
   external?: boolean;
-  icon: "pay" | "bio" | "ruv" | "pqrsd" | "book" | "chart" | "shield" | "hands" | "leaf" | "meat" | "milk" | "flag" | "mic";
+  icon: PictogramName;
   acc: string;
   /** Texto del enlace (por defecto «Ir al servicio»). */
   cta?: string;
@@ -17,19 +19,19 @@ const PQRSD = "/seccion/servicios-fedegan/servicios/peticiones-quejas-reclamos-s
 
 /** Pagos y trámites: lo más usado por ganaderos y aportantes. */
 export const pagos: Acceso[] = [
-  { id: "pago", title: "Pago en línea", text: "Pague la cuota de fomento ganadero y lechero por PSE, con las fechas límite del año.", href: "/seccion/pagos-y-campanas", icon: "pay", acc: "92,205,134", cta: "Pagar ahora" },
-  { id: "biologico", title: "Recaudo biológico", text: "Recaudo de dosis aplicadas: aftosa, aftosa más rabia y brucelosis (BR51).", href: "https://micrositios.goupagos.com.co/fedegan-ma", external: true, icon: "bio", acc: "216,181,88", cta: "Pagar recaudo" },
+  { id: "pago", title: "Pago en línea", text: "Pague la cuota de fomento ganadero y lechero por PSE, con las fechas límite del año.", href: "/pagos", icon: "pago", acc: "92,205,134", cta: "Pagar ahora" },
+  { id: "biologico", title: "Recaudo biológico", text: "Recaudo de dosis aplicadas: aftosa, aftosa más rabia y brucelosis (BR51).", href: "https://micrositios.goupagos.com.co/fedegan-ma", external: true, icon: "biologico", acc: "216,181,88", cta: "Pagar recaudo" },
 ];
 
 export const tramites: Acceso[] = [
-  { id: "ruv", title: "Consulta RUV", text: "Verifique su inscripción en el Registro Único de Vacunación.", href: "https://sagari.fedegan-fng.org.co/#/cnl1", external: true, icon: "ruv", acc: "112,214,196" },
-  { id: "pqrsd", title: "PQRSD", text: "Peticiones, quejas, reclamos, sugerencias y denuncias a FEDEGÁN-FNG.", href: PQRSD, icon: "pqrsd", acc: "230,160,108", cta: "Radicar solicitud" },
-  { id: "inventario", title: "Cifras del inventario", text: "Inventario bovino y bufalino, datos e indicadores del sector.", href: "/seccion/pagos-y-campanas/datos-e-indicadores", icon: "chart", acc: "92,205,134", cta: "Ver cifras" },
-  { id: "seguridad", title: "Seguridad Ganadera", text: "Cartilla ABC y frentes solidarios de seguridad y paz.", href: "/seccion/pagos-y-campanas/abc-seguridad-ganadera-frentes-solidarios-de-seguridad-y-paz", icon: "shield", acc: "230,160,108", cta: "Ver cartilla" },
-  { id: "solidaridad", title: "Solidaridad Ganadera", text: "Inscripción a los frentes solidarios de seguridad.", href: "https://docs.google.com/forms/d/e/1FAIpQLScgMr4PoH4PBvJgcJz-vlk5HMz0APCiBU9LlEsBf0PZbko_Xg/viewform", external: true, icon: "hands", acc: "216,181,88", cta: "Inscribirse" },
-  { id: "sello", title: "Sello Ambiental", text: "Cartilla del Sello Ambiental Colombiano para su predio.", href: "https://storage.googleapis.com/static-fedegan/banners/bnn-2026/bnn-cartilla-sello-ambiental/Sello-Ambiental.pdf", external: true, icon: "leaf", acc: "112,214,196", cta: "Descargar cartilla" },
-  { id: "sac", title: "Metodología SAC", text: "Metodología para la autoevaluación del Sello Ambiental Colombiano.", href: "/seccion/pagos-y-campanas/metodologia-para-la-autoevaluacion-del-sello-ambiental-colombiano", icon: "book", acc: "92,205,134", cta: "Ver metodología" },
-  { id: "buen-gobierno", title: "Código de Buen Gobierno", text: "Principios y reglas de gestión institucional de FEDEGÁN.", href: "https://storage.fedegan.org.co/s3fs-public/codigo_buen_gobierno_fedeganv75.pdf", external: true, icon: "flag", acc: "216,181,88", cta: "Descargar PDF" },
+  { id: "ruv", title: "Consulta RUV", text: "Verifique su inscripción en el Registro Único de Vacunación.", href: "https://sagari.fedegan-fng.org.co/#/cnl1", external: true, icon: "arete", acc: "112,214,196" },
+  { id: "pqrsd", title: "PQRSD", text: "Peticiones, quejas, reclamos, sugerencias y denuncias a FEDEGÁN-FNG.", href: PQRSD, icon: "sobre", acc: "230,160,108", cta: "Radicar solicitud" },
+  { id: "inventario", title: "Cifras del inventario", text: "Inventario bovino y bufalino, datos e indicadores del sector.", href: "/seccion/pagos-y-campanas/datos-e-indicadores", icon: "res", acc: "92,205,134", cta: "Ver cifras" },
+  { id: "seguridad", title: "Seguridad Ganadera", text: "Cartilla ABC y frentes solidarios de seguridad y paz.", href: "/seccion/pagos-y-campanas/abc-seguridad-ganadera-frentes-solidarios-de-seguridad-y-paz", icon: "porton", acc: "230,160,108", cta: "Ver cartilla" },
+  { id: "solidaridad", title: "Solidaridad Ganadera", text: "Inscripción a los frentes solidarios de seguridad.", href: "https://docs.google.com/forms/d/e/1FAIpQLScgMr4PoH4PBvJgcJz-vlk5HMz0APCiBU9LlEsBf0PZbko_Xg/viewform", external: true, icon: "brotes", acc: "216,181,88", cta: "Inscribirse" },
+  { id: "sello", title: "Sello Ambiental", text: "Cartilla del Sello Ambiental Colombiano para su predio.", href: "https://storage.googleapis.com/static-fedegan/banners/bnn-2026/bnn-cartilla-sello-ambiental/Sello-Ambiental.pdf", external: true, icon: "sello", acc: "112,214,196", cta: "Descargar cartilla" },
+  { id: "sac", title: "Metodología SAC", text: "Metodología para la autoevaluación del Sello Ambiental Colombiano.", href: "/seccion/pagos-y-campanas/metodologia-para-la-autoevaluacion-del-sello-ambiental-colombiano", icon: "libro", acc: "92,205,134", cta: "Ver metodología" },
+  { id: "buen-gobierno", title: "Código de Buen Gobierno", text: "Principios y reglas de gestión institucional de FEDEGÁN.", href: "https://storage.fedegan.org.co/s3fs-public/codigo_buen_gobierno_fedeganv75.pdf", external: true, icon: "balanza", acc: "216,181,88", cta: "Descargar PDF" },
 ];
 
 export type Campana = {

@@ -1,27 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { CSSProperties, ReactNode } from "react";
-import { ArrowRight, ArrowUpRight, BookOpen, CreditCard, FileCheck2, Flag, HandHeart, HelpCircle, Leaf, LineChart, Milk, Megaphone, ShieldCheck, Syringe, Beef } from "lucide-react";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { Section } from "@/components/ui/Editorial";
-import { Spotlight } from "@/components/design/Spotlight";
+import { Pictogram } from "@/components/ui/Pictogram";
 import { campanas, pagos, tramites, type Acceso, type Campana } from "@/content/accesos";
 import { excerptOf, getLegacyPage, getLegacySection, legacyHref } from "@/content/legacy";
-
-const icons = {
-  pay: CreditCard,
-  bio: Syringe,
-  ruv: FileCheck2,
-  pqrsd: HelpCircle,
-  book: BookOpen,
-  chart: LineChart,
-  shield: ShieldCheck,
-  hands: HandHeart,
-  leaf: Leaf,
-  meat: Beef,
-  milk: Milk,
-  flag: Flag,
-  mic: Megaphone,
-};
 
 const acc = (v: string) => ({ ["--acc-rgb" as string]: v }) as CSSProperties;
 
@@ -37,49 +21,50 @@ function Wrap({ to, external, className, children }: { to: string; external?: bo
   );
 }
 
-// Pagos: dos tarjetas grandes, es lo primero que busca quien aporta la cuota.
-function PayCard({ a }: { a: Acceso }) {
-  const Icon = icons[a.icon];
+// Pagos: dos paneles amplios; es lo primero que busca quien aporta la cuota.
+function PayPanel({ a }: { a: Acceso }) {
   return (
     <Wrap to={a.href} external={a.external} className="group block h-full">
-      <div className="mx-card mx-lift mx-rise flex h-full flex-col gap-4 !p-6 sm:!p-7" style={acc(a.acc)}>
-        <div className="flex items-start justify-between gap-4">
-          <span className="mx-icon"><Icon size={24} strokeWidth={1.7} /></span>
-          {a.id === "pago" && (
-            <Image src="/accesos/pago-pse.webp" alt="Pago en línea PSE, cuota de fomento ganadero y lechero" width={500} height={250} className="h-16 w-auto rounded-[var(--radius-sm)] sm:h-20" />
+      <article
+        className="flex h-full flex-col overflow-hidden rounded-[0.9rem] border border-[var(--border-strong)] border-t-2 border-t-[rgb(var(--acc-rgb))] bg-[var(--surface-solid)] transition-shadow duration-300 group-hover:shadow-[0_22px_40px_-26px_rgba(0,0,0,0.85)] sm:flex-row"
+        style={acc(a.acc)}
+      >
+        <div className="flex flex-1 flex-col gap-4 p-6 sm:p-8">
+          <Pictogram name={a.icon} size={46} className="text-[rgb(var(--acc-rgb))]" />
+          <div>
+            <h3 className="font-[var(--font-display)] text-3xl font-bold leading-tight text-[var(--text)]">{a.title}</h3>
+            <p className="mt-2 max-w-md leading-relaxed text-[var(--text-muted)]">{a.text}</p>
+          </div>
+          <span className="mt-auto inline-flex w-fit items-center gap-2 rounded-[0.4rem] bg-[rgb(var(--acc-rgb))] px-5 py-3 text-[0.78rem] font-bold uppercase tracking-[0.12em] text-[#0a1a11] transition-transform duration-300 group-hover:translate-x-1">
+            {a.cta ?? "Ir al servicio"} {a.external ? <ArrowUpRight size={16} /> : <ArrowRight size={16} />}
+          </span>
+        </div>
+        <div className="relative flex items-center justify-center border-t border-[var(--border)] bg-[rgba(var(--acc-rgb),0.07)] p-6 sm:w-[40%] sm:border-l sm:border-t-0">
+          {a.id === "pago" ? (
+            <Image src="/accesos/pago-pse.webp" alt="Pago en línea PSE, cuota de fomento ganadero y lechero" width={500} height={250} className="h-auto w-full max-w-[17rem] rounded-[0.5rem] shadow-[0_14px_28px_-16px_rgba(0,0,0,0.7)]" />
+          ) : (
+            <Pictogram name={a.icon} size={132} className="text-[rgb(var(--acc-rgb))] opacity-30" />
           )}
         </div>
-        <div>
-          <h3 className="font-[var(--font-display)] text-2xl font-bold text-[var(--text)]">{a.title}</h3>
-          <p className="mt-2 leading-relaxed text-[var(--text-muted)]">{a.text}</p>
-        </div>
-        <span className="mt-auto inline-flex w-fit items-center gap-2 rounded-full bg-[rgb(var(--acc-rgb))] px-5 py-2.5 text-[0.78rem] font-bold uppercase tracking-[0.1em] text-[#0a1a11] transition-transform group-hover:translate-x-1">
-          {a.cta ?? "Ir al servicio"} {a.external ? <ArrowUpRight size={16} /> : <ArrowRight size={16} />}
-        </span>
-      </div>
+      </article>
     </Wrap>
   );
 }
 
-function TramiteTile({ a }: { a: Acceso }) {
-  const Icon = icons[a.icon];
+function TramiteRow({ a }: { a: Acceso }) {
   return (
     <li>
-      <Wrap to={a.href} external={a.external} className="group block h-full">
-        <div className="mx-card mx-lift mx-rise flex h-full items-start gap-3.5 !p-4 sm:!p-5" style={acc(a.acc)}>
-          <span className="mx-icon !h-11 !w-11 shrink-0"><Icon size={20} strokeWidth={1.7} /></span>
-          <div className="min-w-0 flex-1">
-            <h3 className="flex items-center gap-1.5 font-bold leading-snug text-[var(--text)]">
-              {a.title}
-              {a.external ? (
-                <ArrowUpRight size={14} className="shrink-0 text-[var(--text-faint)] transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-              ) : (
-                <ArrowRight size={14} className="shrink-0 text-[var(--text-faint)] transition-transform group-hover:translate-x-1" />
-              )}
-            </h3>
-            <p className="mt-1 text-sm leading-relaxed text-[var(--text-muted)]">{a.text}</p>
-          </div>
-        </div>
+      <Wrap to={a.href} external={a.external} className="group grid grid-cols-[3rem_1fr_auto] items-center gap-4 border-b border-[var(--border)] px-1 py-5 transition-colors hover:bg-[rgba(216,181,88,0.05)] sm:grid-cols-[3.5rem_1fr_auto]" >
+        <span style={acc(a.acc)} className="flex justify-center text-[rgb(var(--acc-rgb))]">
+          <Pictogram name={a.icon} size={38} />
+        </span>
+        <span className="min-w-0">
+          <span className="block font-[var(--font-display)] text-xl font-bold leading-snug text-[var(--text)] transition-colors group-hover:text-[var(--fg-lime-400)]">{a.title}</span>
+          <span className="mt-0.5 block text-sm leading-relaxed text-[var(--text-muted)]">{a.text}</span>
+        </span>
+        <span className="text-[var(--text-faint)] transition-all duration-300 group-hover:translate-x-1 group-hover:text-[var(--fg-lime-400)]">
+          {a.external ? <ArrowUpRight size={20} /> : <ArrowRight size={20} />}
+        </span>
       </Wrap>
     </li>
   );
@@ -89,16 +74,16 @@ function TramiteTile({ a }: { a: Acceso }) {
 export function AccessHub({ tinted = false }: { tinted?: boolean }) {
   return (
     <Section eyebrow="Acceso directo" title="Pagos, trámites y servicios" intro="Lo más usado por ganaderos y aportantes, a un clic." tinted={tinted}>
-      <Spotlight as="div" className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-5 lg:grid-cols-2">
         {pagos.map((a) => (
-          <PayCard key={a.id} a={a} />
+          <PayPanel key={a.id} a={a} />
         ))}
-      </Spotlight>
-      <Spotlight as="ul" className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      </div>
+      <ul className="mt-9 grid gap-x-14 border-t border-[var(--border-strong)] lg:grid-cols-2">
         {tramites.map((a) => (
-          <TramiteTile key={a.id} a={a} />
+          <TramiteRow key={a.id} a={a} />
         ))}
-      </Spotlight>
+      </ul>
     </Section>
   );
 }
@@ -106,7 +91,7 @@ export function AccessHub({ tinted = false }: { tinted?: boolean }) {
 function CampanaCard({ c }: { c: Campana }) {
   return (
     <li className="mb-4 break-inside-avoid">
-      <Wrap to={c.href} external={c.external} className="mx-rise group block overflow-hidden rounded-[1.2rem] border border-[var(--border-strong)] bg-[var(--surface-solid)] transition-colors hover:border-[var(--fg-lime-500)]">
+      <Wrap to={c.href} external={c.external} className="mx-rise group block overflow-hidden rounded-[0.75rem] border border-[var(--border-strong)] bg-[var(--surface-solid)] transition-colors hover:border-[var(--fg-lime-500)]">
         <div className="relative w-full overflow-hidden bg-[var(--bg-muted)]" style={{ aspectRatio: c.ratio }}>
           <Image
             src={c.image}
@@ -197,24 +182,19 @@ export function PresidentColumn() {
 export function QuickRail({ className = "" }: { className?: string }) {
   const items = [pagos[0], tramites.find((t) => t.id === "pqrsd")!, tramites.find((t) => t.id === "ruv")!];
   return (
-    <div className={`mx-card !p-3 ${className}`}>
-      <p className="px-2.5 pb-2 pt-1 text-[0.7rem] font-bold uppercase tracking-[0.18em] text-[var(--fg-lime-500)]">Accesos rápidos</p>
+    <div className={`rounded-[0.9rem] border border-[var(--border-strong)] border-t-2 border-t-[var(--fg-lime-500)] bg-[var(--surface-solid)] p-3 ${className}`}>
+      <p className="px-2.5 pb-2 pt-1 text-[0.7rem] font-bold uppercase tracking-[0.2em] text-[var(--fg-lime-500)]">Accesos rápidos</p>
       <ul className="flex flex-col">
-        {items.map((a) => {
-          const Icon = icons[a.icon];
-          return (
-            <li key={a.id}>
-              <Wrap to={a.href} external={a.external} className="group flex items-center gap-3 rounded-[var(--radius-sm)] px-2.5 py-2 text-sm font-semibold text-[var(--text)] transition-colors hover:bg-[var(--surface-2)] hover:text-[var(--fg-lime-400)]">
-                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-[rgba(var(--acc-rgb),0.5)] bg-[rgba(var(--acc-rgb),0.12)] text-[rgb(var(--acc-rgb))]" style={acc(a.acc)}>
-                  <Icon size={15} />
-                </span>
-                {a.title}
-              </Wrap>
-            </li>
-          );
-        })}
+        {items.map((a) => (
+          <li key={a.id}>
+            <Wrap to={a.href} external={a.external} className="group flex items-center gap-3 border-t border-[var(--border)] px-2.5 py-2.5 font-[var(--font-display)] text-[1.02rem] font-bold text-[var(--text)] transition-colors hover:text-[var(--fg-lime-400)]">
+              <span style={acc(a.acc)} className="text-[rgb(var(--acc-rgb))]"><Pictogram name={a.icon} size={26} /></span>
+              {a.title}
+            </Wrap>
+          </li>
+        ))}
       </ul>
-      <Link href="/accesos" className="mt-1 flex items-center gap-1.5 px-2.5 py-2 text-xs font-bold uppercase tracking-[0.12em] text-[var(--text-faint)] transition-colors hover:text-[var(--fg-lime-400)]">
+      <Link href="/accesos" className="flex items-center gap-1.5 border-t border-[var(--border)] px-2.5 pb-1 pt-3 text-xs font-bold uppercase tracking-[0.14em] text-[var(--text-faint)] transition-colors hover:text-[var(--fg-lime-400)]">
         Ver todos <ArrowRight size={13} />
       </Link>
     </div>
