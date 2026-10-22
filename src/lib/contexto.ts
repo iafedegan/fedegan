@@ -108,15 +108,21 @@ type ApiResult<T> = { ok: true; data: T } | { ok: false; status: number | null }
 // Última respuesta buena por ruta: si la API falla un momento (429, 5xx, red) se sigue mostrando lo último que llegó.
 const lastGood = new Map<string, unknown>();
 
+async function call(base: string, key: string, path: string) {
+  return fetch(`${base}${path}`, {
+    headers: { Authorization: `Bearer ${key}`, Accept: "application/json" },
+    next: { revalidate: REVALIDATE_SECONDS },
+  });
+}
+
 async function api<T>(path: string): Promise<ApiResult<T>> {
   const { base, key } = await contextoCredentials();
   if (!key) return { ok: false, status: null };
   const route = path.split("?")[0];
   try {
-    const res = await fetch(`${base}${path}`, {
-      headers: { Authorization: `Bearer ${key}`, Accept: "application/json" },
-      next: { revalidate: REVALIDATE_SECONDS },
-    });
+    let res = await call(base, key, path);
+    // Si la clave guardada en el panel quedó vieja y la de las variables de entorno es otra, se prueba con esa.
+    if (res.status === 401 && ENV_KEY && ENV_KEY !== key) res = await call(base, ENV_KEY, path);
     if (res.ok) {
       const data = (await res.json()) as T;
       lastGood.set(path, data);
