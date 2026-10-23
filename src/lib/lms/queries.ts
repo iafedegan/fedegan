@@ -200,3 +200,50 @@ export function videoEmbed(url: string): { type: "iframe" | "file"; src: string 
   }
   return { type: "file", src: url };
 }
+
+// ---------- Carnet y verificación ----------
+
+/** Código de carnet de la persona; se crea la primera vez que abre su carnet. */
+export async function ensureStudent(me: Learner): Promise<{ code: string; since: string } | null> {
+  const db = adminDb();
+  if (!db) return null;
+  const { data } = await db.from("lms_students").select("code,created_at").eq("user_key", me.key).maybeSingle();
+  if (data) return { code: s(data.code), since: s(data.created_at) };
+  for (let i = 0; i < 5; i++) {
+    const code = `UCG-${new Date().getFullYear()}-${String(Math.floor(Math.random() * 1_000_000)).padStart(6, "0")}`;
+    const { data: ins, error } = await db.from("lms_students").insert({ user_key: me.key, code, name: me.name }).select("code,created_at").single();
+    if (!error && ins) return { code: s(ins.code), since: s(ins.created_at) };
+  }
+  return null;
+}
+
+export async function getStudentStats(key: string) {
+  const db = adminDb();
+  if (!db) return { enrolled: 0, certificates: 0 };
+  const { data } = await db.from("lms_enrollments").select("completed_at").eq("user_key", key);
+  const rows = (data ?? []) as Row[];
+  return { enrolled: rows.length, certificates: rows.filter((r) => r.completed_at).length };
+}
+
+export type CodeLookup =
+  | { type: "carnet"; name: string; since: string; certificates: number }
+  | { type: "certificado"; name: string; course: string; date: string }
+  | null;
+
+/** Verifica un código de carnet o de certificado (página pública de verificación). */
+export async function lookupCode(code: string): Promise<CodeLookup> {
+  const db = adminDb();
+  if (!db || !/^UCG-\d{4}-[A-Z0-9]{6}$/i.test(code)) return null;
+  const c = code.toUpperCase();
+  const { data: st } = await db.from("lms_students").select("user_key,name,created_at").eq("code", c).maybeSingle();
+  if (st) {
+    const { certificates } = await getStudentStats(s(st.user_key));
+    return { type: "carnet", name: s(st.name), since: s(st.created_at), certificates };
+  }
+  const { data: en } = await db.from("lms_enrollments").select("user_name,completed_at,course_id").eq("certificate_code", c).maybeSingle();
+  if (en && en.completed_at) {
+    const { data: co } = await db.from("lms_courses").select("title").eq("id", en.course_id).maybeSingle();
+    return { type: "certificado", name: s(en.user_name), course: s(co?.title), date: s(en.completed_at) };
+  }
+  return null;
+}

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { Award } from "lucide-react";
+import { Award, IdCard } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { getLearner, getMyCourses } from "@/lib/lms/queries";
@@ -17,6 +17,7 @@ export default async function MyCoursesPage() {
     <>
       <PageHeader eyebrow="Escuela Virtual" title="Mis cursos" description="Su avance, los cursos en marcha y los certificados que ya obtuvo." image="/locales/sig.jpg" breadcrumbs={[{ label: "Escuela Virtual", href: "/escuela-virtual" }, { label: "Mis cursos" }]} />
       <Container className="py-10">
+        <Link href="/escuela-virtual/carnet" className="mb-6 inline-flex items-center gap-2 rounded-[0.25rem] border border-[var(--border-strong)] px-4 py-2.5 text-xs font-bold uppercase tracking-[0.1em] text-[var(--fg-lime-400)] hover:border-[var(--fg-lime-500)]"><IdCard size={16} /> Mi carnet de estudiante</Link>
         {mine.length === 0 ? (
           <div className="rounded-[var(--radius-md)] border border-dashed border-[var(--border-strong)] p-10 text-center">
             <p className="text-[var(--text-muted)]">Todavía no se ha inscrito a ningún curso.</p>

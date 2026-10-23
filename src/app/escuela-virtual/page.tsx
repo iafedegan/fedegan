@@ -62,6 +62,8 @@ export default async function EscuelaVirtualPage() {
         {learner && (
           <p className="-mt-2 mb-6 text-sm">
             <Link href="/escuela-virtual/mis-cursos" className="font-bold text-[var(--fg-lime-400)] hover:underline">Ver mis cursos y mi avance →</Link>
+            <span className="mx-2 text-[var(--text-faint)]">·</span>
+            <Link href="/escuela-virtual/carnet" className="font-bold text-[var(--fg-lime-400)] hover:underline">Mi carnet →</Link>
           </p>
         )}
         <CatalogExplorer courses={courses} />
