@@ -1146,3 +1146,6 @@ a.mx-card:hover, .mx-lift:hover, .gl-hover:hover { transform: translateY(-2px); 
 /* Card del recorrido pegada a la esquina inferior izquierda */
 .sw-center { bottom: 1rem; left: 1rem; }
 @media (max-width: 767px) { .sw-center { bottom: 3.6rem; left: 0.75rem; } }
+
+/* Sin contador «01 / 13» sobre el menú lateral del recorrido */
+.sw-counter { display: none; }
