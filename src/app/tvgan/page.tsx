@@ -18,8 +18,8 @@ export default function TvganPage() {
         eyebrow="Medios"
         title="TVGAN"
         description="El canal del ganadero colombiano: programas, entrevistas y contenido audiovisual del sector."
-        image="/headers/prensa.jpg"
-        imagePos="55% 40%"
+        image="/headers/ia-tvgan.jpg"
+        imagePos="50% 50%"
         meta="Canal"
         breadcrumbs={[{ label: "TVGAN" }]}
       />

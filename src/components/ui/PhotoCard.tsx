@@ -19,6 +19,7 @@ export function PhotoCard({
   cta = "Ver más",
   accent = "47,156,98",
   badge,
+  open = false,
   children,
 }: {
   image: string;
@@ -32,6 +33,8 @@ export function PhotoCard({
   accent?: string;
   aspect?: string;
   badge?: ReactNode;
+  /** Muestra siempre el texto (sin esperar al cursor): para catálogos donde la descripción ayuda a elegir. */
+  open?: boolean;
   children?: ReactNode;
 }) {
   const style = { ["--wa" as string]: accent, ["--wb" as string]: darker(accent) } as CSSProperties;
@@ -60,17 +63,17 @@ export function PhotoCard({
   );
   if (!href) {
     return (
-      <div className="wc wp" style={style}>
+      <div className={`wc wp${open ? " wp-open" : ""}`} style={style}>
         {body}
       </div>
     );
   }
   return external ? (
-    <a href={href} target="_blank" rel="noopener noreferrer" className="wc wp" style={style}>
+    <a href={href} target="_blank" rel="noopener noreferrer" className={`wc wp${open ? " wp-open" : ""}`} style={style}>
       {body}
     </a>
   ) : (
-    <Link href={href} className="wc wp" style={style}>
+    <Link href={href} className={`wc wp${open ? " wp-open" : ""}`} style={style}>
       {body}
     </Link>
   );

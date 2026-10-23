@@ -23,8 +23,8 @@ export default async function CuotaPage({ searchParams }: { searchParams: Promis
         eyebrow="Zona de pagos"
         title="Cuota de fomento ganadero y lechero"
         description="Ingreso para recaudadores del Fondo Nacional del Ganado."
-        image="/headers/servicios.jpg"
-        imagePos="60% 40%"
+        image="/headers/ia-cuota.jpg"
+        imagePos="50% 50%"
         breadcrumbs={[{ label: "Zona de pagos", href: "/pagos" }, { label: "Cuota de fomento" }]}
         compact
       />

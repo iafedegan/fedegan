@@ -14,8 +14,8 @@ export default async function EventosPage() {
         eyebrow="Agenda"
         title="Eventos"
         description="Webinars, seminarios y foros del sector ganadero colombiano."
-        image="/locales/cifras.jpg"
-        imagePos="30% 50%"
+        image="/headers/ia-eventos.jpg"
+        imagePos="50% 50%"
         meta={`${events.length} ${events.length === 1 ? "evento" : "eventos"}`}
         breadcrumbs={[{ label: "Eventos" }]}
       />

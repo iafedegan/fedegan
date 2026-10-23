@@ -42,8 +42,8 @@ export default function QuienesSomosPage() {
         eyebrow="El gremio"
         title="Quiénes somos"
         description="Federación Colombiana de Ganaderos: gremio sin ánimo de lucro que administra el Fondo Nacional del Ganado y representa a los productores bovinos del país."
-        image="/locales/programas.jpg"
-        imagePos="62% 50%"
+        image="/headers/ia-quienes-somos.jpg"
+        imagePos="50% 50%"
         facts={[`Desde ${FOUNDED}`, "Fondo Nacional del Ganado", "Cobertura nacional"]}
         breadcrumbs={[{ label: "Quiénes somos" }]}
       />

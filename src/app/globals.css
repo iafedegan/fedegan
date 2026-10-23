@@ -1218,3 +1218,12 @@ a.mx-card:hover, .mx-lift:hover, .gl-hover:hover { transform: translateY(-2px); 
   .sw-panel .sw-cta-desc { -webkit-line-clamp: 6; }
   .sw-panel:has(.sw-extra) .sw-cta-desc { -webkit-line-clamp: 3; }
 }
+
+/* Fichas con la descripción siempre visible (catálogo de cursos): ola más alta y texto abierto */
+.wp.wp-open { height: 26rem; }
+.wp.wp-open .wc-wave { height: 60%; padding-top: 2.6rem; }
+.wp.wp-open .wc-wave2 { height: 66%; }
+.wp.wp-open .wp-more { max-height: 11rem; opacity: 1; }
+.wp.wp-open .wp-text { -webkit-line-clamp: 3; }
+.wp.wp-open:hover .wc-wave, .wp.wp-open:focus-visible .wc-wave { height: 66%; }
+.wp.wp-open:hover .wc-wave2, .wp.wp-open:focus-visible .wc-wave2 { height: 72%; }

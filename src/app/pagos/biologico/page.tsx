@@ -20,8 +20,8 @@ export default function BiologicoPage() {
         eyebrow="Zona de pagos"
         title="Recaudo biológico"
         description="Recaudo de las dosis aplicadas en los ciclos de vacunación."
-        image="/headers/campo.jpg"
-        imagePos="50% 60%"
+        image="/headers/ia-biologico.jpg"
+        imagePos="50% 50%"
         breadcrumbs={[{ label: "Zona de pagos", href: "/pagos" }, { label: "Recaudo biológico" }]}
         compact
       />

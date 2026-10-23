@@ -23,7 +23,7 @@ export function LegalPage({
 }) {
   return (
     <>
-      <PageHeader eyebrow={eyebrow} title={title} description={description} image="/headers/servicios.jpg" breadcrumbs={[{ label: crumb }]} compact />
+      <PageHeader eyebrow={eyebrow} title={title} description={description} image="/headers/ia-legal.jpg" breadcrumbs={[{ label: crumb }]} compact />
       <Container className="grid gap-10 py-8 sm:py-12 lg:grid-cols-[1.4fr_0.8fr] lg:gap-14">
         <div className="flex max-w-3xl flex-col gap-8">
           {sections.map((s) => (

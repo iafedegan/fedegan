@@ -12,7 +12,7 @@ import { getLegacyPage, getLegacySection, legacyParams } from "@/content/legacy"
 
 // Secciones aún sin contenido copiado del portal actual.
 const pendientes: Record<string, { nombre: string; kicker: string; descripcion: string; image: string; pos: string }> = {
-  "seguridad-ganadera": { nombre: "Seguridad Ganadera", kicker: "Protección", descripcion: "Alertas, prevención del abigeato y seguridad rural.", image: "/headers/campo.jpg", pos: "50% 60%" },
+  "seguridad-ganadera": { nombre: "Seguridad Ganadera", kicker: "Protección", descripcion: "Alertas, prevención del abigeato y seguridad rural.", image: "/headers/ia-seguridad.jpg", pos: "50% 50%" },
 };
 
 type Params = { slug: string; ruta?: string[] };

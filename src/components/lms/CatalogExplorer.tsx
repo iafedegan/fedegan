@@ -5,7 +5,7 @@ import { Search } from "lucide-react";
 import { PhotoCard } from "@/components/ui/PhotoCard";
 
 export type CatalogCourse = {
-  slug: string; title: string; subtitle: string; category: string; level: string; levelLabel: string; cover: string | null;
+  slug: string; title: string; subtitle: string; category: string; area: string; progress?: number; level: string; levelLabel: string; cover: string | null;
   href: string; external: boolean; lessons: number; minutes: number; videos: number; rating: number; ratings: number; accent: string;
 };
 
@@ -14,11 +14,11 @@ const fmtMin = (m: number) => (m >= 60 ? `${Math.floor(m / 60)} h${m % 60 ? ` ${
 /** Catálogo con buscador y filtros por categoría y nivel (como Udemy/Platzi). */
 export function CatalogExplorer({ courses }: { courses: CatalogCourse[] }) {
   const [q, setQ] = useState("");
-  const [cat, setCat] = useState("");
+  const [area, setArea] = useState("");
   const [level, setLevel] = useState("");
-  const cats = useMemo(() => [...new Set(courses.map((c) => c.category))], [courses]);
+  const areas = useMemo(() => [...new Set(courses.map((c) => c.area))], [courses]);
   const norm = (t: string) => t.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
-  const list = courses.filter((c) => (!cat || c.category === cat) && (!level || c.level === level) && (!q || norm(`${c.title} ${c.subtitle} ${c.category}`).includes(norm(q))));
+  const list = courses.filter((c) => (!area || c.area === area) && (!level || c.level === level) && (!q || norm(`${c.title} ${c.subtitle} ${c.category}`).includes(norm(q))));
   const chip = (on: boolean) => `rounded-full border px-3.5 py-1.5 text-[0.72rem] font-bold uppercase tracking-[0.1em] transition-colors ${on ? "border-[var(--fg-lime-500)] bg-[var(--fg-lime-500)] text-[#0a1a11]" : "border-[var(--border-strong)] text-[var(--text-muted)] hover:text-[var(--text)]"}`;
 
   return (
@@ -28,8 +28,8 @@ export function CatalogExplorer({ courses }: { courses: CatalogCourse[] }) {
         <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="¿Qué quiere aprender? Busque un curso…" aria-label="Buscar cursos" className="w-full rounded-full border border-[var(--border-strong)] bg-[var(--surface-solid)] py-3 pl-11 pr-4 text-[var(--text)] outline-none focus:border-[var(--fg-lime-500)]" />
       </div>
       <div className="flex flex-wrap items-center gap-2" role="group" aria-label="Filtros">
-        <button type="button" onClick={() => { setCat(""); setLevel(""); }} className={chip(!cat && !level)}>Todos</button>
-        {cats.map((c) => <button key={c} type="button" onClick={() => setCat(cat === c ? "" : c)} className={chip(cat === c)}>{c}</button>)}
+        <button type="button" onClick={() => { setArea(""); setLevel(""); }} className={chip(!area && !level)}>Todos</button>
+        {areas.map((c) => <button key={c} type="button" onClick={() => setArea(area === c ? "" : c)} className={chip(area === c)}>{c}</button>)}
         <span aria-hidden className="mx-1 h-5 w-px bg-[var(--border-strong)]" />
         {[["basico", "Básico"], ["intermedio", "Intermedio"], ["avanzado", "Avanzado"]].filter(([v]) => courses.some((c) => c.level === v)).map(([v, l]) => (
           <button key={v} type="button" onClick={() => setLevel(level === v ? "" : v)} className={chip(level === v)}>{l}</button>
@@ -45,12 +45,13 @@ export function CatalogExplorer({ courses }: { courses: CatalogCourse[] }) {
               <PhotoCard
                 image={c.cover ?? "/locales/programas.jpg"}
                 accent={c.accent}
-                kicker={[c.levelLabel, c.videos ? `${c.videos} videos` : c.lessons ? `${c.lessons} lecciones` : "", c.minutes ? fmtMin(c.minutes) : ""].filter(Boolean).join(" · ")}
+                kicker={[c.progress !== undefined ? (c.progress >= 100 ? "Terminado" : `Inscrito · ${c.progress} %`) : "", c.levelLabel, c.videos ? `${c.videos} videos` : c.lessons ? `${c.lessons} lecciones` : "", c.minutes ? fmtMin(c.minutes) : ""].filter(Boolean).join(" · ")}
                 title={c.title}
                 text={c.subtitle}
                 href={c.href}
                 external={c.external}
                 cta="Ver el curso"
+                open
                 badge={<span className="wc-badge wc-badge-glyph"><small>Curso</small>{String(i + 1).padStart(2, "0")}</span>}
               />
             </li>

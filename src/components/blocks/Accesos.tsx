@@ -44,7 +44,7 @@ export function AccessHub({ tinted = false }: { tinted?: boolean }) {
       <ul className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {tramites.map((a, i) => (
           <li key={a.id}>
-            <WaveCard href={a.href} external={a.external} accent={WAVES[i % WAVES.length]} icon={a.icon} title={a.title} text={a.text} cta={a.cta ?? "Ir al servicio"} />
+            <WaveCard href={a.href} external={a.external} accent={WAVES[i % WAVES.length]} icon={a.icon} title={a.title} text={a.text} cta={a.cta ?? "Ir al servicio"} image={`/servicios/${a.id}.jpg`} />
           </li>
         ))}
       </ul>

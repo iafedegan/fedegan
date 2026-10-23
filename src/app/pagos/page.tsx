@@ -55,8 +55,8 @@ export default function PagosPage() {
         eyebrow="Fondo Nacional del Ganado"
         title="Zona de pagos"
         description="Todos los pagos de FEDEGÁN–FNG en un solo lugar."
-        image="/headers/servicios.jpg"
-        imagePos="60% 40%"
+        image="/headers/ia-pagos.jpg"
+        imagePos="50% 50%"
         facts={["PSE", "Cuota de fomento", "Recaudo biológico"]}
         breadcrumbs={[{ label: "Zona de pagos" }]}
         compact
@@ -74,7 +74,7 @@ export default function PagosPage() {
         <ul className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {opciones.map((o) => (
             <li key={o.title}>
-              <WaveCard href={o.href} accent={o.wave} icon={o.icon} title={o.title} tags={o.tags} text={`${o.quien}. ${o.text}`} cta={o.cta} />
+              <WaveCard href={o.href} accent={o.wave} icon={o.icon} title={o.title} tags={o.tags} text={`${o.quien}. ${o.text}`} cta={o.cta} image={`/headers/ia-${/biol/i.test(o.title) ? "biologico" : /planilla/i.test(o.title) ? "planilla" : "cuota"}.jpg`} />
             </li>
           ))}
         </ul>

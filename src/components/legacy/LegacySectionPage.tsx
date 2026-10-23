@@ -68,7 +68,7 @@ export function LegacySectionPage({ slug, ruta }: { slug: string; ruta: string[]
   }
 
   const hasMenu = section.tree.length > 0;
-  const photo = journeyPhotos[PHOTO_ID[slug] ?? slug];
+  const photo = journeyPhotos[PHOTO_ID[slug] ?? slug] ?? (slug === "cartas-de-presidencia" ? { src: "/headers/ia-cartas.jpg", pos: "50% 50%", alt: "" } : undefined);
   const children = isLanding ? section.tree.filter((n) => n.key && n.key !== key) : [];
 
   return (

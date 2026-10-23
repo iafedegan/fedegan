@@ -3,32 +3,40 @@ import { PageHeader } from "@/components/ui/PageHeader";
 import Image from "next/image";
 import { Button } from "@/components/ui/Button";
 import { CatalogExplorer, type CatalogCourse } from "@/components/lms/CatalogExplorer";
-import { LEVELS, getCourses, getLearner } from "@/lib/lms/queries";
+import { LEVELS, getCourses, getLearner, getMyCourses } from "@/lib/lms/queries";
+import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { CtaBand, Section } from "@/components/ui/Editorial";
 
 export const metadata: Metadata = { title: "Escuela Virtual" };
 
+// Las categorías de cada curso se agrupan en pocas áreas para que el filtro no tenga una etiqueta por curso.
+const AREAS: Record<string, string> = {
+  Fundamentos: "Fundamentos y gestión", Administración: "Fundamentos y gestión", "Calidad y certificación": "Fundamentos y gestión",
+  "Nutrición y praderas": "Alimentación y ambiente", Sostenibilidad: "Alimentación y ambiente",
+  Sanidad: "Sanidad y genética", "Genética y reproducción": "Sanidad y genética", Razas: "Sanidad y genética",
+  Producción: "Producción y mercados", Productos: "Producción y mercados", Bufalinos: "Producción y mercados",
+};
 const ACCENTS = ["92,205,134", "216,181,88", "230,160,108", "112,214,196"];
 
 export default async function EscuelaVirtualPage() {
   const all = await getCourses();
+  const learner = await getLearner();
+  const mine = learner ? await getMyCourses(learner.key) : [];
   const courses: CatalogCourse[] = all.map((c, i) => ({
-    slug: c.slug, title: c.title, subtitle: c.subtitle, category: c.category, level: c.level, levelLabel: LEVELS[c.level], cover: c.cover,
+    slug: c.slug, title: c.title, subtitle: c.subtitle, category: c.category, area: AREAS[c.category] ?? c.category, progress: mine.find((m) => m.course.id === c.id)?.percent, level: c.level, levelLabel: LEVELS[c.level], cover: c.cover,
     href: c.externalUrl && !c.lessons ? c.externalUrl : `/escuela-virtual/${c.slug}`, external: Boolean(c.externalUrl && !c.lessons),
     lessons: c.lessons, minutes: c.minutes, videos: c.videos || c.externalVideos, rating: c.rating, ratings: c.ratings, accent: ACCENTS[i % ACCENTS.length],
   }));
   const videos = all.reduce((a, c) => a + (c.videos || c.externalVideos), 0);
   const hours = Math.round(all.reduce((a, c) => a + c.minutes, 0) / 60);
-  const learner = await getLearner();
   return (
     <>
       <PageHeader
         eyebrow="Formación"
         title="Escuela Virtual FEDEGÁN"
-        description="Capacitación técnica y gerencial para productores, técnicos y profesionales del sector ganadero colombiano."
-        image="/locales/sig.jpg"
-        imagePos="45% 50%"
+        image="/headers/ia-escuela.jpg"
+        imagePos="50% 50%"
         meta={`${courses.length} cursos${videos ? ` · ${videos} videos` : ""}`}
         breadcrumbs={[{ label: "Escuela Virtual" }]}
       />
@@ -63,6 +71,12 @@ export default async function EscuelaVirtualPage() {
       </section>
 
       <Section id="catalogo" eyebrow="Catálogo" title={`Los ${courses.length} cursos`} tinted>
+        {!learner && (
+          <p className="mb-6 flex flex-wrap items-center gap-x-4 gap-y-2 rounded-[var(--radius-md)] border border-[var(--border-strong)] bg-[var(--surface-solid)] px-5 py-4 text-sm text-[var(--text-muted)]">
+            <span>Puede explorar todos los cursos. Para estudiar, evaluarse y obtener su certificado, ingrese con su cuenta: es gratis.</span>
+            <Link href={`/ingresar?callbackUrl=${encodeURIComponent("/escuela-virtual/perfil")}`} className="font-bold uppercase tracking-[0.1em] text-[var(--fg-lime-400)] hover:underline">Ingresar →</Link>
+          </p>
+        )}
         <CatalogExplorer courses={courses} />
       </Section>
 

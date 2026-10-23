@@ -26,8 +26,8 @@ export default function ServiciosPage() {
         eyebrow="Autogestión"
         title="Servicios en línea"
         description="Pagos, trámites y consultas de FEDEGÁN–FNG para ganaderos y aliados del sector."
-        image="/headers/servicios.jpg"
-        imagePos="60% 40%"
+        image="/headers/ia-servicios.jpg"
+        imagePos="50% 50%"
         facts={["Pagos", "Trámites", "Consultas"]}
         breadcrumbs={[{ label: "Servicios" }]}
         compact

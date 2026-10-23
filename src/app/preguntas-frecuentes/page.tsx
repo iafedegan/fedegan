@@ -17,8 +17,8 @@ export default async function FaqPage() {
         title="Preguntas frecuentes"
         description="Resuelva sus dudas más comunes sobre trámites, servicios y procesos de FEDEGÁN–FNG."
         meta={`${faqs.length} preguntas`}
-        image="/headers/campo.jpg"
-        imagePos="50% 60%"
+        image="/headers/ia-faq.jpg"
+        imagePos="50% 50%"
         breadcrumbs={[{ label: "Preguntas frecuentes" }]}
       />
       <Container className="grid items-start gap-8 py-5 sm:py-8 lg:grid-cols-[minmax(0,1fr)_19rem] lg:gap-12">

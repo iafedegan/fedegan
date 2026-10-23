@@ -11,8 +11,8 @@ export default function AvisosPage() {
         eyebrow="Avisos"
         title="Avisos y convocatorias"
         description="Comunicados del recaudo, campañas del sector y avisos de aliados, ordenados por tema."
-        image="/headers/campo.jpg"
-        imagePos="50% 60%"
+        image="/headers/ia-avisos.jpg"
+        imagePos="50% 50%"
         breadcrumbs={[{ label: "Avisos" }]}
         compact
       />

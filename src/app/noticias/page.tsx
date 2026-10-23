@@ -39,8 +39,8 @@ export default async function NoticiasPage({ searchParams }: { searchParams: Pro
         eyebrow="Actualidad"
         title="Noticias"
         description="Notas, análisis y actualidad del sector ganadero colombiano, publicadas por CONtexto Ganadero."
-        image="/headers/prensa.jpg"
-        imagePos="60% 40%"
+        image="/headers/ia-noticias.jpg"
+        imagePos="50% 50%"
         breadcrumbs={[{ label: "Noticias" }]}
       />
       <Container className="py-5 sm:py-8">

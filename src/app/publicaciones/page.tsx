@@ -29,8 +29,8 @@ export default async function PublicacionesPage() {
         eyebrow="Biblioteca"
         title="Publicaciones"
         description="Informes, manuales y boletines institucionales del sector ganadero."
-        image="/locales/publicaciones.jpg"
-        imagePos="65% 55%"
+        image="/headers/ia-publicaciones.jpg"
+        imagePos="50% 50%"
         meta={`${items.length} ${items.length === 1 ? "documento" : "documentos"}`}
         breadcrumbs={[{ label: "Publicaciones" }]}
       />

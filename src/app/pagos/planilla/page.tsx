@@ -13,8 +13,8 @@ export default async function PlanillaPage({ searchParams }: { searchParams: Pro
         eyebrow="Recaudo mensual"
         title="Planilla de recaudo"
         description="Diligencie el mes, los orígenes y los totales de leche o carne antes de pagar."
-        image="/headers/servicios.jpg"
-        imagePos="60% 40%"
+        image="/headers/ia-planilla.jpg"
+        imagePos="50% 50%"
         breadcrumbs={[{ label: "Zona de pagos", href: "/pagos" }, { label: "Planilla" }]}
         compact
       />

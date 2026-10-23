@@ -9,8 +9,8 @@ export default function NotFound() {
         eyebrow="Error 404"
         title="Página no encontrada"
         description="El enlace que busca no existe o cambió con la renovación del portal. Use el buscador o vuelva al inicio."
-        image="/headers/campo.jpg"
-        imagePos="50% 55%"
+        image="/headers/ia-404.jpg"
+        imagePos="50% 50%"
         breadcrumbs={[{ label: "Página no encontrada" }]}
       />
       <Container className="flex flex-wrap gap-3 py-8 sm:py-12">

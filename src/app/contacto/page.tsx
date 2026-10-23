@@ -29,8 +29,8 @@ export default function ContactoPage() {
         title="Contacto"
         description="Escríbanos por PQRSD o comuníquese directamente con la Federación Colombiana de Ganaderos."
         meta="PQRSD"
-        image="/headers/servicios.jpg"
-        imagePos="50% 45%"
+        image="/headers/ia-contacto.jpg"
+        imagePos="50% 50%"
         facts={["Lunes a viernes", "8:30 a.m. – 5:30 p.m.", "Bogotá D.C."]}
         breadcrumbs={[{ label: "Contacto" }]}
       />
@@ -91,7 +91,7 @@ export default function ContactoPage() {
             <ul className="grid gap-6 sm:grid-cols-2">
               {contacto.correos.map((c, i) => (
                 <li key={c.email}>
-                  <WaveCard href={`mailto:${c.email}`} accent={(["esmeralda", "terracota", "oro", "turquesa"] as const)[i % 4]} icon="sobre" title={c.label} tags={["Escribir"]} text={`${c.email}. ${c.text}`} cta="Enviar correo" />
+                  <WaveCard href={`mailto:${c.email}`} accent={(["esmeralda", "terracota", "oro", "turquesa"] as const)[i % 4]} icon="sobre" title={c.label} tags={["Escribir"]} text={`${c.email}. ${c.text}`} cta="Enviar correo" image={["/servicios/pqrsd.jpg", "/headers/ia-faq.jpg", "/headers/ia-avisos.jpg", "/headers/ia-accesos.jpg"][i % 4]} />
                 </li>
               ))}
             </ul>
