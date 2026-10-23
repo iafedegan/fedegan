@@ -40,3 +40,8 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 !.env.example
+
+# iCloud: carpeta excluida de la sincronización (el enlace node_modules apunta aquí)
+/node_modules.nosync
+/.next.nosync
+/.next
