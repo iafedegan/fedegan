@@ -27,7 +27,11 @@ export function ticks(min: number, max: number, n = 4): number[] {
   const step = [1, 2, 2.5, 5, 10].map((k) => k * mag).find((s) => s >= raw) ?? raw;
   const start = Math.floor(min / step) * step;
   const out: number[] = [];
-  for (let v = start; v <= max + step * 0.001; v += step) out.push(Number(v.toFixed(10)));
+  // La última marca debe cubrir el máximo, o la gráfica recorta los datos más altos.
+  for (let v = start; ; v += step) {
+    out.push(Number(v.toFixed(10)));
+    if (v >= max - step * 0.001) break;
+  }
   return out;
 }
 
