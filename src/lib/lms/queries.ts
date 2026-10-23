@@ -153,7 +153,7 @@ export async function getMyCourses(key: string) {
   const db = adminDb();
   if (!db) return [];
   const [{ data: es }, { data: ps }, courses] = await Promise.all([
-    db.from("lms_enrollments").select("course_id,enrolled_at,completed_at").eq("user_key", key).order("enrolled_at", { ascending: false }),
+    db.from("lms_enrollments").select("course_id,enrolled_at,completed_at,certificate_code").eq("user_key", key).order("enrolled_at", { ascending: false }),
     db.from("lms_progress").select("course_id").eq("user_key", key),
     getCourses(),
   ]);
@@ -164,7 +164,7 @@ export async function getMyCourses(key: string) {
       const course = courses.find((c) => c.id === s(e.course_id));
       if (!course) return null;
       const d = done.get(course.id) ?? 0;
-      return { course, done: d, percent: course.lessons ? Math.min(100, Math.round((d / course.lessons) * 100)) : 0, completedAt: typeof e.completed_at === "string" ? e.completed_at : null };
+      return { course, done: d, percent: course.lessons ? Math.min(100, Math.round((d / course.lessons) * 100)) : 0, completedAt: typeof e.completed_at === "string" ? e.completed_at : null, code: typeof e.certificate_code === "string" ? e.certificate_code : null, enrolledAt: s(e.enrolled_at) };
     })
     .filter((x): x is NonNullable<typeof x> => x !== null);
 }

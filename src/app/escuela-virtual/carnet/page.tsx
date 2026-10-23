@@ -21,7 +21,7 @@ export default async function StudentCardPage() {
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col items-center gap-6 px-4 py-10">
       <div className="flex w-full items-center justify-between print:hidden">
-        <Link href="/escuela-virtual/mis-cursos" className="text-sm font-semibold text-[var(--text-muted)] hover:text-[var(--fg-lime-400)]">← Mis cursos</Link>
+        <Link href="/escuela-virtual/perfil" className="text-sm font-semibold text-[var(--text-muted)] hover:text-[var(--fg-lime-400)]">← Mi perfil</Link>
         {student && <PrintButton />}
       </div>
 

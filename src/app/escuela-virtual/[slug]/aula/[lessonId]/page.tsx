@@ -38,8 +38,9 @@ export default async function LessonPage({ params, searchParams }: { params: Pro
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--border)] px-4 py-3 sm:px-8">
           <Link href={`/escuela-virtual/${slug}`} className="inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--text-muted)] hover:text-[var(--fg-lime-400)]"><ChevronLeft size={16} /> {course.title}</Link>
           {enrollment && (
-            <div className="flex items-center gap-3 text-xs text-[var(--text-faint)]" aria-label={`Avance ${percent} %`}>
+            <div className="flex items-center gap-4 text-xs text-[var(--text-faint)]" aria-label={`Avance ${percent} %`}>
               <span className="h-2 w-40 overflow-hidden rounded-full bg-[var(--bg-sunken)]"><span className="block h-full bg-[var(--fg-lime-500)]" style={{ width: `${percent}%` }} /></span>{percent} %
+              <Link href="/escuela-virtual/perfil" className="font-bold uppercase tracking-[0.1em] text-[var(--fg-lime-400)] hover:underline">Mi perfil</Link>
             </div>
           )}
         </div>

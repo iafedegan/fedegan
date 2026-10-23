@@ -45,7 +45,7 @@ export async function enroll(fd: FormData) {
   const db = adminDb();
   if (!db) redirect(`/escuela-virtual/${slug}?error=${encodeURIComponent(NOT_CONFIGURED)}`);
   await db.from("lms_enrollments").upsert({ course_id: courseId, user_key: me.key, user_name: me.name }, { onConflict: "course_id,user_key", ignoreDuplicates: true });
-  redirect(`/escuela-virtual/${slug}/aula`);
+  redirect(`/escuela-virtual/perfil?inscrito=${encodeURIComponent(slug)}`);
 }
 
 /** Marca la lección como vista y, si era la última, cierra el curso y emite el certificado. */

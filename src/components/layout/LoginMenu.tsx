@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
-import { ChevronDown, LogIn, LogOut, Newspaper, ShieldCheck, UserCircle2 } from "lucide-react";
+import { ChevronDown, GraduationCap, LogIn, LogOut, Newspaper, ShieldCheck, UserCircle2 } from "lucide-react";
 import { appsForRoles } from "@/lib/access";
 
 const appIcons = { shield: ShieldCheck, newspaper: Newspaper };
@@ -74,6 +74,14 @@ export function LoginMenu() {
                 className="flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-[var(--text)] hover:bg-[var(--bg-muted)]"
               >
                 <UserCircle2 size={18} className="text-[var(--fg-lime-400)]" /> Mis aplicaciones
+              </Link>
+              <Link
+                href="/escuela-virtual/perfil"
+                role="menuitem"
+                onClick={() => setOpen(false)}
+                className="flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-[var(--text)] hover:bg-[var(--bg-muted)]"
+              >
+                <GraduationCap size={18} className="text-[var(--fg-lime-400)]" /> Mi perfil de estudiante
               </Link>
               {userApps.map((a) => {
                 const Icon = appIcons[a.icon];
