@@ -1,16 +1,39 @@
+import { existsSync } from "node:fs";
 import type { NextConfig } from "next";
+import portal from "./src/content/legacy/portal.json";
 
-// Tabla de equivalencias de URLs (TDR 5.3): ejemplo de redirecciones 301
-// desde rutas del portal Drupal actual hacia las nuevas rutas del portal.
-// En la migración real, esta tabla se genera programáticamente a partir del
-// inventario de contenido del sitio actual.
-const legacyRedirects = [
+// Tabla de equivalencias de URLs (TDR 5.3): redirecciones 301 desde las rutas del portal Drupal actual hacia las
+// nuevas. Las manuales cubren páginas que cambiaron de nombre; el resto se genera del inventario migrado
+// (src/content/legacy/portal.json): cada ruta del Drupal apunta a su página en /seccion/<sección>/<ruta>.
+const manualRedirects = [
   { source: "/index.php/noticias", destination: "/noticias", permanent: true },
   { source: "/index.php/component/k2", destination: "/noticias", permanent: true },
   { source: "/publicaciones-institucionales", destination: "/publicaciones", permanent: true },
   { source: "/quienes-somos-fedegan", destination: "/quienes-somos", permanent: true },
   { source: "/normatividad-vigente", destination: "/normatividad", permanent: true },
 ];
+
+const inventory = portal as unknown as {
+  sections: Record<string, { landing: string }>;
+  pages: Record<string, { sections: string[] }>;
+};
+
+function migratedRedirects() {
+  const manual = new Set(manualRedirects.map((r) => r.source));
+  const out: { source: string; destination: string; permanent: true }[] = [];
+  for (const [key, page] of Object.entries(inventory.pages)) {
+    const slug = page.sections[0];
+    if (!slug) continue;
+    const source = `/${key}`;
+    // Una ruta que ya es una página real del portal nuevo no se redirige (se vería un bucle o se taparía la página).
+    if (manual.has(source) || existsSync(`./src/app/${key}/page.tsx`)) continue;
+    const landing = inventory.sections[slug].landing === key;
+    out.push({ source, destination: landing ? `/seccion/${slug}` : `/seccion/${slug}/${key}`, permanent: true });
+  }
+  return out;
+}
+
+const legacyRedirects = [...manualRedirects, ...migratedRedirects()];
 
 // Cabeceras de seguridad (TDR §6). La CSP permite los orígenes que el portal usa: Supabase, CONtexto, Google
 // Tag Manager / Analytics y los PDFs en Google Cloud Storage. 'unsafe-inline' sigue por los estilos y scripts

@@ -96,6 +96,8 @@ function embedInfo(raw: string): EmbedInfo {
   }
   if (host.includes("slideshare")) return { kind: "link", src: raw, href: raw, title: "Presentación", hint: "Se abre en SlideShare." };
   if (host.includes("heyzine")) return { kind: "link", src: raw, href: raw, title: "Publicación interactiva", hint: "Se abre en una pestaña nueva." };
+  if (host === "public.tableau.com") return { kind: "link", src: raw, href: raw, title: "Tablero interactivo", hint: "Se abre en Tableau Public." };
+  if (/\.pdf($|\?)/i.test(u.pathname)) return { kind: "link", src: raw, href: raw, title: "Documento PDF", hint: decodeURIComponent(u.pathname.split("/").pop() ?? "Abrir documento") };
   if (host.startsWith("estadisticas.fedegan")) return { kind: "link", src: raw, href: raw, title: "Tablero interactivo", hint: "Se abre en el sitio de estadísticas de FEDEGÁN." };
   return { kind: "link", src: raw, href: raw, title: "Documento", hint: "Se abre en una pestaña nueva." };
 }
