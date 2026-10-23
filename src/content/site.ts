@@ -10,6 +10,7 @@ export const mainNav = [
   { label: "Preguntas Frecuentes", href: "/preguntas-frecuentes" },
   { label: "PQRSD", href: "/contacto" },
   { label: "Consulta RUV", href: "/servicios" },
+  { label: "Cursos Virtuales", href: "/escuela-virtual" },
 ];
 
 export const quickAccess = [
