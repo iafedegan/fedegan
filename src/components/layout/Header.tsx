@@ -15,8 +15,8 @@ function isActive(pathname: string, href: string) {
 }
 
 // Primeras opciones visibles según el ancho; el resto va en «Más».
-const visibleFrom = (i: number) => (i < 3 ? "" : "hidden xl:block");
-const inMoreOnlyBelow = () => "xl:hidden";
+const visibleFrom = (i: number) => (i < 3 ? "" : i < 6 ? "hidden xl:block" : "hidden");
+const inMoreOnlyBelow = (i: number) => (i < 6 ? "xl:hidden" : "");
 
 function MoreMenu({ items, pathname }: { items: { label: string; href: string }[]; pathname: string }) {
   const [openAt, setOpenAt] = useState<string | null>(null);
@@ -42,7 +42,7 @@ function MoreMenu({ items, pathname }: { items: { label: string; href: string }[
   const activeInside = extra.some((it) => isActive(pathname, it.href));
 
   return (
-    <div ref={ref} className="relative xl:hidden">
+    <div ref={ref} className="relative">
       <button
         type="button"
         aria-haspopup="menu"
@@ -57,9 +57,9 @@ function MoreMenu({ items, pathname }: { items: { label: string; href: string }[
           role="menu"
           className="absolute right-0 top-full z-50 mt-3 w-64 overflow-hidden rounded-[0.25rem] border border-[var(--border-strong)] bg-[var(--surface-solid)] py-2 shadow-[var(--shadow-lg)]"
         >
-          {extra.map((it) => {
+          {extra.map((it, k) => {
             return (
-              <li key={it.href} role="none" className={inMoreOnlyBelow()}>
+              <li key={it.href} role="none" className={inMoreOnlyBelow(k + 3)}>
                 <Link
                   href={it.href}
                   role="menuitem"
@@ -235,8 +235,8 @@ export function Header({ nav: mainNav }: { nav: { label: string; href: string }[
                 />
               </form>
             ) : (
-              <button type="button" onClick={() => setPillOpen(true)} className="nv-pill" aria-label="Abrir el buscador">
-                Buscar
+              <button type="button" onClick={() => setPillOpen(true)} className="nv-pill flex !h-9 !w-9 items-center justify-center !p-0" aria-label="Buscar" title="Buscar">
+                <Search size={16} />
               </button>
             )}
             <span aria-hidden className="h-7 w-px bg-[var(--border-strong)]" />
