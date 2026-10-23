@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { GraduationCap, PlayCircle } from "lucide-react";
+import { PlayCircle } from "lucide-react";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { CtaBand, Section } from "@/components/ui/Editorial";
 import { Button } from "@/components/ui/Button";
@@ -51,9 +51,7 @@ export default function EscuelaVirtualPage() {
             className="pointer-events-none absolute bottom-0 right-4 hidden h-[94%] w-auto drop-shadow-[0_18px_30px_rgba(0,0,0,0.55)] md:block lg:right-16"
           />
           <div className="flex flex-col items-start gap-6 p-7 sm:p-10 lg:max-w-2xl">
-            <span className="flex h-14 w-14 items-center justify-center rounded-[var(--radius-md)] border border-[var(--border-strong)] bg-[rgba(216,181,88,0.14)] text-[var(--fg-lime-400)]">
-              <GraduationCap size={26} strokeWidth={1.6} />
-            </span>
+            <Image src="/brand/ucg-escudo.svg" alt="Escudo de la UCG" width={1893} height={2385} unoptimized className="h-24 w-auto drop-shadow-[0_10px_24px_rgba(0,0,0,0.5)]" />
             <div>
               <h2 className="font-[var(--font-display)] text-3xl font-bold leading-tight text-[var(--text)] sm:text-4xl">Aprenda a su ritmo, desde la finca</h2>
               <p className="mt-3 text-lg leading-relaxed text-[var(--text-muted)]">
