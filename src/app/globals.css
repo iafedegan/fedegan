@@ -1191,3 +1191,9 @@ a.mx-card:hover, .mx-lift:hover, .gl-hover:hover { transform: translateY(-2px); 
   background: radial-gradient(120% 90% at 0% 0%, rgba(var(--acc-rgb), 0.1) 0%, transparent 55%), #fff;
   box-shadow: 0 14px 30px -22px rgba(19, 33, 26, 0.4);
 }
+
+/* La card y la lista de secciones comparten línea base: el borde inferior de la card queda a la altura de la última opción. */
+@media (min-width: 768px) {
+  .sw-rail { top: auto; bottom: 0.75rem; transform: none; }
+  .sw-center { top: auto; bottom: 2.15rem; transform: none; left: 1.5rem; }
+}
