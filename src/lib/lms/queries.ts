@@ -24,6 +24,7 @@ export type Course = {
   externalUrl: string | null;
   externalVideos: number;
   lessons: number;
+  videos: number;
   minutes: number;
   rating: number;
   ratings: number;
@@ -50,7 +51,7 @@ const s = (v: unknown, d = "") => (typeof v === "string" ? v : d);
 const n = (v: unknown) => (typeof v === "number" ? v : 0);
 const lines = (v: unknown) => s(v).split("\n").map((x) => x.trim()).filter(Boolean);
 
-function toCourse(r: Row, stats?: { lessons: number; minutes: number }, rate?: { sum: number; count: number }): Course {
+function toCourse(r: Row, stats?: { lessons: number; videos: number; minutes: number }, rate?: { sum: number; count: number }): Course {
   return {
     id: s(r.id), slug: s(r.slug), title: s(r.title), subtitle: s(r.subtitle), description: s(r.description),
     learnPoints: lines(r.learn_points), requirements: lines(r.requirements), category: s(r.category, "General"),
@@ -61,7 +62,7 @@ function toCourse(r: Row, stats?: { lessons: number; minutes: number }, rate?: {
     certificate: r.certificate !== false,
     externalUrl: typeof r.external_url === "string" && r.external_url ? r.external_url : null,
     externalVideos: n(r.external_videos),
-    lessons: stats?.lessons ?? 0, minutes: stats?.minutes ?? 0,
+    lessons: stats?.lessons ?? 0, videos: stats?.videos ?? 0, minutes: stats?.minutes ?? 0,
     rating: rate && rate.count ? rate.sum / rate.count : 0, ratings: rate?.count ?? 0,
   };
 }
@@ -81,14 +82,15 @@ export const getCourses = cache(async (): Promise<Course[]> => {
   if (!db) return [];
   const [{ data: cs }, { data: ls }, { data: rs }] = await Promise.all([
     db.from("lms_courses").select("*").order("sort_order", { ascending: true }),
-    db.from("lms_lessons").select("course_id,duration_minutes"),
+    db.from("lms_lessons").select("course_id,duration_minutes,kind"),
     db.from("lms_reviews").select("course_id,rating"),
   ]);
-  const st = new Map<string, { lessons: number; minutes: number }>();
+  const st = new Map<string, { lessons: number; videos: number; minutes: number }>();
   for (const l of (ls ?? []) as Row[]) {
     const k = s(l.course_id);
-    const a = st.get(k) ?? { lessons: 0, minutes: 0 };
+    const a = st.get(k) ?? { lessons: 0, videos: 0, minutes: 0 };
     a.lessons++;
+    if (l.kind === "video") a.videos++;
     a.minutes += n(l.duration_minutes);
     st.set(k, a);
   }
