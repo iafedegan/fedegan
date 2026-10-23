@@ -17,6 +17,7 @@ import { ThemeScript } from "@/components/layout/ThemeScript";
 import { PwaRegister } from "@/components/layout/PwaRegister";
 import { SitePopup } from "@/components/design/SitePopup";
 import { ConsentBanner } from "@/components/layout/ConsentBanner";
+import { WebVitals } from "@/components/layout/WebVitals";
 import { SITE_URL } from "@/lib/site-url";
 import { Analytics } from "@/components/layout/Analytics";
 import { UsageTracker } from "@/components/layout/UsageTracker";
@@ -77,6 +78,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
           <div className="read-progress" aria-hidden />
           <UsageTracker />
           <Analytics />
+          <WebVitals />
           <ConsentBanner />
           <SiteChrome
             top={

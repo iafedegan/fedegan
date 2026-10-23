@@ -10,6 +10,15 @@ import type { Local, Piso } from "@/content/site";
 type Row = Record<string, unknown>;
 let warned = false;
 
+// Publicación programada: un registro con «Publicar desde» futura (fecha de Bogotá) aún no es público.
+function hoyBogota() {
+  return new Date().toLocaleDateString("en-CA", { timeZone: "America/Bogota" });
+}
+function publicado(r: Row) {
+  const desde = r.publish_on;
+  return typeof desde !== "string" || !desde || desde <= hoyBogota();
+}
+
 async function rows(table: string, order: { column: string; ascending?: boolean }): Promise<Row[] | null> {
   const db = publicDb();
   if (!db) {
@@ -25,7 +34,7 @@ async function rows(table: string, order: { column: string; ascending?: boolean 
       console.error(`[cms] ${table}: ${error.message}`);
       return null;
     }
-    return data as Row[];
+    return (data as Row[]).filter(publicado);
   } catch (e) {
     console.error(`[cms] ${table}: ${(e as Error).message}`);
     return null;

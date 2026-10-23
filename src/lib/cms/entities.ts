@@ -117,6 +117,7 @@ export const entities: Entity[] = [
       { name: "dek", label: "Resumen", type: "textarea", max: 260 },
       { name: "cover_image", label: "Portada", type: "image", help: "Opcional; si falta se usa una foto según el tipo." },
       { name: "file_url", label: "Archivo PDF", type: "file", help: "Suba el PDF (máx. 5 MB) o pegue su dirección." },
+      { name: "publish_on", label: "Publicar desde", type: "date", help: "Opcional. Si pone una fecha futura, el contenido queda oculto hasta ese día (hora de Bogotá)." },
     ],
   },
   {
@@ -138,6 +139,7 @@ export const entities: Entity[] = [
       { name: "time_text", label: "Horario", type: "text", max: 60, placeholder: "10:00 a. m. – 12:00 m." },
       { name: "place", label: "Lugar", type: "text", max: 80, placeholder: "Virtual" },
       { name: "description", label: "Descripción", type: "textarea", max: 600 },
+      { name: "publish_on", label: "Publicar desde", type: "date", help: "Opcional. Si pone una fecha futura, el contenido queda oculto hasta ese día (hora de Bogotá)." },
     ],
   },
   {

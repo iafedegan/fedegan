@@ -47,3 +47,10 @@ Estos puntos están **preparados arquitectónicamente** (componentes desacoplado
 rutas listas para paginar sobre datos de un CMS, capa de identidad no bloqueante) pero su
 implementación real depende de que FEDEGÁN defina proveedor cloud, tenant de Entra ID, y
 alcance de los módulos opcionales a contratar.
+
+## Documentación
+
+- [`docs/manual-editor.md`](docs/manual-editor.md) — manual del editor y plan de capacitación
+- [`docs/operacion.md`](docs/operacion.md) — entornos, monitoreo, respaldos y lista previa al lanzamiento
+- [`docs/sistema-de-diseno.md`](docs/sistema-de-diseno.md) — reglas de uso del sistema de diseño
+- `docs/migraciones/` — SQL de Supabase, en orden
