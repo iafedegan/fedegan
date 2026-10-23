@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
-import { Award, Check, ChevronLeft, ChevronRight, Download, FileText, HelpCircle, PartyPopper, PlayCircle, Sparkles } from "lucide-react";
-import { CourseAssistant, OpenAssistantLink } from "@/components/lms/CourseAssistant";
+import { Award, Check, ChevronLeft, ChevronRight, Download, FileText, HelpCircle, PartyPopper, PlayCircle } from "lucide-react";
+import { CourseAssistant } from "@/components/lms/CourseAssistant";
+import { StudioPanel } from "@/components/lms/StudioPanel";
 import { QuizForm } from "@/components/lms/QuizForm";
 import { completeLesson } from "@/lib/lms/actions";
 import { flatLessons, getCourse, getEnrollment, getLearner, getProgress, getQuiz, videoEmbed } from "@/lib/lms/queries";
@@ -33,14 +34,14 @@ export default async function LessonPage({ params, searchParams }: { params: Pro
   const finished = Boolean(enrollment?.completedAt);
 
   return (
-    <div className="mx-auto grid w-full max-w-[96rem] gap-0 lg:grid-cols-[1fr_24rem]">
-      <div className="flex min-w-0 flex-col">
+    <div className="mx-auto grid w-full max-w-[112rem] gap-0 lg:grid-cols-[18rem_minmax(0,1fr)] xl:grid-cols-[18rem_minmax(0,1fr)_22rem]">
+      <div className="order-1 flex min-w-0 flex-col lg:order-2">
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--border)] px-4 py-3 sm:px-8">
           <Link href={`/escuela-virtual/${slug}`} className="inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--text-muted)] hover:text-[var(--fg-lime-400)]"><ChevronLeft size={16} /> {course.title}</Link>
           {enrollment && (
             <div className="flex items-center gap-4 text-xs text-[var(--text-faint)]" aria-label={`Avance ${percent} %`}>
               <span className="h-2 w-40 overflow-hidden rounded-full bg-[var(--bg-sunken)]"><span className="block h-full bg-[var(--fg-lime-500)]" style={{ width: `${percent}%` }} /></span>{percent} %
-              <OpenAssistantLink />
+              
               <Link href="/escuela-virtual/perfil" className="font-bold uppercase tracking-[0.1em] text-[var(--fg-lime-400)] hover:underline">Mi perfil</Link>
             </div>
           )}
@@ -89,9 +90,13 @@ export default async function LessonPage({ params, searchParams }: { params: Pro
         </div>
       </div>
 
-      <aside className="border-t border-[var(--border)] lg:border-l lg:border-t-0">
+      <aside className="order-3 border-t border-[var(--border)] lg:order-1 lg:border-r lg:border-t-0">
         <div className="lg:sticky lg:top-16 lg:max-h-[calc(100svh-4rem)] lg:overflow-y-auto">
-          <p className="px-5 py-4 text-xs font-bold uppercase tracking-[0.16em] text-[var(--text-faint)]">Contenido del curso</p>
+          <div className="px-5 py-4">
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--text-faint)]">Avance del curso</p>
+            <div className="mt-2 flex items-center gap-3 text-xs text-[var(--text-muted)]"><span className="h-2 flex-1 overflow-hidden rounded-full bg-[var(--bg-sunken)]"><span className="block h-full bg-[var(--fg-lime-500)]" style={{ width: `${percent}%` }} /></span>{percent} %</div>
+            <p className="mt-1 text-[0.72rem] text-[var(--text-faint)]">{lessons.filter((l) => progress.has(l.id)).length} de {lessons.length} lecciones</p>
+          </div>
           {course.modules.map((m, mi) => (
             <details key={m.id} open={m.lessons.some((l) => l.id === lesson.id) || mi === 0} className="border-t border-[var(--border)]">
               <summary className="cursor-pointer list-none px-5 py-3.5 text-sm font-semibold text-[var(--text)]"><span className="mr-2 font-mono text-xs text-[var(--fg-lime-500)]">{String(mi + 1).padStart(2, "0")}</span>{m.title}</summary>
@@ -114,6 +119,14 @@ export default async function LessonPage({ params, searchParams }: { params: Pro
           ))}
         </div>
       </aside>
+
+      {me && (enrollment || lesson.freePreview) && (
+        <aside aria-label="Studio" className="order-2 border-t border-[var(--border)] lg:col-span-2 xl:order-3 xl:col-span-1 xl:border-l xl:border-t-0">
+          <div className="xl:sticky xl:top-16 xl:max-h-[calc(100svh-4rem)] xl:overflow-y-auto">
+            <StudioPanel courseId={course.id} lessonId={lesson.id} slug={slug} enabled={Boolean(process.env.GEMINI_API_KEY)} />
+          </div>
+        </aside>
+      )}
     </div>
   );
 }

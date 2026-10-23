@@ -40,11 +40,7 @@ export function StudentCard({ d }: { d: StudentCardData }) {
 
           {/* Reverso */}
           <article aria-label="Carnet de estudiante, reverso" className="relative flex aspect-[1.586/1] w-full max-w-[34rem] flex-col justify-between overflow-hidden rounded-[1.1rem] border border-[#b08f4f]/60 bg-[#fbf8ee] p-5 text-[#11271d] shadow-[var(--shadow-lg)] print:shadow-none">
-            <div className="grid grid-cols-3 gap-3 text-center">
-              <div className="rounded-lg border border-[#d8cfae] p-3"><p className="font-[var(--font-display)] text-3xl font-bold">{stats.enrolled}</p><p className="text-[0.58rem] font-bold uppercase tracking-[0.16em] text-[#8a6d2f]">Cursos</p></div>
-              <div className="rounded-lg border border-[#d8cfae] p-3"><p className="font-[var(--font-display)] text-3xl font-bold">{stats.certificates}</p><p className="text-[0.58rem] font-bold uppercase tracking-[0.16em] text-[#8a6d2f]">Certificados</p></div>
-              <div className="rounded-lg border border-[#d8cfae] p-3"><p className="font-[var(--font-display)] text-3xl font-bold">{year}</p><p className="text-[0.58rem] font-bold uppercase tracking-[0.16em] text-[#8a6d2f]">Vigencia</p></div>
-            </div>
+            <div aria-hidden />
             <div className="flex items-end justify-between gap-4">
               <p className="max-w-[16rem] text-[0.65rem] leading-relaxed text-[#4a5a52]">Este carnet identifica a su titular como estudiante de la Escuela Virtual de FEDEGÁN–FNG. Escanee el código para verificar su validez. Es personal e intransferible.</p>
               <div className="h-24 w-24 shrink-0 rounded-md border border-[#d8cfae] bg-white p-1.5" dangerouslySetInnerHTML={{ __html: qr }} aria-label="Código QR de verificación" role="img" />
