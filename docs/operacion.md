@@ -6,7 +6,7 @@
 - **CI**: `.github/workflows/ci.yml` corre lint y build en cada PR y en `main`. Active en GitHub la regla de rama «exigir CI» para bloquear merges que fallen.
 
 ## Variables de entorno
-Ver `.env.example`. Claves: `SUPABASE_*`, `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_GTM_ID`, `CRON_SECRET`, `AUTH_*`.
+Ver `.env.example`. Claves: `SUPABASE_*`, `GEMINI_API_KEY` (asistente de estudio de la Escuela Virtual; ponerla en Vercel → Settings → Environment Variables y redesplegar), `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_GTM_ID`, `CRON_SECRET`, `AUTH_*`.
 
 ## Monitoreo y alertas
 - `GET /api/salud` devuelve 200/503. Apúntele un monitor externo (UptimeRobot, Better Stack) cada minuto con alerta por correo.

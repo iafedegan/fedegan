@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { Award, Check, ChevronLeft, ChevronRight, Download, FileText, HelpCircle, PartyPopper, PlayCircle } from "lucide-react";
+import { CourseAssistant } from "@/components/lms/CourseAssistant";
 import { QuizForm } from "@/components/lms/QuizForm";
 import { completeLesson } from "@/lib/lms/actions";
 import { flatLessons, getCourse, getEnrollment, getLearner, getProgress, getQuiz, videoEmbed } from "@/lib/lms/queries";
@@ -66,6 +67,10 @@ export default async function LessonPage({ params, searchParams }: { params: Pro
           )}
 
           {lesson.kind === "quiz" && enrollment && (questions.length ? <QuizForm courseId={course.id} lessonId={lesson.id} slug={slug} questions={questions} passScore={lesson.passScore} done={done} /> : <p className="text-[var(--text-muted)]">Esta evaluación aún no tiene preguntas.</p>)}
+
+          {me && (enrollment || lesson.freePreview) && (
+            <CourseAssistant courseId={course.id} lessonId={lesson.id} slug={slug} lessonTitle={lesson.title} sources={lessons.length} enabled={Boolean(process.env.GEMINI_API_KEY)} />
+          )}
 
           <div className="flex flex-wrap items-center gap-3 border-t border-[var(--border)] pt-6">
             {prev && <Link href={`/escuela-virtual/${slug}/aula/${prev.id}`} className="inline-flex items-center gap-1.5 rounded-[0.25rem] border border-[var(--border-strong)] px-4 py-2.5 text-xs font-bold uppercase tracking-[0.1em] text-[var(--text-muted)] hover:text-[var(--text)]"><ChevronLeft size={15} /> Anterior</Link>}
