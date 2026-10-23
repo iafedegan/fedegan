@@ -40,7 +40,7 @@ export default function EscuelaVirtualPage() {
 
       <Section>
         <div className="relative isolate overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border-strong)]">
-          <Image src="/locales/sig.jpg" alt="" fill sizes="(min-width: 1280px) 1200px, 100vw" className="-z-10 object-cover" style={{ objectPosition: "45% 40%" }} />
+          <Image src="/locales/publicaciones.jpg" alt="" fill sizes="(min-width: 1280px) 1200px, 100vw" className="-z-10 -scale-x-100 object-cover" style={{ objectPosition: "50% 100%" }} />
           <span aria-hidden className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(5,16,11,0.94)_0%,rgba(5,16,11,0.78)_50%,rgba(5,16,11,0.35)_100%)]" />
           <Image
             src="/brand/mascota-beto.svg"
