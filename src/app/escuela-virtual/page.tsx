@@ -59,7 +59,7 @@ export default async function EscuelaVirtualPage() {
               ))}
             </ul>
             <div className="flex flex-wrap items-center gap-3">
-              <Button variant="lime" href={learner ? "/escuela-virtual/perfil" : `/ingresar?callbackUrl=${encodeURIComponent("/escuela-virtual/perfil")}`}>
+              <Button variant="lime" href={learner ? "/escuela-virtual/perfil" : `/escuela-virtual/ingresar?callbackUrl=${encodeURIComponent("/escuela-virtual/perfil")}`}>
                 Entrar a la plataforma →
               </Button>
               <a href="#catalogo" className="inline-flex min-h-11 items-center px-3 text-[0.8rem] font-bold uppercase tracking-[0.1em] text-[var(--text-muted)] hover:text-[var(--fg-lime-400)]">Ver los cursos ↓</a>
@@ -75,7 +75,7 @@ export default async function EscuelaVirtualPage() {
         {!learner && (
           <p className="mb-6 flex flex-wrap items-center gap-x-4 gap-y-2 rounded-[var(--radius-md)] border border-[var(--border-strong)] bg-[var(--surface-solid)] px-5 py-4 text-sm text-[var(--text-muted)]">
             <span>Puede explorar todos los cursos. Para estudiar, evaluarse y obtener su certificado, ingrese con su cuenta: es gratis.</span>
-            <Link href={`/ingresar?callbackUrl=${encodeURIComponent("/escuela-virtual/perfil")}`} className="font-bold uppercase tracking-[0.1em] text-[var(--fg-lime-400)] hover:underline">Ingresar →</Link>
+            <Link href={`/escuela-virtual/ingresar?callbackUrl=${encodeURIComponent("/escuela-virtual/perfil")}`} className="font-bold uppercase tracking-[0.1em] text-[var(--fg-lime-400)] hover:underline">Ingresar →</Link>
           </p>
         )}
         <CatalogExplorer courses={courses} loggedIn={Boolean(learner)} />

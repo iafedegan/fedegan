@@ -21,7 +21,7 @@ export default async function LessonPage({ params, searchParams }: { params: Pro
   const lesson = lessons[idx];
   const me = await getLearner();
   const enrollment = me ? await getEnrollment(course.id, me.key) : null;
-  if (!enrollment && !lesson.freePreview) redirect(me ? `/escuela-virtual/${slug}` : `/ingresar?callbackUrl=${encodeURIComponent(`/escuela-virtual/${slug}/aula/${lessonId}`)}`);
+  if (!enrollment && !lesson.freePreview) redirect(me ? `/escuela-virtual/${slug}` : `/escuela-virtual/ingresar?callbackUrl=${encodeURIComponent(`/escuela-virtual/${slug}/aula/${lessonId}`)}`);
 
   const progress = me ? await getProgress(course.id, me.key) : new Map<string, number | null>();
   const done = progress.has(lesson.id);

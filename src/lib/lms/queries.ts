@@ -3,33 +3,9 @@ import { cache } from "react";
 import { auth } from "@/auth";
 import { adminDb, publicDb } from "@/lib/cms/client";
 
-export type Level = "basico" | "intermedio" | "avanzado";
-export const LEVELS: Record<Level, string> = { basico: "Básico", intermedio: "Intermedio", avanzado: "Avanzado" };
-
-export type Course = {
-  id: string;
-  slug: string;
-  title: string;
-  subtitle: string;
-  description: string;
-  learnPoints: string[];
-  requirements: string[];
-  category: string;
-  level: Level;
-  instructor: string;
-  instructorBio: string;
-  cover: string | null;
-  promoVideo: string | null;
-  certificate: boolean;
-  externalUrl: string | null;
-  externalVideos: number;
-  lessons: number;
-  videos: number;
-  minutes: number;
-  rating: number;
-  ratings: number;
-};
-
+export { LEVELS, type Level, type Course } from "./queries-types";
+import { LEVELS as _L, type Level, type Course } from "./queries-types";
+void _L;
 export type Lesson = {
   id: string;
   moduleId: string;
@@ -131,14 +107,14 @@ export async function getLearner(): Promise<Learner | null> {
   return { key: email.toLowerCase(), name: session.user.name ?? email };
 }
 
-export type Enrollment = { enrolledAt: string; completedAt: string | null; code: string | null };
+export type Enrollment = { enrolledAt: string; completedAt: string | null; code: string | null; demo: boolean };
 
 export async function getEnrollment(courseId: string, key: string): Promise<Enrollment | null> {
   const db = adminDb();
   if (!db) return null;
   const { data } = await db.from("lms_enrollments").select("*").eq("course_id", courseId).eq("user_key", key).maybeSingle();
   if (!data) return null;
-  return { enrolledAt: s(data.enrolled_at), completedAt: typeof data.completed_at === "string" ? data.completed_at : null, code: typeof data.certificate_code === "string" ? data.certificate_code : null };
+  return { enrolledAt: s(data.enrolled_at), completedAt: typeof data.completed_at === "string" ? data.completed_at : null, code: typeof data.certificate_code === "string" ? data.certificate_code : null, demo: data.demo === true };
 }
 
 export async function getProgress(courseId: string, key: string): Promise<Map<string, number | null>> {
@@ -155,7 +131,7 @@ export async function getMyCourses(key: string) {
   const db = adminDb();
   if (!db) return [];
   const [{ data: es }, { data: ps }, courses] = await Promise.all([
-    db.from("lms_enrollments").select("course_id,enrolled_at,completed_at,certificate_code").eq("user_key", key).order("enrolled_at", { ascending: false }),
+    db.from("lms_enrollments").select("course_id,enrolled_at,completed_at,certificate_code,demo").eq("user_key", key).order("enrolled_at", { ascending: false }),
     db.from("lms_progress").select("course_id").eq("user_key", key),
     getCourses(),
   ]);
@@ -166,7 +142,7 @@ export async function getMyCourses(key: string) {
       const course = courses.find((c) => c.id === s(e.course_id));
       if (!course) return null;
       const d = done.get(course.id) ?? 0;
-      return { course, done: d, percent: course.lessons ? Math.min(100, Math.round((d / course.lessons) * 100)) : 0, completedAt: typeof e.completed_at === "string" ? e.completed_at : null, code: typeof e.certificate_code === "string" ? e.certificate_code : null, enrolledAt: s(e.enrolled_at) };
+      return { course, done: d, percent: course.lessons ? Math.min(100, Math.round((d / course.lessons) * 100)) : 0, completedAt: typeof e.completed_at === "string" ? e.completed_at : null, code: typeof e.certificate_code === "string" ? e.certificate_code : null, enrolledAt: s(e.enrolled_at), demo: e.demo === true };
     })
     .filter((x): x is NonNullable<typeof x> => x !== null);
 }
@@ -229,7 +205,7 @@ export async function getStudentStats(key: string) {
 
 export type CodeLookup =
   | { type: "carnet"; name: string; since: string; certificates: number }
-  | { type: "certificado"; name: string; course: string; date: string }
+  | { type: "certificado"; name: string; course: string; date: string; demo: boolean }
   | null;
 
 /** Verifica un código de carnet o de certificado (página pública de verificación). */
@@ -242,10 +218,10 @@ export async function lookupCode(code: string): Promise<CodeLookup> {
     const { certificates } = await getStudentStats(s(st.user_key));
     return { type: "carnet", name: s(st.name), since: s(st.created_at), certificates };
   }
-  const { data: en } = await db.from("lms_enrollments").select("user_name,completed_at,course_id").eq("certificate_code", c).maybeSingle();
+  const { data: en } = await db.from("lms_enrollments").select("user_name,completed_at,course_id,demo").eq("certificate_code", c).maybeSingle();
   if (en && en.completed_at) {
     const { data: co } = await db.from("lms_courses").select("title").eq("id", en.course_id).maybeSingle();
-    return { type: "certificado", name: s(en.user_name), course: s(co?.title), date: s(en.completed_at) };
+    return { type: "certificado", name: s(en.user_name), course: s(co?.title), date: s(en.completed_at), demo: en.demo === true };
   }
   return null;
 }

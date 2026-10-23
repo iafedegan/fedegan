@@ -16,7 +16,8 @@ export default async function VerifyPage({ params }: { params: Promise<{ code: s
       {found ? (
         <div className="w-full rounded-[var(--radius-lg)] border border-[var(--fg-lime-500)] bg-[var(--surface-solid)] p-8">
           <BadgeCheck size={36} className="mx-auto text-[var(--fg-lime-500)]" />
-          <h1 className="mt-3 font-[var(--font-display)] text-3xl font-bold text-[var(--text)]">{found.type === "carnet" ? "Carnet válido" : "Certificado válido"}</h1>
+          <h1 className="mt-3 font-[var(--font-display)] text-3xl font-bold text-[var(--text)]">{found.type === "carnet" ? "Carnet válido" : found.demo ? "Certificado de demostración" : "Certificado válido"}</h1>
+          {found.type === "certificado" && found.demo && <p className="mt-2 text-sm text-[#e6cf8e]">Es un certificado de prueba: no acredita la finalización del curso.</p>}
           <p className="mt-5 text-sm uppercase tracking-[0.16em] text-[var(--text-faint)]">{found.type === "carnet" ? "Estudiante" : "Se certifica a"}</p>
           <p className="font-[var(--font-display)] text-2xl font-bold text-[var(--text)]">{found.name}</p>
           {found.type === "carnet" ? (

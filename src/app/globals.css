@@ -1156,7 +1156,7 @@ a.mx-card:hover, .mx-lift:hover, .gl-hover:hover { transform: translateY(-2px); 
 /* ── Contenedores con más presencia (cards, cifras, citas) ─────────────────────────────────────────────────
    Superficie con degradado, brillo de acento en la esquina, línea de color arriba y una ola suave abajo,
    en la línea de las fichas con foto. Un solo bloque para todo el portal. */
-.gl, .mx-card, .mx-stat, .mx-quote, .mx-panel { isolation: isolate; }
+.gl, .mx-card, .mx-stat, .mx-quote, .mx-panel { isolation: isolate; position: relative; }
 .gl, .mx-card, .mx-stat, .mx-quote, .mx-panel {
   --acc-rgb: 216, 181, 88;
   border-radius: 1rem;

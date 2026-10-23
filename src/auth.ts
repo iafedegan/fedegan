@@ -2,6 +2,8 @@ import NextAuth, { type DefaultSession } from "next-auth";
 import MicrosoftEntraID from "next-auth/providers/microsoft-entra-id";
 import Credentials from "next-auth/providers/credentials";
 import { demoProfiles } from "@/lib/access";
+import { adminDb } from "@/lib/cms/client";
+import { verifyPassword } from "@/lib/lms/password";
 
 declare module "next-auth" {
   interface Session {
@@ -39,6 +41,31 @@ if (demoEnabled) {
     }),
   );
 }
+
+// Ingreso de ganaderos y aliados (Escuela Virtual): correo y contraseña propios, con bloqueo breve tras varios intentos fallidos.
+providers.push(
+  Credentials({
+    id: "ganadero",
+    name: "Ganaderos y aliados",
+    credentials: { email: {}, password: {} },
+    async authorize(credentials) {
+      const db = adminDb();
+      const email = String(credentials?.email ?? "").trim().toLowerCase();
+      const password = String(credentials?.password ?? "");
+      if (!db || !email || !password) return null;
+      const { data } = await db.from("lms_accounts").select("*").eq("email", email).maybeSingle();
+      if (!data) return null;
+      if (data.locked_until && new Date(data.locked_until) > new Date()) return null;
+      if (!(await verifyPassword(password, String(data.password_hash)))) {
+        const failed = (data.failed_count ?? 0) + 1;
+        await db.from("lms_accounts").update({ failed_count: failed >= 5 ? 0 : failed, locked_until: failed >= 5 ? new Date(Date.now() + 10 * 60_000).toISOString() : null }).eq("email", email);
+        return null;
+      }
+      if (data.failed_count) await db.from("lms_accounts").update({ failed_count: 0, locked_until: null }).eq("email", email);
+      return { id: `gan-${email}`, name: String(data.name), email, roles: [String(data.kind)] } as never;
+    },
+  }),
+);
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   providers,

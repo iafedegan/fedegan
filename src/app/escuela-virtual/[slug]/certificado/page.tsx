@@ -5,6 +5,7 @@ import { notFound, redirect } from "next/navigation";
 import { PrintButton } from "@/components/lms/PrintButton";
 import { getCourse, getEnrollment, getLearner } from "@/lib/lms/queries";
 import { qrSvg, siteOrigin } from "@/lib/lms/qr";
+import { linkedinAddUrl, linkedinShareUrl } from "@/lib/lms/linkedin";
 
 export const metadata: Metadata = { title: "Certificado", robots: { index: false } };
 
@@ -13,7 +14,7 @@ export default async function CertificatePage({ params }: { params: Promise<{ sl
   const course = await getCourse(slug);
   if (!course || !course.certificate) notFound();
   const me = await getLearner();
-  if (!me) redirect(`/ingresar?callbackUrl=${encodeURIComponent(`/escuela-virtual/${slug}/certificado`)}`);
+  if (!me) redirect(`/escuela-virtual/ingresar?callbackUrl=${encodeURIComponent(`/escuela-virtual/${slug}/certificado`)}`);
   const enrollment = await getEnrollment(course.id, me.key);
   if (!enrollment?.completedAt || !enrollment.code) redirect(`/escuela-virtual/${slug}`);
   const verifyUrl = `${await siteOrigin()}/escuela-virtual/verificar/${enrollment.code}`;
@@ -25,9 +26,15 @@ export default async function CertificatePage({ params }: { params: Promise<{ sl
     <div className="mx-auto flex w-full max-w-4xl flex-col items-center gap-6 px-4 py-10">
       <div className="flex w-full items-center justify-between print:hidden">
         <Link href={`/escuela-virtual/${slug}`} className="text-sm font-semibold text-[var(--text-muted)] hover:text-[var(--fg-lime-400)]">← Volver al curso</Link>
-        <PrintButton />
+        <div className="flex flex-wrap items-center gap-2">
+          <a href={linkedinAddUrl({ course: course.title, code: enrollment.code, date: enrollment.completedAt, verifyUrl, demo: enrollment.demo })} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-[0.25rem] bg-[#0a66c2] px-5 py-3 text-xs font-bold uppercase tracking-[0.1em] text-white hover:bg-[#0b5aa8]">Agregar a LinkedIn</a>
+          <a href={linkedinShareUrl(verifyUrl)} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-[0.25rem] border border-[#0a66c2] px-5 py-3 text-xs font-bold uppercase tracking-[0.1em] text-[#6fb1f2] hover:bg-[rgba(10,102,194,0.15)]">Compartir publicación</a>
+          <PrintButton />
+        </div>
       </div>
+      {enrollment.demo && <p className="w-full rounded-[0.25rem] border border-[#e8d9a8] bg-[#fbf5de] px-4 py-2.5 text-sm text-[#6b5518] print:hidden">Certificado de demostración: sirve para probar la publicación en LinkedIn y no acredita la finalización del curso.</p>}
       <article className="relative w-full overflow-hidden rounded-[0.5rem] border-[10px] border-double border-[#b08f4f] bg-[#fbf8ee] p-8 text-center text-[#11271d] shadow-[var(--shadow-lg)] sm:p-14 print:shadow-none">
+        {enrollment.demo && <span aria-hidden className="pointer-events-none absolute right-[-3.2rem] top-8 rotate-45 bg-[#b08f4f] px-14 py-1 text-[0.7rem] font-bold uppercase tracking-[0.3em] text-white">Demostración</span>}
         <Image src="/brand/ucg-escudo.svg" alt="Escudo UCG" width={1893} height={2385} unoptimized className="mx-auto h-24 w-auto" />
         <p className="mt-5 text-xs font-bold uppercase tracking-[0.3em] text-[#8a6d2f]">Escuela Virtual · FEDEGÁN–FNG</p>
         <h1 className="mt-3 font-[var(--font-display)] text-4xl font-bold sm:text-5xl">Certificado de finalización</h1>

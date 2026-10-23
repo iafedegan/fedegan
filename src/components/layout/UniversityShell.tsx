@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
-import { GraduationCap, IdCard, LogIn, LogOut, UserCircle2 } from "lucide-react";
+import { GraduationCap, LogIn, LogOut, UserCircle2 } from "lucide-react";
 
 // Marco propio de la Escuela Virtual (UCG): se ve como un sitio aparte, sin el encabezado, el menú ni el pie del portal de
 // FEDEGÁN. La salida es «Cerrar sesión», que devuelve al portal.
@@ -23,7 +23,7 @@ export function UniversityShell({ children }: { children: ReactNode }) {
       <a href="#contenido" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-[var(--fg-lime-500)] focus:px-5 focus:py-2.5 focus:text-sm focus:font-bold focus:text-[var(--fg-green-900)]">
         Saltar al contenido
       </a>
-      <header className="sticky top-0 z-50 border-b border-[var(--border-strong)] bg-[color-mix(in_srgb,var(--bg)_92%,transparent)] backdrop-blur-xl">
+      <header className="sticky top-0 z-50 border-b print:hidden border-[var(--border-strong)] bg-[color-mix(in_srgb,var(--bg)_92%,transparent)] backdrop-blur-xl">
         <div className="mx-auto flex h-16 w-full max-w-[96rem] items-center gap-3 px-4 sm:px-6">
           <Link href="/escuela-virtual" className="flex shrink-0 items-center gap-3" aria-label="UCG, Escuela Virtual: inicio">
             <Image src="/brand/ucg-escudo.svg" alt="" width={1893} height={2385} unoptimized priority className="h-10 w-auto" />
@@ -38,7 +38,6 @@ export function UniversityShell({ children }: { children: ReactNode }) {
             {user && (
               <>
                 <Link href="/escuela-virtual/perfil" className={link("/escuela-virtual/perfil")}><UserCircle2 size={16} /> Mi perfil</Link>
-                <Link href="/escuela-virtual/carnet" className={link("/escuela-virtual/carnet")}><IdCard size={16} /> Carnet</Link>
               </>
             )}
           </nav>
@@ -56,8 +55,8 @@ export function UniversityShell({ children }: { children: ReactNode }) {
                 </button>
               </>
             ) : (
-              status !== "loading" && (
-                <Link href={`/ingresar?callbackUrl=${encodeURIComponent(pathname)}`} className="inline-flex min-h-10 items-center gap-2 rounded-full bg-[var(--fg-lime-500)] px-5 text-[0.75rem] font-bold uppercase tracking-[0.1em] text-[#0a1a11] hover:bg-[var(--fg-lime-400)]">
+              status !== "loading" && !pathname.startsWith("/escuela-virtual/ingresar") && (
+                <Link href={`/escuela-virtual/ingresar?callbackUrl=${encodeURIComponent(pathname)}`} className="inline-flex min-h-10 items-center gap-2 rounded-full bg-[var(--fg-lime-500)] px-5 text-[0.75rem] font-bold uppercase tracking-[0.1em] text-[#0a1a11] hover:bg-[var(--fg-lime-400)]">
                   <LogIn size={15} /> Ingresar
                 </Link>
               )
@@ -68,7 +67,7 @@ export function UniversityShell({ children }: { children: ReactNode }) {
 
       <main id="contenido" data-region="body" className="flex-1">{children}</main>
 
-      <footer className="border-t border-[var(--border)] py-6 text-center text-xs text-[var(--text-faint)]">
+      <footer className="border-t border-[var(--border)] py-6 print:hidden text-center text-xs text-[var(--text-faint)]">
         © {new Date().getFullYear()} UCG · Escuela Virtual FEDEGÁN–FNG
       </footer>
     </div>

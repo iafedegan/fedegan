@@ -9,7 +9,7 @@ export default async function ClassroomEntry({ params }: { params: Promise<{ slu
   const course = await getCourse(slug);
   if (!course) notFound();
   const me = await getLearner();
-  if (!me) redirect(`/ingresar?callbackUrl=${encodeURIComponent(`/escuela-virtual/${slug}/aula`)}`);
+  if (!me) redirect(`/escuela-virtual/ingresar?callbackUrl=${encodeURIComponent(`/escuela-virtual/${slug}/aula`)}`);
   if (!(await getEnrollment(course.id, me.key))) redirect(`/escuela-virtual/${slug}`);
   const lessons = flatLessons(course);
   if (!lessons.length) redirect(`/escuela-virtual/${slug}`);
