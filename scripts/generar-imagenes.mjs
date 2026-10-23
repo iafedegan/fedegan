@@ -28,10 +28,22 @@ const ESCENAS = {
   bursagan: "Corral de subasta ganadera moderno con novillos y compradores de sombrero de espaldas apoyados en la baranda, luz de media mañana; sensación de comercio y bolsa de ganado, sin carteles legibles.",
   "maestro-de-la-carne": "Mesa de madera con cortes de carne de res frescos y bien presentados, cuchillo de chef, hierbas y sal gruesa; un maestro carnicero con delantal de perfil cortando con precisión; sensación de calidad, cocina colombiana y mesa familiar.",
   "colombian-beef": "Ganado de pasto en una pradera exuberante y muy verde de Colombia al amanecer, novillos gordos y sanos con neblina entre colinas; sensación de carne grass-fed de exportación y calidad premium.",
+  "curso-01": "Ganadero mayor con sombrero y ruana enseñando a un joven un potrero de hacienda tradicional colombiana con casa de campo y ganado; sensación de historia, tradición y cultura sanitaria de la ganadería colombiana.",
+  "curso-02": "Potrero verde y exuberante con ganado pastando en rotación, cercas eléctricas, pacas de heno y un tractor al fondo; un ganadero revisa el pasto con la mano; sensación de manejo de praderas y buena alimentación animal.",
+  "curso-03": "Sistema silvopastoril: ganado descansando a la sombra de árboles nativos dentro del potrero, un arroyo cristalino y paneles solares pequeños al fondo; sensación de ganadería sostenible y cuidado del medio ambiente.",
+  "curso-04": "Veterinario con guantes y overol examinando con cuidado a un ternero en un corral limpio, con botiquín de primeros auxilios abierto en una caja de madera; sensación de salud animal y atención oportuna.",
+  "curso-05": "Técnico con tanque de nitrógeno líquido y equipo de inseminación artificial junto a una vaca cebú de excelente genética en un corral; al fondo un toro reproductor de buena conformación; sensación de mejoramiento genético y reproducción.",
+  "curso-06": "Tres grupos de ganado en etapas distintas en un mismo paisaje de pradera: vaca con su ternero recién nacido en primer plano, novillas jóvenes en el medio y novillos gordos al fondo; sensación de ciclo completo cría, levante y ceba.",
+  "curso-07": "Mesa rústica de madera con una lechera de aluminio, leche fresca en vasos, quesos campesinos y cortes frescos de carne de res; ordeño manual al fondo desenfocado; sensación de productos de la ganadería, leche y carne.",
+  "curso-08": "Administrador de finca ganadera de perfil con tablet y libreta registrando animales mientras un vaquero arrea el ganado en el corral; sensación de registros, administración, recurso humano y gestión de la finca.",
+  "curso-09": "Dos vacas de razas distintas lado a lado en un potrero: una holstein blanca y negra de leche y una cebú Brahman gris de carne, con montañas de fondo; sensación de razas bovinas del trópico alto y bajo.",
+  "curso-10": "Búfalos de agua oscuros con grandes cuernos curvos descansando y bañándose en un humedal tropical colombiano al amanecer, con garzas blancas; sensación de producción bufalina.",
+  "curso-11": "Ganadero y auditor de certificación revisando con una tablet un corral limpio y ordenado, con arete de identificación en la oreja de una res (sin números legibles) y entorno verde de finca certificada; sensación de buenas prácticas ganaderas, trazabilidad, bienestar animal y sello ambiental.",
 };
 
 const ids = process.argv.slice(2).length ? process.argv.slice(2) : Object.keys(ESCENAS);
 await mkdir("public/journey", { recursive: true });
+await mkdir("public/cursos", { recursive: true });
 
 for (const id of ids) {
   const escena = ESCENAS[id];
@@ -58,6 +70,7 @@ for (const id of ids) {
     continue;
   }
   const ext = parte.inlineData.mimeType.includes("jpeg") ? "jpg" : "png";
-  await writeFile(`public/journey/${id}.${ext}`, Buffer.from(parte.inlineData.data, "base64"));
-  console.log(`${id}: public/journey/${id}.${ext}`);
+  const destino = id.startsWith("curso-") ? `public/cursos/${id}.${ext}` : `public/journey/${id}.${ext}`;
+  await writeFile(destino, Buffer.from(parte.inlineData.data, "base64"));
+  console.log(`${id}: ${destino}`);
 }

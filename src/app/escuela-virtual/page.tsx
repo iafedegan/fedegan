@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { PlayCircle } from "lucide-react";
 import { PageHeader } from "@/components/ui/PageHeader";
+import { PhotoCard } from "@/components/ui/PhotoCard";
 import { CtaBand, Section } from "@/components/ui/Editorial";
 import { Button } from "@/components/ui/Button";
 
@@ -67,20 +67,22 @@ export default function EscuelaVirtualPage() {
         <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {courses.map((c) => (
             <li key={c.title} className="h-full">
-              <a
+              <PhotoCard
+                image={`/cursos/curso-${c.n}.jpg`}
+                accent={c.accent}
+                kicker={`Curso ${c.n} · ${c.videos} videos`}
+                title={c.title}
+                text={c.desc}
                 href={MPG_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mx-card flex h-full flex-col gap-3 !p-6 !pt-7"
-                style={{ ["--acc-rgb" as string]: c.accent } as React.CSSProperties}
-              >
-                <span className="font-mono text-xs tracking-[0.14em] text-[rgb(var(--acc-rgb))]">CURSO {c.n}</span>
-                <h3 className="font-[var(--font-display)] text-xl font-bold leading-snug text-[var(--text)]">{c.title}</h3>
-                <p className="text-sm leading-relaxed text-[var(--text-muted)]">{c.desc}</p>
-                <span className="mt-auto inline-flex items-center gap-1.5 self-start rounded-full border border-[rgba(var(--acc-rgb),0.55)] px-3 py-1.5 text-xs font-bold uppercase tracking-[0.08em] text-[rgb(var(--acc-rgb))]">
-                  <PlayCircle size={13} aria-hidden /> {c.videos} videos
-                </span>
-              </a>
+                external
+                cta="Ver el curso en la plataforma"
+                badge={
+                  <span className="wc-badge wc-badge-glyph">
+                    <small>Curso</small>
+                    {c.n}
+                  </span>
+                }
+              />
             </li>
           ))}
         </ul>
