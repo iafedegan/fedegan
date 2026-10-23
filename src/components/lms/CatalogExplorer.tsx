@@ -12,7 +12,7 @@ export type CatalogCourse = {
 const fmtMin = (m: number) => (m >= 60 ? `${Math.floor(m / 60)} h${m % 60 ? ` ${m % 60} min` : ""}` : `${m} min`);
 
 /** Catálogo con buscador y filtros por categoría y nivel (como Udemy/Platzi). */
-export function CatalogExplorer({ courses }: { courses: CatalogCourse[] }) {
+export function CatalogExplorer({ courses, loggedIn = false }: { courses: CatalogCourse[]; loggedIn?: boolean }) {
   const [q, setQ] = useState("");
   const [area, setArea] = useState("");
   const [level, setLevel] = useState("");
@@ -41,11 +41,11 @@ export function CatalogExplorer({ courses }: { courses: CatalogCourse[] }) {
       ) : (
         <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {list.map((c, i) => (
-            <li key={c.slug} className="h-full">
+            <li key={c.slug} className={`h-full ${loggedIn && c.progress === undefined ? "lms-off" : ""}`}>
               <PhotoCard
                 image={c.cover ?? "/locales/programas.jpg"}
                 accent={c.accent}
-                kicker={[c.progress !== undefined ? (c.progress >= 100 ? "Terminado" : `Inscrito · ${c.progress} %`) : "", c.levelLabel, c.videos ? `${c.videos} videos` : c.lessons ? `${c.lessons} lecciones` : "", c.minutes ? fmtMin(c.minutes) : ""].filter(Boolean).join(" · ")}
+                kicker={[c.progress !== undefined ? (c.progress >= 100 ? "Terminado" : `Inscrito · ${c.progress} %`) : c.levelLabel, c.videos ? `${c.videos} videos` : c.lessons ? `${c.lessons} lecciones` : "", c.minutes ? fmtMin(c.minutes) : ""].filter(Boolean).join(" · ")}
                 title={c.title}
                 text={c.subtitle}
                 href={c.href}

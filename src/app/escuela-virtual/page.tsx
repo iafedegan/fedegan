@@ -78,7 +78,7 @@ export default async function EscuelaVirtualPage() {
             <Link href={`/ingresar?callbackUrl=${encodeURIComponent("/escuela-virtual/perfil")}`} className="font-bold uppercase tracking-[0.1em] text-[var(--fg-lime-400)] hover:underline">Ingresar →</Link>
           </p>
         )}
-        <CatalogExplorer courses={courses} />
+        <CatalogExplorer courses={courses} loggedIn={Boolean(learner)} />
       </Section>
 
       <CtaBand

@@ -1236,3 +1236,7 @@ a.mx-card:hover, .mx-lift:hover, .gl-hover:hover { transform: translateY(-2px); 
 .mh-tag { font-size: clamp(0.72rem, 1.9vw, 0.82rem); letter-spacing: 0.2em; }
 .sw-p-kicker span, .sw-counter, .sw-hint { font-size: max(0.72rem, 11.5px); }
 .mh-date { font-size: max(0.72rem, 11.5px); }
+
+/* Catálogo: los cursos en los que la persona aún no está inscrita se ven en gris; recuperan el color al pasar el cursor. */
+.lms-off .wp { filter: grayscale(1) brightness(0.92); transition: filter 0.4s var(--ease-lux), transform 0.4s var(--ease-lux); }
+.lms-off .wp:hover, .lms-off .wp:focus-visible { filter: grayscale(0.15); }
