@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowUpRight, TrendingDown, TrendingUp } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { getObservatorio, OBSERVATORIO_URL, periodoLargo, type Indicador } from "@/lib/observatorio";
+import { ObservatorioNav } from "./ObservatorioNav";
 import { IndicatorTabs } from "./IndicatorTabs";
 import { TerritorialExplorer } from "./TerritorialExplorer";
 import { nf, signo, variacion } from "./format";
@@ -44,7 +45,7 @@ const por = (o: Record<string, Indicador>, claves: string[]) => claves.map((c) =
 
 function Seccion({ id, n, titulo, texto, children }: { id: string; n: string; titulo: string; texto: string; children: React.ReactNode }) {
   return (
-    <section id={id} className="scroll-mt-28 border-t border-[var(--border)] py-10 sm:py-14">
+    <section id={id} className="scroll-mt-28 border-t first:border-t-0 border-[var(--border)] py-10 sm:py-14">
       <div className="mb-7 flex items-start gap-5">
         <span className="font-[var(--font-display)] text-4xl font-bold leading-none text-[var(--fg-lime-500)] sm:text-5xl">{n}</span>
         <div>
@@ -144,19 +145,9 @@ export async function Observatorio() {
         </Container>
       </section>
 
-      <div className="sticky top-0 z-30 border-b border-[var(--border)] bg-[color-mix(in_srgb,var(--bg)_92%,transparent)] backdrop-blur-xl">
-        <Container className="flex items-center gap-5 overflow-x-auto py-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          <span className="shrink-0 text-[0.66rem] font-bold uppercase tracking-[0.2em] text-[var(--text-faint)]">En esta página</span>
-          {[...secciones, { id: "documentos", n: "07", t: "Documentos" }].map((s) => (
-            <a key={s.id} href={`#${s.id}`} className="shrink-0 text-sm font-semibold text-[var(--text-muted)] transition-colors hover:text-[var(--fg-lime-400)]">
-              <span className="mr-1.5 text-[var(--fg-lime-500)]">{s.n}</span>
-              {s.t}
-            </a>
-          ))}
-        </Container>
-      </div>
-
-      <Container>
+      <Container className="lg:grid lg:grid-cols-[15rem_minmax(0,1fr)] lg:gap-12">
+        <ObservatorioNav items={[...secciones.map((x) => ({ id: x.id, n: x.n, t: x.t })), { id: "documentos", n: "07", t: "Documentos" }]} />
+        <div className="min-w-0">
         {secciones.map((s) => (
           <Seccion key={s.id} id={s.id} n={s.n} titulo={s.t} texto={s.d}>
             {s.id === "inventario" ? <TerritorialExplorer bovinos={obs.bovinos} predios={obs.predios} orientacion={obs.orientacion} /> : <IndicatorTabs indicadores={s.ind ?? []} />}
@@ -172,6 +163,7 @@ export async function Observatorio() {
           </div>
           <p className="mt-6 text-xs text-[var(--text-faint)]">Fuente: FEDEGÁN · Sistema de información estadística, publicada por CONtexto Ganadero. Las cifras se actualizan cada pocas horas.</p>
         </Seccion>
+        </div>
       </Container>
     </>
   );
