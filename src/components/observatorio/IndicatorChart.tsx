@@ -138,11 +138,16 @@ export function IndicatorChart({ ind }: { ind: Indicador }) {
                   </text>
                 </g>
               ))}
-              {periodos.map((p, i) => (i % paso === 0 || i === n - 1 ? (
-                <text key={p} x={x(i)} y={H - 10} textAnchor="middle" fontSize="11" fontFamily="var(--font-mono)" fill="currentColor" fillOpacity="0.62">
-                  {etiqueta(p)}
-                </text>
-              ) : null))}
+              {periodos.map((p, i) => {
+                // Las marcas parten del dato más reciente hacia atrás: la última siempre sale y nunca queda pegada a otra.
+                if ((n - 1 - i) % paso !== 0) return null;
+                const borde = x(i) > W - M.r - 22 ? "end" : x(i) < M.l + 22 ? "start" : "middle";
+                return (
+                  <text key={p} x={borde === "end" ? W - 2 : borde === "start" ? M.l - 4 : x(i)} y={H - 10} textAnchor={borde} fontSize="11" fontFamily="var(--font-mono)" fill="currentColor" fillOpacity="0.62">
+                    {etiqueta(p)}
+                  </text>
+                );
+              })}
 
               {forma === "barras"
                 ? periodos.map((p, i) => {

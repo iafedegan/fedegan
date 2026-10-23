@@ -78,10 +78,10 @@ export function TerritorialExplorer({ bovinos, predios, orientacion }: { bovinos
               {act.partes.partes.map((p) => {
                 const tot = act.partes!.partes.reduce((a, b) => a + b.valor, 0);
                 return (
-                  <li key={p.nombre} className="grid grid-cols-[7.5rem_1fr_auto] items-center gap-3 text-sm">
+                  <li key={p.nombre} className="grid grid-cols-[7.5rem_1fr_6.75rem] items-center gap-3 text-sm">
                     <span className="text-[var(--text-muted)]">{p.nombre}</span>
                     <span className="h-2 rounded-full bg-[var(--bg-sunken)]"><span className="block h-full rounded-full bg-[var(--fg-lime-500)]" style={{ width: `${(p.valor / tot) * 100}%` }} /></span>
-                    <span className="tabular-nums text-[var(--text)]">{corto(p.valor)} · {nf((p.valor / tot) * 100, 0)} %</span>
+                    <span className="text-right tabular-nums text-[var(--text)]">{corto(p.valor)} · {nf((p.valor / tot) * 100, 0)} %</span>
                   </li>
                 );
               })}
@@ -90,17 +90,17 @@ export function TerritorialExplorer({ bovinos, predios, orientacion }: { bovinos
         )}
       </div>
 
-      <div>
+      <div className="lg:pt-2">
         <p className="font-[var(--font-display)] text-lg font-bold text-[var(--text)]">Los ocho primeros · {t.periodos[i]}</p>
         <ol className="mt-3 flex flex-col gap-3">
           {top.map((d, k) => (
-            <li key={d.nombre} className="grid grid-cols-[1.6rem_1fr_auto] items-center gap-3">
+            <li key={d.nombre} className="grid grid-cols-[1.6rem_1fr_3.5rem] items-center gap-3">
               <span className="font-[var(--font-display)] text-lg font-bold text-[var(--fg-lime-500)]">{k + 1}</span>
               <span>
                 <span className="flex items-baseline justify-between gap-2 text-sm font-semibold text-[var(--text)]"><span>{d.nombre}</span><span className="tabular-nums text-[var(--text-muted)]">{corto(d.v)}</span></span>
                 <span className="mt-1 block h-2 rounded-full bg-[var(--bg-sunken)]"><span className="block h-full rounded-full bg-gradient-to-r from-[var(--fg-lime-500)] to-[#34a868] transition-[width] duration-500" style={{ width: `${(d.v / maxV) * 100}%` }} /></span>
               </span>
-              <span className={`text-xs font-bold tabular-nums ${d.v >= d.p ? "text-[#5ccd86]" : "text-[#f08a8a]"}`}>{d.p ? signo(variacion(d.v, d.p)).replace(/ %$/, "%") : ""}</span>
+              <span className={`text-right text-xs font-bold tabular-nums ${d.v >= d.p ? "text-[#5ccd86]" : "text-[#f08a8a]"}`}>{d.p ? signo(variacion(d.v, d.p)).replace(/ %$/, "%") : ""}</span>
             </li>
           ))}
         </ol>
