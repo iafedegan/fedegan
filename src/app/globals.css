@@ -1128,3 +1128,17 @@ a.mx-card:hover, .mx-lift:hover, .gl-hover:hover { transform: translateY(-2px); 
   footer li > a:not([aria-label]) svg { display: inline; }
   section[role="dialog"] > button[aria-label="Cerrar"] { padding: 0.65rem; top: 0; right: 0; }
 }
+
+/* Tarjeta del recorrido: más pequeña y anclada abajo a la izquierda, para dejar ver la foto */
+.sw-center { top: auto; bottom: 2.2rem; left: 2.2rem; right: auto; transform: none; justify-content: flex-start; align-items: flex-start; }
+.sw-panel { align-items: flex-start; width: min(26rem, 40vw); height: 17.5rem; padding: 1.1rem 1.3rem 1.1rem; gap: 0.7rem; }
+.sw-panel .sw-cta-desc { -webkit-line-clamp: 5; font-size: 0.9rem; line-height: 1.45; }
+.sw-panel:has(.sw-extra) .sw-cta-desc { -webkit-line-clamp: 3; }
+.sw-panel .sw-p-title { font-size: clamp(1.35rem, 1.8vw, 1.7rem); }
+.sw-panel .sw-p-kicker { font-size: 0.6rem; }
+.sw-panel .sw-cta { padding: 0.6rem 1rem; font-size: 0.7rem; margin-top: auto; }
+@media (max-width: 767px) {
+  .sw-center { top: auto; bottom: 4.2rem; left: 1rem; }
+  .sw-panel { width: min(21rem, calc(100vw - 2rem)); height: 17rem; padding: 1rem 1.1rem; }
+  .sw-panel .sw-cta-desc { font-size: 0.86rem; }
+}
