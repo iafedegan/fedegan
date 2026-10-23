@@ -1120,3 +1120,11 @@ a.mx-card:hover, .mx-lift:hover, .gl-hover:hover { transform: translateY(-2px); 
 .wc-badge .pg { color: #f4f2e9; }
 .wc-badge-glyph { height: auto; min-height: 2.7rem; padding: 0.35rem 0.7rem; font-family: var(--font-display); font-size: 1.25rem; font-weight: 700; line-height: 1; font-variant-numeric: lining-nums; }
 .wc-badge-glyph small { display: block; margin-bottom: 0.15rem; font-family: var(--font-body); font-size: 0.58rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: rgb(var(--wa, 216, 181, 88)); }
+
+/* Táctil: los enlaces de texto del pie y los botones de cierre llegan a un área de toque cómoda (≈40 px). */
+@media (pointer: coarse) {
+  footer li > a:not([aria-label]),
+  footer li > button { display: inline-block; padding-block: 0.75rem; }
+  footer li > a:not([aria-label]) svg { display: inline; }
+  section[role="dialog"] > button[aria-label="Cerrar"] { padding: 0.65rem; top: 0; right: 0; }
+}

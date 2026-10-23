@@ -50,7 +50,7 @@ export function ConsentBanner() {
       <p className="mt-2 text-xs text-[var(--text-faint)]">
         <ShieldCheck size={12} className="mr-1 inline" />
         Puede cambiarlo cuando quiera en «Preferencias de privacidad».{" "}
-        <a href="/privacidad" className="underline underline-offset-2 hover:text-[var(--fg-lime-400)]">Política de datos</a>
+        <a href="/privacidad" className="inline-block py-2 underline underline-offset-2 hover:text-[var(--fg-lime-400)]">Política de datos</a>
       </p>
       <div className="mt-4 flex flex-wrap items-center gap-2">
         <button type="button" onClick={() => decidir(true)} className="rounded-[0.25rem] bg-[var(--fg-lime-500)] px-4 py-2.5 text-[0.76rem] font-bold uppercase tracking-[0.1em] text-[#0a1a11] hover:bg-[var(--fg-lime-400)]">
