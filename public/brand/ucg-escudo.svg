@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" role="img" aria-label="UCG">
+  <title>UCG</title>
+  <defs>
+    <g id="l" fill="none" stroke-linejoin="miter" stroke-linecap="butt"><path d="M40 25 V125 A45 45 0 0 0 130 125 V25"/><path d="M317.5 51.8 A75 75 0 1 0 317.5 148.2"/><path d="M507.5 51.8 A75 75 0 1 0 525 100 H462"/></g>
+    <path id="arc" d="M60 200 A140 140 0 0 1 340 200"/>
+  </defs>
+  <circle cx="200" cy="200" r="190" fill="#0b4a2d" stroke="#d8b558" stroke-width="8"/>
+  <circle cx="200" cy="200" r="168" fill="none" stroke="#d8b558" stroke-width="2"/>
+  <circle cx="200" cy="200" r="120" fill="#06301d" stroke="#d8b558" stroke-width="3"/>
+  <g fill="#d8b558">
+    <path id="s" d="M200 40 l7 15 16 2-12 11 3 16-14-8-14 8 3-16-12-11 16-2z" transform="translate(0 6)"/>
+    <use href="#s" transform="rotate(-48 200 200)"/><use href="#s" transform="rotate(48 200 200)"/>
+    <use href="#s" transform="rotate(180 200 200)"/><use href="#s" transform="rotate(132 200 200)"/><use href="#s" transform="rotate(228 200 200)"/>
+  </g>
+  <g transform="translate(80 156) scale(.44)">
+    <use href="#l" transform="translate(9 9)" stroke="#000" stroke-opacity=".5" stroke-width="58"/>
+    <use href="#l" stroke="#d8b558" stroke-width="56"/>
+    <use href="#l" stroke="#0b4a2d" stroke-width="38"/>
+  </g>
+</svg>
