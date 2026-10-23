@@ -37,7 +37,7 @@ export function PageHeader({
         </>
       )}
       <Container className={`relative flex flex-col items-center justify-end text-center ${compact ? "py-4 sm:py-5" : "min-h-[10.5rem] py-6 sm:min-h-[13rem] sm:py-8"}`}>
-        <nav aria-label="Ruta de navegación" className="mx-crumb mb-3 self-center text-xs">
+        <nav aria-label="Ruta de navegación" className="mx-crumb mb-3 self-start text-xs">
           <Link href="/" className="rounded px-1 py-0.5 transition-colors hover:text-[var(--fg-lime-400)]">Inicio</Link>
           {breadcrumbs.map((b) => (
             <span key={b.label} className="flex items-center gap-1">
@@ -50,7 +50,7 @@ export function PageHeader({
             </span>
           ))}
         </nav>
-        {eyebrow && <span className="mx-kicker mb-2 self-center">{eyebrow}</span>}
+        {eyebrow && <span className="mx-kicker mb-2 self-start">{eyebrow}</span>}
         <h1 className={`mx-title text-balance font-[var(--font-display)] font-bold leading-[1.05] ${compact ? "text-2xl sm:text-3xl" : "text-3xl sm:text-5xl"}`}>{title}</h1>
         {description && <p className="mx-lead mx-auto mt-2.5 line-clamp-3 max-w-2xl text-sm leading-relaxed sm:text-base">{description}</p>}
         {chips.length > 0 && (
