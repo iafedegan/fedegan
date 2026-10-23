@@ -9,7 +9,10 @@ import { SignInPanel } from "@/components/blocks/SignInPanel";
 
 export const metadata: Metadata = { title: "Iniciar sesión" };
 
-export default async function IngresarPage() {
+export default async function IngresarPage({ searchParams }: { searchParams: Promise<{ callbackUrl?: string }> }) {
+  // Quien viene de la Escuela Virtual usa su ingreso propio (ganaderos y aliados), nunca el del portal.
+  const { callbackUrl } = await searchParams;
+  if (callbackUrl && /^\/escuela-virtual(\/|$|\?)/.test(callbackUrl)) redirect(`/escuela-virtual/ingresar?callbackUrl=${encodeURIComponent(callbackUrl)}`);
   const session = await auth();
   if (session?.user) redirect("/mi-fedegan");
 
