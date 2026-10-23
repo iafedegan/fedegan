@@ -56,7 +56,8 @@ export async function PortalJourney() {
       tags: l.tags ?? [],
       href: l.href,
       external: l.external,
-      subs: subsOf(l.id),
+      // «Cifras del sector» abre directo el Observatorio: sin segundo nivel.
+      subs: l.id === "cifras" ? [] : subsOf(l.id),
       accent: l.accent ?? "216,181,88",
       image,
       pos: photo?.pos ?? l.imagenPos ?? "50% 50%",
