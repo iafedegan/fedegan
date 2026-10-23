@@ -15,6 +15,7 @@ export function PageHeader({
   facts,
   meta,
   compact = false,
+  root = { label: "Inicio", href: "/" },
 }: {
   eyebrow?: string;
   title: string;
@@ -26,6 +27,8 @@ export function PageHeader({
   meta?: string;
   /** Franja baja, para páginas de trabajo donde el contenido debe verse de inmediato. */
   compact?: boolean;
+  /** Primer eslabón de la ruta (por defecto, «Inicio» del portal). */
+  root?: { label: string; href: string };
 }) {
   const chips = facts ?? (meta ? [meta] : []);
   return (
@@ -39,7 +42,7 @@ export function PageHeader({
       <Container className={`relative flex flex-col items-center justify-start text-center lg:h-40 ${compact ? "py-4 sm:py-5" : "py-5 sm:py-6"}`}>
         <div className="flex flex-col items-start self-start lg:absolute lg:left-10 lg:top-6">
           <nav aria-label="Ruta de navegación" className="mx-crumb mb-3 self-start text-xs">
-            <Link href="/" className="rounded px-1 py-0.5 transition-colors hover:text-[var(--fg-lime-400)]">Inicio</Link>
+            <Link href={root.href} className="rounded px-1 py-0.5 transition-colors hover:text-[var(--fg-lime-400)]">{root.label}</Link>
             {breadcrumbs.map((b) => (
               <span key={b.label} className="flex items-center gap-1">
                 <ChevronRight size={12} aria-hidden />

@@ -90,7 +90,7 @@ export default async function LessonPage({ params, searchParams }: { params: Pro
       </div>
 
       <aside className="border-t border-[var(--border)] lg:border-l lg:border-t-0">
-        <div className="lg:sticky lg:top-28 lg:max-h-[calc(100svh-8rem)] lg:overflow-y-auto">
+        <div className="lg:sticky lg:top-16 lg:max-h-[calc(100svh-4rem)] lg:overflow-y-auto">
           <p className="px-5 py-4 text-xs font-bold uppercase tracking-[0.16em] text-[var(--text-faint)]">Contenido del curso</p>
           {course.modules.map((m, mi) => (
             <details key={m.id} open={m.lessons.some((l) => l.id === lesson.id) || mi === 0} className="border-t border-[var(--border)]">

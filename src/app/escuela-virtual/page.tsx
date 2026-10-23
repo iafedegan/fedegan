@@ -8,7 +8,7 @@ import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { CtaBand, Section } from "@/components/ui/Editorial";
 
-export const metadata: Metadata = { title: "Escuela Virtual" };
+export const metadata: Metadata = { title: "Cursos" };
 
 // Las categorías de cada curso se agrupan en pocas áreas para que el filtro no tenga una etiqueta por curso.
 const AREAS: Record<string, string> = {
@@ -34,11 +34,12 @@ export default async function EscuelaVirtualPage() {
     <>
       <PageHeader
         eyebrow="Formación"
-        title="Escuela Virtual FEDEGÁN"
+        title="Escuela Virtual UCG"
         image="/headers/ia-escuela.jpg"
         imagePos="50% 50%"
         meta={`${courses.length} cursos${videos ? ` · ${videos} videos` : ""}`}
-        breadcrumbs={[{ label: "Escuela Virtual" }]}
+        root={{ label: "UCG", href: "/escuela-virtual" }}
+        breadcrumbs={[{ label: "Cursos" }]}
       />
 
       <section aria-labelledby="intro" className="relative overflow-hidden">

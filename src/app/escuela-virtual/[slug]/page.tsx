@@ -64,8 +64,7 @@ export default async function CoursePage({ params, searchParams }: { params: Pro
         <Container className="grid gap-8 py-8 sm:py-12 lg:grid-cols-[1fr_22rem] lg:gap-12">
           <div className="flex flex-col gap-4">
             <nav aria-label="Ruta de navegación" className="flex flex-wrap items-center gap-1 text-xs text-[var(--text-muted)]">
-              <Link href="/" className="hover:text-[var(--fg-lime-400)]">Inicio</Link><ChevronRight size={12} />
-              <Link href="/escuela-virtual" className="hover:text-[var(--fg-lime-400)]">Escuela Virtual</Link><ChevronRight size={12} />
+              <Link href="/escuela-virtual" className="hover:text-[var(--fg-lime-400)]">UCG · Cursos</Link><ChevronRight size={12} />
               <span className="font-semibold text-[var(--text)]">{course.category}</span>
             </nav>
             <h1 className="font-[var(--font-display)] text-3xl font-bold leading-tight text-[var(--text)] sm:text-5xl">{course.title}</h1>
@@ -86,7 +85,7 @@ export default async function CoursePage({ params, searchParams }: { params: Pro
           </div>
 
           <aside className="lg:row-span-1">
-            <div className="overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border-strong)] bg-[var(--surface-solid)] shadow-[var(--shadow-lg)] lg:sticky lg:top-28">
+            <div className="overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border-strong)] bg-[var(--surface-solid)] shadow-[var(--shadow-lg)] lg:sticky lg:top-24">
               {promo ? (
                 <div className="aspect-video bg-black">
                   {promo.type === "iframe" ? <iframe src={promo.src} title="Presentación del curso" allowFullScreen loading="lazy" className="h-full w-full" /> : <video src={promo.src} controls className="h-full w-full" />}
