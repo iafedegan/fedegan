@@ -185,6 +185,21 @@ export function ScrollWorld({ scenes: base }: { scenes: JourneyScene[] }) {
     };
   }, [K, scenes]);
 
+  // Mientras la escena aún no está anclada, su parte baja queda fuera de la pantalla: la lista y la card se suben
+  // esa cantidad para que siempre se vean completas.
+  useEffect(() => {
+    const stage = stageRef.current;
+    if (!stage) return;
+    const medir = () => stage.style.setProperty("--sw-cut", `${Math.max(0, Math.round(stage.getBoundingClientRect().bottom - window.innerHeight))}px`);
+    medir();
+    window.addEventListener("scroll", medir, { passive: true });
+    window.addEventListener("resize", medir);
+    return () => {
+      window.removeEventListener("scroll", medir);
+      window.removeEventListener("resize", medir);
+    };
+  }, []);
+
   const goTo = useCallback(
     (i: number) => {
       const track = trackRef.current;

@@ -1197,3 +1197,12 @@ a.mx-card:hover, .mx-lift:hover, .gl-hover:hover { transform: translateY(-2px); 
   .sw-rail { top: auto; bottom: 0.75rem; transform: none; }
   .sw-center { top: auto; bottom: 2.15rem; transform: none; left: 1.5rem; }
 }
+
+/* Antes de anclarse la escena, lista y card se elevan lo que la pantalla le recorta (--sw-cut, lo mide ScrollWorld). */
+@media (min-width: 768px) {
+  .sw-rail { bottom: calc(0.75rem + var(--sw-cut, 0px)); max-height: calc(100% - 1.5rem - var(--sw-cut, 0px)); }
+  .sw-center { bottom: calc(2.15rem + var(--sw-cut, 0px)); }
+}
+@media (max-width: 767px) {
+  .sw-center { bottom: calc(3.6rem + var(--sw-cut, 0px)); }
+}
