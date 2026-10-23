@@ -17,6 +17,8 @@ import { ThemeScript } from "@/components/layout/ThemeScript";
 import { PwaRegister } from "@/components/layout/PwaRegister";
 import { SitePopup } from "@/components/design/SitePopup";
 import { ConsentBanner } from "@/components/layout/ConsentBanner";
+import { SITE_URL } from "@/lib/site-url";
+import { Analytics } from "@/components/layout/Analytics";
 import { UsageTracker } from "@/components/layout/UsageTracker";
 
 export const viewport: Viewport = {
@@ -26,6 +28,9 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
+  alternates: { canonical: "./" },
+  openGraph: { type: "website", locale: "es_CO", siteName: "FEDEGÁN–FNG", images: ["/brand/fedegan-icon-round.png"] },
   appleWebApp: { capable: true, title: "FEDEGÁN", statusBarStyle: "black-translucent" },
   title: {
     default: "FEDEGÁN–FNG · Federación Colombiana de Ganaderos",
@@ -37,6 +42,16 @@ export const metadata: Metadata = {
     icon: [{ url: "/brand/fedegan-icon-round.png", type: "image/png" }],
     apple: "/brand/fedegan-icon-round.png",
   },
+};
+
+const orgJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "FEDEGÁN–FNG · Federación Colombiana de Ganaderos",
+  url: SITE_URL,
+  logo: `${SITE_URL}/brand/fedegan-icon-round.png`,
+  address: { "@type": "PostalAddress", streetAddress: "Calle 37 # 14-31", addressLocality: "Bogotá D.C.", addressCountry: "CO" },
+  sameAs: ["https://www.instagram.com/fedegan_col/", "http://www.youtube.com/user/FEDEGANFNG"],
 };
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {
@@ -54,12 +69,14 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
     >
       <head>
         <ThemeScript />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }} />
       </head>
       <body className="min-h-full flex flex-col">
         {css && <style id="design-css" dangerouslySetInnerHTML={{ __html: css }} />}
         <Providers>
           <div className="read-progress" aria-hidden />
           <UsageTracker />
+          <Analytics />
           <ConsentBanner />
           <SiteChrome
             top={

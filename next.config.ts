@@ -12,6 +12,33 @@ const legacyRedirects = [
   { source: "/normatividad-vigente", destination: "/normatividad", permanent: true },
 ];
 
+// Cabeceras de seguridad (TDR §6). La CSP permite los orígenes que el portal usa: Supabase, CONtexto, Google
+// Tag Manager / Analytics y los PDFs en Google Cloud Storage. 'unsafe-inline' sigue por los estilos y scripts
+// en línea de Next.js; pasar a nonces es una mejora posterior.
+const csp = [
+  "default-src 'self'",
+  "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com" + (process.env.NODE_ENV === "production" ? "" : " 'unsafe-eval'"),
+  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+  "font-src 'self' data: https://fonts.gstatic.com",
+  "img-src 'self' data: blob: https:",
+  "media-src 'self' https:",
+  "connect-src 'self' https://*.supabase.co https://contexto-olive.vercel.app https://www.google-analytics.com https://*.google-analytics.com https://www.googletagmanager.com",
+  "frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com https://www.googletagmanager.com",
+  "frame-ancestors 'self'",
+  "base-uri 'self'",
+  "form-action 'self'",
+  "object-src 'none'",
+].join("; ");
+
+const securityHeaders = [
+  { key: "Content-Security-Policy", value: csp },
+  { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
+  { key: "X-Content-Type-Options", value: "nosniff" },
+  { key: "X-Frame-Options", value: "SAMEORIGIN" },
+  { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+  { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), payment=()" },
+];
+
 const nextConfig: NextConfig = {
   // Imágenes remotas permitidas para next/image: archivos subidos desde el CMS (Supabase Storage) y portadas de CONtexto.
   images: {
@@ -22,6 +49,7 @@ const nextConfig: NextConfig = {
   },
   async headers() {
     return [
+      { source: "/:path*", headers: securityHeaders },
       // El service worker nunca debe quedar en caché del navegador: así cada despliegue lo renueva.
       { source: "/sw.js", headers: [{ key: "Cache-Control", value: "no-cache, no-store, must-revalidate" }, { key: "Service-Worker-Allowed", value: "/" }] },
     ];

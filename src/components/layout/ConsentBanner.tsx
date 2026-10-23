@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { Cookie, ShieldCheck, X } from "lucide-react";
 import { EVENTO_PRIVACIDAD, borrarUso, getConsent, getUso, setConsent } from "@/lib/uso";
-import { legales } from "@/content/accesos";
 
 // Permiso para personalizar el orden del recorrido según el uso. Se pregunta una vez y puede cambiarse en
 // «Preferencias de privacidad» (pie de página).
@@ -46,12 +45,12 @@ export function ConsentBanner() {
         <Cookie size={18} className="text-[var(--fg-lime-400)]" /> Personalice su recorrido
       </p>
       <p className="mt-2 text-sm leading-relaxed text-[var(--text-muted)]">
-        Con su permiso, guardamos en <b className="text-[var(--text)]">este dispositivo</b> una cookie que cuenta qué secciones visita más, para mostrarle primero las que más usa. No guardamos datos personales ni la dirección MAC, y nada sale de su dispositivo.
+        Con su permiso, guardamos en <b className="text-[var(--text)]">este dispositivo</b> una cookie que cuenta qué secciones visita más, para mostrarle primero las que más usa. Si acepta, también medimos el uso del sitio de forma agregada (Google Analytics). No guardamos datos personales ni la dirección MAC.
       </p>
       <p className="mt-2 text-xs text-[var(--text-faint)]">
         <ShieldCheck size={12} className="mr-1 inline" />
         Puede cambiarlo cuando quiera en «Preferencias de privacidad».{" "}
-        <a href={legales[0].href} target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-[var(--fg-lime-400)]">Política de datos</a>
+        <a href="/privacidad" className="underline underline-offset-2 hover:text-[var(--fg-lime-400)]">Política de datos</a>
       </p>
       <div className="mt-4 flex flex-wrap items-center gap-2">
         <button type="button" onClick={() => decidir(true)} className="rounded-[0.25rem] bg-[var(--fg-lime-500)] px-4 py-2.5 text-[0.76rem] font-bold uppercase tracking-[0.1em] text-[#0a1a11] hover:bg-[var(--fg-lime-400)]">

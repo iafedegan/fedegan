@@ -115,6 +115,8 @@ export function Footer() {
           </div>
           <div className="flex flex-wrap items-center gap-x-5 gap-y-2 lg:justify-end">
             <Link href="/mapa-del-sitio" className="hover:text-white">Mapa del sitio</Link>
+            <Link href="/privacidad" className="hover:text-white">Privacidad</Link>
+            <Link href="/terminos" className="hover:text-white">Términos</Link>
             <Link href="/transparencia" className="hover:text-white">Transparencia</Link>
             <Link href="/contacto" className="hover:text-white">Contacto</Link>
             <FooterAccess />

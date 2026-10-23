@@ -3,7 +3,7 @@ import { getEvents, getPublications } from "@/lib/cms/content";
 import { getNoticias } from "@/lib/contexto";
 import { allLegacyPages, legacyHref } from "@/content/legacy";
 
-const BASE_URL = "https://www.fedegan.org.co";
+import { SITE_URL as BASE_URL } from "@/lib/site-url";
 
 const staticRoutes = [
   "",
@@ -16,6 +16,9 @@ const staticRoutes = [
   "/preguntas-frecuentes",
   "/escuela-virtual",
   "/tvgan",
+  "/privacidad",
+  "/terminos",
+  "/transparencia",
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
