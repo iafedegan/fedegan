@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef, useState, useTransition } from "react";
-import { BookOpenText, Send, Sparkles } from "lucide-react";
+import { useEffect, useRef, useState, useTransition } from "react";
+import { BookOpenText, Send, Sparkles, X } from "lucide-react";
 import { askAssistant, type ChatTurn } from "@/lib/lms/assistant";
 
 const QUICK_LESSON = ["Resume esta lección", "Dame los puntos clave", "Hazme 5 preguntas de práctica", "Explícalo más sencillo", "Glosario de términos"];
@@ -31,6 +31,13 @@ export function CourseAssistant({ courseId, lessonId, slug, lessonTitle, sources
   const [error, setError] = useState("");
   const [pending, start] = useTransition();
   const end = useRef<HTMLDivElement>(null);
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    const on = () => setOpen(true);
+    window.addEventListener("abrir-asistente", on);
+    return () => window.removeEventListener("abrir-asistente", on);
+  }, []);
 
   function ask(text: string) {
     const question = text.trim();
@@ -48,7 +55,14 @@ export function CourseAssistant({ courseId, lessonId, slug, lessonTitle, sources
   }
 
   return (
-    <section id="asistente" aria-label="Asistente del curso" className="scroll-mt-28 overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border-strong)] bg-[var(--surface-solid)]">
+    <>
+      {!open && (
+        <button type="button" onClick={() => setOpen(true)} className="fixed bottom-5 right-5 z-40 inline-flex items-center gap-2 rounded-full bg-[var(--fg-lime-500)] px-5 py-3.5 text-sm font-bold text-[#0a1a11] shadow-[0_10px_30px_rgba(0,0,0,0.5)] transition-transform hover:scale-105 print:hidden">
+          <Sparkles size={18} /> Asistente IA
+        </button>
+      )}
+      {open && (
+    <section id="asistente" aria-label="Asistente del curso" className="fixed inset-x-3 bottom-3 z-50 flex max-h-[85svh] flex-col overflow-y-auto rounded-[var(--radius-lg)] border border-[var(--border-strong)] bg-[var(--surface-solid)] shadow-[0_20px_60px_rgba(0,0,0,0.6)] sm:inset-x-auto sm:right-5 sm:bottom-5 sm:w-[28rem] print:hidden">
       <header className="flex flex-wrap items-center gap-3 border-b border-[var(--border)] bg-[linear-gradient(100deg,rgba(47,156,98,0.18),rgba(216,181,88,0.12))] px-5 py-4">
         <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[var(--fg-lime-500)] text-[#0a1a11]"><Sparkles size={18} /></span>
         <div className="min-w-0 flex-1">
@@ -56,6 +70,7 @@ export function CourseAssistant({ courseId, lessonId, slug, lessonTitle, sources
           <p className="text-xs text-[var(--text-muted)]">Pregúntele sobre «{lessonTitle}». Responde solo con lo que enseña este curso.</p>
         </div>
         <span className="flex items-center gap-1.5 rounded-full border border-[var(--border-strong)] px-3 py-1 text-[0.68rem] font-bold uppercase tracking-[0.1em] text-[var(--text-muted)]"><BookOpenText size={13} /> {sources.length} fuentes</span>
+        <button type="button" onClick={() => setOpen(false)} aria-label="Cerrar asistente" className="flex h-8 w-8 items-center justify-center rounded-full border border-[var(--border-strong)] text-[var(--text-muted)] hover:text-[var(--text)]"><X size={15} /></button>
       </header>
 
       {!enabled ? (
@@ -103,5 +118,15 @@ export function CourseAssistant({ courseId, lessonId, slug, lessonTitle, sources
         </div>
       )}
     </section>
+      )}
+    </>
+  );
+}
+
+export function OpenAssistantLink() {
+  return (
+    <button type="button" onClick={() => window.dispatchEvent(new Event("abrir-asistente"))} className="inline-flex items-center gap-1 font-bold uppercase tracking-[0.1em] text-[var(--fg-lime-400)] hover:underline">
+      <Sparkles size={13} /> Asistente IA
+    </button>
   );
 }

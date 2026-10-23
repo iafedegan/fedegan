@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { Award, Check, ChevronLeft, ChevronRight, Download, FileText, HelpCircle, PartyPopper, PlayCircle, Sparkles } from "lucide-react";
-import { CourseAssistant } from "@/components/lms/CourseAssistant";
+import { CourseAssistant, OpenAssistantLink } from "@/components/lms/CourseAssistant";
 import { QuizForm } from "@/components/lms/QuizForm";
 import { completeLesson } from "@/lib/lms/actions";
 import { flatLessons, getCourse, getEnrollment, getLearner, getProgress, getQuiz, videoEmbed } from "@/lib/lms/queries";
@@ -40,7 +40,7 @@ export default async function LessonPage({ params, searchParams }: { params: Pro
           {enrollment && (
             <div className="flex items-center gap-4 text-xs text-[var(--text-faint)]" aria-label={`Avance ${percent} %`}>
               <span className="h-2 w-40 overflow-hidden rounded-full bg-[var(--bg-sunken)]"><span className="block h-full bg-[var(--fg-lime-500)]" style={{ width: `${percent}%` }} /></span>{percent} %
-              <a href="#asistente" className="inline-flex items-center gap-1 font-bold uppercase tracking-[0.1em] text-[var(--fg-lime-400)] hover:underline"><Sparkles size={13} /> Asistente IA</a>
+              <OpenAssistantLink />
               <Link href="/escuela-virtual/perfil" className="font-bold uppercase tracking-[0.1em] text-[var(--fg-lime-400)] hover:underline">Mi perfil</Link>
             </div>
           )}
