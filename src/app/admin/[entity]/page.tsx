@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { AlertCircle, ArrowDown, ArrowUp, CheckCircle2, ChevronRight, Eye, EyeOff, ImageOff, Pencil, Plus } from "lucide-react";
+import { ListTree, AlertCircle, ArrowDown, ArrowUp, CheckCircle2, ChevronRight, Eye, EyeOff, ImageOff, Pencil, Plus } from "lucide-react";
 import { ConfigNotice } from "@/components/admin/ConfigNotice";
 import { DeleteButton } from "@/components/admin/DeleteButton";
 import { readDb } from "@/lib/cms/client";
@@ -130,6 +130,9 @@ export default async function EntityListPage({
                         {published ? <Eye size={16} /> : <EyeOff size={16} />}
                       </button>
                     </form>
+                    {entity.key === "cursos" && (
+                      <Link href={`/admin/cursos/${id}/curriculo`} aria-label="Currículo" title="Currículo (módulos y lecciones)" className="ad-icon-btn"><ListTree size={16} /></Link>
+                    )}
                     <Link href={`/admin/${entity.key}/${id}`} aria-label="Editar" title="Editar" className="ad-icon-btn"><Pencil size={16} /></Link>
                     <form action={deleteRecord}>
                       <input type="hidden" name="_entity" value={entity.key} />

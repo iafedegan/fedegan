@@ -13,6 +13,13 @@ export const adminNav: AdminNavGroup[] = [
     ],
   },
   {
+    group: "Escuela Virtual",
+    items: [
+      { label: "Cursos", href: "/admin/cursos", icon: "graduation" },
+      { label: "Estudiantes", href: "/admin/estudiantes", icon: "users" },
+    ],
+  },
+  {
     group: "Contenido",
     items: [
       { label: "Publicaciones", href: "/admin/publicaciones", icon: "file" },

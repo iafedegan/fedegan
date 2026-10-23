@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { PageHeader } from "@/components/ui/PageHeader";
-import { PhotoCard } from "@/components/ui/PhotoCard";
+import Link from "next/link";
+import { CatalogExplorer, type CatalogCourse } from "@/components/lms/CatalogExplorer";
+import { LEVELS, getCourses, getLearner } from "@/lib/lms/queries";
 import { CtaBand, Section } from "@/components/ui/Editorial";
 import { Button } from "@/components/ui/Button";
 
@@ -10,22 +12,15 @@ export const metadata: Metadata = { title: "Escuela Virtual" };
 const MPG_URL = "https://mpg.fedegan.org.co/";
 const ACCENTS = ["92,205,134", "216,181,88", "230,160,108", "112,214,196"];
 
-// Manual Práctico Ganadero (M.V. Esp. Ricardo Arenas Ovalle): 11 bloques, 165 videos y más de 40 horas.
-const courses = [
-  { title: "Fundamentos de la Ganadería Colombiana", desc: "Bases históricas, sostenibilidad y cultura sanitaria", videos: 8 },
-  { title: "Alimentación Animal y Manejo de Praderas", desc: "Praderas, pastoreo, conservación y suplementación", videos: 29 },
-  { title: "Ganadería Sostenible y Medio Ambiente", desc: "Sistemas silvopastoriles, agua, ecosistemas y energías", videos: 12 },
-  { title: "Salud Animal", desc: "Enfermedades, primeros auxilios y manejo del animal", videos: 18 },
-  { title: "Genética y Reproducción", desc: "Mejoramiento genético, reproducción y biotecnologías", videos: 21 },
-  { title: "Etapas de la Producción Ganadera", desc: "Cría, levante y ceba del ganado", videos: 16 },
-  { title: "Productos de Ganadería", desc: "Carne, leche, agroindustria cárnica y láctea", videos: 24 },
-  { title: "Administración Ganadera", desc: "Registros, recurso humano, gremialidad y animales asociados", videos: 10 },
-  { title: "Razas Bovinas", desc: "Razas de leche y carne para trópico alto y bajo", videos: 4 },
-  { title: "Búfalos", desc: "Producción, manejo, nutrición y mercados bufaleros", videos: 8 },
-  { title: "Buenas Prácticas Ganaderas y Sello Ambiental", desc: "BPG, trazabilidad, bienestar animal y sellos NTC-6550", videos: 15 },
-].map((c, i) => ({ ...c, n: String(i + 1).padStart(2, "0"), accent: ACCENTS[i % ACCENTS.length] }));
-
-export default function EscuelaVirtualPage() {
+export default async function EscuelaVirtualPage() {
+  const all = await getCourses();
+  const courses: CatalogCourse[] = all.map((c, i) => ({
+    slug: c.slug, title: c.title, subtitle: c.subtitle, category: c.category, level: c.level, levelLabel: LEVELS[c.level], cover: c.cover,
+    href: c.externalUrl && !c.lessons ? c.externalUrl : `/escuela-virtual/${c.slug}`, external: Boolean(c.externalUrl && !c.lessons),
+    lessons: c.lessons, minutes: c.minutes, videos: c.externalVideos, rating: c.rating, ratings: c.ratings, accent: ACCENTS[i % ACCENTS.length],
+  }));
+  const videos = all.reduce((a, c) => a + c.externalVideos + c.lessons, 0);
+  const learner = await getLearner();
   return (
     <>
       <PageHeader
@@ -34,7 +29,7 @@ export default function EscuelaVirtualPage() {
         description="Capacitación técnica y gerencial para productores, técnicos y profesionales del sector ganadero colombiano."
         image="/locales/sig.jpg"
         imagePos="45% 50%"
-        meta={`${courses.length} cursos · 165 videos`}
+        meta={`${courses.length} cursos${videos ? ` · ${videos} videos` : ""}`}
         breadcrumbs={[{ label: "Escuela Virtual" }]}
       />
 
@@ -63,29 +58,13 @@ export default function EscuelaVirtualPage() {
         </div>
       </Section>
 
-      <Section eyebrow="Catálogo" title="Los 11 cursos" tinted>
-        <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {courses.map((c) => (
-            <li key={c.title} className="h-full">
-              <PhotoCard
-                image={`/cursos/curso-${c.n}.jpg`}
-                accent={c.accent}
-                kicker={`Curso ${c.n} · ${c.videos} videos`}
-                title={c.title}
-                text={c.desc}
-                href={MPG_URL}
-                external
-                cta="Ver el curso en la plataforma"
-                badge={
-                  <span className="wc-badge wc-badge-glyph">
-                    <small>Curso</small>
-                    {c.n}
-                  </span>
-                }
-              />
-            </li>
-          ))}
-        </ul>
+      <Section eyebrow="Catálogo" title={`Los ${courses.length} cursos`} tinted>
+        {learner && (
+          <p className="-mt-2 mb-6 text-sm">
+            <Link href="/escuela-virtual/mis-cursos" className="font-bold text-[var(--fg-lime-400)] hover:underline">Ver mis cursos y mi avance →</Link>
+          </p>
+        )}
+        <CatalogExplorer courses={courses} />
       </Section>
 
       <CtaBand

@@ -1206,3 +1206,15 @@ a.mx-card:hover, .mx-lift:hover, .gl-hover:hover { transform: translateY(-2px); 
 @media (max-width: 767px) {
   .sw-center { bottom: calc(3.6rem + var(--sw-cut, 0px)); }
 }
+
+/* Card del recorrido más alta: la descripción y el destacado (p. ej. TvGan) se leen completos. */
+@media (min-width: 768px) {
+  .sw-panel { height: 25rem; width: min(27rem, 42vw); }
+  .sw-panel .sw-cta-desc { -webkit-line-clamp: 7; }
+  .sw-panel:has(.sw-extra) .sw-cta-desc { -webkit-line-clamp: 4; }
+}
+@media (max-width: 767px) {
+  .sw-panel { height: 24rem; }
+  .sw-panel .sw-cta-desc { -webkit-line-clamp: 6; }
+  .sw-panel:has(.sw-extra) .sw-cta-desc { -webkit-line-clamp: 3; }
+}

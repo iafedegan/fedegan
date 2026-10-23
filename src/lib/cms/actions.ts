@@ -76,6 +76,7 @@ async function readField(
       return { value: text };
     }
     case "date": {
+      if (!text && !f.required) return { value: null };
       if (!/^\d{4}-\d{2}-\d{2}$/.test(text) || Number.isNaN(Date.parse(text))) return { error: `${f.label}: fecha no válida.` };
       return { value: text };
     }

@@ -5,6 +5,7 @@ import { ChevronRight } from "lucide-react";
 import { RecordForm } from "@/components/admin/RecordForm";
 import { readDb } from "@/lib/cms/client";
 import { getEntity } from "@/lib/cms/entities";
+import { CourseTabs } from "@/components/admin/CourseTabs";
 
 export const metadata: Metadata = { title: "Editar contenido", robots: { index: false } };
 
@@ -36,6 +37,7 @@ export default async function EntityEditPage({ params }: { params: Promise<{ ent
           {creating ? `Nuevo ${entity.label}` : String(record?.[entity.titleField] ?? `Editar ${entity.label}`)}
         </h1>
       </header>
+      {entity.key === "cursos" && !creating && <CourseTabs id={id} active="info" />}
       <RecordForm entity={entity} record={record} writable={writable} />
     </div>
   );
