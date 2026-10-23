@@ -31,6 +31,13 @@ export function PageHeader({
   root?: { label: string; href: string };
 }) {
   const chips = facts ?? (meta ? [meta] : []);
+  // El tamaño del título se ajusta a su largo: los títulos de documentos pueden pasar de 100 caracteres.
+  const n = title.length;
+  const size = compact
+    ? n > 80 ? "text-lg sm:text-xl lg:text-2xl" : n > 45 ? "text-xl sm:text-2xl lg:text-3xl" : "text-2xl sm:text-3xl"
+    : n > 90 ? "text-xl sm:text-2xl lg:text-3xl" : n > 60 ? "text-2xl sm:text-3xl lg:text-4xl" : n > 32 ? "text-2xl sm:text-4xl lg:text-5xl" : "text-3xl sm:text-5xl";
+  // Ruta larga: se conserva la raíz y los dos últimos tramos, con texto recortado.
+  const trail = breadcrumbs.length > 2 ? [{ label: "…" }, ...breadcrumbs.slice(-2)] : breadcrumbs;
   return (
     <section className={`mx-hero ${image ? "mx-hero-photo" : ""}`} data-region="pagehead">
       {image && (
@@ -39,17 +46,17 @@ export function PageHeader({
           <span aria-hidden className="mx-hero-shade" />
         </>
       )}
-      <Container className={`relative flex flex-col items-center justify-start text-center lg:h-40 ${compact ? "py-4 sm:py-5" : "py-5 sm:py-6"}`}>
-        <div className="flex flex-col items-start self-start lg:absolute lg:left-10 lg:top-6">
-          <nav aria-label="Ruta de navegación" className="mx-crumb mb-3 self-start text-xs">
+      <Container className={`relative flex flex-col items-center justify-start text-center lg:min-h-40 ${compact ? "py-4 sm:py-5" : "py-5 sm:py-6"}`}>
+        <div className="flex min-w-0 max-w-full flex-col items-start self-start lg:absolute lg:left-10 lg:top-6 lg:max-w-[14rem]">
+          <nav aria-label="Ruta de navegación" className="mx-crumb mb-3 max-w-full flex-nowrap self-start overflow-hidden text-xs">
             <Link href={root.href} className="rounded px-1 py-0.5 transition-colors hover:text-[var(--fg-lime-400)]">{root.label}</Link>
-            {breadcrumbs.map((b) => (
-              <span key={b.label} className="flex items-center gap-1">
+            {trail.map((b, i) => (
+              <span key={`${b.label}-${i}`} className="flex min-w-0 items-center gap-1">
                 <ChevronRight size={12} aria-hidden />
                 {b.href ? (
-                  <Link href={b.href} className="rounded px-1 py-0.5 transition-colors hover:text-[var(--fg-lime-400)]">{b.label}</Link>
+                  <Link href={b.href} title={b.label} className="max-w-[9rem] truncate rounded px-1 py-0.5 transition-colors hover:text-[var(--fg-lime-400)]">{b.label}</Link>
                 ) : (
-                  <span aria-current="page" className="px-1 py-0.5 font-semibold">{b.label}</span>
+                  <span aria-current={i === trail.length - 1 ? "page" : undefined} title={b.label} className="max-w-[10rem] truncate px-1 py-0.5 font-semibold">{b.label}</span>
                 )}
               </span>
             ))}
@@ -57,7 +64,7 @@ export function PageHeader({
           {eyebrow && <span className="mx-kicker mb-2 self-start">{eyebrow}</span>}
         </div>
         <div className="flex w-full flex-col items-center lg:px-56">
-          <h1 className={`mx-title text-balance font-[var(--font-display)] font-bold leading-[1.05] ${compact ? "text-2xl sm:text-3xl" : "text-3xl sm:text-5xl"}`}>{title}</h1>
+          <h1 className={`mx-title text-balance break-words font-[var(--font-display)] font-bold leading-[1.08] ${size}`}>{title}</h1>
           {description && <p className="mx-lead mx-auto mt-2.5 line-clamp-3 lg:line-clamp-2 max-w-2xl text-sm leading-relaxed sm:text-base">{description}</p>}
           {chips.length > 0 && (
             <ul className="mt-4 flex flex-wrap justify-center gap-2 lg:absolute lg:right-10 lg:top-6 lg:mt-0 lg:flex-col lg:items-end lg:gap-1.5">

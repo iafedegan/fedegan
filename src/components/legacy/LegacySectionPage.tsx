@@ -93,7 +93,7 @@ export function LegacySectionPage({ slug, ruta }: { slug: string; ruta: string[]
         </details>
         )}
 
-        <article className="min-w-0 lg:order-first">
+        <article className="min-w-0 [overflow-wrap:anywhere] lg:order-first">
           {page.blocks.length > 0 ? (
             <LegacyContent blocks={page.blocks} />
           ) : (

@@ -26,7 +26,7 @@ function Inline({ text }: { text: string }) {
     if (m[1] !== undefined) {
       out.push(
         <strong key={`s${i++}`} className="font-bold text-[var(--text)]">
-          {m[1]}
+          <Inline text={m[1]} />
         </strong>,
       );
       continue;
