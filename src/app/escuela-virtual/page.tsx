@@ -65,10 +65,9 @@ export default function EscuelaVirtualPage() {
                 href={MPG_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group relative flex h-full flex-col gap-3 overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border-strong)] bg-[var(--surface-solid)] p-6 pt-7 transition-colors hover:border-[rgb(var(--acc-rgb))]"
+                className="mx-card flex h-full flex-col gap-3 !p-6 !pt-7"
                 style={{ ["--acc-rgb" as string]: c.accent } as React.CSSProperties}
               >
-                <span aria-hidden className="absolute inset-x-0 top-0 h-1 bg-[rgb(var(--acc-rgb))]" />
                 <span className="font-mono text-xs tracking-[0.14em] text-[rgb(var(--acc-rgb))]">CURSO {c.n}</span>
                 <h3 className="font-[var(--font-display)] text-xl font-bold leading-snug text-[var(--text)]">{c.title}</h3>
                 <p className="text-sm leading-relaxed text-[var(--text-muted)]">{c.desc}</p>
