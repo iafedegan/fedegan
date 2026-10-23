@@ -42,6 +42,14 @@ export default function EscuelaVirtualPage() {
         <div className="relative isolate overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border-strong)]">
           <Image src="/locales/sig.jpg" alt="" fill sizes="(min-width: 1280px) 1200px, 100vw" className="-z-10 object-cover" style={{ objectPosition: "45% 40%" }} />
           <span aria-hidden className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(5,16,11,0.94)_0%,rgba(5,16,11,0.78)_50%,rgba(5,16,11,0.35)_100%)]" />
+          <Image
+            src="/brand/mascota-beto.svg"
+            alt="Beto, la mascota de la UCG, saluda con un diploma bajo el brazo"
+            width={1080}
+            height={1455}
+            unoptimized
+            className="pointer-events-none absolute bottom-0 right-4 hidden h-[94%] w-auto drop-shadow-[0_18px_30px_rgba(0,0,0,0.55)] md:block lg:right-16"
+          />
           <div className="flex flex-col items-start gap-6 p-7 sm:p-10 lg:max-w-2xl">
             <span className="flex h-14 w-14 items-center justify-center rounded-[var(--radius-md)] border border-[var(--border-strong)] bg-[rgba(216,181,88,0.14)] text-[var(--fg-lime-400)]">
               <GraduationCap size={26} strokeWidth={1.6} />
