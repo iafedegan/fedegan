@@ -1142,3 +1142,7 @@ a.mx-card:hover, .mx-lift:hover, .gl-hover:hover { transform: translateY(-2px); 
   .sw-panel { width: min(21rem, calc(100vw - 2rem)); height: 17rem; padding: 1rem 1.1rem; }
   .sw-panel .sw-cta-desc { font-size: 0.86rem; }
 }
+
+/* Card del recorrido pegada a la esquina inferior izquierda */
+.sw-center { bottom: 1rem; left: 1rem; }
+@media (max-width: 767px) { .sw-center { bottom: 3.6rem; left: 0.75rem; } }
