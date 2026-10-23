@@ -13,9 +13,9 @@ export const journeyPhotos: Record<string, JourneyPhoto> = {
     alt: "Ganadero con ruana observando su hato de cebú en un potrero al atardecer",
   },
   normatividad: {
-    src: "/headers/servicios.jpg",
-    pos: "45% 50%",
-    alt: "Ganadero tramitando una guía de movilización en el computador, con los corrales al otro lado de la ventana",
+    src: "/journey/normatividad.jpg",
+    pos: "50% 50%",
+    alt: "Escritorio con códigos de leyes y una balanza de la justicia, junto a una ventana con ganado en el potrero",
   },
   publicaciones: {
     src: "/locales/publicaciones.jpg",

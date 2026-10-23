@@ -1,0 +1,58 @@
+// Genera con Gemini las fotos del recorrido de la home, una por escena, acordes a su título.
+// Uso:  node --env-file=.env.local scripts/generar-imagenes.mjs [id ...]     (sin ids = todas)
+// La clave sale de GEMINI_API_KEY (archivo .env.local, que git ignora). Las imágenes quedan en public/journey/.
+import { mkdir, writeFile } from "node:fs/promises";
+
+const MODELO = process.env.GEMINI_IMAGE_MODEL ?? "gemini-3.1-flash-image";
+const KEY = process.env.GEMINI_API_KEY;
+if (!KEY) {
+  console.error("Falta GEMINI_API_KEY (ponla en .env.local).");
+  process.exit(1);
+}
+
+const ESTILO =
+  "Fotografía documental realista, luz natural cálida, color auténtico, calidad editorial de revista, " +
+  "composición horizontal 16:9 con espacio libre a los lados para superponer texto. Ambiente rural colombiano. " +
+  "Sin texto legible, sin letras, sin logotipos, sin marcas de agua, sin pantallas con interfaces; personas de espaldas o de perfil, sin rostros reconocibles.";
+
+const ESCENAS = {
+  programas: "Productor ganadero con ruana y sombrero observando su hato de cebú en un potrero verde al atardecer, cerca de alambre, montañas al fondo; sensación de ganadería sostenible y cuidado del campo.",
+  normatividad: "Escritorio de madera en una oficina rural con libros de leyes encuadernados en cuero, una pequeña balanza de la justicia de bronce y carpetas de expedientes; por la ventana se ve un potrero con ganado al fondo; sensación de marco legal y seriedad institucional.",
+  publicaciones: "Mesa de madera de campo con informes impresos, gráficos y cuadernos técnicos; un ganadero de perfil revisa un documento con el hato pastando al fondo; sensación de biblioteca y conocimiento técnico del sector.",
+  cifras: "Sala de ordeño moderna con una vaca holstein y un brazo robótico de ordeño, al fondo una pantalla difusa con gráficas luminosas azul-verdosas sin texto; sensación de datos y tecnología ganadera.",
+  fng: "Ganadero y un técnico veterinario de perfil atendiendo una res con cuidado en un corral de madera, jornada de sanidad en finca; sensación de inversión del gremio en el productor.",
+  fep: "Lote de novillos gordos en un potrero amplio al amanecer, con un camión ganadero al fondo en el camino; sensación de mercado estable y precios justos.",
+  sig: "Inspector de calidad con casco y chaleco, de espaldas, revisando con una tablet un corral limpio y ordenado de una finca ganadera moderna; sensación de calidad, procesos y certificación.",
+};
+
+const ids = process.argv.slice(2).length ? process.argv.slice(2) : Object.keys(ESCENAS);
+await mkdir("public/journey", { recursive: true });
+
+for (const id of ids) {
+  const escena = ESCENAS[id];
+  if (!escena) {
+    console.error(`Escena desconocida: ${id}`);
+    continue;
+  }
+  const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${MODELO}:generateContent`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "x-goog-api-key": KEY },
+    body: JSON.stringify({
+      contents: [{ parts: [{ text: `${escena}\n\n${ESTILO}` }] }],
+      generationConfig: { responseModalities: ["IMAGE"], imageConfig: { aspectRatio: "16:9" } },
+    }),
+  });
+  const data = await res.json();
+  if (!res.ok) {
+    console.error(`${id}: error ${res.status} ${data.error?.message ?? ""}`);
+    continue;
+  }
+  const parte = data.candidates?.[0]?.content?.parts?.find((p) => p.inlineData);
+  if (!parte) {
+    console.error(`${id}: la respuesta no trajo imagen`, JSON.stringify(data).slice(0, 200));
+    continue;
+  }
+  const ext = parte.inlineData.mimeType.includes("jpeg") ? "jpg" : "png";
+  await writeFile(`public/journey/${id}.${ext}`, Buffer.from(parte.inlineData.data, "base64"));
+  console.log(`${id}: public/journey/${id}.${ext}`);
+}
