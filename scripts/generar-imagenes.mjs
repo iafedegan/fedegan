@@ -23,6 +23,11 @@ const ESCENAS = {
   fng: "Ganadero y un técnico veterinario de perfil atendiendo una res con cuidado en un corral de madera, jornada de sanidad en finca; sensación de inversión del gremio en el productor.",
   fep: "Lote de novillos gordos en un potrero amplio al amanecer, con un camión ganadero al fondo en el camino; sensación de mercado estable y precios justos.",
   sig: "Inspector de calidad con casco y chaleco, de espaldas, revisando con una tablet un corral limpio y ordenado de una finca ganadera moderna; sensación de calidad, procesos y certificación.",
+  tvgan: "Equipo de televisión rural: un camarógrafo de espaldas con cámara de hombro y un periodista de perfil con micrófono grabando en un potrero con ganado y montañas al atardecer; sensación de televisión del campo.",
+  fundagan: "Familia campesina colombiana de espaldas, sonriendo, caminando junto a un técnico de campo y un niño con su ternero en una vereda verde; sensación de responsabilidad social, comunidad y acompañamiento a las familias ganaderas.",
+  bursagan: "Corral de subasta ganadera moderno con novillos y compradores de sombrero de espaldas apoyados en la baranda, luz de media mañana; sensación de comercio y bolsa de ganado, sin carteles legibles.",
+  "maestro-de-la-carne": "Mesa de madera con cortes de carne de res frescos y bien presentados, cuchillo de chef, hierbas y sal gruesa; un maestro carnicero con delantal de perfil cortando con precisión; sensación de calidad, cocina colombiana y mesa familiar.",
+  "colombian-beef": "Ganado de pasto en una pradera exuberante y muy verde de Colombia al amanecer, novillos gordos y sanos con neblina entre colinas; sensación de carne grass-fed de exportación y calidad premium.",
 };
 
 const ids = process.argv.slice(2).length ? process.argv.slice(2) : Object.keys(ESCENAS);

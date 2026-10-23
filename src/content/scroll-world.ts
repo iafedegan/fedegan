@@ -8,9 +8,9 @@ export interface JourneyPhoto {
 
 export const journeyPhotos: Record<string, JourneyPhoto> = {
   programas: {
-    src: "/locales/programas.jpg",
-    pos: "62% 50%",
-    alt: "Ganadero con ruana observando su hato de cebú en un potrero al atardecer",
+    src: "/journey/programas.jpg",
+    pos: "50% 50%",
+    alt: "Ganadero con ruana observando su hato en un potrero verde de la cordillera al atardecer",
   },
   normatividad: {
     src: "/journey/normatividad.jpg",
@@ -18,28 +18,28 @@ export const journeyPhotos: Record<string, JourneyPhoto> = {
     alt: "Escritorio con códigos de leyes y una balanza de la justicia, junto a una ventana con ganado en el potrero",
   },
   publicaciones: {
-    src: "/locales/publicaciones.jpg",
-    pos: "60% 50%",
-    alt: "Ganadero junto a su hato con informes y certificados de sostenibilidad sobre una mesa de campo",
+    src: "/journey/publicaciones.jpg",
+    pos: "50% 50%",
+    alt: "Ganadero revisando informes y cuadernos técnicos en una mesa de campo, con el hato al fondo",
   },
   cifras: {
-    src: "/locales/cifras.jpg",
-    pos: "45% 50%",
-    alt: "Vaca holstein en una sala de ordeño robotizada con pantalla de datos de producción",
+    src: "/journey/cifras.jpg",
+    pos: "50% 50%",
+    alt: "Vaca holstein en una sala de ordeño robotizada con una pantalla de datos de producción",
   },
   fng: {
-    src: "/locales/fng.jpg",
+    src: "/journey/fng.jpg",
     pos: "50% 50%",
-    alt: "Ganadero y funcionario atendiendo una res en el corral de una finca",
+    alt: "Ganadero y técnico veterinario atendiendo una res en un corral de madera",
   },
   fep: {
-    src: "/headers/campo.jpg",
-    pos: "50% 62%",
-    alt: "Vacas pastando en un potrero con cerca de alambre y árboles",
+    src: "/journey/fep.jpg",
+    pos: "50% 50%",
+    alt: "Novillos pastando en un valle verde con un camión ganadero al fondo del camino",
   },
   sig: {
-    src: "/locales/sig.jpg",
-    pos: "45% 50%",
-    alt: "Ganadero llenando un tanque de agua junto a un silo, con hato y montañas al fondo",
+    src: "/journey/sig.jpg",
+    pos: "50% 50%",
+    alt: "Inspector de calidad con casco y tablet revisando los corrales de una finca ganadera",
   },
 };
