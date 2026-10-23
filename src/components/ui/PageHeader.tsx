@@ -36,7 +36,7 @@ export function PageHeader({
           <span aria-hidden className="mx-hero-shade" />
         </>
       )}
-      <Container className={`relative flex flex-col items-center justify-end text-center ${compact ? "py-4 sm:py-5" : "min-h-[10.5rem] py-6 sm:min-h-[13rem] sm:py-8"}`}>
+      <Container className={`relative flex flex-col items-center justify-end text-center ${compact ? "py-4 sm:py-5" : "min-h-[13rem] pb-12 pt-6 sm:min-h-[17rem] sm:pb-20 sm:pt-8"}`}>
         <nav aria-label="Ruta de navegación" className="mx-crumb mb-3 self-start text-xs">
           <Link href="/" className="rounded px-1 py-0.5 transition-colors hover:text-[var(--fg-lime-400)]">Inicio</Link>
           {breadcrumbs.map((b) => (
