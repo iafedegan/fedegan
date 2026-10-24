@@ -1335,3 +1335,5 @@ a.mx-card:hover, .mx-lift:hover, .gl-hover:hover { transform: translateY(-2px); 
   .sw-stage { overflow: clip; display: flex; flex-direction: column; box-sizing: border-box; padding-bottom: 5rem; }
   .sw-center { position: sticky; top: auto; bottom: 5rem; left: auto; right: auto; transform: none; margin-top: auto; width: 100%; }
 }
+
+.sw-panel .sw-p-kicker { font-size: max(0.7rem, 11.2px); }
