@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowUpRight, TrendingDown, TrendingUp } from "lucide-react";
 import { Container } from "@/components/ui/Container";
+import { PageHeader } from "@/components/ui/PageHeader";
 import { getObservatorio, OBSERVATORIO_URL, periodoLargo, type Indicador } from "@/lib/observatorio";
 import { ObservatorioNav } from "./ObservatorioNav";
 import { IndicatorTabs } from "./IndicatorTabs";
@@ -116,17 +117,19 @@ export async function Observatorio() {
 
   return (
     <>
-      <section className="border-b border-[var(--border)] bg-[var(--bg-muted)] py-10 sm:py-14">
-        <Container>
-          <p className="inline-flex flex-wrap items-center gap-2 rounded-full border border-[var(--border-strong)] bg-[var(--surface-solid)] px-4 py-2 text-xs font-semibold text-[var(--text-muted)]">
-            <span className="h-2 w-2 rounded-full bg-[#34a868]" /> Datos oficiales de FEDEGÁN <span className="text-[var(--text)]">· {mesActual ? periodoLargo(mesActual) : "actualizado"}</span>
-          </p>
-          <h1 className="mt-5 font-[var(--font-display)] text-5xl font-bold leading-[1.02] text-[var(--text)] sm:text-6xl lg:text-7xl">
-            Observatorio <span className="text-[var(--fg-lime-400)]">ganadero</span>
-          </h1>
-          <p className="mt-5 max-w-2xl text-lg leading-relaxed text-[var(--text-muted)]">Las cifras del sector en un solo lugar: precios, inventario por departamento, producción, consumo, mercado internacional y costos. Datos oficiales de FEDEGÁN, siempre al día.</p>
+      <PageHeader
+        eyebrow="Cifras del sector"
+        title="Observatorio ganadero"
+        description="Las cifras del sector en un solo lugar: precios, inventario por departamento, producción, consumo, mercado internacional y costos. Datos oficiales de FEDEGÁN, siempre al día."
+        image="/journey/cifras.jpg"
+        imagePos="50% 50%"
+        facts={["Datos oficiales de FEDEGÁN", mesActual ? periodoLargo(mesActual) : "Actualizado"]}
+        breadcrumbs={[{ label: "Cifras del sector" }]}
+      />
 
-          <ul className="mt-9 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <section className="border-b border-[var(--border)] bg-[var(--bg-muted)] py-8 sm:py-10">
+        <Container>
+          <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {kpis.map((k) => (
               <Kpi key={k.etiqueta} {...k} />
             ))}
