@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { createPortal } from "react-dom";
 import Link from "next/link";
-import { ArrowDown, ArrowRight, Check, ChevronDown, ChevronLeft, ChevronRight, X } from "lucide-react";
+import { ArrowRight, Check, ChevronDown, ChevronLeft, ChevronRight, X } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { warp } from "./timing";
 import { instantaneaUso, ordenarPorUso, parseUso, registrarUso, suscribirUso } from "@/lib/uso";
@@ -82,7 +82,6 @@ export function ScrollWorld({ scenes: base }: { scenes: JourneyScene[] }) {
   const stageRef = useRef<HTMLDivElement>(null);
   const layerRefs = useRef<(HTMLDivElement | null)[]>([]);
   const dotRefs = useRef<(HTMLButtonElement | null)[]>([]);
-  const hintRef = useRef<HTMLParagraphElement | null>(null);
   const chipRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const barRef = useRef<HTMLSpanElement>(null);
   const counterRef = useRef<HTMLSpanElement>(null);
@@ -127,7 +126,6 @@ export function ScrollWorld({ scenes: base }: { scenes: JourneyScene[] }) {
         el.style.filter = blur > 0.05 ? `blur(${blur.toFixed(2)}px)` : "none";
       });
 
-      if (hintRef.current) hintRef.current.style.opacity = String(clamp(1 - pv * 40));
       if (barRef.current) barRef.current.style.transform = `scaleX(${pv.toFixed(4)})`;
       const idx = clamp(Math.round(s), 0, K);
       if (idx !== activeIdx) {
@@ -267,9 +265,6 @@ export function ScrollWorld({ scenes: base }: { scenes: JourneyScene[] }) {
           ))}
           <div className="sw-shade" aria-hidden />
           <span ref={barRef} className="sw-bar" aria-hidden />
-          <p ref={hintRef} className="sw-hint" aria-hidden>
-            Desliza para recorrer <ArrowDown size={14} />
-          </p>
 
           <div className="sw-picker" style={{ "--acc": scenes[current].accent } as React.CSSProperties}>
             <button type="button" onClick={() => goTo(Math.max(0, current - 1))} disabled={current === 0} aria-label="Sección anterior" className="sw-picker-arrow"><ChevronLeft size={20} /></button>
