@@ -23,8 +23,8 @@ export function MastheadTools() {
   const [open, setOpen] = useState(false);
   return (
     <div className="mh-tools">
-      <button type="button" onClick={() => setOpen(!open)} aria-expanded={open} aria-controls="mh-opciones" className="mh-tools-toggle">
-        Opciones <ChevronDown size={13} className={`transition-transform duration-300 ${open ? "rotate-180" : ""}`} />
+      <button type="button" onClick={() => setOpen(!open)} aria-expanded={open} aria-controls="mh-opciones" aria-label={open ? "Cerrar opciones" : "Abrir opciones"} className="mh-tools-toggle">
+        <ChevronDown size={16} className={`transition-transform duration-300 ${open ? "rotate-180" : ""}`} />
       </button>
       {open && (
         <div id="mh-opciones" className="mh-tools-panel">

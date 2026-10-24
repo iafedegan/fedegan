@@ -1326,6 +1326,6 @@ a.mx-card:hover, .mx-lift:hover, .gl-hover:hover { transform: translateY(-2px); 
 /* Celular: tema y cuenta se despliegan debajo de la fecha */
 @media (max-width: 767px) {
   .mh-tools { flex-direction: column; align-items: center; justify-content: flex-start; margin: 0.25rem 0 0; }
-  .mh-tools-toggle { display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.25rem 0.75rem; border-radius: 999px; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--fg-lime-400); border: 1px solid var(--border-strong); }
+  .mh-tools-toggle { display: inline-flex; align-items: center; justify-content: center; padding: 0.15rem 0.9rem; min-height: 1.6rem; border-radius: 999px; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--fg-lime-400); border: 1px solid var(--border-strong); }
   .mh-tools-panel { display: flex; flex-direction: column; gap: 0.6rem; align-items: flex-start; margin-top: 0.6rem; padding: 0.75rem 1rem; border-radius: 1rem; border: 1px solid var(--border-strong); background: var(--surface-solid); font-size: 0.85rem; font-weight: 600; color: var(--text); }
 }
