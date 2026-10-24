@@ -1299,3 +1299,10 @@ a.mx-card:hover, .mx-lift:hover, .gl-hover:hover { transform: translateY(-2px); 
 
 /* Celular: sin recorrido por scroll; la escena cambia con las flechas */
 @media (max-width: 767px) { .sw-track { height: auto; } }
+
+/* Celular: sin recuadro; solo foto, título, texto y botón sobre el degradado */
+@media (max-width: 767px) {
+  .sw-panel { background: none; border: 0; box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none; padding-inline: 0.4rem; height: auto; min-height: 15rem; overflow: visible; }
+  .sw-panel::before, .sw-panel::after { display: none; }
+  .sw-panel .sw-cta-desc, .sw-panel h2, .sw-panel h3 { text-shadow: 0 1px 14px rgba(0, 0, 0, 0.8); }
+}
