@@ -1254,7 +1254,7 @@ a.mx-card:hover, .mx-lift:hover, .gl-hover:hover { transform: translateY(-2px); 
 @media (max-width: 767px) {
   .sw-chips { display: none !important; }
   .sw-picker {
-    position: absolute; z-index: 4; top: 0.9rem; left: 0.9rem; right: 0.9rem; display: flex; align-items: stretch; gap: 0.4rem; padding: 0.35rem;
+    position: absolute; z-index: 4; top: 0.9rem; left: 0.9rem; right: 0.9rem; display: flex; align-items: stretch; padding: 0.2rem;
     border-radius: 1rem; background: rgba(5, 16, 11, 0.62); border: 1px solid rgba(255, 255, 255, 0.18);
     -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
   }
@@ -1263,7 +1263,7 @@ a.mx-card:hover, .mx-lift:hover, .gl-hover:hover { transform: translateY(-2px); 
   .sw-picker-main { display: flex; min-width: 0; flex: 1; flex-direction: column; align-items: center; justify-content: center; gap: 0.1rem; padding: 0.35rem 0.5rem; text-align: center; }
   .sw-picker-count { font-size: 0.66rem; font-weight: 700; letter-spacing: 0.18em; color: rgb(var(--acc)); }
   .sw-picker-name { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; color: #f7f4ea; }
-  .sw-picker-all { display: inline-flex; align-items: center; gap: 0.25rem; font-size: 0.72rem; font-weight: 600; color: rgba(244, 242, 233, 0.8); text-decoration: underline; text-underline-offset: 3px; }
+  .sw-picker-all { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.85rem; font-weight: 700; letter-spacing: 0.04em; color: #f4f2e9; }
   .sw-hint { top: 5.6rem; }
   .sw-sheet { position: fixed; inset: 0; z-index: 90; display: flex; align-items: flex-end; background: rgba(0, 0, 0, 0.6); }
   .sw-sheet-box { width: 100%; max-height: 80svh; overflow-y: auto; border-radius: 1.25rem 1.25rem 0 0; background: #0b1a12; border-top: 1px solid rgba(255, 255, 255, 0.18); padding-bottom: env(safe-area-inset-bottom); }
@@ -1297,8 +1297,6 @@ a.mx-card:hover, .mx-lift:hover, .gl-hover:hover { transform: translateY(-2px); 
   [data-region="navbar"] { top: var(--mh-h, 0px); }
 }
 
-/* Celular: sin recorrido por scroll; la escena cambia con las flechas */
-@media (max-width: 767px) { .sw-track { height: auto; } }
 
 /* Celular: sin recuadro; solo foto, título, texto y botón sobre el degradado */
 @media (max-width: 767px) {

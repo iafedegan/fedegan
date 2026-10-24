@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { createPortal } from "react-dom";
 import Link from "next/link";
-import { ArrowRight, Check, ChevronDown, ChevronLeft, ChevronRight, X } from "lucide-react";
+import { ArrowRight, Check, ChevronDown, X } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { warp } from "./timing";
 import { instantaneaUso, ordenarPorUso, parseUso, registrarUso, suscribirUso } from "@/lib/uso";
@@ -90,9 +90,6 @@ export function ScrollWorld({ scenes: base }: { scenes: JourneyScene[] }) {
   const [open, setOpen] = useState<number | null>(null);
   const [current, setCurrent] = useState(0);
   const [menu, setMenu] = useState(false);
-  // En celular no hay scroll: la escena se cambia con las flechas y la lista, sin mover la página.
-  const mobileIdx = useRef(0);
-  const jump = useRef<(() => void) | null>(null);
   const openRef = useRef<number | null>(null);
   const pending = useRef<number | null>(null);
 
@@ -150,9 +147,7 @@ export function ScrollWorld({ scenes: base }: { scenes: JourneyScene[] }) {
       }
     };
 
-    const phone = window.matchMedia("(max-width: 767px)");
     const readProgress = () => {
-      if (phone.matches) return clamp(mobileIdx.current / K);
       const run = track.offsetHeight - stage.offsetHeight;
       return run > 0 ? clamp(-track.getBoundingClientRect().top / run) : 0;
     };
@@ -178,14 +173,12 @@ export function ScrollWorld({ scenes: base }: { scenes: JourneyScene[] }) {
       setTop();
       onScroll();
     });
-    jump.current = onScroll;
     ro.observe(stage);
     if (header) ro.observe(header);
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
 
     return () => {
-      jump.current = null;
       ro.disconnect();
       window.removeEventListener("scroll", onScroll);
       if (raf) cancelAnimationFrame(raf);
@@ -209,11 +202,6 @@ export function ScrollWorld({ scenes: base }: { scenes: JourneyScene[] }) {
 
   const goTo = useCallback(
     (i: number) => {
-      if (window.matchMedia("(max-width: 767px)").matches) {
-        mobileIdx.current = i;
-        jump.current?.();
-        return;
-      }
       const track = trackRef.current;
       const stage = stageRef.current;
       if (!track || !stage) return;
@@ -278,14 +266,10 @@ export function ScrollWorld({ scenes: base }: { scenes: JourneyScene[] }) {
           <div className="sw-shade" aria-hidden />
           <span ref={barRef} className="sw-bar" aria-hidden />
 
-          <div className="sw-picker" style={{ "--acc": scenes[current].accent } as React.CSSProperties}>
-            <button type="button" onClick={() => goTo(Math.max(0, current - 1))} disabled={current === 0} aria-label="Sección anterior" className="sw-picker-arrow"><ChevronLeft size={20} /></button>
+          <div className="sw-picker">
             <button type="button" onClick={() => setMenu(true)} aria-haspopup="dialog" className="sw-picker-main">
-              <span className="sw-picker-count">{two(current + 1)} / {two(K + 1)}</span>
-              <span className="sw-picker-name">{scenes[current].nombre}</span>
-              <span className="sw-picker-all">Ver todas las secciones <ChevronDown size={13} /></span>
+              <span className="sw-picker-all">Ver todas las secciones <ChevronDown size={14} /></span>
             </button>
-            <button type="button" onClick={() => goTo(Math.min(K, current + 1))} disabled={current === K} aria-label="Sección siguiente" className="sw-picker-arrow"><ChevronRight size={20} /></button>
           </div>
           {menu && createPortal(
             <div className="sw-sheet" role="dialog" aria-modal="true" aria-label="Secciones del portal" onClick={() => setMenu(false)}>
