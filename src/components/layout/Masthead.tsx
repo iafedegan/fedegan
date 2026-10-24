@@ -6,7 +6,6 @@ export function Masthead() {
   const date = new Intl.DateTimeFormat("es-CO", { weekday: "long", day: "numeric", month: "long", year: "numeric", timeZone: "America/Bogota" }).format(new Date());
   return (
     <div className="mh" data-region="masthead">
-      <MastheadTools date={date} />
       <div className="mh-row">
         <span aria-hidden className="mh-rule mh-rule-l" />
         <Link href="/" className="mh-title" aria-label="FEDEGÁN FNG, inicio">
@@ -16,6 +15,7 @@ export function Masthead() {
       </div>
       <p className="mh-tag">Federación Colombiana de Ganaderos</p>
       <p className="mh-date">{date}</p>
+      <MastheadTools />
     </div>
   );
 }
