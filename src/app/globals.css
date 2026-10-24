@@ -1283,3 +1283,9 @@ a.mx-card:hover, .mx-lift:hover, .gl-hover:hover { transform: translateY(-2px); 
   .sw-panel:has(.sw-extra) .sw-cta-desc { -webkit-line-clamp: 2; }
   .sw-panel .sw-cta { min-height: 2.75rem; padding-block: 0.6rem; }
 }
+
+/* Celular: tarjeta centrada y por encima de la barra inferior */
+@media (max-width: 767px) {
+  .sw-center { left: 0; right: 0; justify-content: center; align-items: center; bottom: calc(5.75rem + var(--sw-cut, 0px)); }
+  .sw-panel { width: calc(100% - 1.5rem); }
+}
