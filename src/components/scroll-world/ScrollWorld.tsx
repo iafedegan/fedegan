@@ -90,6 +90,9 @@ export function ScrollWorld({ scenes: base }: { scenes: JourneyScene[] }) {
   const [open, setOpen] = useState<number | null>(null);
   const [current, setCurrent] = useState(0);
   const [menu, setMenu] = useState(false);
+  // En celular no hay scroll: la escena se cambia con las flechas y la lista, sin mover la página.
+  const mobileIdx = useRef(0);
+  const jump = useRef<(() => void) | null>(null);
   const openRef = useRef<number | null>(null);
   const pending = useRef<number | null>(null);
 
@@ -147,7 +150,9 @@ export function ScrollWorld({ scenes: base }: { scenes: JourneyScene[] }) {
       }
     };
 
+    const phone = window.matchMedia("(max-width: 767px)");
     const readProgress = () => {
+      if (phone.matches) return clamp(mobileIdx.current / K);
       const run = track.offsetHeight - stage.offsetHeight;
       return run > 0 ? clamp(-track.getBoundingClientRect().top / run) : 0;
     };
@@ -173,12 +178,14 @@ export function ScrollWorld({ scenes: base }: { scenes: JourneyScene[] }) {
       setTop();
       onScroll();
     });
+    jump.current = onScroll;
     ro.observe(stage);
     if (header) ro.observe(header);
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
 
     return () => {
+      jump.current = null;
       ro.disconnect();
       window.removeEventListener("scroll", onScroll);
       if (raf) cancelAnimationFrame(raf);
@@ -202,6 +209,11 @@ export function ScrollWorld({ scenes: base }: { scenes: JourneyScene[] }) {
 
   const goTo = useCallback(
     (i: number) => {
+      if (window.matchMedia("(max-width: 767px)").matches) {
+        mobileIdx.current = i;
+        jump.current?.();
+        return;
+      }
       const track = trackRef.current;
       const stage = stageRef.current;
       if (!track || !stage) return;

@@ -1296,3 +1296,6 @@ a.mx-card:hover, .mx-lift:hover, .gl-hover:hover { transform: translateY(-2px); 
   .mh-tag { display: none; }
   [data-region="navbar"] { top: var(--mh-h, 0px); }
 }
+
+/* Celular: sin recorrido por scroll; la escena cambia con las flechas */
+@media (max-width: 767px) { .sw-track { height: auto; } }
