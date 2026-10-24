@@ -1332,6 +1332,6 @@ a.mx-card:hover, .mx-lift:hover, .gl-hover:hover { transform: translateY(-2px); 
 
 /* Celular: la tarjeta queda pegada abajo de la pantalla con «sticky» (sin cálculos en JS), así no se sube al empezar el scroll */
 @media (max-width: 767px) {
-  .sw-stage { overflow: clip; display: flex; flex-direction: column; box-sizing: border-box; padding-bottom: 5.75rem; }
-  .sw-center { position: sticky; top: auto; bottom: 5.75rem; left: auto; right: auto; transform: none; margin-top: auto; width: 100%; }
+  .sw-stage { overflow: clip; display: flex; flex-direction: column; box-sizing: border-box; padding-bottom: 5rem; }
+  .sw-center { position: sticky; top: auto; bottom: 5rem; left: auto; right: auto; transform: none; margin-top: auto; width: 100%; }
 }
