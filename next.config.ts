@@ -39,9 +39,19 @@ const securityHeaders = [
   { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), payment=()" },
 ];
 
+// Imágenes del portal en /public: no llevan huella en el nombre, así que se guardan una semana y se revalidan en segundo plano.
+const staticAssetCache = [{ key: "Cache-Control", value: "public, max-age=604800, stale-while-revalidate=2592000" }];
+
 const nextConfig: NextConfig = {
+  poweredByHeader: false,
+  compress: true,
+  reactStrictMode: true,
+  experimental: { optimizePackageImports: ["lucide-react"] },
   // Imágenes remotas permitidas para next/image: archivos subidos desde el CMS (Supabase Storage) y portadas de CONtexto.
   images: {
+    formats: ["image/avif", "image/webp"],
+    minimumCacheTTL: 2592000,
+    deviceSizes: [360, 414, 640, 768, 1024, 1280, 1536, 1920],
     remotePatterns: [
       { protocol: "https", hostname: "*.supabase.co", pathname: "/storage/v1/object/public/**" },
       { protocol: "https", hostname: "contexto-olive.vercel.app" },
@@ -51,6 +61,7 @@ const nextConfig: NextConfig = {
     return [
       { source: "/:path*", headers: securityHeaders },
       // El service worker nunca debe quedar en caché del navegador: así cada despliegue lo renueva.
+      ...["journey", "cursos", "servicios", "headers", "brand", "accesos", "locales"].map((d) => ({ source: `/${d}/:path*`, headers: staticAssetCache })),
       { source: "/sw.js", headers: [{ key: "Cache-Control", value: "no-cache, no-store, must-revalidate" }, { key: "Service-Worker-Allowed", value: "/" }] },
     ];
   },

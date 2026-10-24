@@ -18,7 +18,7 @@ export function MobileTabBar() {
 
   const isActive = (href: string) => (href === "/" ? pathname === "/" : pathname.startsWith(href));
   const item =
-    "relative flex min-h-14 flex-1 flex-col items-center justify-center gap-0.5 text-[0.62rem] font-semibold tracking-wide transition-colors";
+    "relative flex min-h-14 flex-1 flex-col items-center justify-center gap-0.5 text-[0.7rem] font-semibold tracking-wide transition-colors";
 
   return (
     <nav

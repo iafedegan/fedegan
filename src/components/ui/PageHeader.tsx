@@ -1,3 +1,4 @@
+import { SITE_URL } from "@/lib/site-url";
 import Image from "next/image";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
@@ -38,8 +39,17 @@ export function PageHeader({
     : n > 90 ? "text-xl sm:text-2xl lg:text-3xl" : n > 60 ? "text-2xl sm:text-3xl lg:text-4xl" : n > 32 ? "text-2xl sm:text-4xl lg:text-5xl" : "text-3xl sm:text-5xl";
   // Ruta larga: se conserva la raíz y los dos últimos tramos, con texto recortado.
   const trail = breadcrumbs.length > 2 ? [{ label: "…" }, ...breadcrumbs.slice(-2)] : breadcrumbs;
+  const crumbs = [root, ...breadcrumbs];
+  const crumbLd = breadcrumbs.length
+    ? {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: crumbs.map((c, i) => ({ "@type": "ListItem", position: i + 1, name: c.label, ...(c.href ? { item: `${SITE_URL}${c.href}` } : {}) })),
+      }
+    : null;
   return (
     <section className={`mx-hero ${image ? "mx-hero-photo" : ""}`} data-region="pagehead">
+      {crumbLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(crumbLd) }} />}
       {image && (
         <>
           <Image src={image} alt="" fill priority sizes="100vw" className="-z-20 object-cover" style={{ objectPosition: imagePos }} />

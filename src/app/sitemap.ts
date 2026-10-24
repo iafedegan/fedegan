@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { getEvents, getPublications } from "@/lib/cms/content";
 import { getNoticias } from "@/lib/contexto";
+import { getCourses } from "@/lib/lms/queries";
 import { allLegacyPages, legacyHref } from "@/content/legacy";
 
 import { SITE_URL as BASE_URL } from "@/lib/site-url";
@@ -19,14 +20,21 @@ const staticRoutes = [
   "/privacidad",
   "/terminos",
   "/transparencia",
+  "/directorio",
+  "/programas",
+  "/normatividad",
+  "/accesos",
+  "/mapa-del-sitio",
+  "/pagos",
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [{ items: noticias }, publications, events] = await Promise.all([getNoticias({ limit: 50 }), getPublications(), getEvents()]);
+  const [{ items: noticias }, publications, events, courses] = await Promise.all([getNoticias({ limit: 50 }), getPublications(), getEvents(), getCourses().catch(() => [])]);
   const dynamic = [
     ...noticias.map((n) => `/noticias/${n.slug}`),
     ...publications.map((p) => `/publicaciones/${p.slug}`),
     ...events.map((e) => `/eventos/${e.slug}`),
+    ...courses.map((c) => `/escuela-virtual/${c.slug}`),
     ...allLegacyPages().map(({ key, slug }) => legacyHref(slug, key)),
   ];
 

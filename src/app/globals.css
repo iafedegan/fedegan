@@ -1320,7 +1320,7 @@ a.mx-card:hover, .mx-lift:hover, .gl-hover:hover { transform: translateY(-2px); 
 @media (max-width: 767px) {
   .mh-tools { justify-content: flex-end; }
   .mh-tools-date { display: none; }
-  .mh-date { margin-top: 0.3rem; font-size: 0.62rem; }
+  .mh-date { margin-top: 0.3rem; font-size: 0.7rem; }
 }
 
 /* Celular: tema y cuenta se despliegan debajo de la fecha */

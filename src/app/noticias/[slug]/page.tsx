@@ -6,6 +6,7 @@ import { ArrowLeft, ChevronRight } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Badge } from "@/components/ui/Badge";
 import { getNoticia, getNoticias } from "@/lib/contexto";
+import { SITE_URL } from "@/lib/site-url";
 
 export async function generateStaticParams() {
   const { items } = await getNoticias({ limit: 50 });
@@ -40,6 +41,24 @@ export default async function NoticiaDetailPage({ params }: { params: Promise<{ 
 
   return (
     <article>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "NewsArticle",
+            headline: n.title,
+            description: n.dek,
+            image: n.image ? [n.image] : undefined,
+            datePublished: n.publishedAt ?? undefined,
+            dateModified: n.updatedAt ?? n.publishedAt ?? undefined,
+            author: { "@type": "Person", name: n.author },
+            publisher: { "@type": "Organization", name: "FEDEGÁN–FNG", logo: { "@type": "ImageObject", url: `${SITE_URL}/brand/fedegan-icon-round.png` } },
+            mainEntityOfPage: `${SITE_URL}/noticias/${slug}`,
+            inLanguage: "es-CO",
+          }),
+        }}
+      />
       <section className="ph">
         <Container className="relative py-5 sm:py-7 lg:py-8">
           <nav aria-label="Ruta de navegación" className="mb-4 flex flex-wrap items-center gap-1.5 text-xs text-[var(--text-faint)]">

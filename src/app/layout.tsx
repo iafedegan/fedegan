@@ -31,7 +31,19 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   alternates: { canonical: "./" },
-  openGraph: { type: "website", locale: "es_CO", siteName: "FEDEGÁN–FNG", images: ["/brand/fedegan-icon-round.png"] },
+  openGraph: {
+    type: "website",
+    locale: "es_CO",
+    siteName: "FEDEGÁN–FNG",
+    url: "/",
+    title: "FEDEGÁN–FNG · Federación Colombiana de Ganaderos",
+    description: "Noticias, programas, publicaciones, servicios y cifras del sector ganadero colombiano.",
+    images: [{ url: "/brand/fedegan-icon-round.png", width: 512, height: 512, alt: "FEDEGÁN–FNG" }],
+  },
+  twitter: { card: "summary", title: "FEDEGÁN–FNG · Federación Colombiana de Ganaderos", description: "Noticias, programas, publicaciones, servicios y cifras del sector ganadero colombiano.", images: ["/brand/fedegan-icon-round.png"] },
+  robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1, "max-video-preview": -1 } },
+  applicationName: "FEDEGÁN–FNG",
+  category: "agricultura",
   appleWebApp: { capable: true, title: "FEDEGÁN", statusBarStyle: "black-translucent" },
   title: {
     default: "FEDEGÁN–FNG · Federación Colombiana de Ganaderos",
@@ -55,6 +67,16 @@ const orgJsonLd = {
   sameAs: ["https://www.instagram.com/fedegan_col/", "http://www.youtube.com/user/FEDEGANFNG"],
 };
 
+const siteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "FEDEGÁN–FNG",
+  url: SITE_URL,
+  inLanguage: "es-CO",
+  publisher: { "@type": "Organization", name: "FEDEGÁN–FNG · Federación Colombiana de Ganaderos" },
+  potentialAction: { "@type": "SearchAction", target: { "@type": "EntryPoint", urlTemplate: `${SITE_URL}/buscador?q={search_term_string}` }, "query-input": "required name=search_term_string" },
+};
+
 export default async function RootLayout({ children }: LayoutProps<"/">) {
   const [nav, design] = await Promise.all([getNav(), getPublishedDesign()]);
   const css = designCss(design);
@@ -70,6 +92,9 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
     >
       <head>
         <ThemeScript />
+        <link rel="preconnect" href="https://pzaxysfoenujkdgotncb.supabase.co" crossOrigin="" />
+        <link rel="dns-prefetch" href="https://contexto-olive.vercel.app" />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(siteJsonLd) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }} />
       </head>
       <body className="min-h-full flex flex-col">
