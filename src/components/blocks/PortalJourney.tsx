@@ -65,6 +65,25 @@ export async function PortalJourney() {
     });
   }
 
+  // Zona de pagos: cuota de fomento, planilla y biológico, a un clic desde el recorrido.
+  scenes.push({
+    id: "pagos",
+    nombre: "Zona de pagos",
+    rubro: "Servicios en línea",
+    descripcion: "Pague la cuota de fomento ganadero y lechero, presente la planilla de recaudo y solicite el biológico, todo en un solo lugar. Elija quién es usted, qué necesita y siga los pasos.",
+    tags: ["Cuota de fomento", "Planilla", "Biológico"],
+    href: "/pagos",
+    subs: [
+      { label: "Cuota de fomento", href: "/pagos/cuota" },
+      { label: "Planilla de recaudo", href: "/pagos/planilla" },
+      { label: "Biológico", href: "/pagos/biologico" },
+    ],
+    accent: "92,205,134",
+    image: "/headers/ia-pagos.jpg",
+    pos: "50% 50%",
+    alt: "Productor ganadero revisando un pago en línea desde su finca",
+  });
+
   // Noticias cierra el recorrido: usa la foto de la última nota con imagen (sin las generadas con IA).
   const lead = news.carousel.find((n) => n.image && !n.imageAlt?.toLowerCase().startsWith("imagen generada con ia"));
   scenes.push({
