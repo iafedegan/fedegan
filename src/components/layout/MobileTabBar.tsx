@@ -2,12 +2,11 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, LayoutGrid, Menu, Newspaper, Search } from "lucide-react";
+import { Home, Menu, Newspaper, Search } from "lucide-react";
 
 const tabs = [
   { href: "/", label: "Inicio", icon: Home },
   { href: "/noticias", label: "Noticias", icon: Newspaper },
-  { href: "/directorio", label: "Locales", icon: LayoutGrid },
   { href: "/buscador", label: "Buscar", icon: Search },
 ];
 
