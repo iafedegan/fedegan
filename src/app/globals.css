@@ -1289,3 +1289,10 @@ a.mx-card:hover, .mx-lift:hover, .gl-hover:hover { transform: translateY(-2px); 
   .sw-center { left: 0; right: 0; justify-content: center; align-items: center; bottom: calc(5.75rem + var(--sw-cut, 0px)); }
   .sw-panel { width: calc(100% - 1.5rem); }
 }
+
+/* Celular: el título FEDEGÁN FNG queda siempre visible arriba */
+@media (max-width: 767px) {
+  .mh { position: sticky; top: 0; z-index: 55; padding-bottom: 0.5rem; }
+  .mh-tag { display: none; }
+  [data-region="navbar"] { top: var(--mh-h, 0px); }
+}
