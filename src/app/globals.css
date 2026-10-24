@@ -1342,3 +1342,10 @@ a.mx-card:hover, .mx-lift:hover, .gl-hover:hover { transform: translateY(-2px); 
 @media (min-width: 768px) {
   .sw-rail { bottom: calc(5.25rem + var(--sw-cut, 0px)); max-height: calc(100% - 6rem - var(--sw-cut, 0px)); }
 }
+
+/* Escritorio: la tarjeta aparece al centro de la pantalla solo mientras se apunta a una sección de la lista */
+@media (min-width: 768px) {
+  .sw-center { top: 50%; bottom: auto; left: 50%; right: auto; transform: translate(-50%, -50%); justify-content: center; align-items: center; transition: opacity 0.25s ease; }
+  .sw-center.is-idle { opacity: 0; pointer-events: none; }
+  .sw-center.is-idle .sw-panel { pointer-events: none; }
+}

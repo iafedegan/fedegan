@@ -90,6 +90,19 @@ export function ScrollWorld({ scenes: base }: { scenes: JourneyScene[] }) {
   const [open, setOpen] = useState<number | null>(null);
   const [current, setCurrent] = useState(0);
   const [menu, setMenu] = useState(false);
+  // Escritorio: la tarjeta solo aparece (al centro) mientras se apunta a una sección de la lista.
+  const [hover, setHover] = useState<number | null>(null);
+  const hoverTimer = useRef<number | undefined>(undefined);
+  const verCard = useCallback((i: number) => {
+    window.clearTimeout(hoverTimer.current);
+    setHover(i);
+  }, []);
+  const ocultarCard = useCallback(() => {
+    window.clearTimeout(hoverTimer.current);
+    hoverTimer.current = window.setTimeout(() => setHover(null), 250);
+  }, []);
+  const shown = hover ?? current;
+  const sc = scenes[shown];
   useEffect(() => {
     const abrir = () => setMenu(true);
     window.addEventListener("fedegan:secciones", abrir);
@@ -332,35 +345,35 @@ export function ScrollWorld({ scenes: base }: { scenes: JourneyScene[] }) {
           )}
 
 
-          <div className="sw-center">
-            <div className="sw-panel" style={{ "--acc": scenes[current].accent } as React.CSSProperties}>
-              <p className="sw-p-kicker" key={`k-${scenes[current].id}`}>
-                <span>{two(current + 1)} / {two(K + 1)}</span>
-                {scenes[current].rubro}
+          <div className={`sw-center${hover === null ? " is-idle" : ""}`} onMouseEnter={() => verCard(shown)} onMouseLeave={ocultarCard}>
+            <div className="sw-panel" style={{ "--acc": sc.accent } as React.CSSProperties}>
+              <p className="sw-p-kicker" key={`k-${sc.id}`}>
+                <span>{two(shown + 1)} / {two(K + 1)}</span>
+                {sc.rubro}
               </p>
-              <h2 className="sw-p-title" key={`t-${scenes[current].id}`}>{scenes[current].nombre}</h2>
-              <p className="sw-cta-desc" key={scenes[current].id}>{scenes[current].descripcion}</p>
-              {scenes[current].extra && (() => {
-                const x = scenes[current].extra!;
+              <h2 className="sw-p-title" key={`t-${sc.id}`}>{sc.nombre}</h2>
+              <p className="sw-cta-desc" key={sc.id}>{sc.descripcion}</p>
+              {sc.extra && (() => {
+                const x = sc.extra!;
                 const body = (
                   <>
                     <span>{x.etiqueta}</span>
                     <b>{x.texto}</b>
                   </>
                 );
-                const href = x.href ?? scenes[current].href;
+                const href = x.href ?? sc.href;
                 return href.startsWith("/") ? (
-                  <Link href={href} className="sw-extra" key={`x-${scenes[current].id}`}>
+                  <Link href={href} className="sw-extra" key={`x-${sc.id}`}>
                     {body}
                   </Link>
                 ) : (
-                  <a href={href} target="_blank" rel="noopener noreferrer" className="sw-extra" key={`x-${scenes[current].id}`}>
+                  <a href={href} target="_blank" rel="noopener noreferrer" className="sw-extra" key={`x-${sc.id}`}>
                     {body}
                   </a>
                 );
               })()}
-              <button type="button" onClick={() => navigate(scenes[current])} className="sw-cta">
-                {scenes[current].external ? "Visitar sitio" : "Entrar a la sección"}
+              <button type="button" onClick={() => navigate(sc)} className="sw-cta">
+                {sc.external ? "Visitar sitio" : "Entrar a la sección"}
                 <ArrowRight size={16} aria-hidden />
               </button>
             </div>
@@ -371,7 +384,7 @@ export function ScrollWorld({ scenes: base }: { scenes: JourneyScene[] }) {
               {two(1)} / {two(K + 1)}
             </span>
             {scenes.map((s, i) => (
-              <div key={s.id} className="sw-item" style={{ "--acc": s.accent } as React.CSSProperties}>
+              <div key={s.id} className="sw-item" style={{ "--acc": s.accent } as React.CSSProperties} onMouseEnter={() => verCard(i)} onMouseLeave={ocultarCard} onFocus={() => verCard(i)} onBlur={ocultarCard}>
                 <button
                   ref={(el) => {
                     dotRefs.current[i] = el;
