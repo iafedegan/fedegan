@@ -3,8 +3,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { createPortal } from "react-dom";
 import Link from "next/link";
-import { ArrowDown, ArrowRight } from "lucide-react";
+import { ArrowDown, ArrowRight, Check, ChevronDown, ChevronLeft, ChevronRight, X } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { warp } from "./timing";
 import { instantaneaUso, ordenarPorUso, parseUso, registrarUso, suscribirUso } from "@/lib/uso";
@@ -89,6 +90,7 @@ export function ScrollWorld({ scenes: base }: { scenes: JourneyScene[] }) {
   // Escena cuyas opciones están desplegadas; «pending» evita cerrarla mientras el scroll llega a ella.
   const [open, setOpen] = useState<number | null>(null);
   const [current, setCurrent] = useState(0);
+  const [menu, setMenu] = useState(false);
   const openRef = useRef<number | null>(null);
   const pending = useRef<number | null>(null);
 
@@ -268,6 +270,33 @@ export function ScrollWorld({ scenes: base }: { scenes: JourneyScene[] }) {
           <p ref={hintRef} className="sw-hint" aria-hidden>
             Desliza para recorrer <ArrowDown size={14} />
           </p>
+
+          <div className="sw-picker" style={{ "--acc": scenes[current].accent } as React.CSSProperties}>
+            <button type="button" onClick={() => goTo(Math.max(0, current - 1))} disabled={current === 0} aria-label="Sección anterior" className="sw-picker-arrow"><ChevronLeft size={20} /></button>
+            <button type="button" onClick={() => setMenu(true)} aria-haspopup="dialog" className="sw-picker-main">
+              <span className="sw-picker-count">{two(current + 1)} / {two(K + 1)}</span>
+              <span className="sw-picker-name">{scenes[current].nombre}</span>
+              <span className="sw-picker-all">Ver todas las secciones <ChevronDown size={13} /></span>
+            </button>
+            <button type="button" onClick={() => goTo(Math.min(K, current + 1))} disabled={current === K} aria-label="Sección siguiente" className="sw-picker-arrow"><ChevronRight size={20} /></button>
+          </div>
+          {menu && createPortal(
+            <div className="sw-sheet" role="dialog" aria-modal="true" aria-label="Secciones del portal" onClick={() => setMenu(false)}>
+              <div className="sw-sheet-box" onClick={(e) => e.stopPropagation()}>
+                <div className="sw-sheet-head"><p>¿A dónde quiere ir?</p><button type="button" onClick={() => setMenu(false)} aria-label="Cerrar"><X size={18} /></button></div>
+                <ul>
+                  {scenes.map((sc, i) => (
+                    <li key={sc.id}>
+                      <button type="button" onClick={() => { setMenu(false); goTo(i); }} className={i === current ? "is-on" : ""} style={{ "--acc": sc.accent } as React.CSSProperties}>
+                        <span className="sw-sheet-n">{two(i + 1)}</span><span className="sw-sheet-t">{sc.nombre}</span>{i === current && <Check size={16} />}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>,
+            document.body,
+          )}
 
           <nav className="sw-chips" aria-label="Locales del recorrido">
             {scenes.map((s, i) => (
