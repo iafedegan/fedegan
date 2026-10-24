@@ -1,8 +1,9 @@
 "use client";
 
+import { Fragment } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Menu, Newspaper, Search } from "lucide-react";
+import { Home, LayoutGrid, Menu, Newspaper, Search } from "lucide-react";
 
 const tabs = [
   { href: "/", label: "Inicio", icon: Home },
@@ -24,15 +25,23 @@ export function MobileTabBar() {
       aria-label="Navegación de la aplicación"
       className="fixed inset-x-3 bottom-[max(0.75rem,env(safe-area-inset-bottom))] z-[60] flex items-center rounded-full border border-[var(--border-strong)] bg-[color-mix(in_srgb,var(--bg)_86%,transparent)] px-1.5 shadow-[0_22px_44px_-14px_rgba(0,0,0,0.95)] backdrop-blur-xl md:hidden"
     >
-      {tabs.map(({ href, label, icon: Icon }) => {
+      {tabs.map(({ href, label, icon: Icon }, i) => {
         const active = isActive(href);
         return (
-          <Link key={href} href={href} aria-current={active ? "page" : undefined} className={`${item} ${active ? "text-[var(--fg-lime-400)]" : "text-[var(--text-muted)] active:text-[var(--text)]"}`}>
+          <Fragment key={href}>
+          {i === 2 && pathname === "/" && (
+            <button type="button" onClick={() => window.dispatchEvent(new Event("fedegan:secciones"))} aria-haspopup="dialog" className={`${item} text-[var(--text-muted)] active:text-[var(--text)]`}>
+              <span className="flex h-8 w-14 items-center justify-center rounded-full"><LayoutGrid size={21} strokeWidth={1.8} /></span>
+              Secciones
+            </button>
+          )}
+          <Link href={href} aria-current={active ? "page" : undefined} className={`${item} ${active ? "text-[var(--fg-lime-400)]" : "text-[var(--text-muted)] active:text-[var(--text)]"}`}>
             <span className={`flex h-8 w-14 items-center justify-center rounded-full transition-colors duration-300 ${active ? "bg-[rgba(216,181,88,0.16)]" : ""}`}>
               <Icon size={21} strokeWidth={active ? 2.2 : 1.8} />
             </span>
             {label}
           </Link>
+          </Fragment>
         );
       })}
       <button

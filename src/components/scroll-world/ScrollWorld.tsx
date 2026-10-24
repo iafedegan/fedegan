@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { createPortal } from "react-dom";
 import Link from "next/link";
-import { ArrowRight, Check, ChevronDown, X } from "lucide-react";
+import { ArrowRight, Check, X } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { warp } from "./timing";
 import { instantaneaUso, ordenarPorUso, parseUso, registrarUso, suscribirUso } from "@/lib/uso";
@@ -90,6 +90,11 @@ export function ScrollWorld({ scenes: base }: { scenes: JourneyScene[] }) {
   const [open, setOpen] = useState<number | null>(null);
   const [current, setCurrent] = useState(0);
   const [menu, setMenu] = useState(false);
+  useEffect(() => {
+    const abrir = () => setMenu(true);
+    window.addEventListener("fedegan:secciones", abrir);
+    return () => window.removeEventListener("fedegan:secciones", abrir);
+  }, []);
   const openRef = useRef<number | null>(null);
   const pending = useRef<number | null>(null);
 
@@ -279,11 +284,6 @@ export function ScrollWorld({ scenes: base }: { scenes: JourneyScene[] }) {
           <div className="sw-shade" aria-hidden />
           <span ref={barRef} className="sw-bar" aria-hidden />
 
-          <div className="sw-picker">
-            <button type="button" onClick={() => setMenu(true)} aria-haspopup="dialog" className="sw-picker-main">
-              <span className="sw-picker-all">Ver todas las secciones <ChevronDown size={14} /></span>
-            </button>
-          </div>
           {menu && createPortal(
             <div className="sw-sheet" role="dialog" aria-modal="true" aria-label="Secciones del portal" onClick={() => setMenu(false)}>
               <div className="sw-sheet-box" onClick={(e) => e.stopPropagation()}>
