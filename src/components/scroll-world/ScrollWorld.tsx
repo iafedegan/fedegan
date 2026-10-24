@@ -200,9 +200,16 @@ export function ScrollWorld({ scenes: base }: { scenes: JourneyScene[] }) {
     medir();
     window.addEventListener("scroll", medir, { passive: true });
     window.addEventListener("resize", medir);
+    window.addEventListener("load", medir);
+    // Anuncios, ticker o cabecera que cargan después mueven la escena sin que haya scroll: se vuelve a medir.
+    const ro = new ResizeObserver(medir);
+    ro.observe(document.body);
+    ro.observe(stage);
     return () => {
+      ro.disconnect();
       window.removeEventListener("scroll", medir);
       window.removeEventListener("resize", medir);
+      window.removeEventListener("load", medir);
     };
   }, []);
 
