@@ -106,7 +106,12 @@ export function ScrollWorld({ scenes: base }: { scenes: JourneyScene[] }) {
     let activeIdx = -1;
 
     const header = document.querySelector("header");
-    const setTop = () => track.style.setProperty("--sw-top", `${header ? header.getBoundingClientRect().height : 72}px`);
+    // En celular la cabecera «FEDEGÁN FNG» también queda fija: la escena se ancla debajo de ella y de la barra.
+    const mh = document.querySelector<HTMLElement>(".mh");
+    const setTop = () => {
+      const fija = mh && getComputedStyle(mh).position === "sticky" ? mh.getBoundingClientRect().height : 0;
+      track.style.setProperty("--sw-top", `${fija + (header ? header.getBoundingClientRect().height : 72)}px`);
+    };
     setTop();
 
     const paint = (pv: number) => {
@@ -175,6 +180,7 @@ export function ScrollWorld({ scenes: base }: { scenes: JourneyScene[] }) {
     });
     ro.observe(stage);
     if (header) ro.observe(header);
+    if (mh) ro.observe(mh);
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
 
