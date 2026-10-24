@@ -15,7 +15,7 @@ export function Masthead() {
         <span aria-hidden className="mh-rule mh-rule-r" />
       </div>
       <p className="mh-tag">Federación Colombiana de Ganaderos</p>
-      <p className="mh-date max-md:hidden">{date}</p>
+      <p className="mh-date">{date}</p>
     </div>
   );
 }

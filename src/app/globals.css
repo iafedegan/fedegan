@@ -1315,3 +1315,10 @@ a.mx-card:hover, .mx-lift:hover, .gl-hover:hover { transform: translateY(-2px); 
     -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 2.2rem, #000 calc(100% - 1.2rem), transparent); mask-image: linear-gradient(180deg, transparent 0, #000 2.2rem, #000 calc(100% - 1.2rem), transparent);
   }
 }
+
+/* Celular: la fecha va debajo del título, no en la fila de iconos */
+@media (max-width: 767px) {
+  .mh-tools { justify-content: flex-end; }
+  .mh-tools-date { display: none; }
+  .mh-date { margin-top: 0.3rem; font-size: 0.62rem; }
+}
