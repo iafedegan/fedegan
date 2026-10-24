@@ -1337,3 +1337,8 @@ a.mx-card:hover, .mx-lift:hover, .gl-hover:hover { transform: translateY(-2px); 
 }
 
 .sw-panel .sw-p-kicker { font-size: max(0.7rem, 11.2px); }
+
+/* Escritorio: la lista de secciones queda por encima del botón de volver arriba (↑) */
+@media (min-width: 768px) {
+  .sw-rail { bottom: calc(5.25rem + var(--sw-cut, 0px)); max-height: calc(100% - 6rem - var(--sw-cut, 0px)); }
+}
