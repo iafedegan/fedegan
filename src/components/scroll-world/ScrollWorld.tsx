@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { createPortal } from "react-dom";
 import Link from "next/link";
-import { ArrowRight, Check, X } from "lucide-react";
+import { ArrowRight, Check, ChevronUp, X } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { warp } from "./timing";
 import { instantaneaUso, ordenarPorUso, parseUso, registrarUso, suscribirUso } from "@/lib/uso";
@@ -302,6 +302,7 @@ export function ScrollWorld({ scenes: base }: { scenes: JourneyScene[] }) {
           ))}
           <div className="sw-shade" aria-hidden />
           <span ref={barRef} className="sw-bar" aria-hidden />
+          <p className="sw-swipe" aria-hidden><ChevronUp size={22} />Deslice hacia arriba</p>
 
           {menu && createPortal(
             <div className="sw-sheet" role="dialog" aria-modal="true" aria-label="Secciones del portal" onClick={() => setMenu(false)}>
