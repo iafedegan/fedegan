@@ -279,15 +279,15 @@ export function Header({ nav: mainNav }: { nav: { label: string; href: string }[
                 {mainNav.map((item, i) => {
                   const active = isActive(pathname, item.href);
                   return (
-                    <li key={item.href} className="border-b border-[var(--border)] last:border-0">
+                    <li key={item.href} className="border-b border-[rgba(255,255,255,0.07)] last:border-0">
                       <Link
                         href={item.href}
                         onClick={() => setOpenAt(null)}
                         aria-current={active ? "page" : undefined}
-                        className="group flex min-h-14 items-center gap-[0.9rem] py-2"
+                        className="group flex items-center gap-[0.9rem] py-[0.95rem]"
                       >
-                        <span className="text-[0.75rem] font-bold tracking-[0.12em] text-[var(--fg-lime-500)]">{String(i + 1).padStart(2, "0")}</span>
-                        <span className={`flex-1 text-[1.02rem] font-semibold ${active ? "text-[var(--fg-lime-400)]" : "text-[#e7e3d4]"}`}>
+                        <span className="text-[0.75rem] font-bold leading-normal tracking-[0.12em] text-[var(--fg-lime-500)]">{String(i + 1).padStart(2, "0")}</span>
+                        <span className={`flex-1 text-[1.02rem] font-semibold leading-normal ${active ? "text-[var(--fg-lime-400)]" : "text-[#e7e3d4]"}`}>
                           {item.label}
                         </span>
                         <ArrowRight size={18} className="ml-auto text-[var(--text-faint)] transition-transform duration-300 group-active:translate-x-1" />

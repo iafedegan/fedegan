@@ -1326,7 +1326,7 @@ a.mx-card:hover, .mx-lift:hover, .gl-hover:hover { transform: translateY(-2px); 
 /* Celular: tema y cuenta se despliegan debajo de la fecha */
 @media (max-width: 767px) {
   .mh-tools { flex-direction: column; align-items: center; justify-content: flex-start; margin: 0.25rem 0 0; }
-  .mh-tools-toggle { display: inline-flex; align-items: center; justify-content: center; padding: 0.15rem 0.9rem; min-height: 1.6rem; border-radius: 999px; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--fg-lime-400); border: 1px solid var(--border-strong); }
+  .mh-tools-toggle { display: inline-flex; align-items: center; justify-content: center; padding: 0.15rem 0.9rem; min-height: 1.6rem; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--fg-lime-400); border: 0; background: none; }
   .mh-tools-panel { display: flex; flex-direction: column; gap: 0.6rem; align-items: flex-start; margin-top: 0.6rem; padding: 0.75rem 1rem; border-radius: 1rem; border: 1px solid var(--border-strong); background: var(--surface-solid); font-size: 0.85rem; font-weight: 600; color: var(--text); }
 }
 
@@ -1353,3 +1353,11 @@ a.mx-card:hover, .mx-lift:hover, .gl-hover:hover { transform: translateY(-2px); 
 /* Tarjetas con esquinas redondeadas en todo el portal */
 .mx-card, .gl, .wc, .wp, .mx-stat, .sw-card, .sw-panel { border-radius: 0.65rem; }
 @media (max-width: 767px) { .sw-panel { border-radius: 0; } }
+
+/* Celular: sin tarjeta; solo el título de la sección, arriba y centrado (se entra desde la lista de secciones). */
+@media (max-width: 767px) {
+  .sw-center { position: absolute; top: 5.6rem; bottom: auto; left: 0; right: 0; transform: none; justify-content: center; align-items: flex-start; }
+  .sw-center .sw-panel { width: calc(100% - 2rem); height: auto; min-height: 0; padding: 0; border: 0; background: none; box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none; align-items: center; text-align: center; }
+  .sw-center .sw-panel::before, .sw-center .sw-panel::after { display: none; }
+  .sw-center .sw-p-kicker, .sw-center .sw-cta-desc, .sw-center .sw-extra, .sw-center .sw-cta { display: none; }
+}
