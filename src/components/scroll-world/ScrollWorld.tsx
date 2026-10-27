@@ -106,6 +106,12 @@ export function ScrollWorld({ scenes: base }: { scenes: JourneyScene[] }) {
   useEffect(() => {
     const abrir = () => setMenu(true);
     window.addEventListener("fedegan:secciones", abrir);
+    try {
+      if (sessionStorage.getItem("fedegan:secciones")) {
+        sessionStorage.removeItem("fedegan:secciones");
+        abrir();
+      }
+    } catch {}
     return () => window.removeEventListener("fedegan:secciones", abrir);
   }, []);
   const openRef = useRef<number | null>(null);
@@ -304,7 +310,7 @@ export function ScrollWorld({ scenes: base }: { scenes: JourneyScene[] }) {
                 <ul>
                   {scenes.map((sc, i) => (
                     <li key={sc.id}>
-                      <button type="button" onClick={() => { setMenu(false); goTo(i); }} className={i === current ? "is-on" : ""} style={{ "--acc": sc.accent } as React.CSSProperties}>
+                      <button type="button" onClick={() => { setMenu(false); navigate(scenes[i]); }} className={i === current ? "is-on" : ""} style={{ "--acc": sc.accent } as React.CSSProperties}>
                         <span className="sw-sheet-n">{two(i + 1)}</span><span className="sw-sheet-t">{sc.nombre}</span>{i === current && <Check size={16} />}
                       </button>
                     </li>

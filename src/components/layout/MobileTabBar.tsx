@@ -2,7 +2,7 @@
 
 import { Fragment } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Home, LayoutGrid, Menu, Newspaper, Search } from "lucide-react";
 
 const tabs = [
@@ -14,9 +14,16 @@ const tabs = [
 // Barra de pestañas flotante tipo app, solo en móvil. "Más" abre el menú completo del encabezado.
 export function MobileTabBar() {
   const pathname = usePathname();
+  const router = useRouter();
   if (pathname.startsWith("/ingresar")) return null;
 
   const isActive = (href: string) => (href === "/" ? pathname === "/" : pathname.startsWith(href));
+  // Desde cualquier pantalla: en el inicio abre la hoja de secciones; en otras, vuelve al inicio y la abre allí.
+  const abrirSecciones = () => {
+    if (pathname === "/") return window.dispatchEvent(new Event("fedegan:secciones"));
+    try { sessionStorage.setItem("fedegan:secciones", "1"); } catch {}
+    router.push("/");
+  };
   const item =
     "relative flex min-h-14 flex-1 flex-col items-center justify-center gap-0.5 text-[0.7rem] font-semibold tracking-wide transition-colors";
 
@@ -29,8 +36,8 @@ export function MobileTabBar() {
         const active = isActive(href);
         return (
           <Fragment key={href}>
-          {i === 2 && pathname === "/" && (
-            <button type="button" onClick={() => window.dispatchEvent(new Event("fedegan:secciones"))} aria-haspopup="dialog" className={`${item} text-[var(--text-muted)] active:text-[var(--text)]`}>
+          {i === 2 && (
+            <button type="button" onClick={abrirSecciones} aria-haspopup="dialog" className={`${item} text-[var(--text-muted)] active:text-[var(--text)]`}>
               <span className="flex h-8 w-14 items-center justify-center rounded-full"><LayoutGrid size={21} strokeWidth={1.8} /></span>
               Secciones
             </button>
