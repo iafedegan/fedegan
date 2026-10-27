@@ -93,16 +93,15 @@ export function ScrollWorld({ scenes: base }: { scenes: JourneyScene[] }) {
   // La indicación de deslizar se va en cuanto la persona empieza a desplazarse.
   const [desliza, setDesliza] = useState(false);
   useEffect(() => {
-    const ini = window.scrollY;
-    const listo = () => { if (Math.abs(window.scrollY - ini) > 8) setDesliza(true); };
-    const tocar = () => setDesliza(true);
+    // Se arma tras un instante para ignorar el desplazamiento de carga o de restauración de la página.
+    let ini = window.scrollY;
+    let armado = false;
+    const t = window.setTimeout(() => { ini = window.scrollY; armado = true; }, 800);
+    const listo = () => { if (armado && Math.abs(window.scrollY - ini) > 24) setDesliza(true); };
     window.addEventListener("scroll", listo, { passive: true });
-    window.addEventListener("touchmove", tocar, { passive: true, once: true });
-    window.addEventListener("wheel", tocar, { passive: true, once: true });
     return () => {
+      window.clearTimeout(t);
       window.removeEventListener("scroll", listo);
-      window.removeEventListener("touchmove", tocar);
-      window.removeEventListener("wheel", tocar);
     };
   }, []);
   // Escritorio: la tarjeta solo aparece (al centro) mientras se apunta a una sección de la lista.
