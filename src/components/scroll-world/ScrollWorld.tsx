@@ -367,7 +367,11 @@ export function ScrollWorld({ scenes: base }: { scenes: JourneyScene[] }) {
 
 
           <div className={`sw-center${hover === null ? " is-idle" : ""}`} onMouseEnter={() => verCard(shown)} onMouseLeave={ocultarCard}>
-            <div className="sw-panel" style={{ "--acc": sc.accent } as React.CSSProperties}>
+            <div
+              className="sw-panel"
+              style={{ "--acc": sc.accent } as React.CSSProperties}
+              onClick={() => { if (window.matchMedia("(max-width: 767px)").matches) navigate(sc); }}
+            >
               <p className="sw-p-kicker" key={`k-${sc.id}`}>
                 <span>{two(shown + 1)} / {two(K + 1)}</span>
                 {sc.rubro}
