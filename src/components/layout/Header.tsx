@@ -284,10 +284,10 @@ export function Header({ nav: mainNav }: { nav: { label: string; href: string }[
                         href={item.href}
                         onClick={() => setOpenAt(null)}
                         aria-current={active ? "page" : undefined}
-                        className="group flex min-h-14 items-center gap-4 py-2"
+                        className="group flex min-h-14 items-center gap-[0.9rem] py-2"
                       >
-                        <span className="w-6 font-mono text-[0.7rem] text-[var(--fg-lime-500)]">{String(i + 1).padStart(2, "0")}</span>
-                        <span className={`font-[var(--font-display)] text-xl font-semibold ${active ? "text-[var(--fg-lime-400)]" : "text-[var(--text)]"}`}>
+                        <span className="text-[0.75rem] font-bold tracking-[0.12em] text-[var(--fg-lime-500)]">{String(i + 1).padStart(2, "0")}</span>
+                        <span className={`flex-1 text-[1.02rem] font-semibold ${active ? "text-[var(--fg-lime-400)]" : "text-[#e7e3d4]"}`}>
                           {item.label}
                         </span>
                         <ArrowRight size={18} className="ml-auto text-[var(--text-faint)] transition-transform duration-300 group-active:translate-x-1" />
