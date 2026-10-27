@@ -90,6 +90,21 @@ export function ScrollWorld({ scenes: base }: { scenes: JourneyScene[] }) {
   const [open, setOpen] = useState<number | null>(null);
   const [current, setCurrent] = useState(0);
   const [menu, setMenu] = useState(false);
+  // La indicación de deslizar se va en cuanto la persona empieza a desplazarse.
+  const [desliza, setDesliza] = useState(false);
+  useEffect(() => {
+    const ini = window.scrollY;
+    const listo = () => { if (Math.abs(window.scrollY - ini) > 8) setDesliza(true); };
+    const tocar = () => setDesliza(true);
+    window.addEventListener("scroll", listo, { passive: true });
+    window.addEventListener("touchmove", tocar, { passive: true, once: true });
+    window.addEventListener("wheel", tocar, { passive: true, once: true });
+    return () => {
+      window.removeEventListener("scroll", listo);
+      window.removeEventListener("touchmove", tocar);
+      window.removeEventListener("wheel", tocar);
+    };
+  }, []);
   // Escritorio: la tarjeta solo aparece (al centro) mientras se apunta a una sección de la lista.
   const [hover, setHover] = useState<number | null>(null);
   const hoverTimer = useRef<number | undefined>(undefined);
@@ -302,7 +317,7 @@ export function ScrollWorld({ scenes: base }: { scenes: JourneyScene[] }) {
           ))}
           <div className="sw-shade" aria-hidden />
           <span ref={barRef} className="sw-bar" aria-hidden />
-          <p className="sw-swipe" aria-hidden><ChevronUp size={22} />Deslice hacia arriba</p>
+          {!desliza && <p className="sw-swipe" aria-hidden><ChevronUp size={22} />Deslice hacia arriba</p>}
 
           {menu && createPortal(
             <div className="sw-sheet" role="dialog" aria-modal="true" aria-label="Secciones del portal" onClick={() => setMenu(false)}>
