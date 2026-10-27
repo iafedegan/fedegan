@@ -1,0 +1,23 @@
+name: Salud del portal
+# Consulta /api/salud cada 30 minutos. Si el portal o el CMS no responden, el trabajo falla y GitHub
+# avisa por correo a quienes siguen el repositorio. Para cambiar la URL, defina la variable SITE_URL
+# del repositorio (Settings → Secrets and variables → Actions → Variables).
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+jobs:
+  consultar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Consultar /api/salud
+        env:
+          SITE_URL: ${{ vars.SITE_URL || 'https://fedegan.vercel.app' }}
+        run: |
+          code=$(curl -s -o salud.json -w "%{http_code}" --max-time 25 "$SITE_URL/api/salud" || true)
+          cat salud.json 2>/dev/null || true
+          echo
+          if [ "$code" != "200" ]; then
+            echo "::error::/api/salud respondió $code"
+            exit 1
+          fi

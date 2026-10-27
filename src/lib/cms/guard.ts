@@ -12,3 +12,11 @@ export async function getEditor() {
   const ok = hasAnyRole(session.user.roles, EDITOR_ROLES);
   return ok ? { actor: session.user.email ?? session.user.name ?? "editor" } : null;
 }
+
+/** Para acciones del servidor: devuelve quién edita o redirige (sin sesión → ingreso; sin rol → /admin). */
+export async function requireEditorActor() {
+  const session = await auth();
+  if (!session?.user) redirect("/ingresar");
+  if (!hasAnyRole(session.user.roles, EDITOR_ROLES)) redirect("/admin");
+  return session.user.email ?? session.user.name ?? "editor";
+}

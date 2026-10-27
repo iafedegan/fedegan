@@ -6,7 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test \"tests/**/*.test.mjs\"",
+    "exportar": "node scripts/exportar-contenido.mjs",
+    "verificar:redirecciones": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/verificar-redirecciones.mjs",
+    "inventario": "node scripts/inventario-componentes.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.117.3",

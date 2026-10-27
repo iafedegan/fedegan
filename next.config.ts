@@ -1,4 +1,6 @@
+import { readFileSync } from "node:fs";
 import type { NextConfig } from "next";
+import { buildLegacyRedirects, servedPaths } from "./src/content/legacy/redirects";
 
 // Tabla de equivalencias de URLs (TDR 5.3): ejemplo de redirecciones 301
 // desde rutas del portal Drupal actual hacia las nuevas rutas del portal.
@@ -66,7 +68,11 @@ const nextConfig: NextConfig = {
     ];
   },
   async redirects() {
-    return legacyRedirects;
+    // 301 manuales primero (tienen prioridad) y luego las generadas desde las páginas migradas.
+    const legacy = JSON.parse(readFileSync("./src/content/legacy/portal.json", "utf8"));
+    const manual = new Set(legacyRedirects.map((r) => r.source));
+    const generated = buildLegacyRedirects(legacy, servedPaths("./src/app")).filter((r) => !manual.has(r.source));
+    return [...legacyRedirects.map((r) => ({ source: r.source, destination: r.destination, statusCode: 301 as const })), ...generated];
   },
 };
 

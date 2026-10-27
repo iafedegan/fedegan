@@ -7,6 +7,7 @@ import { LegacyContent } from "@/components/legacy/LegacyContent";
 import { QuickRail } from "@/components/blocks/Accesos";
 import { WaveCard } from "@/components/ui/WaveCard";
 import { journeyPhotos } from "@/content/scroll-world";
+import { getPageOverride } from "@/lib/cms/paginas";
 import { excerptOf, findTrail, getLegacyPage, getLegacySection, legacyHref, type NavNode } from "@/content/legacy";
 
 const PHOTO_ID: Record<string, string> = { "cifras-del-sector": "cifras", "sistema-integrado-de-gestion": "sig" };
@@ -45,12 +46,15 @@ function NavTree({ nodes, slug, current, depth = 0 }: { nodes: NavNode[]; slug: 
 }
 
 // Página de una sección con el texto copiado del portal actual: menú lateral, migas y contenido.
-export function LegacySectionPage({ slug, ruta }: { slug: string; ruta: string[] }) {
+export async function LegacySectionPage({ slug, ruta }: { slug: string; ruta: string[] }) {
   const section = getLegacySection(slug);
   if (!section) notFound();
   const key = ruta.length ? ruta.map((s) => decodeURIComponent(s)).join("/") : section.landing;
-  const page = getLegacyPage(key);
-  if (!page || !page.sections.includes(slug)) notFound();
+  const base = getLegacyPage(key);
+  if (!base || !base.sections.includes(slug)) notFound();
+  // Si el equipo editó el texto en /admin/paginas, ese texto reemplaza a la copia original.
+  const override = await getPageOverride(key);
+  const page = override ? { ...base, title: override.title, blocks: override.blocks } : base;
 
   const trail = findTrail(section.tree, key) ?? [];
   const isLanding = key === section.landing;

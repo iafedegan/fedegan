@@ -1,0 +1,21 @@
+name: Rendimiento (Core Web Vitals)
+# Lighthouse móvil sobre las páginas principales, cada lunes y a demanda. Compara con las metas del TDR
+# (LCP ≤ 2,5 s, CLS ≤ 0,1, INP ≤ 200 ms) y guarda los informes como artefactos. No bloquea nada.
+on:
+  schedule:
+    - cron: "0 11 * * 1"
+  workflow_dispatch:
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: treosh/lighthouse-ci-action@v12
+        with:
+          urls: |
+            ${{ vars.SITE_URL || 'https://fedegan.vercel.app' }}/
+            ${{ vars.SITE_URL || 'https://fedegan.vercel.app' }}/noticias
+            ${{ vars.SITE_URL || 'https://fedegan.vercel.app' }}/seccion/programas
+            ${{ vars.SITE_URL || 'https://fedegan.vercel.app' }}/contacto
+          configPath: ./lighthouserc.json
+          uploadArtifacts: true

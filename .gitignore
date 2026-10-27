@@ -45,3 +45,6 @@ next-env.d.ts
 /node_modules.nosync
 /.next.nosync
 /.next
+
+# Exportaciones del CMS (npm run exportar)
+/exportacion

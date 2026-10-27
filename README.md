@@ -1,56 +1,62 @@
-# Portal FEDEGÁN–FNG — base tecnológica
+# Portal FEDEGÁN–FNG
 
-Prototipo funcional del nuevo portal institucional, construido como base técnica real
-(no solo maqueta) para el proyecto descrito en **TDR Ecosistema FEDEGAN V5.0**.
+Portal institucional de la Federación Colombiana de Ganaderos y hub de su ecosistema digital, construido según el **TDR Ecosistema FEDEGÁN V5.0**: una entrada común con navegación, búsqueda e identidad centralizadas, donde cada línea de valor es un «local».
 
 ## Stack
 
-- Next.js (App Router) + TypeScript
-- Tailwind CSS v4 (tokens de diseño en `src/app/globals.css`)
-- Arquitectura de componentes: `src/components/ui` (base) + `src/components/blocks` (bloques de página tipo page-builder)
+- **Next.js 16** (App Router) + **TypeScript** + **Tailwind CSS v4** (tokens en `src/app/globals.css`)
+- **Supabase** (Postgres + Storage) como CMS propio, con panel en `/admin`
+- **Auth.js** con Microsoft Entra ID (modo demostración mientras se conecta Azure)
+- **CONtexto Ganadero** (API) para las noticias
+- **Vercel** (CDN y despliegue), **GitHub Actions** (CI, salud y rendimiento), PWA instalable
 
 ## Cómo correr
 
 ```bash
 npm install
-npm run dev
+cp .env.example .env.local   # completar las variables (ver docs/traspaso.md)
+npm run dev                  # http://localhost:3000
 ```
 
-Abrir [http://localhost:3000](http://localhost:3000).
+Sin Supabase configurado el portal funciona con el contenido de respaldo de `src/content/`; el panel `/admin` muestra el modo solo lectura.
 
-## Qué cubre este avance del TDR
+## Comandos
 
-| Requisito del TDR | Estado |
+| Comando | Qué hace |
 |---|---|
-| 5.1 Arquitectura de información y navegación por tareas | ✅ Home, navrail, footer |
-| 5.1 Diseño modular tipo page builder | ✅ `src/components/blocks/*` son bloques componibles |
-| 5.2 Sistema de diseño y tokens | ✅ `globals.css`, ver `/componentes` |
-| 5.2 Catálogo visual navegable de componentes | ✅ Ruta `/componentes` |
-| 5.2 Demostración de 3 escenarios de cambio de layout | ✅ Demo interactiva en `/componentes` |
-| 4.1 Páginas institucionales base | ✅ Quiénes somos, Programas, Normatividad, Servicios, FAQ, Contacto |
-| 4.1 Noticias / publicaciones / eventos (listado + detalle) | ✅ Con contenido de ejemplo |
-| 4.1 Buscador de contenido | ✅ `/buscador`, búsqueda cliente sobre índice estático |
-| 5.3 Redirecciones 301 / tabla de equivalencias | ✅ Ejemplo en `next.config.ts` (`legacyRedirects`) |
-| 6.4 Sitemap, robots, metadatos | ✅ `src/app/sitemap.ts`, `robots.ts`, metadata por página |
-| 4.1 Landing/accesos a servicios existentes | ✅ Escuela Virtual, TVGAN, Mi FEDEGÁN (landing "próximamente") |
+| `npm run dev` / `build` / `start` | Desarrollo, compilación y servidor de producción |
+| `npm run lint` | ESLint |
+| `npm test` | Pruebas automáticas (búsqueda, cifrado, saneado del diseño, redirecciones) |
+| `npm run exportar` | Exporta el contenido del CMS a `exportacion/` (`-- --archivos` incluye los archivos subidos) |
+| `npm run verificar:redirecciones -- <url>` | Comprueba que cada URL antigua responde 301 a su nueva ruta |
+| `npm run inventario` | Regenera `docs/inventario-componentes.md` |
 
-## Qué queda fuera de este avance (requiere decisiones/credenciales de FEDEGÁN)
+## Qué cubre del TDR
 
-- **CMS headless real** y operación editorial autónoma (hoy el contenido vive en `src/content/site.ts` como datos de ejemplo).
-- **Migración real de contenido** desde el portal Drupal actual (requiere acceso al sitio/BD actual).
-- **Infraestructura en nube, CDN, CI/CD y observabilidad** (requiere cuenta cloud del cliente).
-- **Identidad**: SSO interno (Microsoft Entra ID) y CIAM externo (Google Identity Platform o equivalente) — módulos opcionales A/B del TDR.
-- **Analítica (GTM/GA4) y SEO tooling** — módulos opcionales D/E.
-- **Automatizaciones con IA** — módulo opcional F.
-
-Estos puntos están **preparados arquitectónicamente** (componentes desacoplados del contenido,
-rutas listas para paginar sobre datos de un CMS, capa de identidad no bloqueante) pero su
-implementación real depende de que FEDEGÁN defina proveedor cloud, tenant de Entra ID, y
-alcance de los módulos opcionales a contratar.
+| Requisito | Dónde |
+|---|---|
+| Sistema de diseño, librería y catálogo (E1) | `src/components/ui`, `/componentes`, `docs/sistema-de-diseno.md`, `docs/inventario-componentes.md` |
+| Navegación, páginas base y legales (E2) | Menú administrable, pie, `/privacidad`, `/terminos`, `/transparencia`, `/mapa-del-sitio` |
+| Home, secciones y buscador (E3) | Home configurable con editor de diseño, `/buscador` con relevancia, accesos a servicios |
+| Migración con redirecciones 301 (E4) | `src/content/legacy/` (305 páginas, editables en `/admin/paginas`), `src/content/legacy/redirects.ts` (299 redirecciones generadas) |
+| Infraestructura, CI y observabilidad (E5) | `.github/workflows/`, `/api/salud`, `/api/vitals`, `docs/operacion.md` |
+| Lanzamiento (E6) | `docs/lanzamiento.md` |
+| Capacitación y transferencia (E7) | `docs/manual-editor.md`, `docs/traspaso.md`, `docs/arquitectura.md` |
+| CMS con publicación programada | `/admin` (campo «Publicar desde» y tarea diaria) |
+| Seguridad, SEO y analítica con consentimiento | Cabeceras CSP/HSTS, canonical, datos estructurados, sitemap, GTM tras aceptar cookies |
+| Módulo A (SSO internos) | Entra ID listo; falta registrar la aplicación (`docs/traspaso.md`) |
 
 ## Documentación
 
-- [`docs/manual-editor.md`](docs/manual-editor.md) — manual del editor y plan de capacitación
+- [`docs/arquitectura.md`](docs/arquitectura.md) — cómo está construido y por qué
 - [`docs/operacion.md`](docs/operacion.md) — entornos, monitoreo, respaldos y lista previa al lanzamiento
-- [`docs/sistema-de-diseno.md`](docs/sistema-de-diseno.md) — reglas de uso del sistema de diseño
-- `docs/migraciones/` — SQL de Supabase, en orden
+- [`docs/traspaso.md`](docs/traspaso.md) — cuentas, variables de entorno, rotación de claves y plan de salida
+- [`docs/lanzamiento.md`](docs/lanzamiento.md) — cambio de dominio, verificación y marcha atrás
+- [`docs/estabilizacion.md`](docs/estabilizacion.md) — periodo posterior al lanzamiento (propuesta)
+- [`docs/manual-editor.md`](docs/manual-editor.md) — manual del editor y plan de capacitación
+- [`docs/sistema-de-diseno.md`](docs/sistema-de-diseno.md) · [`docs/inventario-componentes.md`](docs/inventario-componentes.md)
+- `docs/migraciones/` — SQL de Supabase, en orden (000, 001, …)
+
+## Pendiente de decisiones o credenciales de FEDEGÁN
+
+Dominio definitivo, registro de la aplicación en Entra ID, contenedor de GTM, inventario de URLs del Drupal actual, módulo de registro de usuarios externos (opcional B) y la decisión sobre los demás módulos opcionales.
