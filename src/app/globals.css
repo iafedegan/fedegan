@@ -1372,3 +1372,9 @@ a.mx-card:hover, .mx-lift:hover, .gl-hover:hover { transform: translateY(-2px); 
 }
 @media (max-width: 767px) and (prefers-reduced-motion: no-preference) { .sw-swipe svg { animation: sw-rise 1.5s ease-in-out infinite; } }
 @keyframes sw-rise { 0%, 100% { transform: translateY(3px); opacity: 0.5; } 50% { transform: translateY(-4px); opacity: 1; } }
+
+/* Celular: leve desenfoque detrás del título y la indicación para que las letras resalten sobre la foto. */
+@media (max-width: 767px) {
+  .sw-center .sw-panel { padding: 0.8rem 1rem; border-radius: 1rem; background: rgba(5, 16, 11, 0.38); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); width: fit-content; max-width: calc(100% - 2rem); }
+  .sw-swipe { padding: 0.45rem 1rem 0.5rem; border-radius: 1rem; background: rgba(5, 16, 11, 0.38); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+}
