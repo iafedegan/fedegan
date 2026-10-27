@@ -1356,7 +1356,7 @@ a.mx-card:hover, .mx-lift:hover, .gl-hover:hover { transform: translateY(-2px); 
 
 /* Celular: sin tarjeta; solo el título de la sección, arriba y centrado (se entra desde la lista de secciones). */
 @media (max-width: 767px) {
-  .sw-center { position: absolute; top: 1.6rem; bottom: auto; left: 0; right: 0; transform: none; justify-content: center; align-items: flex-start; }
+  .sw-center { position: absolute; top: 1.6rem; bottom: auto; left: 0; right: 0; transform: none; justify-content: center; align-items: center; }
   .sw-center .sw-panel { width: calc(100% - 2rem); height: auto; min-height: 0; padding: 0; border: 0; background: none; box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none; align-items: center; text-align: center; }
   .sw-center .sw-panel::before, .sw-center .sw-panel::after { display: none; }
   .sw-center .sw-p-kicker, .sw-center .sw-extra, .sw-center .sw-cta { display: none; }
