@@ -14,9 +14,9 @@ import { publishDesign, saveDesignDraft, undoDesignPublish } from "@/lib/design/
 
 // Tamaño virtual de cada pantalla: el sitio se dibuja a ese ancho y se escala para caber en el marco.
 const DEVICES = {
-  desktop: { w: 1440, h: 900, name: "Mac", bezel: 16 },
-  tablet: { w: 820, h: 1100, name: "Tableta", bezel: 14 },
-  mobile: { w: 390, h: 800, name: "Celular", bezel: 11 },
+  desktop: { w: 1440, h: 900, name: "Mac", bezel: 10, maxW: 880 },
+  tablet: { w: 820, h: 1100, name: "Tableta", bezel: 10, maxW: 520 },
+  mobile: { w: 390, h: 800, name: "Celular", bezel: 8, maxW: 300 },
 } as const;
 type Device = keyof typeof DEVICES;
 type Tab = "zonas" | "piezas" | "recorrido" | "cintillo" | "popup" | "publicidad";
@@ -404,9 +404,9 @@ export function DesignEditor({ writable, initialPublished, initialDraft, canUndo
   );
 
   const dev = DEVICES[device];
-  const maxH = Math.max(360, vh * (full ? 0.78 : 0.66));
+  const maxH = Math.max(360, vh * (full ? 0.7 : 0.55));
   const avail = Math.max(240, stageW - 2 * dev.bezel - 24);
-  const scale = Math.min(1, avail / dev.w, maxH / dev.h);
+  const scale = Math.min(1, avail / dev.w, maxH / dev.h, dev.maxW / dev.w);
   const viewW = Math.round(dev.w * scale);
   const viewH = Math.round(dev.h * scale);
   const nAnuncios = AD_ZONES.filter((z) => design.ads[z.id]?.on).length;
@@ -426,7 +426,7 @@ export function DesignEditor({ writable, initialPublished, initialDraft, canUndo
   const menuItem = "flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm font-semibold text-[#2a3a32] hover:bg-[#f1efe6] disabled:opacity-40";
 
   return (
-    <div className="grid items-start gap-5 xl:grid-cols-[minmax(0,1fr)_24rem]">
+    <div className="grid items-start gap-5 xl:grid-cols-[minmax(0,1fr)_20rem]">
       {/* Barra superior + vista previa */}
       <div className={full ? "fixed inset-0 z-50 overflow-y-auto bg-[#f4f2ea] p-4" : "min-w-0"}>
         <div className="ad-card relative mb-4 flex flex-wrap items-center gap-2 p-3">
@@ -486,10 +486,10 @@ export function DesignEditor({ writable, initialPublished, initialDraft, canUndo
           <p role="status" className={`mb-4 rounded-xl px-4 py-2 text-sm ${status.kind === "err" ? "bg-[#fde8e8] text-[#a12b2b]" : status.kind === "ok" ? "bg-[#e1f1e7] text-[#146040]" : "bg-[#f1efe6] text-[#5d6e65]"}`}>{status.text}</p>
         )}
 
-        <div ref={stage} className="ad-card flex flex-col items-center px-3 pb-4 pt-6 sm:px-6">
+        <div ref={stage} className="ad-card flex flex-col items-center overflow-hidden px-3 pb-3 pt-5 sm:px-6">
           <div className="flex flex-col items-center" style={{ width: viewW + 2 * dev.bezel }}>
-            <div className="bg-[#14171a] shadow-[0_18px_40px_-18px_rgba(0,0,0,0.6)]" style={{ padding: dev.bezel, borderRadius: device === "mobile" ? 36 : device === "tablet" ? 26 : 20, width: "100%" }}>
-              <div className="relative overflow-hidden bg-[#05100b]" style={{ width: viewW, height: viewH, borderRadius: device === "mobile" ? 26 : device === "tablet" ? 14 : 8 }}>
+            <div className="bg-[#14171a] shadow-[0_18px_40px_-18px_rgba(0,0,0,0.6)]" style={{ padding: dev.bezel, borderRadius: device === "mobile" ? 30 : device === "tablet" ? 20 : 14, width: "100%" }}>
+              <div className="relative overflow-hidden bg-[#05100b]" style={{ width: viewW, height: viewH, borderRadius: device === "mobile" ? 22 : device === "tablet" ? 11 : 5 }}>
                 <iframe
                   ref={frame}
                   src="/"
@@ -500,7 +500,7 @@ export function DesignEditor({ writable, initialPublished, initialDraft, canUndo
                 />
               </div>
             </div>
-            {device === "desktop" && <div aria-hidden className="h-3.5 w-[112%] rounded-b-[1.4rem] bg-gradient-to-b from-[#c9ccd0] to-[#9da1a6]" />}
+            {device === "desktop" && <div aria-hidden className="h-2.5 w-[106%] rounded-b-[1rem] bg-gradient-to-b from-[#c9ccd0] to-[#9da1a6]" />}
           </div>
           <p className="mt-4 text-sm text-[#5d6e65]">
             {dev.name} · {dev.w}px · {Math.round(scale * 100)} %{scale < 1 ? " (ajustado al ancho)" : ""}
@@ -510,22 +510,22 @@ export function DesignEditor({ writable, initialPublished, initialDraft, canUndo
       </div>
 
       {/* Panel de propiedades */}
-      <aside className={`flex flex-col gap-3 xl:sticky xl:top-4 xl:max-h-[calc(100vh-2rem)] xl:overflow-y-auto xl:pr-1 ${full ? "hidden" : ""}`} aria-label="Propiedades del diseño">
+      <aside className={`flex flex-col gap-2 xl:sticky xl:top-4 xl:max-h-[calc(100vh-2rem)] xl:overflow-y-auto xl:pr-1 ${full ? "hidden" : ""}`} aria-label="Propiedades del diseño">
         <section className="ad-card p-0">
-          <h2 className="flex items-center gap-2.5 border-b border-[#e4e1d6] px-5 py-4 text-sm font-bold uppercase tracking-[0.2em] text-[#165a43]">
-            <SlidersHorizontal size={16} /> Propiedades
+          <h2 className="flex items-center gap-2 border-b border-[#e4e1d6] px-4 py-2.5 text-[0.68rem] font-bold uppercase tracking-[0.18em] text-[#165a43]">
+            <SlidersHorizontal size={14} /> Propiedades
           </h2>
-          <div className="p-5">
-            <p className="text-lg font-bold text-[#11271d]">Elige qué quieres cambiar</p>
-            <p className="mt-1 text-sm text-[#5d6e65]">Haz clic en la página o elige una parte:</p>
-            <div className="mt-3 flex flex-wrap gap-2">
+          <div className="p-4">
+            <p className="text-sm font-bold text-[#11271d]">Elige qué quieres cambiar</p>
+            <p className="mt-0.5 text-xs text-[#5d6e65]">Haz clic en la página o elige una parte:</p>
+            <div className="mt-2.5 flex flex-wrap gap-1.5">
               {REGIONS.map((r) => (
                 <button
                   key={r.id}
                   type="button"
                   aria-pressed={tab === "zonas" && r.id === region}
                   onClick={() => { setRegion(r.id); setTab("zonas"); }}
-                  className={`rounded-full border px-4 py-1.5 text-sm font-semibold transition-colors ${tab === "zonas" && r.id === region ? "border-[#b08f4f] bg-[#f7edcf] text-[#7c5f1f]" : "border-[#d9d6cb] bg-white text-[#11271d] hover:border-[#b08f4f]"}`}
+                  className={`rounded-full border px-3 py-1 text-xs font-semibold transition-colors ${tab === "zonas" && r.id === region ? "border-[#b08f4f] bg-[#f7edcf] text-[#7c5f1f]" : "border-[#d9d6cb] bg-white text-[#11271d] hover:border-[#b08f4f]"}`}
                 >
                   {r.label}
                   {design.regions[r.id] && <span className="ml-1 text-[#b08f4f]">●</span>}
@@ -539,16 +539,16 @@ export function DesignEditor({ writable, initialPublished, initialDraft, canUndo
           const abierto = tab === id;
           return (
             <section key={id} className="ad-card p-0">
-              <button type="button" aria-expanded={abierto} aria-controls={`acc-${id}`} onClick={() => abrir(id)} className="flex w-full items-center gap-3.5 px-5 py-4 text-left">
-                <Icon size={18} className="shrink-0 text-[#5d6e65]" aria-hidden />
+              <button type="button" aria-expanded={abierto} aria-controls={`acc-${id}`} onClick={() => abrir(id)} className="flex w-full items-center gap-3 px-4 py-2.5 text-left">
+                <Icon size={16} className="shrink-0 text-[#5d6e65]" aria-hidden />
                 <span className="min-w-0 flex-1">
-                  <span className="block text-sm font-bold uppercase tracking-[0.16em] text-[#11271d]">{title}</span>
-                  <span className="block truncate text-sm text-[#5d6e65]">{summary}</span>
+                  <span className="block text-[0.68rem] font-bold uppercase tracking-[0.14em] text-[#11271d]">{title}</span>
+                  <span className="block truncate text-xs text-[#5d6e65]">{summary}</span>
                 </span>
-                <ChevronDown size={18} className={`shrink-0 text-[#5d6e65] transition-transform duration-300 ${abierto ? "rotate-180" : ""}`} />
+                <ChevronDown size={16} className={`shrink-0 text-[#5d6e65] transition-transform duration-300 ${abierto ? "rotate-180" : ""}`} />
               </button>
               {abierto && (
-                <div id={`acc-${id}`} className="flex flex-col gap-4 border-t border-[#e4e1d6] p-5">
+                <div id={`acc-${id}`} className="flex flex-col gap-3 border-t border-[#e4e1d6] p-4 text-xs [&_.text-sm]:!text-xs">
                   {body}
                 </div>
               )}
