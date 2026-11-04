@@ -6,7 +6,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
 import {
-  CalendarDays, FileStack, FileText, GraduationCap, Users, Globe, HelpCircle, History, LayoutDashboard, Link2, LogOut, Menu, Newspaper, Store, BarChart3, Palette, PanelLeftClose, PanelLeftOpen, Plug, X,
+  CalendarDays, FileStack, FileText, GraduationCap, Users, Globe, HelpCircle, History, LayoutDashboard, Link2, LogOut, Menu, Newspaper, Store, BarChart3, Palette, PanelLeftClose, PanelLeftOpen, Plug, X, ChevronDown,
   type LucideIcon,
 } from "lucide-react";
 import type { AdminNavGroup } from "@/lib/cms/nav";
@@ -25,6 +25,20 @@ export function AdminSidebar({ user, groups }: { user: { name: string; email: st
   const [openAt, setOpenAt] = useState<string | null>(null);
   const open = openAt === pathname;
   const [pinned, setPinned] = useState(false);
+  // Grupos del menú que la persona dejó retraídos (se recuerdan en este navegador).
+  const [cerrados, setCerrados] = useState<string[]>([]);
+  useEffect(() => {
+    try {
+      const g = localStorage.getItem("fedegan:admin-grupos-cerrados");
+      if (g) setCerrados(JSON.parse(g));
+    } catch {}
+  }, []);
+  const alternar = (grupo: string) =>
+    setCerrados((prev) => {
+      const next = prev.includes(grupo) ? prev.filter((x) => x !== grupo) : [...prev, grupo];
+      try { localStorage.setItem("fedegan:admin-grupos-cerrados", JSON.stringify(next)); } catch {}
+      return next;
+    });
 
   useEffect(() => {
     if (!open) return;
@@ -65,10 +79,22 @@ export function AdminSidebar({ user, groups }: { user: { name: string; email: st
       </div>
 
       <nav aria-label="Menú del panel" className={`mt-6 flex flex-1 flex-col gap-5 pr-1 ${rail ? "overflow-x-hidden overflow-y-auto" : "overflow-y-auto"}`}>
-        {groups.map((g) => (
+        {groups.map((g) => {
+          const cerrado = cerrados.includes(g.group);
+          return (
           <div key={g.group}>
-            <p className={`mb-2 px-3 text-[0.66rem] font-bold uppercase tracking-[0.22em] text-[#7fa392] ${lbl(rail)}`}>{g.group}</p>
-            <ul className="flex flex-col gap-0.5">
+            <button
+              type="button"
+              onClick={() => alternar(g.group)}
+              aria-expanded={!cerrado}
+              aria-controls={`grupo-${g.group}`}
+              className={`mb-2 flex w-full items-center justify-between px-3 text-left text-[0.66rem] font-bold uppercase tracking-[0.22em] text-[#7fa392] transition-colors hover:text-white ${lbl(rail)}`}
+            >
+              {g.group}
+              <ChevronDown size={14} className={`transition-transform duration-300 ${cerrado ? "-rotate-90" : ""}`} />
+            </button>
+            <div id={`grupo-${g.group}`} className={`grid transition-[grid-template-rows] duration-300 ${cerrado ? "grid-rows-[0fr]" : "grid-rows-[1fr]"}`}>
+            <ul className="flex min-h-0 flex-col gap-0.5 overflow-hidden" inert={cerrado}>
               {g.items.map((it) => {
                 const Icon = icons[it.icon] ?? FileText;
                 const active = !it.external && isActive(pathname, it.href);
@@ -91,8 +117,10 @@ export function AdminSidebar({ user, groups }: { user: { name: string; email: st
                 );
               })}
             </ul>
+            </div>
           </div>
-        ))}
+          );
+        })}
       </nav>
 
       <button

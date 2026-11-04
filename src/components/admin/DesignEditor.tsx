@@ -1,7 +1,10 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState, useTransition } from "react";
-import { ArrowDown, ArrowUp, GripVertical, Minus, Monitor, Plus, RotateCcw, Smartphone, Tablet, Undo2, UploadCloud } from "lucide-react";
+import {
+  ArrowDown, ArrowUp, ChevronDown, Ellipsis, ExternalLink, GripVertical, LayoutGrid, ListOrdered, Maximize2, Megaphone, MessageSquare, Minimize2, Monitor, Newspaper, Paintbrush,
+  Redo2, RotateCcw, SlidersHorizontal, Smartphone, Tablet, Undo2, UploadCloud, type LucideIcon,
+} from "lucide-react";
 import {
   AD_ZONES, FONTS, FOOTERS, HEROES, NAVBARS, REGIONS,
   designCss, isEmptyDesign, normalizeDesign,
@@ -9,17 +12,14 @@ import {
 } from "@/lib/design/regions";
 import { publishDesign, saveDesignDraft, undoDesignPublish } from "@/lib/design/actions";
 
-const WIDTHS = { desktop: "100%", tablet: "820px", mobile: "390px" } as const;
-type Device = keyof typeof WIDTHS;
+// Tamaño virtual de cada pantalla: el sitio se dibuja a ese ancho y se escala para caber en el marco.
+const DEVICES = {
+  desktop: { w: 1440, h: 900, name: "Mac", bezel: 16 },
+  tablet: { w: 820, h: 1100, name: "Tableta", bezel: 14 },
+  mobile: { w: 390, h: 800, name: "Celular", bezel: 11 },
+} as const;
+type Device = keyof typeof DEVICES;
 type Tab = "zonas" | "piezas" | "recorrido" | "cintillo" | "popup" | "publicidad";
-const TABS: { id: Tab; label: string }[] = [
-  { id: "zonas", label: "Zonas" },
-  { id: "piezas", label: "Piezas" },
-  { id: "recorrido", label: "Recorrido" },
-  { id: "cintillo", label: "Cintillo" },
-  { id: "popup", label: "Ventana" },
-  { id: "publicidad", label: "Publicidad" },
-];
 export type LocalRef = { id: string; label: string };
 
 const same = (a: DesignConfig, b: DesignConfig) => JSON.stringify(normalizeDesign(a)) === JSON.stringify(normalizeDesign(b));
@@ -84,25 +84,31 @@ function Choice<T extends string>({ title, current, options, onPick }: { title: 
   );
 }
 
-const POS_KEY = "fedegan-design-panel";
-
 export function DesignEditor({ writable, initialPublished, initialDraft, canUndo, locals }: { writable: boolean; initialPublished: DesignConfig; initialDraft: DesignConfig; canUndo: boolean; locals: LocalRef[] }) {
   const [design, setDesign] = useState<DesignConfig>(initialDraft);
   const [published, setPublished] = useState<DesignConfig>(initialPublished);
   const [undoable, setUndoable] = useState(canUndo);
-  const [tab, setTab] = useState<Tab>("zonas");
+  const [tab, setTab] = useState<Tab | null>(null);
   const [region, setRegion] = useState<RegionId>("hero");
   const [localId, setLocalId] = useState(locals[0]?.id ?? "");
   const [device, setDevice] = useState<Device>("desktop");
   const [status, setStatus] = useState<{ kind: "ok" | "err" | "info"; text: string } | null>(null);
   const [pending, start] = useTransition();
-  const [pos, setPos] = useState<{ x: number; y: number } | null>(null);
-  const [collapsed, setCollapsed] = useState(false);
+  const [full, setFull] = useState(false);
+  const [menu, setMenu] = useState<"vista" | "mas" | null>(null);
+  const [resaltar, setResaltar] = useState(true);
+  const [stageW, setStageW] = useState(900);
+  const [vh, setVh] = useState(800);
+  const [hist, setHist] = useState({ p: 0, f: 0 });
+  const past = useRef<DesignConfig[]>([]);
+  const future = useRef<DesignConfig[]>([]);
+  const prevDesign = useRef<DesignConfig>(initialDraft);
+  const fromHistory = useRef(false);
+  const stage = useRef<HTMLDivElement>(null);
   const [dragFrom, setDragFrom] = useState<number | null>(null);
   const frame = useRef<HTMLIFrameElement>(null);
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const first = useRef(true);
-  const wrap = useRef<HTMLDivElement>(null);
 
   const css = useMemo(() => designCss(design), [design]);
   const dirty = !same(design, published);
@@ -128,14 +134,14 @@ export function DesignEditor({ writable, initialPublished, initialDraft, canUndo
       el.id = "design-preview";
       doc.head.appendChild(el);
     }
-    const mark = tab === "zonas" ? `\n[data-region="${region}"]{outline:3px solid #d8b558 !important;outline-offset:-3px}` : "";
+    const mark = resaltar && tab === "zonas" ? `\n[data-region="${region}"]{outline:3px solid #d8b558 !important;outline-offset:-3px}` : "";
     el.textContent = css + mark;
     const root = doc.documentElement;
     root.setAttribute("data-navbar", design.parts.navbar ?? "clasico");
     root.setAttribute("data-footer", design.parts.footer ?? "completo");
     root.setAttribute("data-hero", design.parts.hero ?? "izquierda");
     win.postMessage({ type: "design-draft", design }, window.location.origin);
-  }, [css, region, tab, design]);
+  }, [css, region, tab, design, resaltar]);
 
   useEffect(sync, [sync]);
 
@@ -178,34 +184,54 @@ export function DesignEditor({ writable, initialPublished, initialDraft, canUndo
     };
   }, [design, writable]);
 
-  // ---- panel flotante arrastrable
+  // ---- medidas del marco de la vista previa
   useEffect(() => {
-    queueMicrotask(() => {
-      try {
-        const raw = localStorage.getItem(POS_KEY);
-        if (raw) setPos(JSON.parse(raw));
-      } catch {}
-    });
-  }, []);
-  const clampPos = (x: number, y: number) => ({
-    x: Math.min(Math.max(8, x), Math.max(8, window.innerWidth - 150)),
-    y: Math.min(Math.max(8, y), Math.max(8, window.innerHeight - 90)),
-  });
-  const startDrag = (e: React.PointerEvent) => {
-    const box = wrap.current!.getBoundingClientRect();
-    const dx = e.clientX - box.left;
-    const dy = e.clientY - box.top;
-    const move = (ev: PointerEvent) => setPos(clampPos(ev.clientX - dx, ev.clientY - dy));
-    const up = (ev: PointerEvent) => {
-      window.removeEventListener("pointermove", move);
-      window.removeEventListener("pointerup", up);
-      try {
-        localStorage.setItem(POS_KEY, JSON.stringify(clampPos(ev.clientX - dx, ev.clientY - dy)));
-      } catch {}
+    const el = stage.current;
+    const measure = () => {
+      if (el) setStageW(el.clientWidth);
+      setVh(window.innerHeight);
     };
-    window.addEventListener("pointermove", move);
-    window.addEventListener("pointerup", up);
+    measure();
+    const ro = new ResizeObserver(measure);
+    if (el) ro.observe(el);
+    window.addEventListener("resize", measure);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", measure);
+    };
+  }, [full]);
+
+  // ---- historial de ediciones del borrador (deshacer / rehacer)
+  useEffect(() => {
+    if (fromHistory.current) {
+      fromHistory.current = false;
+    } else if (prevDesign.current !== design) {
+      past.current = [...past.current.slice(-49), prevDesign.current];
+      future.current = [];
+    }
+    prevDesign.current = design;
+    setHist({ p: past.current.length, f: future.current.length });
+  }, [design]);
+  const undoEdit = () => {
+    const back = past.current.pop();
+    if (!back) return;
+    future.current.push(design);
+    fromHistory.current = true;
+    setDesign(back);
   };
+  const redoEdit = () => {
+    const next = future.current.pop();
+    if (!next) return;
+    past.current.push(design);
+    fromHistory.current = true;
+    setDesign(next);
+  };
+  useEffect(() => {
+    if (!full) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setFull(false);
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [full]);
 
   // ---- parches
   const patchRegion = (p: Partial<RegionStyle>) =>
@@ -259,56 +285,9 @@ export function DesignEditor({ writable, initialPublished, initialDraft, canUndo
   const patchPopup = (p: Partial<typeof popup>) => update((d) => ({ ...d, popup: { ...d.popup, ...p } }));
   const patchAd = (zone: (typeof AD_ZONES)[number]["id"], p: Partial<AdConfig>) => update((d) => ({ ...d, ads: { ...d.ads, [zone]: { ...(d.ads[zone] ?? {}), ...p } } }));
 
-  const placeStyle = pos ? { left: pos.x, top: pos.y } : { right: 16, top: 16 };
+  const cuerpoZonas = (
+    <>
 
-  return (
-    <div className="relative">
-      <div className="mb-3 flex items-center justify-between gap-3">
-        <p className="text-sm font-semibold text-[#5d6e65]">Vista previa con el borrador aplicado. Haga clic en una zona o un local para editarlo.</p>
-        <div className="flex gap-1.5">
-          {([["desktop", Monitor], ["tablet", Tablet], ["mobile", Smartphone]] as const).map(([d, Icon]) => (
-            <button key={d} type="button" aria-label={d} aria-pressed={device === d} onClick={() => setDevice(d)} className={`ad-icon-btn ${device === d ? "!border-[#b08f4f] !text-[#165a43]" : ""}`}>
-              <Icon size={16} />
-            </button>
-          ))}
-        </div>
-      </div>
-      <div className="ad-card overflow-hidden bg-[#e4e1d6] p-2 sm:p-3">
-        <iframe ref={frame} src="/" title="Vista previa del sitio" onLoad={onFrameLoad} style={{ width: WIDTHS[device], maxWidth: "100%" }} className="mx-auto block h-[82vh] min-h-[34rem] rounded-lg border-0 bg-[#05100b]" />
-      </div>
-
-      {/* Panel flotante */}
-      <div ref={wrap} style={placeStyle} className="fixed z-40 w-[min(24rem,calc(100vw-1rem))] rounded-2xl border border-[#d9d6cb] bg-white shadow-[0_24px_60px_-20px_rgba(0,0,0,0.5)]">
-        <div onPointerDown={startDrag} className="flex cursor-grab touch-none select-none items-center gap-2 rounded-t-2xl bg-[#0f3d2e] px-3 py-2.5 text-white active:cursor-grabbing">
-          <GripVertical size={16} aria-hidden />
-          <span className="flex-1 text-sm font-bold">Diseño del sitio</span>
-          {dirty && <span className="rounded-full bg-[#d8b558] px-2 py-0.5 text-[0.65rem] font-bold text-[#11271d]">Sin publicar</span>}
-          <button type="button" aria-label={collapsed ? "Expandir panel" : "Contraer panel"} onPointerDown={(e) => e.stopPropagation()} onClick={() => setCollapsed((c) => !c)} className="flex h-7 w-7 items-center justify-center rounded-full hover:bg-white/15">
-            {collapsed ? <Plus size={15} /> : <Minus size={15} />}
-          </button>
-        </div>
-
-        {!collapsed && (
-          <div className="flex max-h-[calc(100vh-9rem)] flex-col">
-            <div role="tablist" className="flex flex-wrap gap-1 border-b border-[#e4e1d6] p-2">
-              {TABS.map((t) => (
-                <button key={t.id} role="tab" aria-selected={tab === t.id} type="button" onClick={() => setTab(t.id)} className={`rounded-lg px-2.5 py-1.5 text-xs font-bold ${tab === t.id ? "bg-[#f7edcf] text-[#7c5f1f]" : "text-[#5d6e65] hover:bg-[#f1efe6]"}`}>
-                  {t.label}
-                </button>
-              ))}
-            </div>
-
-            <div className="flex flex-col gap-4 overflow-y-auto p-4">
-              {tab === "zonas" && (
-                <>
-                  <div className="grid grid-cols-2 gap-1.5">
-                    {REGIONS.map((r) => (
-                      <button key={r.id} type="button" aria-pressed={r.id === region} onClick={() => setRegion(r.id)} className={`rounded-lg border px-2.5 py-1.5 text-left text-xs font-semibold ${r.id === region ? "border-[#b08f4f] bg-[#f7edcf]" : "border-[#d9d6cb] hover:border-[#b08f4f]"}`}>
-                        {r.label}
-                        {design.regions[r.id] && <span className="ml-1 text-[#b08f4f]">●</span>}
-                      </button>
-                    ))}
-                  </div>
                   <p className="text-xs text-[#8a978f]">{meta.hint}</p>
                   {has("bg") && <ColorField label="Fondo" value={rs.bg} fallback="#0a2a20" onChange={(v) => patchRegion({ bg: v })} />}
                   {has("fg") && <ColorField label="Texto" value={rs.fg} fallback="#f4f2e9" onChange={(v) => patchRegion({ fg: v })} />}
@@ -326,19 +305,17 @@ export function DesignEditor({ writable, initialPublished, initialDraft, canUndo
                   <button type="button" className="ad-btn ad-btn-ghost self-start" onClick={() => update((d) => { const regions = { ...d.regions }; delete regions[region]; return { ...d, regions }; })}>
                     <RotateCcw size={14} /> Restablecer zona
                   </button>
-                </>
-              )}
-
-              {tab === "piezas" && (
-                <>
+    </>
+  );
+  const cuerpoPiezas = (
+    <>
                   <Choice title="Encabezado" current={design.parts.navbar ?? "clasico"} options={NAVBARS} onPick={(id) => update((d) => ({ ...d, parts: { ...d.parts, navbar: id } }))} />
                   <Choice title="Recorrido de portada" current={design.parts.hero ?? "izquierda"} options={HEROES} onPick={(id) => update((d) => ({ ...d, parts: { ...d.parts, hero: id } }))} />
                   <Choice title="Pie de página" current={design.parts.footer ?? "completo"} options={FOOTERS} onPick={(id) => update((d) => ({ ...d, parts: { ...d.parts, footer: id } }))} />
-                </>
-              )}
-
-              {tab === "recorrido" && (
-                <>
+    </>
+  );
+  const cuerpoRecorrido = (
+    <>
                   <div>
                     <p className="ad-eyebrow mb-2">Orden (arrastre o use las flechas)</p>
                     <ol className="flex flex-col gap-1">
@@ -375,11 +352,10 @@ export function DesignEditor({ writable, initialPublished, initialDraft, canUndo
                       </button>
                     </div>
                   )}
-                </>
-              )}
-
-              {tab === "cintillo" && (
-                <>
+    </>
+  );
+  const cuerpoCintillo = (
+    <>
                   <label className="flex items-center gap-2 text-sm font-semibold">
                     <input type="checkbox" checked={Boolean(ticker.on)} onChange={(e) => patchTicker({ on: e.target.checked })} /> Mostrar el cintillo bajo el encabezado
                   </label>
@@ -394,11 +370,10 @@ export function DesignEditor({ writable, initialPublished, initialDraft, canUndo
                     />
                   </label>
                   <Slider label="Velocidad" value={ticker.speed ?? 5} min={1} max={10} unit="" onChange={(n) => patchTicker({ speed: n })} />
-                </>
-              )}
-
-              {tab === "popup" && (
-                <>
+    </>
+  );
+  const cuerpoPopup = (
+    <>
                   <label className="flex items-center gap-2 text-sm font-semibold">
                     <input type="checkbox" checked={Boolean(popup.on)} onChange={(e) => patchPopup({ on: e.target.checked })} /> Mostrar la ventana emergente
                   </label>
@@ -408,11 +383,10 @@ export function DesignEditor({ writable, initialPublished, initialDraft, canUndo
                   <label className="flex flex-col gap-1 text-sm font-semibold">Enlace del botón<input className="ad-input" placeholder="/eventos o https://…" value={popup.ctaHref ?? ""} onChange={(e) => patchPopup({ ctaHref: e.target.value })} /></label>
                   <Slider label="Aparece tras" value={popup.delay ?? 3} min={0} max={60} unit=" s" onChange={(n) => patchPopup({ delay: n })} />
                   <p className="text-xs text-[#8a978f]">Se muestra una vez por visita. En la vista previa aparece de inmediato.</p>
-                </>
-              )}
-
-              {tab === "publicidad" && (
-                <>
+    </>
+  );
+  const cuerpoPublicidad = (
+    <>
                   {AD_ZONES.map((z) => {
                     const a = design.ads[z.id] ?? {};
                     return (
@@ -426,27 +400,164 @@ export function DesignEditor({ writable, initialPublished, initialDraft, canUndo
                       </fieldset>
                     );
                   })}
-                </>
-              )}
-            </div>
+    </>
+  );
 
-            <div className="flex flex-col gap-2 border-t border-[#e4e1d6] p-3">
-              <div className="flex gap-2">
-                <button type="button" className="ad-btn ad-btn-primary flex-1 justify-center" disabled={!writable || pending || !dirty} onClick={doPublish}>
-                  <UploadCloud size={15} /> {pending ? "Procesando…" : "Publicar"}
-                </button>
-                <button type="button" className="ad-btn ad-btn-ghost justify-center" disabled={!writable || pending || !undoable} onClick={doUndo} title="Deshacer la última publicación">
-                  <Undo2 size={15} />
-                </button>
+  const dev = DEVICES[device];
+  const maxH = Math.max(360, vh * (full ? 0.78 : 0.66));
+  const avail = Math.max(240, stageW - 2 * dev.bezel - 24);
+  const scale = Math.min(1, avail / dev.w, maxH / dev.h);
+  const viewW = Math.round(dev.w * scale);
+  const viewH = Math.round(dev.h * scale);
+  const nAnuncios = AD_ZONES.filter((z) => design.ads[z.id]?.on).length;
+  const nEstilos = Object.keys(design.locals).length;
+  const partLabel = (list: readonly { id: string; label: string }[], id: string) => list.find((o) => o.id === id)?.label ?? "";
+  const abrir = (t: Tab) => setTab((cur) => (cur === t ? null : t));
+
+  const secciones: { id: Tab; icon: LucideIcon; title: string; summary: string; body: React.ReactNode }[] = [
+    { id: "zonas", icon: Paintbrush, title: "Colores y tamaños", summary: `Zona: ${meta.label}${design.regions[region] ? " · con cambios" : ""}`, body: cuerpoZonas },
+    { id: "piezas", icon: LayoutGrid, title: "Plantilla", summary: `${partLabel(NAVBARS, design.parts.navbar ?? "clasico")} · ${partLabel(HEROES, design.parts.hero ?? "izquierda")}`, body: cuerpoPiezas },
+    { id: "recorrido", icon: ListOrdered, title: "Orden y estilo de secciones", summary: `${locals.length} secciones${nEstilos ? ` · ${nEstilos} con estilo propio` : ""}`, body: cuerpoRecorrido },
+    { id: "cintillo", icon: Newspaper, title: "Cintillo de titulares", summary: ticker.on ? `Activado · ${(ticker.messages ?? []).filter(Boolean).length} mensajes` : "Apagado", body: cuerpoCintillo },
+    { id: "popup", icon: MessageSquare, title: "Ventana emergente", summary: popup.on ? "Activada" : "Apagada", body: cuerpoPopup },
+    { id: "publicidad", icon: Megaphone, title: "Publicidad", summary: nAnuncios ? `${nAnuncios} anuncio${nAnuncios === 1 ? "" : "s"} activo${nAnuncios === 1 ? "" : "s"}` : "Sin anuncios activos", body: cuerpoPublicidad },
+  ];
+
+  const menuItem = "flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm font-semibold text-[#2a3a32] hover:bg-[#f1efe6] disabled:opacity-40";
+
+  return (
+    <div className="grid items-start gap-5 xl:grid-cols-[minmax(0,1fr)_24rem]">
+      {/* Barra superior + vista previa */}
+      <div className={full ? "fixed inset-0 z-50 overflow-y-auto bg-[#f4f2ea] p-4" : "min-w-0"}>
+        <div className="ad-card relative mb-4 flex flex-wrap items-center gap-2 p-3">
+          <span className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-bold ${dirty ? "border-[#e2c874] bg-[#fbf3d9] text-[#7c5f1f]" : "border-[#d9d6cb] bg-white text-[#11271d]"}`}>
+            <span className={`h-2.5 w-2.5 rounded-full ${dirty ? "bg-[#d8a21f]" : "bg-[#1fa65a]"}`} />
+            {dirty ? "Sin publicar" : "Publicado"}
+          </span>
+          <div className="flex gap-1.5">
+            <button type="button" aria-label="Deshacer cambio" title="Deshacer cambio" disabled={!hist.p} onClick={undoEdit} className="ad-icon-btn disabled:opacity-40"><Undo2 size={16} /></button>
+            <button type="button" aria-label="Rehacer cambio" title="Rehacer cambio" disabled={!hist.f} onClick={redoEdit} className="ad-icon-btn disabled:opacity-40"><Redo2 size={16} /></button>
+          </div>
+          <div role="group" aria-label="Pantalla" className="flex gap-1 rounded-full border border-[#d9d6cb] bg-white p-1">
+            {([["desktop", Monitor, "Computador"], ["tablet", Tablet, "Tableta"], ["mobile", Smartphone, "Celular"]] as const).map(([d, Icon, label]) => (
+              <button key={d} type="button" aria-label={label} title={label} aria-pressed={device === d} onClick={() => setDevice(d)} className={`flex h-9 w-11 items-center justify-center rounded-full transition-colors ${device === d ? "bg-[#165a43] text-white" : "text-[#5d6e65] hover:bg-[#f1efe6]"}`}>
+                <Icon size={17} />
+              </button>
+            ))}
+          </div>
+          <div className="relative">
+            <button type="button" aria-haspopup="menu" aria-expanded={menu === "vista"} onClick={() => setMenu(menu === "vista" ? null : "vista")} className="ad-icon-btn !w-auto gap-1 px-3">
+              <SlidersHorizontal size={16} /> <ChevronDown size={14} />
+            </button>
+            {menu === "vista" && (
+              <div role="menu" className="absolute left-0 top-full z-30 mt-2 w-64 rounded-xl border border-[#d9d6cb] bg-white p-1.5 shadow-xl">
+                <label className={`${menuItem} cursor-pointer`}>
+                  <input type="checkbox" checked={resaltar} onChange={(e) => setResaltar(e.target.checked)} /> Resaltar la zona elegida
+                </label>
               </div>
-              {status && (
-                <p role="status" className={`rounded-lg px-3 py-1.5 text-xs ${status.kind === "err" ? "bg-[#fde8e8] text-[#a12b2b]" : status.kind === "ok" ? "bg-[#e1f1e7] text-[#146040]" : "bg-[#f1efe6] text-[#5d6e65]"}`}>{status.text}</p>
+            )}
+          </div>
+          <div className="ml-auto flex items-center gap-1.5">
+            <button type="button" aria-label={full ? "Salir de pantalla completa" : "Pantalla completa"} title={full ? "Salir de pantalla completa" : "Pantalla completa"} onClick={() => setFull((v) => !v)} className="ad-icon-btn">
+              {full ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
+            </button>
+            <a href="/" target="_blank" rel="noreferrer" aria-label="Abrir el sitio en otra pestaña" title="Abrir el sitio en otra pestaña" className="ad-icon-btn"><ExternalLink size={16} /></a>
+            <button type="button" className="ad-btn ad-btn-primary" disabled={!writable || pending || !dirty} onClick={doPublish}>
+              <UploadCloud size={15} /> {pending ? "Procesando…" : "Publicar"}
+            </button>
+            <div className="relative">
+              <button type="button" aria-label="Más opciones" aria-haspopup="menu" aria-expanded={menu === "mas"} onClick={() => setMenu(menu === "mas" ? null : "mas")} className="ad-icon-btn"><Ellipsis size={16} /></button>
+              {menu === "mas" && (
+                <div role="menu" className="absolute right-0 top-full z-30 mt-2 w-72 rounded-xl border border-[#d9d6cb] bg-white p-1.5 shadow-xl">
+                  <button type="button" role="menuitem" className={menuItem} disabled={!writable || pending || !undoable} onClick={() => { setMenu(null); doUndo(); }}>
+                    <Undo2 size={15} /> Deshacer la última publicación
+                  </button>
+                  <button type="button" role="menuitem" className={menuItem} disabled={!writable || pending || !dirty} onClick={() => { setMenu(null); setDesign(published); }}>
+                    <RotateCcw size={15} /> Descartar cambios sin publicar
+                  </button>
+                </div>
               )}
-              {isEmptyDesign(design) && !status && <p className="text-xs text-[#8a978f]">Sin cambios respecto al diseño original.</p>}
             </div>
           </div>
+          {menu && <button type="button" tabIndex={-1} aria-hidden className="fixed inset-0 z-20 cursor-default" onClick={() => setMenu(null)} />}
+        </div>
+
+        {status && (
+          <p role="status" className={`mb-4 rounded-xl px-4 py-2 text-sm ${status.kind === "err" ? "bg-[#fde8e8] text-[#a12b2b]" : status.kind === "ok" ? "bg-[#e1f1e7] text-[#146040]" : "bg-[#f1efe6] text-[#5d6e65]"}`}>{status.text}</p>
         )}
+
+        <div ref={stage} className="ad-card flex flex-col items-center px-3 pb-4 pt-6 sm:px-6">
+          <div className="flex flex-col items-center" style={{ width: viewW + 2 * dev.bezel }}>
+            <div className="bg-[#14171a] shadow-[0_18px_40px_-18px_rgba(0,0,0,0.6)]" style={{ padding: dev.bezel, borderRadius: device === "mobile" ? 36 : device === "tablet" ? 26 : 20, width: "100%" }}>
+              <div className="relative overflow-hidden bg-[#05100b]" style={{ width: viewW, height: viewH, borderRadius: device === "mobile" ? 26 : device === "tablet" ? 14 : 8 }}>
+                <iframe
+                  ref={frame}
+                  src="/"
+                  title="Vista previa del sitio"
+                  onLoad={onFrameLoad}
+                  style={{ width: dev.w, height: dev.h, transform: `scale(${scale})`, transformOrigin: "top left" }}
+                  className="absolute left-0 top-0 block max-w-none border-0 bg-[#05100b]"
+                />
+              </div>
+            </div>
+            {device === "desktop" && <div aria-hidden className="h-3.5 w-[112%] rounded-b-[1.4rem] bg-gradient-to-b from-[#c9ccd0] to-[#9da1a6]" />}
+          </div>
+          <p className="mt-4 text-sm text-[#5d6e65]">
+            {dev.name} · {dev.w}px · {Math.round(scale * 100)} %{scale < 1 ? " (ajustado al ancho)" : ""}
+          </p>
+          <p className="mt-1 text-xs text-[#8a978f]">Haga clic en una zona o un local de la página para editarlo.</p>
+        </div>
       </div>
+
+      {/* Panel de propiedades */}
+      <aside className={`flex flex-col gap-3 xl:sticky xl:top-4 xl:max-h-[calc(100vh-2rem)] xl:overflow-y-auto xl:pr-1 ${full ? "hidden" : ""}`} aria-label="Propiedades del diseño">
+        <section className="ad-card p-0">
+          <h2 className="flex items-center gap-2.5 border-b border-[#e4e1d6] px-5 py-4 text-sm font-bold uppercase tracking-[0.2em] text-[#165a43]">
+            <SlidersHorizontal size={16} /> Propiedades
+          </h2>
+          <div className="p-5">
+            <p className="text-lg font-bold text-[#11271d]">Elige qué quieres cambiar</p>
+            <p className="mt-1 text-sm text-[#5d6e65]">Haz clic en la página o elige una parte:</p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {REGIONS.map((r) => (
+                <button
+                  key={r.id}
+                  type="button"
+                  aria-pressed={tab === "zonas" && r.id === region}
+                  onClick={() => { setRegion(r.id); setTab("zonas"); }}
+                  className={`rounded-full border px-4 py-1.5 text-sm font-semibold transition-colors ${tab === "zonas" && r.id === region ? "border-[#b08f4f] bg-[#f7edcf] text-[#7c5f1f]" : "border-[#d9d6cb] bg-white text-[#11271d] hover:border-[#b08f4f]"}`}
+                >
+                  {r.label}
+                  {design.regions[r.id] && <span className="ml-1 text-[#b08f4f]">●</span>}
+                </button>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {secciones.map(({ id, icon: Icon, title, summary, body }) => {
+          const abierto = tab === id;
+          return (
+            <section key={id} className="ad-card p-0">
+              <button type="button" aria-expanded={abierto} aria-controls={`acc-${id}`} onClick={() => abrir(id)} className="flex w-full items-center gap-3.5 px-5 py-4 text-left">
+                <Icon size={18} className="shrink-0 text-[#5d6e65]" aria-hidden />
+                <span className="min-w-0 flex-1">
+                  <span className="block text-sm font-bold uppercase tracking-[0.16em] text-[#11271d]">{title}</span>
+                  <span className="block truncate text-sm text-[#5d6e65]">{summary}</span>
+                </span>
+                <ChevronDown size={18} className={`shrink-0 text-[#5d6e65] transition-transform duration-300 ${abierto ? "rotate-180" : ""}`} />
+              </button>
+              {abierto && (
+                <div id={`acc-${id}`} className="flex flex-col gap-4 border-t border-[#e4e1d6] p-5">
+                  {body}
+                </div>
+              )}
+            </section>
+          );
+        })}
+
+        {isEmptyDesign(design) && <p className="px-1 text-xs text-[#8a978f]">Sin cambios respecto al diseño original.</p>}
+      </aside>
     </div>
   );
 }
