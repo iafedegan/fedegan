@@ -160,6 +160,17 @@ export function DesignEditor({ writable, initialPublished, initialDraft, canUndo
           setRegion(hit);
           setTab("zonas");
         }
+        // Enlaces y botones del sitio funcionan con normalidad dentro de la vista previa (se puede navegar a cada página);
+        // solo se bloquean los enlaces que salen del sitio. El resto de clics únicamente elige la zona.
+        const control = t?.closest?.("a[href], button");
+        if (control) {
+          const href = control.getAttribute("href");
+          if (href && !href.startsWith("/") && !href.startsWith("#")) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+          return;
+        }
         e.preventDefault();
         e.stopPropagation();
       },
