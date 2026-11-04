@@ -1384,3 +1384,8 @@ a.mx-card:hover, .mx-lift:hover, .gl-hover:hover { transform: translateY(-2px); 
   .sw-center .sw-panel { pointer-events: auto; cursor: pointer; -webkit-tap-highlight-color: transparent; }
   .sw-center .sw-panel:active { background: rgba(5, 16, 11, 0.55); }
 }
+
+/* Escritorio: leve desenfoque detrás de la lista de secciones para que realce sobre la foto. */
+@media (min-width: 768px) {
+  .sw-rail { padding: 0.9rem 1.1rem; border-radius: 1rem; background: rgba(5, 16, 11, 0.38); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+}
