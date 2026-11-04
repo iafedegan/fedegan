@@ -5,6 +5,7 @@ import { ShieldAlert } from "lucide-react";
 import { auth } from "@/auth";
 import { ROLES, hasAnyRole } from "@/lib/access";
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
+import { AdminContainer } from "@/components/admin/AdminContainer";
 import { adminNav } from "@/lib/cms/nav";
 import { EDITOR_ROLES } from "@/lib/cms/guard";
 
@@ -38,7 +39,7 @@ export default async function AdminLayout({ children }: { children: ReactNode })
     <div data-theme="institucional" className="ad-shell flex flex-col lg:flex-row">
       <AdminSidebar user={user} groups={adminNav} />
       <div className="min-w-0 flex-1">
-        <div className="mx-auto w-full max-w-6xl px-4 py-7 sm:px-8 sm:py-10">{children}</div>
+        <AdminContainer>{children}</AdminContainer>
       </div>
     </div>
   );

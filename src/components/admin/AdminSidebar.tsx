@@ -28,10 +28,12 @@ export function AdminSidebar({ user, groups }: { user: { name: string; email: st
   // Grupos del menú que la persona dejó retraídos (se recuerdan en este navegador).
   const [cerrados, setCerrados] = useState<string[]>([]);
   useEffect(() => {
-    try {
-      const g = localStorage.getItem("fedegan:admin-grupos-cerrados");
-      if (g) setCerrados(JSON.parse(g));
-    } catch {}
+    queueMicrotask(() => {
+      try {
+        const g = localStorage.getItem("fedegan:admin-grupos-cerrados");
+        if (g) setCerrados(JSON.parse(g));
+      } catch {}
+    });
   }, []);
   const alternar = (grupo: string) =>
     setCerrados((prev) => {
