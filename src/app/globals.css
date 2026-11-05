@@ -1424,30 +1424,30 @@ html[data-theme="esmeralda"] body:has(.mx-hero)::before,
 html[data-theme="esmeralda"] body:has(.mx-hero)::after {
   content: ""; position: fixed; inset: -24%; z-index: -1; pointer-events: none; will-change: transform;
 }
-/* Tono claro */
+/* Tono claro: colores suaves, más presentes hacia los bordes que en el centro, donde está el texto */
 html[data-theme="institucional"] body::before {
   background:
-    radial-gradient(min(58rem, 120vw) min(44rem, 90vw) at 27% 25%, rgba(255, 160, 202, 0.95), transparent 66%),
-    radial-gradient(min(58rem, 120vw) min(44rem, 90vw) at 73% 27%, rgba(140, 190, 255, 0.95), transparent 66%),
+    radial-gradient(min(46rem, 100vw) min(36rem, 76vw) at 22% 22%, rgba(255, 176, 208, 0.5), transparent 66%),
+    radial-gradient(min(46rem, 100vw) min(36rem, 76vw) at 78% 24%, rgba(160, 200, 255, 0.5), transparent 66%),
     linear-gradient(180deg, #ffffff 0%, #fbfaf9 100%);
 }
 html[data-theme="institucional"] body::after {
   background:
-    radial-gradient(min(60rem, 125vw) min(46rem, 94vw) at 27% 76%, rgba(140, 228, 190, 0.92), transparent 66%),
-    radial-gradient(min(58rem, 120vw) min(44rem, 90vw) at 73% 74%, rgba(255, 200, 130, 0.95), transparent 66%);
+    radial-gradient(min(48rem, 104vw) min(38rem, 80vw) at 22% 78%, rgba(156, 232, 198, 0.46), transparent 66%),
+    radial-gradient(min(46rem, 100vw) min(36rem, 76vw) at 78% 76%, rgba(255, 212, 156, 0.5), transparent 66%);
 }
-/* Tono oscuro de las páginas interiores: los mismos colores como destellos suaves sobre el grafito */
+/* Tono oscuro de las páginas interiores: los mismos colores como destellos muy suaves sobre el grafito */
 html[data-theme="esmeralda"]:has(.mx-hero) { background: #141414; }
 html[data-theme="esmeralda"] body:has(.mx-hero) { background: transparent; }
 html[data-theme="esmeralda"] body:has(.mx-hero)::before {
   background:
-    radial-gradient(min(54rem, 105vw) min(42rem, 78vw) at 27% 25%, rgba(255, 150, 196, 0.28), transparent 66%),
-    radial-gradient(min(54rem, 105vw) min(42rem, 78vw) at 73% 27%, rgba(120, 170, 255, 0.28), transparent 66%);
+    radial-gradient(min(46rem, 100vw) min(36rem, 76vw) at 22% 22%, rgba(255, 150, 196, 0.15), transparent 66%),
+    radial-gradient(min(46rem, 100vw) min(36rem, 76vw) at 78% 24%, rgba(120, 170, 255, 0.15), transparent 66%);
 }
 html[data-theme="esmeralda"] body:has(.mx-hero)::after {
   background:
-    radial-gradient(min(56rem, 108vw) min(44rem, 80vw) at 27% 76%, rgba(120, 220, 180, 0.28), transparent 66%),
-    radial-gradient(min(54rem, 105vw) min(42rem, 78vw) at 73% 74%, rgba(255, 190, 120, 0.27), transparent 66%);
+    radial-gradient(min(48rem, 104vw) min(38rem, 80vw) at 22% 78%, rgba(120, 220, 180, 0.14), transparent 66%),
+    radial-gradient(min(46rem, 100vw) min(36rem, 76vw) at 78% 76%, rgba(255, 190, 120, 0.15), transparent 66%);
 }
 @media (prefers-reduced-motion: no-preference) {
   html[data-theme="institucional"] body::before, html[data-theme="esmeralda"] body:has(.mx-hero)::before { animation: nacar-a 20s ease-in-out infinite alternate; }
