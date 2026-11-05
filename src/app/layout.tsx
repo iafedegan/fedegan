@@ -15,6 +15,7 @@ import { Ticker } from "@/components/design/Ticker";
 import { AdSlot } from "@/components/design/AdSlot";
 import { Masthead } from "@/components/layout/Masthead";
 import { ThemeScript } from "@/components/layout/ThemeScript";
+import { ThemeRoute } from "@/components/layout/ThemeRoute";
 import { PwaRegister } from "@/components/layout/PwaRegister";
 import { SitePopup } from "@/components/design/SitePopup";
 import { ConsentBanner } from "@/components/layout/ConsentBanner";
@@ -103,6 +104,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
         <Providers>
           <ElementEdits initial={design.elements} />
           <div className="read-progress" aria-hidden />
+          <ThemeRoute />
           <UsageTracker />
           <Analytics />
           <WebVitals />

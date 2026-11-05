@@ -1,48 +1,9 @@
+import Image from "next/image";
 import Link from "next/link";
-import {
-  ArrowLeft,
-  ArrowRight,
-  ArrowUpRight,
-  BarChart3,
-  Beef,
-  BookOpen,
-  FlaskConical,
-  Globe,
-  Handshake,
-  Layers,
-  Leaf,
-  Mail,
-  Megaphone,
-  Milk,
-  Scale,
-  Search,
-  ShieldCheck,
-  Stethoscope,
-  Users,
-  Wallet,
-  type LucideIcon,
-} from "lucide-react";
+import type { CSSProperties } from "react";
+import { ArrowLeft, ArrowRight, ArrowUpRight, Search } from "lucide-react";
+import { elegirFoto } from "@/components/ui/WaveCard";
 import { excerptOf, getLegacyPage, legacyHref, type NavNode } from "@/content/legacy";
-
-// Pictograma según el tema del título: ayuda a reconocer cada rama sin leer.
-const ICONS: [RegExp, LucideIcon][] = [
-  [/norma|ley|decreto|resoluci|c[oó]digo|jur[ií]d|legal/i, Scale],
-  [/cifra|estad[ií]stic|inventario|precio|dato|indicador/i, BarChart3],
-  [/sanidad|biol[oó]g|vacun|aftosa|salud|brucel/i, Stethoscope],
-  [/ciencia|tecnolog|investig|laborator|innovaci/i, FlaskConical],
-  [/leche|l[aá]cte/i, Milk],
-  [/carne|bovin|ganado|cadena|fondo nacional/i, Beef],
-  [/exporta|mercado|internacional|comercio/i, Globe],
-  [/presupuesto|financ|contable|pago|cuota|recaudo|tarifa/i, Wallet],
-  [/transparen|gobierno|control|auditor|calidad|gesti[oó]n|pol[ií]tica/i, ShieldCheck],
-  [/publicaci|libro|cartilla|revista|bolet[ií]n|manual/i, BookOpen],
-  [/prensa|comunicad|carta|columna|noticia/i, Megaphone],
-  [/ambient|sostenib|verde|carbono|sello/i, Leaf],
-  [/alianza|convenio|contrato|social|fundag[aá]n|solidar/i, Handshake],
-  [/servicio|tr[aá]mite|atenci[oó]n|pqrsd|contacto/i, Mail],
-  [/gremi|fedeg[aá]n|c[aá]mara|asamblea|junta|directiv|congreso|regional/i, Users],
-];
-export const topicIcon = (label: string): LucideIcon => ICONS.find(([re]) => re.test(label))?.[1] ?? Layers;
 
 export const countBelow = (n: NavNode): number => (n.children ?? []).reduce((a, c) => a + 1 + countBelow(c), 0);
 
@@ -57,52 +18,65 @@ export function SectionSearch({ label, className = "" }: { label: string; classN
   );
 }
 
-// Entrada de la sección en formato ficha: número, pictograma, título, extracto y avance de lo que hay dentro.
+// Entrada de la sección: foto grande con el número en un sello redondo y, debajo, título, extracto y avance de lo que hay dentro.
 export function SectionTiles({ nodes, slug }: { nodes: NavNode[]; slug: string }) {
   return (
     <ol className="hub-tiles">
       {nodes.map((n, i) => {
-        const Icon = topicIcon(n.label);
         const kids = n.children ?? [];
         const total = countBelow(n);
         const href = n.key ? legacyHref(slug, n.key) : n.href;
         const page = n.key ? getLegacyPage(n.key) : null;
-        const text = page ? excerptOf(page, 120).replace(/\*\*/g, "") : "";
+        const text = page ? excerptOf(page, 130).replace(/\*\*/g, "") : "";
         const external = !n.key && Boolean(n.href);
-        const inner = (
-          <>
-            <span className="hub-num" aria-hidden>{String(i + 1).padStart(2, "0")}</span>
-            <span className="hub-ico" aria-hidden><Icon size={20} strokeWidth={1.75} /></span>
+        const foto = elegirFoto(n.label);
+        const style = { ["--i" as string]: i % 8 } as CSSProperties;
+        const media = (
+          <span className="hub-img">
+            <Image src={foto.src} alt="" fill sizes="(min-width: 1024px) 45vw, 100vw" className="object-cover" style={{ objectPosition: foto.pos }} />
+            <span className="hub-badge" aria-hidden>{String(i + 1).padStart(2, "0")}</span>
+          </span>
+        );
+        const meta = (
+          <span className="hub-meta">
             <h3 className="hub-name">{n.label}</h3>
-            {text && <p className="hub-text">{text}</p>}
-            {kids.length > 0 && (
-              <ul className="hub-kids" aria-label={`Dentro de ${n.label}`}>
-                {kids.slice(0, 3).map((k) => (
-                  <li key={k.label}>{k.label}</li>
-                ))}
-                {kids.length > 3 && <li className="hub-more">+{kids.length - 3} más</li>}
-              </ul>
-            )}
             <span className="hub-foot">
               {total > 0 ? `${total} ${total === 1 ? "página" : "páginas"}` : external ? "Sitio externo" : "Abrir"}
-              {external ? <ArrowUpRight size={15} aria-hidden /> : <ArrowRight size={15} aria-hidden />}
+              {external ? <ArrowUpRight size={16} aria-hidden /> : <ArrowRight size={16} aria-hidden />}
             </span>
-          </>
+          </span>
         );
         return (
-          <li key={`${n.label}-${i}`}>
+          <li key={`${n.label}-${i}`} style={style}>
             {href ? (
               external ? (
-                <a href={href} target="_blank" rel="noopener noreferrer" className="hub-tile">{inner}</a>
+                <a href={href} target="_blank" rel="noopener noreferrer" className="hub-tile">
+                  {media}
+                  {meta}
+                  {text && <span className="hub-text">{text}</span>}
+                </a>
               ) : (
-                <Link href={href} className="hub-tile">{inner}</Link>
+                <Link href={href} className="hub-tile">
+                  {media}
+                  {meta}
+                  {text && <span className="hub-text">{text}</span>}
+                  {kids.length > 0 && (
+                    <span className="hub-kids" aria-label={`Dentro de ${n.label}`}>
+                      {kids.slice(0, 3).map((k) => (
+                        <span key={k.label}>{k.label}</span>
+                      ))}
+                      {kids.length > 3 && <span>+{kids.length - 3} más</span>}
+                    </span>
+                  )}
+                </Link>
               )
             ) : (
               // Encabezado sin página propia: se muestra como grupo con sus enlaces.
               <div className="hub-tile hub-group">
-                <span className="hub-num" aria-hidden>{String(i + 1).padStart(2, "0")}</span>
-                <span className="hub-ico" aria-hidden><Icon size={20} strokeWidth={1.75} /></span>
-                <h3 className="hub-name">{n.label}</h3>
+                {media}
+                <span className="hub-meta">
+                  <h3 className="hub-name">{n.label}</h3>
+                </span>
                 <ul className="hub-links">
                   {kids.slice(0, 6).map((k) => {
                     const kh = k.key ? legacyHref(slug, k.key) : k.href;

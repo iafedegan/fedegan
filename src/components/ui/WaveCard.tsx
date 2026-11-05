@@ -32,7 +32,7 @@ const POOL: Foto[] = [
   { src: "/locales/cifras.jpg", pos: "70% 50%" },
 ];
 
-function elegirFoto(titulo: string): Foto {
+export function elegirFoto(titulo: string): Foto {
   const tema = POR_TEMA.find(([re]) => re.test(titulo));
   if (tema) return tema[1];
   let h = 0;

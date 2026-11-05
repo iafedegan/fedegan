@@ -1,12 +1,13 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ExternalLink, Menu } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { LegacyContent } from "@/components/legacy/LegacyContent";
 import { QuickRail } from "@/components/blocks/Accesos";
-import { NavTree, type NavItem } from "@/components/legacy/NavTree";
+import type { NavItem } from "@/components/legacy/NavTree";
 import { TocRail, type TocItem } from "@/components/legacy/TocRail";
+import { SectionMenu } from "@/components/legacy/SectionMenu";
 import { ArticleTools } from "@/components/legacy/ArticleTools";
 import { PrevNext, SectionSearch, SectionTiles, countBelow, flattenTree } from "@/components/legacy/SectionParts";
 import { getPageOverride } from "@/lib/cms/paginas";
@@ -139,49 +140,38 @@ export async function LegacySectionPage({ slug, ruta }: { slug: string; ruta: st
   }
 
   /* ───────────── Página de contenido ───────────── */
+  // Panel fijo a la izquierda (titular, ubicación, menú e índice) y el texto a la derecha.
   const kids = (here?.children ?? []).filter((n) => n.key !== key);
+  const branch = trail.length > 1 ? trail[0].label : undefined;
   return (
     <>
       <PageHeader variant="strip" title={page.title} breadcrumbs={crumbs} aside={<SectionSearch label={section.label} className="sec-search-sm" />} />
-      <Container className={`doc-grid ${hasMenu ? "has-menu" : ""}`}>
-        {/* Menú de la sección (escritorio) */}
-        {hasMenu && (
-          <aside className="doc-left hidden lg:block">
-            <div className="doc-sticky flex">
-              <nav aria-label={`Menú de ${section.label}`} className="ed-rail">
-                <Link href={`/seccion/${slug}`} className="ed-rail-title">{section.label}</Link>
-                <NavTree nodes={menuItems} current={key} />
-              </nav>
-            </div>
-          </aside>
-        )}
-
-        {/* Texto */}
-        <article className="doc-main ed-body min-w-0 [overflow-wrap:anywhere]">
-          <header className="art-head">
-            <p className="art-kicker">{(trail.length > 1 ? trail[0].label : section.label)}</p>
+      <Container className="doc-split">
+        <aside className="doc-panel">
+          <div className="doc-panel-in">
             <h1 className={`ed-title ${sizeOf(page.title)}`}>{page.title}</h1>
+            <ul className="pills" aria-label="Ubicación">
+              <li><Link href={`/seccion/${slug}`}>{section.label}</Link></li>
+              {branch && <li>{branch}</li>}
+              {here && countBelow(here) > 0 && <li>{countBelow(here)} páginas dentro</li>}
+            </ul>
+            {hasMenu && <SectionMenu label={section.label} items={menuItems} current={key} />}
+            {toc.length >= 3 && (
+              <>
+                <details className="toc-m lg:hidden">
+                  <summary>En esta página <span>{toc.length}</span></summary>
+                  <TocRail items={toc} title="Ir a" />
+                </details>
+                <div className="hidden lg:block">
+                  <TocRail items={toc} />
+                </div>
+              </>
+            )}
             <ArticleTools />
-          </header>
+          </div>
+        </aside>
 
-          {hasMenu && (
-            <details className="doc-menu-m mb-3 lg:hidden">
-              <summary>
-                <Menu size={16} aria-hidden /> En esta sección
-              </summary>
-              <nav aria-label={`Menú de ${section.label}`} className="mt-3 border-t border-[var(--border)] pt-3">
-                <NavTree nodes={menuItems} current={key} />
-              </nav>
-            </details>
-          )}
-
-          {toc.length >= 3 && (
-            <details className="toc-m xl:hidden">
-              <summary>En esta página <span>{toc.length}</span></summary>
-              <TocRail items={toc} title="Ir a" />
-            </details>
-          )}
-
+        <article className="doc-content ed-body min-w-0 [overflow-wrap:anywhere]">
           {page.blocks.length > 0 ? <LegacyContent blocks={page.blocks} /> : empty}
 
           {kids.length > 0 && (
@@ -192,17 +182,9 @@ export async function LegacySectionPage({ slug, ruta }: { slug: string; ruta: st
           )}
 
           <PrevNext prev={prev} next={next} />
-          <QuickRail className="mt-10 xl:hidden" />
+          <QuickRail className="mt-12" />
           {source}
         </article>
-
-        {/* Índice de la página y ayuda */}
-        <aside className="doc-right">
-          <div className="doc-sticky flex">
-            {toc.length >= 3 && <TocRail items={toc} />}
-            <QuickRail />
-          </div>
-        </aside>
       </Container>
     </>
   );
