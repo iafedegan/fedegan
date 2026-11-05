@@ -10,6 +10,7 @@ import { TocRail, type TocItem } from "@/components/legacy/TocRail";
 import { SectionMenu } from "@/components/legacy/SectionMenu";
 import { ArticleTools } from "@/components/legacy/ArticleTools";
 import { PrevNext, SectionSearch, SectionTiles, countBelow, flattenTree } from "@/components/legacy/SectionParts";
+import { journeyPhotos } from "@/content/scroll-world";
 import { getPageOverride } from "@/lib/cms/paginas";
 import { findTrail, getLegacyPage, getLegacySection, legacyHref, type NavNode } from "@/content/legacy";
 
@@ -22,6 +23,8 @@ const toItems = (nodes: NavNode[], slug: string): NavItem[] =>
     external: !n.key && Boolean(n.href),
     children: n.children ? toItems(n.children, slug) : undefined,
   }));
+
+const PHOTO_ID: Record<string, string> = { "cifras-del-sector": "cifras", "sistema-integrado-de-gestion": "sig" };
 
 const sizeOf = (title: string) => (title.length > 90 ? "ed-t4" : title.length > 60 ? "ed-t3" : title.length > 32 ? "ed-t2" : "ed-t1");
 
@@ -94,6 +97,8 @@ export async function LegacySectionPage({ slug, ruta }: { slug: string; ruta: st
           variant="band"
           title={section.label}
           description={page.title.length > 12 && page.title !== section.label ? page.title : undefined}
+          image={(journeyPhotos[PHOTO_ID[slug] ?? slug] ?? (slug === "cartas-de-presidencia" ? { src: "/headers/ia-cartas.jpg", pos: "50% 50%", alt: "" } : undefined))?.src}
+          imagePos={journeyPhotos[PHOTO_ID[slug] ?? slug]?.pos}
           breadcrumbs={crumbs}
           aside={
             <>

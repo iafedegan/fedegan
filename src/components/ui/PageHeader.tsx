@@ -1,4 +1,5 @@
 import { SITE_URL } from "@/lib/site-url";
+import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { ChevronRight } from "lucide-react";
@@ -16,6 +17,8 @@ export function PageHeader({
   title,
   description,
   breadcrumbs = [],
+  image,
+  imagePos,
   facts,
   meta,
   compact = false,
@@ -69,6 +72,12 @@ export function PageHeader({
       ))}
     </nav>
   );
+  // Foto de la página que se funde con el fondo (degradé): sin marco ni borde, solo un resplandor detrás del titular.
+  const photo = image ? (
+    <span aria-hidden className="ed-photo">
+      <Image src={image} alt="" fill priority sizes="(min-width: 1024px) 70vw, 100vw" className="object-cover" style={{ objectPosition: imagePos ?? "50% 50%" }} />
+    </span>
+  ) : null;
   const ld = crumbLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(crumbLd) }} />;
 
   if (variant === "strip") {
@@ -102,6 +111,7 @@ export function PageHeader({
     return (
       <section className="mx-hero ed-head ed-band" data-region="pagehead">
         {ld}
+        {photo}
         <Container>
           <div className="ed-flagrow">
             {eyebrow && <span className="ed-flag">{eyebrow}</span>}
@@ -122,6 +132,7 @@ export function PageHeader({
   return (
     <section className="mx-hero ed-head" data-region="pagehead">
       {ld}
+      {photo}
       <Container>
         <div className="ed-flagrow">
           {eyebrow && <span className="ed-flag">{eyebrow}</span>}
