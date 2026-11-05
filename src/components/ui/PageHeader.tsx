@@ -1,5 +1,4 @@
 import { SITE_URL } from "@/lib/site-url";
-import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { ChevronRight } from "lucide-react";
@@ -72,11 +71,16 @@ export function PageHeader({
       ))}
     </nav>
   );
-  // Foto de la página que se funde con el fondo (degradé): sin marco ni borde, solo un resplandor detrás del titular.
-  const photo = image ? (
-    <span aria-hidden className="ed-photo">
-      <Image src={image} alt="" fill priority sizes="(min-width: 1024px) 70vw, 100vw" className="object-cover" style={{ objectPosition: imagePos ?? "50% 50%" }} />
-    </span>
+  // Foto de fondo de toda la página: queda fija detrás del contenido, con un degradé encima (se define en globals.css).
+  // Va por el optimizador de Next (AVIF/WebP) con dos tamaños, uno para pantallas pequeñas y otro para grandes.
+  // Se pinta con una hoja de estilos en línea: llega ya en el HTML y desaparece sola al salir de la página.
+  const bgOk = Boolean(image && image.startsWith("/") && /^[\w\-./]+$/.test(image));
+  const posOk = imagePos && /^[\d.% ]+$/.test(imagePos) ? imagePos : "50% 50%";
+  const photo = bgOk ? (
+    <>
+      <i hidden className="ed-bgmark" />
+      <style>{`html{--page-photo:url("/_next/image?url=${encodeURIComponent(image!)}&w=1920&q=70");--page-photo-sm:url("/_next/image?url=${encodeURIComponent(image!)}&w=768&q=70");--page-pos:${posOk}}`}</style>
+    </>
   ) : null;
   const ld = crumbLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(crumbLd) }} />;
 
@@ -84,6 +88,7 @@ export function PageHeader({
     return (
       <section className="mx-hero ed-head ed-strip" data-region="pagehead">
         {ld}
+        {photo}
         <Container>
           <div className="ed-striprow">
             {crumbNav}

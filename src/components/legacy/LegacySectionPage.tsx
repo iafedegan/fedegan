@@ -41,6 +41,7 @@ export async function LegacySectionPage({ slug, ruta }: { slug: string; ruta: st
   const override = await getPageOverride(key);
   const page = override ? { ...base, title: override.title, blocks: override.blocks } : base;
 
+  const sectionPhoto = journeyPhotos[PHOTO_ID[slug] ?? slug] ?? (slug === "cartas-de-presidencia" ? { src: "/headers/ia-cartas.jpg", pos: "50% 50%", alt: "" } : undefined);
   const trail = findTrail(section.tree, key) ?? [];
   const isLanding = key === section.landing;
   const here = trail[trail.length - 1];
@@ -97,8 +98,8 @@ export async function LegacySectionPage({ slug, ruta }: { slug: string; ruta: st
           variant="band"
           title={section.label}
           description={page.title.length > 12 && page.title !== section.label ? page.title : undefined}
-          image={(journeyPhotos[PHOTO_ID[slug] ?? slug] ?? (slug === "cartas-de-presidencia" ? { src: "/headers/ia-cartas.jpg", pos: "50% 50%", alt: "" } : undefined))?.src}
-          imagePos={journeyPhotos[PHOTO_ID[slug] ?? slug]?.pos}
+          image={sectionPhoto?.src}
+          imagePos={sectionPhoto?.pos}
           breadcrumbs={crumbs}
           aside={
             <>
@@ -149,7 +150,7 @@ export async function LegacySectionPage({ slug, ruta }: { slug: string; ruta: st
   const kids = (here?.children ?? []).filter((n) => n.key !== key);
   return (
     <>
-      <PageHeader variant="strip" title={page.title} breadcrumbs={crumbs} />
+      <PageHeader variant="strip" title={page.title} breadcrumbs={crumbs} image={sectionPhoto?.src} imagePos={sectionPhoto?.pos} />
       <Container className={`doc-split ${hasMenu ? "has-menu" : ""}`}>
         {hasMenu && (
           <aside className="doc-rail hidden lg:block">
