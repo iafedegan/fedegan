@@ -5,7 +5,7 @@ import { Container } from "@/components/ui/Container";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { LegacyContent } from "@/components/legacy/LegacyContent";
 import { QuickRail } from "@/components/blocks/Accesos";
-import type { NavItem } from "@/components/legacy/NavTree";
+import { NavTree, type NavItem } from "@/components/legacy/NavTree";
 import { TocRail, type TocItem } from "@/components/legacy/TocRail";
 import { SectionMenu } from "@/components/legacy/SectionMenu";
 import { ArticleTools } from "@/components/legacy/ArticleTools";
@@ -92,7 +92,6 @@ export async function LegacySectionPage({ slug, ruta }: { slug: string; ruta: st
       <>
         <PageHeader
           variant="band"
-          eyebrow="Sección"
           title={section.label}
           description={page.title.length > 12 && page.title !== section.label ? page.title : undefined}
           breadcrumbs={crumbs}
@@ -140,38 +139,44 @@ export async function LegacySectionPage({ slug, ruta }: { slug: string; ruta: st
   }
 
   /* ───────────── Página de contenido ───────────── */
-  // Panel fijo a la izquierda (titular, ubicación, menú e índice) y el texto a la derecha.
+  // Un solo recorrido: migas arriba; el menú de la sección a la izquierda (siempre visible en escritorio);
+  // y en el centro el titular, el índice plegado de la página, el texto y «anterior / siguiente».
   const kids = (here?.children ?? []).filter((n) => n.key !== key);
-  const branch = trail.length > 1 ? trail[0].label : undefined;
   return (
     <>
-      <PageHeader variant="strip" title={page.title} breadcrumbs={crumbs} aside={<SectionSearch label={section.label} className="sec-search-sm" />} />
-      <Container className="doc-split">
-        <aside className="doc-panel">
-          <div className="doc-panel-in">
-            <h1 className={`ed-title ${sizeOf(page.title)}`}>{page.title}</h1>
-            <ul className="pills" aria-label="Ubicación">
-              <li><Link href={`/seccion/${slug}`}>{section.label}</Link></li>
-              {branch && <li>{branch}</li>}
-              {here && countBelow(here) > 0 && <li>{countBelow(here)} páginas dentro</li>}
-            </ul>
-            {hasMenu && <SectionMenu label={section.label} items={menuItems} current={key} />}
-            {toc.length >= 3 && (
-              <>
-                <details className="toc-m lg:hidden">
-                  <summary>En esta página <span>{toc.length}</span></summary>
-                  <TocRail items={toc} title="Ir a" />
-                </details>
-                <div className="hidden lg:block">
-                  <TocRail items={toc} />
-                </div>
-              </>
-            )}
-            <ArticleTools />
-          </div>
-        </aside>
+      <PageHeader variant="strip" title={page.title} breadcrumbs={crumbs} />
+      <Container className={`doc-split ${hasMenu ? "has-menu" : ""}`}>
+        {hasMenu && (
+          <aside className="doc-rail hidden lg:block">
+            <div className="doc-sticky">
+              <nav aria-label={`Menú de ${section.label}`} className="ed-rail">
+                <Link href={`/seccion/${slug}`} className="ed-rail-title">{section.label}</Link>
+                <NavTree nodes={menuItems} current={key} />
+              </nav>
+            </div>
+          </aside>
+        )}
 
         <article className="doc-content ed-body min-w-0 [overflow-wrap:anywhere]">
+          <header className="art-head">
+            <h1 className={`ed-title ${sizeOf(page.title)}`}>{page.title}</h1>
+            {/* En pantallas sin menú lateral, el mismo árbol se abre en pantalla completa. */}
+            {hasMenu && (
+              <div className="lg:hidden">
+                <SectionMenu label={section.label} items={menuItems} current={key} />
+              </div>
+            )}
+          </header>
+
+          {toc.length >= 3 && (
+            <details className="toc-m">
+              <summary>
+                En esta página <span>{toc.length}</span>
+              </summary>
+              <TocRail items={toc} title="Ir a" />
+            </details>
+          )}
+
           {page.blocks.length > 0 ? <LegacyContent blocks={page.blocks} /> : empty}
 
           {kids.length > 0 && (
@@ -182,7 +187,7 @@ export async function LegacySectionPage({ slug, ruta }: { slug: string; ruta: st
           )}
 
           <PrevNext prev={prev} next={next} />
-          <QuickRail className="mt-12" />
+          <ArticleTools />
           {source}
         </article>
       </Container>

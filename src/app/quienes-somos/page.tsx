@@ -3,9 +3,7 @@ import { type PictogramName } from "@/components/ui/Pictogram";
 import { WaveCard } from "@/components/ui/WaveCard";
 import { PhotoCard } from "@/components/ui/PhotoCard";
 import { PageHeader } from "@/components/ui/PageHeader";
-import { CtaBand, Section } from "@/components/ui/Editorial";
-import { CountUp } from "@/components/design/CountUp";
-import { ScrollRail } from "@/components/design/ScrollRail";
+import { CtaBand, Section, Timeline } from "@/components/ui/Editorial";
 
 export const metadata: Metadata = { title: "Quiénes somos" };
 
@@ -51,9 +49,9 @@ export default function QuienesSomosPage() {
 
       <Section>
         <ul className="grid gap-4 sm:grid-cols-3">
-          <li className="mx-stat mx-rise"><b><CountUp to={YEARS} /></b><span>Años de trayectoria</span></li>
+          <li className="mx-stat mx-rise"><b>{YEARS}</b><span>Años de trayectoria</span></li>
           <li className="mx-stat mx-rise"><b>4</b><span>Frentes del gremio</span></li>
-          <li className="mx-stat mx-rise"><b><CountUp to={2009} from={1963} /></b><span>País libre de aftosa</span></li>
+          <li className="mx-stat mx-rise"><b>2009</b><span>País libre de aftosa</span></li>
         </ul>
       </Section>
 
@@ -74,12 +72,8 @@ export default function QuienesSomosPage() {
         </ul>
       </Section>
 
-      <Section title="Nuestra historia" intro="Seis hitos que marcan el camino del gremio. Deslice o use las flechas.">
-        <ScrollRail label="Línea de tiempo">
-          {milestones.map((m, i) => (
-            <WaveCard key={m.year} accent={(["oro", "esmeralda", "terracota", "turquesa"] as const)[i % 4]} glyph={m.year} title={m.title} text={m.text} tags={[`${String(i + 1).padStart(2, "0")} / ${String(milestones.length).padStart(2, "0")}`]} />
-          ))}
-        </ScrollRail>
+      <Section title="Nuestra historia" intro="Seis hitos que marcan el camino del gremio.">
+        <Timeline items={milestones} />
       </Section>
 
       <Section title="Lo que hacemos" intro="Cada línea de valor tiene su propia sección con programas, normatividad y documentos.">

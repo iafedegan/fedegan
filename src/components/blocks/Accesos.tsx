@@ -29,7 +29,7 @@ function Wrap({ to, external, className, children }: { to: string; external?: bo
 export function AccessHub({ tinted = false }: { tinted?: boolean }) {
   return (
     <Section eyebrow="Acceso directo" title="Pagos, trámites y servicios" intro="Lo más usado por ganaderos y aportantes, a un clic." tinted={tinted}>
-      <Link href="/pagos" className="group mb-2 flex flex-col items-start justify-between gap-4 rounded-[0.25rem] border border-[var(--border-strong)] border-l-[3px] border-l-[var(--fg-lime-500)] bg-[var(--surface-solid)] p-6 transition-colors hover:border-[var(--fg-lime-500)] sm:flex-row sm:items-center sm:p-7">
+      <Link href="/pagos" className="ah-banner group mb-2 flex flex-col items-start justify-between gap-4 rounded-[0.25rem] border border-[var(--border-strong)] border-l-[3px] border-l-[var(--fg-lime-500)] bg-[var(--surface-solid)] p-6 transition-colors hover:border-[var(--fg-lime-500)] sm:flex-row sm:items-center sm:p-7">
         <span className="flex items-center gap-5">
           <span className="text-[var(--fg-lime-400)]"><Pictogram name="pago" size={46} /></span>
           <span>

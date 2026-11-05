@@ -1,8 +1,6 @@
-import Image from "next/image";
 import Link from "next/link";
 import type { CSSProperties } from "react";
 import { ArrowLeft, ArrowRight, ArrowUpRight, Search } from "lucide-react";
-import { elegirFoto } from "@/components/ui/WaveCard";
 import { excerptOf, getLegacyPage, legacyHref, type NavNode } from "@/content/legacy";
 
 export const countBelow = (n: NavNode): number => (n.children ?? []).reduce((a, c) => a + 1 + countBelow(c), 0);
@@ -18,65 +16,50 @@ export function SectionSearch({ label, className = "" }: { label: string; classN
   );
 }
 
-// Entrada de la sección: foto grande con el número en un sello redondo y, debajo, título, extracto y avance de lo que hay dentro.
+// Entrada de la sección: celda de texto con número, título, extracto y cuántas páginas trae. Sin fotos repetidas: se escanea rápido.
 export function SectionTiles({ nodes, slug }: { nodes: NavNode[]; slug: string }) {
   return (
-    <ol className="hub-tiles">
+    <ol className="hub-grid">
       {nodes.map((n, i) => {
         const kids = n.children ?? [];
         const total = countBelow(n);
         const href = n.key ? legacyHref(slug, n.key) : n.href;
         const page = n.key ? getLegacyPage(n.key) : null;
-        const text = page ? excerptOf(page, 130).replace(/\*\*/g, "") : "";
+        const text = page ? excerptOf(page, 120).replace(/\*\*/g, "") : "";
         const external = !n.key && Boolean(n.href);
-        const foto = elegirFoto(n.label);
         const style = { ["--i" as string]: i % 8 } as CSSProperties;
-        const media = (
-          <span className="hub-img">
-            <Image src={foto.src} alt="" fill sizes="(min-width: 1024px) 45vw, 100vw" className="object-cover" style={{ objectPosition: foto.pos }} />
-            <span className="hub-badge" aria-hidden>{String(i + 1).padStart(2, "0")}</span>
-          </span>
-        );
-        const meta = (
-          <span className="hub-meta">
+        const head = (
+          <>
+            <span className="hub-no" aria-hidden>{String(i + 1).padStart(2, "0")}</span>
             <h3 className="hub-name">{n.label}</h3>
-            <span className="hub-foot">
-              {total > 0 ? `${total} ${total === 1 ? "página" : "páginas"}` : external ? "Sitio externo" : "Abrir"}
-              {external ? <ArrowUpRight size={16} aria-hidden /> : <ArrowRight size={16} aria-hidden />}
-            </span>
+          </>
+        );
+        const foot = (
+          <span className="hub-foot">
+            {total > 0 ? `${total} ${total === 1 ? "página" : "páginas"}` : external ? "Sitio externo" : "Abrir"}
+            {external ? <ArrowUpRight size={16} aria-hidden /> : <ArrowRight size={16} aria-hidden />}
           </span>
         );
         return (
           <li key={`${n.label}-${i}`} style={style}>
             {href ? (
               external ? (
-                <a href={href} target="_blank" rel="noopener noreferrer" className="hub-tile">
-                  {media}
-                  {meta}
+                <a href={href} target="_blank" rel="noopener noreferrer" className="hub-cell">
+                  {head}
                   {text && <span className="hub-text">{text}</span>}
+                  {foot}
                 </a>
               ) : (
-                <Link href={href} className="hub-tile">
-                  {media}
-                  {meta}
+                <Link href={href} className="hub-cell">
+                  {head}
                   {text && <span className="hub-text">{text}</span>}
-                  {kids.length > 0 && (
-                    <span className="hub-kids" aria-label={`Dentro de ${n.label}`}>
-                      {kids.slice(0, 3).map((k) => (
-                        <span key={k.label}>{k.label}</span>
-                      ))}
-                      {kids.length > 3 && <span>+{kids.length - 3} más</span>}
-                    </span>
-                  )}
+                  {foot}
                 </Link>
               )
             ) : (
               // Encabezado sin página propia: se muestra como grupo con sus enlaces.
-              <div className="hub-tile hub-group">
-                {media}
-                <span className="hub-meta">
-                  <h3 className="hub-name">{n.label}</h3>
-                </span>
+              <div className="hub-cell hub-group">
+                {head}
                 <ul className="hub-links">
                   {kids.slice(0, 6).map((k) => {
                     const kh = k.key ? legacyHref(slug, k.key) : k.href;
