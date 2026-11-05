@@ -20,7 +20,7 @@ const ICON = { video: PlayCircle, lectura: FileText, quiz: HelpCircle } as const
 function Stars({ value, size = 16 }: { value: number; size?: number }) {
   return (
     <span className="inline-flex" aria-label={`${value.toFixed(1)} de 5`}>
-      {[1, 2, 3, 4, 5].map((i) => <Star key={i} size={size} className={i <= Math.round(value) ? "fill-[var(--fg-lime-500)] text-[var(--fg-lime-500)]" : "text-[var(--border-strong)]"} />)}
+      {[1, 2, 3, 4, 5].map((i) => <Star key={i} size={size} className={i <= Math.round(value) ? "fill-[var(--fg-lime-500)] text-[var(--fg-lime-400)]" : "text-[var(--border-strong)]"} />)}
     </span>
   );
 }
@@ -40,19 +40,19 @@ export default async function CoursePage({ params, searchParams }: { params: Pro
   const mine = me ? reviews.find((r) => r.name === me.name) : null;
 
   const cta = course.externalUrl && !hasContent ? (
-    <a href={course.externalUrl} target="_blank" rel="noopener noreferrer" className="inline-flex w-full items-center justify-center gap-2 rounded-[0.25rem] bg-[var(--fg-lime-500)] px-5 py-3.5 text-sm font-bold uppercase tracking-[0.1em] text-[#0a1a11] hover:bg-[var(--fg-lime-400)]">
+    <a href={course.externalUrl} target="_blank" rel="noopener noreferrer" className="inline-flex w-full items-center justify-center gap-2 rounded-[0.25rem] bg-[var(--fg-lime-500)] px-5 py-3.5 text-sm font-bold uppercase tracking-[0.1em] text-[#0a1a11] hover:brightness-110">
       Ir al curso <ExternalLink size={16} />
     </a>
   ) : !hasContent ? (
     <p className="rounded-[0.25rem] border border-dashed border-[var(--border-strong)] p-3 text-center text-sm text-[var(--text-muted)]">Contenido en preparación.</p>
   ) : enrollment ? (
-    <Link href={`/escuela-virtual/${course.slug}/aula`} className="inline-flex w-full items-center justify-center gap-2 rounded-[0.25rem] bg-[var(--fg-lime-500)] px-5 py-3.5 text-sm font-bold uppercase tracking-[0.1em] text-[#0a1a11] hover:bg-[var(--fg-lime-400)]">
+    <Link href={`/escuela-virtual/${course.slug}/aula`} className="inline-flex w-full items-center justify-center gap-2 rounded-[0.25rem] bg-[var(--fg-lime-500)] px-5 py-3.5 text-sm font-bold uppercase tracking-[0.1em] text-[#0a1a11] hover:brightness-110">
       {percent === 0 ? "Empezar el curso" : percent === 100 ? "Repasar el curso" : "Continuar donde iba"} <ChevronRight size={16} />
     </Link>
   ) : (
     <form action={enroll}>
       <input type="hidden" name="course_id" value={course.id} /><input type="hidden" name="slug" value={course.slug} />
-      <button type="submit" className="inline-flex w-full items-center justify-center gap-2 rounded-[0.25rem] bg-[var(--fg-lime-500)] px-5 py-3.5 text-sm font-bold uppercase tracking-[0.1em] text-[#0a1a11] hover:bg-[var(--fg-lime-400)]">
+      <button type="submit" className="inline-flex w-full items-center justify-center gap-2 rounded-[0.25rem] bg-[var(--fg-lime-500)] px-5 py-3.5 text-sm font-bold uppercase tracking-[0.1em] text-[#0a1a11] hover:brightness-110">
         {me ? "Inscribirme gratis" : "Ingresar e inscribirme"}
       </button>
     </form>
@@ -97,9 +97,9 @@ export default async function CoursePage({ params, searchParams }: { params: Pro
                 {error && <p role="alert" className="rounded-[0.25rem] border border-[#f0b5b5] bg-[#fdecec] px-3 py-2 text-sm text-[#7a1f1f]">{error}</p>}
                 {cta}
                 <ul className="flex flex-col gap-2.5 text-sm text-[var(--text-muted)]">
-                  <li className="flex items-center gap-2.5"><Forever size={16} className="text-[var(--fg-lime-500)]" /> Gratis, a su ritmo y de por vida</li>
-                  {course.certificate && <li className="flex items-center gap-2.5"><Award size={16} className="text-[var(--fg-lime-500)]" /> Certificado al terminar</li>}
-                  <li className="flex items-center gap-2.5"><Users size={16} className="text-[var(--fg-lime-500)]" /> Para productores, técnicos y estudiantes</li>
+                  <li className="flex items-center gap-2.5"><Forever size={16} className="text-[var(--fg-lime-400)]" /> Gratis, a su ritmo y de por vida</li>
+                  {course.certificate && <li className="flex items-center gap-2.5"><Award size={16} className="text-[var(--fg-lime-400)]" /> Certificado al terminar</li>}
+                  <li className="flex items-center gap-2.5"><Users size={16} className="text-[var(--fg-lime-400)]" /> Para productores, técnicos y estudiantes</li>
                 </ul>
               </div>
             </div>
@@ -113,7 +113,7 @@ export default async function CoursePage({ params, searchParams }: { params: Pro
             <section>
               <h2 className="font-[var(--font-display)] text-2xl font-bold text-[var(--text)]">Lo que aprenderá</h2>
               <ul className="mt-4 grid gap-x-8 gap-y-3 rounded-[var(--radius-md)] border border-[var(--border-strong)] p-6 sm:grid-cols-2">
-                {course.learnPoints.map((p) => <li key={p} className="flex items-start gap-3 text-[var(--text-muted)]"><Check size={18} className="mt-0.5 shrink-0 text-[var(--fg-lime-500)]" />{p}</li>)}
+                {course.learnPoints.map((p) => <li key={p} className="flex items-start gap-3 text-[var(--text-muted)]"><Check size={18} className="mt-0.5 shrink-0 text-[var(--fg-lime-400)]" />{p}</li>)}
               </ul>
             </section>
           )}
@@ -126,7 +126,7 @@ export default async function CoursePage({ params, searchParams }: { params: Pro
                 {course.modules.map((m, i) => (
                   <details key={m.id} open={i === 0} className="group rounded-[var(--radius-md)] border border-[var(--border-strong)] bg-[var(--surface-solid)]">
                     <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-4">
-                      <span className="font-semibold text-[var(--text)]"><span className="mr-2 font-mono text-xs text-[var(--fg-lime-500)]">{String(i + 1).padStart(2, "0")}</span>{m.title}</span>
+                      <span className="font-semibold text-[var(--text)]"><span className="mr-2 font-mono text-xs text-[var(--fg-lime-400)]">{String(i + 1).padStart(2, "0")}</span>{m.title}</span>
                       <span className="shrink-0 text-xs text-[var(--text-faint)]">{m.lessons.length} lecciones</span>
                     </summary>
                     <ul className="divide-y divide-[var(--border)] border-t border-[var(--border)]">
@@ -135,7 +135,7 @@ export default async function CoursePage({ params, searchParams }: { params: Pro
                         const open = Boolean(enrollment) || l.freePreview;
                         return (
                           <li key={l.id} className="flex items-center gap-3 px-5 py-3 text-sm">
-                            {progress.has(l.id) ? <Check size={16} className="shrink-0 text-[var(--fg-lime-500)]" /> : <I size={16} className="shrink-0 text-[var(--text-faint)]" />}
+                            {progress.has(l.id) ? <Check size={16} className="shrink-0 text-[var(--fg-lime-400)]" /> : <I size={16} className="shrink-0 text-[var(--text-faint)]" />}
                             {open && hasContent ? <Link href={`/escuela-virtual/${course.slug}/aula/${l.id}`} className="min-w-0 flex-1 text-[var(--text)] hover:text-[var(--fg-lime-400)]">{l.title}</Link> : <span className="min-w-0 flex-1 text-[var(--text-muted)]">{l.title}</span>}
                             {l.freePreview && !enrollment && <span className="rounded-full border border-[var(--fg-lime-500)] px-2 py-0.5 text-[0.65rem] font-bold uppercase tracking-[0.08em] text-[var(--fg-lime-400)]">Vista previa</span>}
                             {!open && <Lock size={13} className="text-[var(--text-faint)]" />}
@@ -184,7 +184,7 @@ export default async function CoursePage({ params, searchParams }: { params: Pro
                   {[5, 4, 3, 2, 1].map((n) => <label key={n} className="cursor-pointer text-sm text-[var(--text-muted)]"><input type="radio" name="rating" value={n} required defaultChecked={mine?.rating === n} className="mr-1 accent-[var(--fg-lime-500)]" />{n} ★</label>)}
                 </fieldset>
                 <textarea name="comment" rows={3} maxLength={600} placeholder="Cuéntenos qué le pareció (opcional)" defaultValue={mine?.comment} className="rounded-[0.25rem] border border-[var(--border-strong)] bg-[var(--bg)] p-3 text-[var(--text)] outline-none focus:border-[var(--fg-lime-500)]" />
-                <button type="submit" className="self-start rounded-[0.25rem] bg-[var(--fg-lime-500)] px-5 py-2.5 text-xs font-bold uppercase tracking-[0.1em] text-[#0a1a11] hover:bg-[var(--fg-lime-400)]">Enviar valoración</button>
+                <button type="submit" className="self-start rounded-[0.25rem] bg-[var(--fg-lime-500)] px-5 py-2.5 text-xs font-bold uppercase tracking-[0.1em] text-[#0a1a11] hover:brightness-110">Enviar valoración</button>
               </form>
             )}
             <ul className="mt-5 flex flex-col gap-4">

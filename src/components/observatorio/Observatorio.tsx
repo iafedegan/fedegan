@@ -48,7 +48,7 @@ function Seccion({ id, n, titulo, texto, children }: { id: string; n: string; ti
   return (
     <section id={id} className="scroll-mt-28 border-t first:border-t-0 border-[var(--border)] py-10 sm:py-14">
       <div className="mb-7 flex items-start gap-5">
-        <span className="font-[var(--font-display)] text-4xl font-bold leading-none text-[var(--fg-lime-500)] sm:text-5xl">{n}</span>
+        <span className="font-[var(--font-display)] text-4xl font-bold leading-none text-[var(--fg-lime-400)] sm:text-5xl">{n}</span>
         <div>
           <h2 className="font-[var(--font-display)] text-3xl font-bold leading-tight text-[var(--text)]">{titulo}</h2>
           <p className="mt-1 max-w-2xl text-[var(--text-muted)]">{texto}</p>
@@ -137,7 +137,7 @@ export async function Observatorio() {
 
           {dichos.length > 0 && (
             <div className="mt-9">
-              <p className="mb-3 text-[0.7rem] font-bold uppercase tracking-[0.2em] text-[var(--fg-lime-500)]">Lo que dicen los datos</p>
+              <p className="mb-3 text-[0.7rem] font-bold uppercase tracking-[0.2em] text-[var(--fg-lime-400)]">Lo que dicen los datos</p>
               <ul className="grid gap-3 md:grid-cols-2">
                 {dichos.map((d) => (
                   <li key={d} className="rounded-[0.25rem] border border-[var(--border)] bg-[var(--surface-solid)] px-4 py-3.5 leading-relaxed text-[var(--text)]">{d}</li>

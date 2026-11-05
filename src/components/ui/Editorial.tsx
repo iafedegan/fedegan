@@ -46,7 +46,7 @@ export function PrincipleList({ items }: { items: { title: string; text: string 
     <ol className="divide-y divide-[var(--border)] border-y border-[var(--border)]">
       {items.map((it, i) => (
         <li key={it.title} className="grid grid-cols-[3.2rem_1fr] gap-x-4 py-6 sm:grid-cols-[4.4rem_1fr] sm:py-7">
-          <span aria-hidden className="font-[var(--font-display)] text-3xl font-bold leading-none text-[var(--fg-lime-500)] sm:text-4xl">
+          <span aria-hidden className="font-[var(--font-display)] text-3xl font-bold leading-none text-[var(--fg-lime-400)] sm:text-4xl">
             {String(i + 1).padStart(2, "0")}
           </span>
           <div>
@@ -168,7 +168,7 @@ export function CtaBand({
                   href={a.href}
                   className={`inline-flex items-center gap-2 rounded-[var(--radius-sm)] px-5 py-3 text-[0.8rem] font-bold uppercase tracking-[0.08em] transition-all duration-300 [transition-timing-function:var(--ease-lux)] hover:-translate-y-0.5 pointer-coarse:min-h-12 ${
                     (a.variant ?? (i === 0 ? "lime" : "secondary")) === "lime"
-                      ? "bg-[var(--fg-lime-500)] text-[var(--fg-green-900)] hover:bg-[var(--fg-lime-400)]"
+                      ? "bg-[var(--fg-lime-500)] text-[var(--fg-green-900)] hover:brightness-110"
                       : "border border-[var(--border-strong)] text-[var(--text)] hover:border-[var(--fg-lime-500)]"
                   }`}
                 >

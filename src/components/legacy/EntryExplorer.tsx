@@ -58,7 +58,7 @@ function Row({ e }: { e: ExplorerEntry }) {
           {e.code && <span className="inline-block rounded-[0.25rem] border border-[var(--border-strong)] px-2 py-1 text-[0.7rem] font-bold tracking-[0.06em] text-[var(--fg-lime-400)]">{e.code}</span>}
         </span>
         <span className="min-w-0">
-          {e.code && <span className="mb-1 block text-[0.68rem] font-bold tracking-[0.08em] text-[var(--fg-lime-500)] sm:hidden">{e.code}</span>}
+          {e.code && <span className="mb-1 block text-[0.68rem] font-bold tracking-[0.08em] text-[var(--fg-lime-400)] sm:hidden">{e.code}</span>}
           <span className="block font-[var(--font-display)] text-lg font-bold leading-snug text-[var(--text)] transition-colors group-hover:text-[var(--fg-lime-400)]">{e.title}</span>
           {e.desc && <span className="mt-1 line-clamp-2 block text-sm leading-relaxed text-[var(--text-muted)]">{e.desc}</span>}
         </span>

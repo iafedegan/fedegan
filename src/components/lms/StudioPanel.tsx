@@ -111,7 +111,7 @@ export function StudioPanel({ courseId, lessonId, slug, enabled }: { courseId: s
       <div className="grid grid-cols-2 gap-2">
         {TOOLS.map(({ kind, label, Icon }) => (
           <button key={kind} type="button" disabled={!enabled || busy !== null} onClick={() => make(kind)} className="flex items-center gap-2.5 rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--bg-muted)] px-3 py-3 text-left text-[0.82rem] font-semibold leading-tight text-[var(--text)] transition-colors hover:border-[var(--fg-lime-500)] disabled:opacity-50">
-            <Icon size={17} className="shrink-0 text-[var(--fg-lime-500)]" />{busy === kind ? "Generando…" : label}
+            <Icon size={17} className="shrink-0 text-[var(--fg-lime-400)]" />{busy === kind ? "Generando…" : label}
           </button>
         ))}
       </div>
@@ -119,7 +119,7 @@ export function StudioPanel({ courseId, lessonId, slug, enabled }: { courseId: s
       {error && <p role="alert" className="text-sm text-[#f08a8a]">{error}</p>}
       {results.length === 0 && !error && (
         <div className="flex flex-col items-center gap-2 px-2 py-8 text-center text-sm text-[var(--text-faint)]">
-          <Sparkles size={26} className="text-[var(--fg-lime-500)]" />
+          <Sparkles size={26} className="text-[var(--fg-lime-400)]" />
           Los materiales que genere aparecerán aquí. Elija si quiere usar solo esta lección o todo el curso.
         </div>
       )}

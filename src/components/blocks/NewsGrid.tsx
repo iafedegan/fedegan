@@ -22,7 +22,7 @@ export async function NewsGrid() {
                 <img src={lead.image} alt={lead.imageAlt ?? ""} loading="lazy" className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] [transition-timing-function:var(--ease-lux)] group-hover:scale-[1.04]" />
               )}
             </div>
-            <p className="mt-5 flex items-center gap-3 text-[0.7rem] font-bold uppercase tracking-[0.18em] text-[var(--fg-lime-500)]">
+            <p className="mt-5 flex items-center gap-3 text-[0.7rem] font-bold uppercase tracking-[0.18em] text-[var(--fg-lime-400)]">
               {lead.section} <span aria-hidden className="h-px w-6 bg-current opacity-60" /> <span className="text-[var(--text-faint)]">{lead.date}</span>
             </p>
             <h3 className="mt-2 text-balance font-[var(--font-display)] text-2xl font-bold leading-[1.15] text-[var(--text)] sm:text-[2rem]">
@@ -42,7 +42,7 @@ export async function NewsGrid() {
                     )}
                   </span>
                   <span className="min-w-0">
-                    <span className="block text-[0.64rem] font-bold uppercase tracking-[0.16em] text-[var(--fg-lime-500)]">{n.section}</span>
+                    <span className="block text-[0.64rem] font-bold uppercase tracking-[0.16em] text-[var(--fg-lime-400)]">{n.section}</span>
                     <span className="mt-1 block font-[var(--font-display)] text-base font-bold leading-snug text-[var(--text)] sm:text-lg">
                       <span className="lnk">{n.title}</span>
                     </span>

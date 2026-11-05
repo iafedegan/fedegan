@@ -15,7 +15,7 @@ export function SearchClient({ initialQuery = "", index }: { initialQuery?: stri
   return (
     <div className="flex flex-col gap-8">
       <div className="relative">
-        <Search size={20} className="absolute left-5 top-1/2 -translate-y-1/2 text-[var(--fg-lime-500)]" />
+        <Search size={20} className="absolute left-5 top-1/2 -translate-y-1/2 text-[var(--fg-lime-400)]" />
         <Input
           id="global-search"
           value={q}

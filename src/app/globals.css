@@ -13,13 +13,14 @@
   --fg-green-800: #0f3d2e;
   --fg-green-700: #0f3d2e;
   --fg-green-600: #1d5a45;
-  --fg-lime-500: #b08f4f;
-  --fg-lime-400: #cfae6a;
+  /* Sobre fondo blanco el texto dorado (--fg-lime-400) se oscurece para tener contraste ≥ 4,5:1; el 500 queda como relleno de botones. Las superficies oscuras lo restablecen más abajo. */
+  --fg-lime-500: #b08f4f; /* relleno / decoración */
+  --fg-lime-400: #7a5c18; /* texto dorado */
   --fg-teal-600: #2f6f5e;
 
-  --bg: #f5f4f0;
-  --bg-muted: #eceae3;
-  --bg-sunken: #e4e1d6;
+  --bg: #ffffff;
+  --bg-muted: #f4f3ef;
+  --bg-sunken: #eae8e0;
   --surface: #ffffff;
   --surface-solid: #ffffff;
   --surface-2: #f0efe8;
@@ -30,7 +31,7 @@
 
   --text: #13211a;
   --text-muted: #5d6b62;
-  --text-faint: #7d8a81;
+  --text-faint: #5b6a61;
   --text-on-brand: #f7f6f1;
   --on-accent: #f7f6f1;
 
@@ -361,7 +362,7 @@ h1, h2, h3, h4, h5, h6 {
   .ph-photo::after { background: linear-gradient(0deg, rgba(5, 16, 11, 0.55) 0%, rgba(5, 16, 11, 0.1) 70%), linear-gradient(135deg, rgba(47, 156, 98, 0.18), transparent 60%); }
 }
 .eyebrow {
-  display: inline-flex; align-items: center; gap: 0.6rem; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.28em; text-transform: uppercase; color: var(--fg-lime-500);
+  display: inline-flex; align-items: center; gap: 0.6rem; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.28em; text-transform: uppercase; color: var(--fg-lime-400);
 }
 .eyebrow::before { content: ""; width: 1.5rem; height: 1px; background: currentColor; }
 
@@ -1402,3 +1403,11 @@ a.mx-card:hover, .mx-lift:hover, .gl-hover:hover { transform: translateY(-2px); 
 .ad-rail:not(:hover):not(:focus-within):not([data-pinned="true"]) .ad-nav { gap: 0.5rem; }
 .ad-rail:not(:hover):not(:focus-within):not([data-pinned="true"]) .ad-grupo-titulo { height: 0; margin: 0; padding: 0; overflow: hidden; }
 .ad-rail:not(:hover):not(:focus-within):not([data-pinned="true"]) .ad-grupo-box + .ad-grupo-box { padding-top: 0.5rem; border-top: 1px solid rgba(255, 255, 255, 0.12); }
+
+/* Tono claro (fondo blanco): las superficies que siguen siendo oscuras (portadas con foto, recorrido, pie de página) conservan texto claro y dorado luminoso. */
+[data-theme="institucional"] :is(.mx-hero-photo, footer, .sw, .sw-sheet, [class*="bg-[var(--fg-green-9"], [class*="bg-[var(--fg-green-8"]) {
+  --fg-lime-500: #d8b558; --fg-lime-400: #e2c373; --link: #e2c373;
+  --text: #f4f2e9; --text-muted: rgba(244, 242, 233, 0.82); --text-faint: rgba(244, 242, 233, 0.68);
+}
+[data-theme="institucional"] .mx-hero-photo :is(.mx-crumb, .mx-crumb a, .mx-crumb span) { color: #f4f2e9; }
+[data-theme="institucional"] footer a:not([class*="text-white"]) { color: inherit; }

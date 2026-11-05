@@ -56,7 +56,7 @@ export function UniversityShell({ children }: { children: ReactNode }) {
               </>
             ) : (
               status !== "loading" && !pathname.startsWith("/escuela-virtual/ingresar") && (
-                <Link href={`/escuela-virtual/ingresar?callbackUrl=${encodeURIComponent(pathname)}`} className="inline-flex min-h-10 items-center gap-2 rounded-full bg-[var(--fg-lime-500)] px-5 text-[0.75rem] font-bold uppercase tracking-[0.1em] text-[#0a1a11] hover:bg-[var(--fg-lime-400)]">
+                <Link href={`/escuela-virtual/ingresar?callbackUrl=${encodeURIComponent(pathname)}`} className="inline-flex min-h-10 items-center gap-2 rounded-full bg-[var(--fg-lime-500)] px-5 text-[0.75rem] font-bold uppercase tracking-[0.1em] text-[#0a1a11] hover:brightness-110">
                   <LogIn size={15} /> Ingresar
                 </Link>
               )

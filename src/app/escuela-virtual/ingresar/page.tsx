@@ -23,7 +23,7 @@ export default async function UniversityLoginPage({ searchParams }: { searchPara
         <div className="flex flex-col items-start gap-6">
           <Image src="/brand/ucg-escudo.svg" alt="Escudo UCG" width={1893} height={2385} unoptimized priority className="h-20 w-auto drop-shadow-[0_10px_24px_rgba(0,0,0,0.5)]" />
           <div>
-            <p className="text-[0.72rem] font-bold uppercase tracking-[0.22em] text-[var(--fg-lime-500)]">Escuela Virtual UCG</p>
+            <p className="text-[0.72rem] font-bold uppercase tracking-[0.22em] text-[var(--fg-lime-400)]">Escuela Virtual UCG</p>
             <h1 className="mt-2 font-[var(--font-display)] text-4xl font-bold leading-tight text-[var(--text)] sm:text-5xl">Bienvenido, ganadero y aliado</h1>
             <p className="mt-4 max-w-xl text-lg leading-relaxed text-[var(--text-muted)]">Ingrese o cree su cuenta gratis para estudiar a su ritmo, evaluarse, obtener su certificado y su carnet de estudiante.</p>
           </div>

@@ -19,7 +19,7 @@ export function SectionHeading({
       {action && (
         <Link
           href={action.href}
-          className="group inline-flex items-center gap-2 rounded-full border border-[var(--border-strong)] px-5 py-2.5 text-sm font-semibold text-[var(--fg-lime-400)] transition-colors hover:bg-[var(--fg-lime-500)] hover:text-[var(--on-accent)]"
+          className="group inline-flex items-center gap-2 rounded-full border border-[var(--border-strong)] px-5 py-2.5 text-sm font-semibold text-[var(--fg-lime-400)] transition-colors hover:bg-[var(--fg-lime-500)] hover:text-[#0a1a11]"
         >
           {action.label}
           <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>

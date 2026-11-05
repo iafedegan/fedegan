@@ -114,7 +114,7 @@ export async function LegacySectionPage({ slug, ruta }: { slug: string; ruta: st
         <aside className="hidden lg:block">
           <div className="sticky top-36 flex max-h-[calc(100svh-10rem)] flex-col gap-3">
             <nav aria-label={`Menú de ${section.label}`} className="mx-card min-h-0 flex-1 overflow-y-auto !p-3">
-              <p className="px-2.5 pb-2 pt-1 text-[0.7rem] font-bold uppercase tracking-[0.18em] text-[var(--fg-lime-500)]">{section.label}</p>
+              <p className="px-2.5 pb-2 pt-1 text-[0.7rem] font-bold uppercase tracking-[0.18em] text-[var(--fg-lime-400)]">{section.label}</p>
               <NavTree nodes={menuItems} current={key} />
             </nav>
             <QuickRail />

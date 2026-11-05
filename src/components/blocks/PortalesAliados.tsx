@@ -12,7 +12,7 @@ export async function PortalesAliados() {
         <div className="px-4 py-12 sm:px-8">
           <h2
             id="portales-title"
-            className="mb-7 text-center text-sm font-bold uppercase tracking-[0.22em] text-[var(--fg-lime-500)]"
+            className="mb-7 text-center text-sm font-bold uppercase tracking-[0.22em] text-[var(--fg-lime-400)]"
           >
             Portales aliados
           </h2>

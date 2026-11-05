@@ -65,26 +65,26 @@ export function UniversityLogin({ callbackUrl }: { callbackUrl: string }) {
             </fieldset>
             <label className="relative block">
               <span className="sr-only">Nombre completo</span>
-              <User size={17} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[var(--fg-lime-500)]" />
+              <User size={17} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[var(--fg-lime-400)]" />
               <input value={name} onChange={(e) => setName(e.target.value)} required autoComplete="name" placeholder="Nombre completo" className={field} />
             </label>
           </>
         )}
         <label className="relative block">
           <span className="sr-only">Correo electrónico</span>
-          <Mail size={17} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[var(--fg-lime-500)]" />
+          <Mail size={17} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[var(--fg-lime-400)]" />
           <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required autoComplete="email" placeholder="Correo electrónico" className={field} />
         </label>
         <label className="relative block">
           <span className="sr-only">Contraseña</span>
-          <Lock size={17} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[var(--fg-lime-500)]" />
+          <Lock size={17} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[var(--fg-lime-400)]" />
           <input type={show ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} required minLength={mode === "up" ? 8 : 1} autoComplete={mode === "up" ? "new-password" : "current-password"} placeholder={mode === "up" ? "Contraseña (mínimo 8 caracteres)" : "Contraseña"} className={`${field} pr-12`} />
           <button type="button" onClick={() => setShow((s) => !s)} aria-label={show ? "Ocultar contraseña" : "Mostrar contraseña"} className="absolute right-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full text-[var(--text-faint)] hover:text-[var(--text)]">
             {show ? <EyeOff size={17} /> : <Eye size={17} />}
           </button>
         </label>
         {error && <p role="alert" className="rounded-[0.25rem] border border-[#f0b5b5] bg-[#fdecec] px-3 py-2.5 text-sm text-[#7a1f1f]">{error}</p>}
-        <button type="submit" disabled={pending} className="inline-flex min-h-12 items-center justify-center rounded-[0.25rem] bg-[var(--fg-lime-500)] px-6 text-[0.8rem] font-bold uppercase tracking-[0.12em] text-[#0a1a11] transition-colors hover:bg-[var(--fg-lime-400)] disabled:opacity-60">
+        <button type="submit" disabled={pending} className="inline-flex min-h-12 items-center justify-center rounded-[0.25rem] bg-[var(--fg-lime-500)] px-6 text-[0.8rem] font-bold uppercase tracking-[0.12em] text-[#0a1a11] transition-colors hover:brightness-110 disabled:opacity-60">
           {pending ? "Un momento…" : mode === "in" ? "Ingresar a la Escuela" : "Crear mi cuenta"}
         </button>
       </form>

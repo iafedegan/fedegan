@@ -147,7 +147,7 @@ export function NewsCarousel({ items }: { items: Noticia[] }) {
                   <div className="mt-1 flex items-center gap-3">
                     <Link
                       href={`/noticias/${n.slug}`}
-                      className="inline-flex items-center gap-2 rounded-[var(--radius-sm)] bg-[var(--fg-lime-500)] px-5 py-2.5 text-sm font-bold uppercase tracking-[0.1em] text-[var(--on-accent)] transition-transform duration-300 hover:-translate-y-0.5"
+                      className="inline-flex items-center gap-2 rounded-[var(--radius-sm)] bg-[var(--fg-lime-500)] px-5 py-2.5 text-sm font-bold uppercase tracking-[0.1em] text-[#0a1a11] transition-transform duration-300 hover:-translate-y-0.5"
                     >
                       Ver más <ArrowRight size={16} />
                     </Link>
@@ -156,7 +156,7 @@ export function NewsCarousel({ items }: { items: Noticia[] }) {
                         type="button"
                         aria-label={userPaused ? "Reanudar el carrusel" : "Pausar el carrusel"}
                         onClick={() => setUserPaused((v) => !v)}
-                        className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border-strong)] text-[var(--fg-lime-400)] transition-colors hover:bg-[var(--fg-lime-500)] hover:text-[var(--on-accent)]"
+                        className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border-strong)] text-[var(--fg-lime-400)] transition-colors hover:bg-[var(--fg-lime-500)] hover:text-[#0a1a11]"
                       >
                         {userPaused ? <Play size={16} /> : <Pause size={16} />}
                       </button>
@@ -164,7 +164,7 @@ export function NewsCarousel({ items }: { items: Noticia[] }) {
                         type="button"
                         aria-label="Nota anterior"
                         onClick={() => go(index - 1)}
-                        className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border-strong)] text-[var(--fg-lime-400)] transition-colors hover:bg-[var(--fg-lime-500)] hover:text-[var(--on-accent)]"
+                        className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border-strong)] text-[var(--fg-lime-400)] transition-colors hover:bg-[var(--fg-lime-500)] hover:text-[#0a1a11]"
                       >
                         <ChevronLeft size={18} />
                       </button>
@@ -172,7 +172,7 @@ export function NewsCarousel({ items }: { items: Noticia[] }) {
                         type="button"
                         aria-label="Nota siguiente"
                         onClick={() => go(index + 1)}
-                        className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border-strong)] text-[var(--fg-lime-400)] transition-colors hover:bg-[var(--fg-lime-500)] hover:text-[var(--on-accent)]"
+                        className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border-strong)] text-[var(--fg-lime-400)] transition-colors hover:bg-[var(--fg-lime-500)] hover:text-[#0a1a11]"
                       >
                         <ChevronRight size={18} />
                       </button>

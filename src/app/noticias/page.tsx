@@ -29,7 +29,7 @@ export default async function NoticiasPage({ searchParams }: { searchParams: Pro
   const chip = (active: boolean) =>
     `whitespace-nowrap rounded-full border px-4 py-2 text-xs font-bold uppercase tracking-[0.08em] transition-colors ${
       active
-        ? "border-transparent bg-[var(--fg-lime-500)] text-[var(--on-accent)]"
+        ? "border-transparent bg-[var(--fg-lime-500)] text-[#0a1a11]"
         : "border-[var(--border-strong)] text-[var(--text-muted)] hover:text-[var(--text)]"
     }`;
 
@@ -83,7 +83,7 @@ export default async function NoticiasPage({ searchParams }: { searchParams: Pro
                 {nextCursor && (
                   <Link
                     href={href({ categoria, cursor: nextCursor })}
-                    className="inline-flex items-center gap-2 rounded-full border border-[var(--border-strong)] px-5 py-2.5 text-sm font-semibold text-[var(--fg-lime-400)] transition-colors hover:bg-[var(--fg-lime-500)] hover:text-[var(--on-accent)]"
+                    className="inline-flex items-center gap-2 rounded-full border border-[var(--border-strong)] px-5 py-2.5 text-sm font-semibold text-[var(--fg-lime-400)] transition-colors hover:bg-[var(--fg-lime-500)] hover:text-[#0a1a11]"
                   >
                     Notas anteriores <ArrowRight size={16} />
                   </Link>

@@ -24,7 +24,7 @@ export function CatalogExplorer({ courses, loggedIn = false }: { courses: Catalo
   return (
     <div className="flex flex-col gap-6">
       <div className="relative">
-        <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--fg-lime-500)]" />
+        <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--fg-lime-400)]" />
         <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="¿Qué quiere aprender? Busque un curso…" aria-label="Buscar cursos" className="w-full rounded-full border border-[var(--border-strong)] bg-[var(--surface-solid)] py-3 pl-11 pr-4 text-[var(--text)] outline-none focus:border-[var(--fg-lime-500)]" />
       </div>
       <div className="flex flex-wrap items-center gap-2" role="group" aria-label="Filtros">

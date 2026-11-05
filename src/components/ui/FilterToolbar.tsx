@@ -43,7 +43,7 @@ export function FilterToolbar({
                 onClick={() => onChange(o.value)}
                 className={`inline-flex shrink-0 items-center gap-2 whitespace-nowrap rounded-full border px-4 py-2 text-xs font-bold uppercase tracking-[0.08em] transition-colors pointer-coarse:min-h-11 ${
                   active
-                    ? "border-transparent bg-[var(--fg-lime-500)] text-[var(--on-accent)]"
+                    ? "border-transparent bg-[var(--fg-lime-500)] text-[#0a1a11]"
                     : "border-[var(--border-strong)] text-[var(--text-muted)] hover:text-[var(--text)]"
                 }`}
               >
@@ -96,7 +96,7 @@ export function EmptyResults({ onReset, children }: { onReset: () => void; child
       <button
         type="button"
         onClick={onReset}
-        className="mt-4 rounded-full border border-[var(--border-strong)] px-5 py-2 text-sm font-semibold text-[var(--fg-lime-400)] transition-colors hover:bg-[var(--fg-lime-500)] hover:text-[var(--on-accent)]"
+        className="mt-4 rounded-full border border-[var(--border-strong)] px-5 py-2 text-sm font-semibold text-[var(--fg-lime-400)] transition-colors hover:bg-[var(--fg-lime-500)] hover:text-[#0a1a11]"
       >
         Limpiar filtros
       </button>

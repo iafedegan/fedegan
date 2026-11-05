@@ -34,7 +34,7 @@ export function ObservatorioNav({ items }: { items: Item[] }) {
         <nav aria-label="En esta página" className="mx-auto flex max-w-[var(--container,80rem)] items-center gap-5 overflow-x-auto px-4 py-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {items.map((s) => (
             <a key={s.id} href={`#${s.id}`} aria-current={activo === s.id ? "true" : undefined} className={`shrink-0 text-sm font-semibold transition-colors hover:text-[var(--fg-lime-400)] ${activo === s.id ? "text-[var(--fg-lime-400)]" : "text-[var(--text-muted)]"}`}>
-              <span className="mr-1.5 text-[var(--fg-lime-500)]">{s.n}</span>
+              <span className="mr-1.5 text-[var(--fg-lime-400)]">{s.n}</span>
               {s.t}
             </a>
           ))}

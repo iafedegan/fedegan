@@ -8,7 +8,7 @@ export function NewsUnavailable({ compact = false }: { compact?: boolean }) {
         compact ? "p-6" : "p-8 sm:p-10"
       }`}
     >
-      <span className="flex h-12 w-12 items-center justify-center rounded-[var(--radius-sm)] bg-[var(--bg-sunken)] text-[var(--fg-lime-500)]">
+      <span className="flex h-12 w-12 items-center justify-center rounded-[var(--radius-sm)] bg-[var(--bg-sunken)] text-[var(--fg-lime-400)]">
         <Newspaper size={22} />
       </span>
       <h2 className="font-[var(--font-display)] text-2xl font-bold text-[var(--text)]">Las noticias no están disponibles por ahora</h2>

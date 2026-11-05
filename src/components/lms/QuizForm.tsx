@@ -28,7 +28,7 @@ export function QuizForm({ courseId, lessonId, slug, questions, passScore, done 
       {state.score !== undefined && (
         <div role="status" className={`rounded-[var(--radius-md)] border p-5 ${state.passed ? "border-[var(--fg-lime-500)]" : "border-[#f08a8a]"}`}>
           <p className="flex items-center gap-2 font-semibold text-[var(--text)]">
-            {state.passed ? <CheckCircle2 className="text-[var(--fg-lime-500)]" /> : <XCircle className="text-[#f08a8a]" />}
+            {state.passed ? <CheckCircle2 className="text-[var(--fg-lime-400)]" /> : <XCircle className="text-[#f08a8a]" />}
             Obtuvo {state.score} % {state.passed ? "· ¡aprobada!" : `· necesita ${passScore} % para aprobar`}
           </p>
           {state.wrong && state.wrong.length > 0 && (
@@ -38,7 +38,7 @@ export function QuizForm({ courseId, lessonId, slug, questions, passScore, done 
           )}
         </div>
       )}
-      <button type="submit" disabled={pending} className="self-start rounded-[0.25rem] bg-[var(--fg-lime-500)] px-6 py-3 text-xs font-bold uppercase tracking-[0.1em] text-[#0a1a11] hover:bg-[var(--fg-lime-400)] disabled:opacity-60">
+      <button type="submit" disabled={pending} className="self-start rounded-[0.25rem] bg-[var(--fg-lime-500)] px-6 py-3 text-xs font-bold uppercase tracking-[0.1em] text-[#0a1a11] hover:brightness-110 disabled:opacity-60">
         {pending ? "Calificando…" : done ? "Presentar de nuevo" : "Enviar respuestas"}
       </button>
     </form>

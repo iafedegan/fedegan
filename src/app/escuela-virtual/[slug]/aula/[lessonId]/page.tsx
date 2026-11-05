@@ -56,12 +56,12 @@ export default async function LessonPage({ params, searchParams }: { params: Pro
         <div className="flex flex-col gap-6 px-4 py-8 sm:px-8">
           {(fin || finished) && enrollment && (
             <div className="flex flex-wrap items-center justify-between gap-4 rounded-[var(--radius-md)] border border-[var(--fg-lime-500)] bg-[rgba(216,181,88,0.08)] p-5">
-              <p className="flex items-center gap-3 font-semibold text-[var(--text)]"><PartyPopper className="text-[var(--fg-lime-500)]" /> ¡Terminó el curso!</p>
+              <p className="flex items-center gap-3 font-semibold text-[var(--text)]"><PartyPopper className="text-[var(--fg-lime-400)]" /> ¡Terminó el curso!</p>
               {course.certificate && <Link href={`/escuela-virtual/${slug}/certificado`} className="inline-flex items-center gap-2 rounded-[0.25rem] bg-[var(--fg-lime-500)] px-5 py-2.5 text-xs font-bold uppercase tracking-[0.1em] text-[#0a1a11]"><Award size={16} /> Ver mi certificado</Link>}
             </div>
           )}
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.14em] text-[var(--fg-lime-500)]">Lección {idx + 1} de {lessons.length}</p>
+            <p className="text-xs font-bold uppercase tracking-[0.14em] text-[var(--fg-lime-400)]">Lección {idx + 1} de {lessons.length}</p>
             <h1 className="mt-1 font-[var(--font-display)] text-3xl font-bold leading-tight text-[var(--text)]">{lesson.title}</h1>
           </div>
           {lesson.content && <div className="max-w-3xl space-y-4 text-[1.02rem] leading-relaxed text-[var(--text-muted)]">{lesson.content.split(/\n{2,}/).map((p, i) => <p key={i}>{p}</p>)}</div>}
@@ -80,7 +80,7 @@ export default async function LessonPage({ params, searchParams }: { params: Pro
             {enrollment && lesson.kind !== "quiz" && (
               <form action={completeLesson}>
                 <input type="hidden" name="course_id" value={course.id} /><input type="hidden" name="lesson_id" value={lesson.id} /><input type="hidden" name="slug" value={slug} /><input type="hidden" name="next" value={next?.id ?? ""} />
-                <button type="submit" className="inline-flex items-center gap-2 rounded-[0.25rem] bg-[var(--fg-lime-500)] px-5 py-2.5 text-xs font-bold uppercase tracking-[0.1em] text-[#0a1a11] hover:bg-[var(--fg-lime-400)]">
+                <button type="submit" className="inline-flex items-center gap-2 rounded-[0.25rem] bg-[var(--fg-lime-500)] px-5 py-2.5 text-xs font-bold uppercase tracking-[0.1em] text-[#0a1a11] hover:brightness-110">
                   <Check size={15} /> {done ? "Ya completada · continuar" : next ? "Completar y continuar" : "Completar el curso"}
                 </button>
               </form>
@@ -99,7 +99,7 @@ export default async function LessonPage({ params, searchParams }: { params: Pro
           </div>
           {course.modules.map((m, mi) => (
             <details key={m.id} open={m.lessons.some((l) => l.id === lesson.id) || mi === 0} className="border-t border-[var(--border)]">
-              <summary className="cursor-pointer list-none px-5 py-3.5 text-sm font-semibold text-[var(--text)]"><span className="mr-2 font-mono text-xs text-[var(--fg-lime-500)]">{String(mi + 1).padStart(2, "0")}</span>{m.title}</summary>
+              <summary className="cursor-pointer list-none px-5 py-3.5 text-sm font-semibold text-[var(--text)]"><span className="mr-2 font-mono text-xs text-[var(--fg-lime-400)]">{String(mi + 1).padStart(2, "0")}</span>{m.title}</summary>
               <ul>
                 {m.lessons.map((l) => {
                   const I = ICON[l.kind];
@@ -107,7 +107,7 @@ export default async function LessonPage({ params, searchParams }: { params: Pro
                   return (
                     <li key={l.id}>
                       <Link href={`/escuela-virtual/${slug}/aula/${l.id}`} aria-current={current ? "page" : undefined} className={`flex items-center gap-3 px-5 py-2.5 text-sm transition-colors ${current ? "bg-[rgba(216,181,88,0.12)] text-[var(--text)]" : "text-[var(--text-muted)] hover:bg-[var(--bg-muted)]"}`}>
-                        {progress.has(l.id) ? <Check size={15} className="shrink-0 text-[var(--fg-lime-500)]" /> : <I size={15} className="shrink-0 text-[var(--text-faint)]" />}
+                        {progress.has(l.id) ? <Check size={15} className="shrink-0 text-[var(--fg-lime-400)]" /> : <I size={15} className="shrink-0 text-[var(--text-faint)]" />}
                         <span className="min-w-0 flex-1">{l.title}</span>
                         {l.minutes > 0 && <span className="shrink-0 text-xs text-[var(--text-faint)]">{l.minutes} min</span>}
                       </Link>

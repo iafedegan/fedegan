@@ -23,7 +23,7 @@ export function PrimaryButton({ children, ...rest }: React.ButtonHTMLAttributes<
   return (
     <button
       {...rest}
-      className={`inline-flex items-center justify-center gap-2 rounded-[0.25rem] bg-[var(--fg-lime-500)] px-6 py-3 text-[0.8rem] font-bold uppercase tracking-[0.12em] text-[#0a1a11] transition hover:bg-[var(--fg-lime-400)] disabled:cursor-not-allowed disabled:opacity-45 ${rest.className ?? ""}`}
+      className={`inline-flex items-center justify-center gap-2 rounded-[0.25rem] bg-[var(--fg-lime-500)] px-6 py-3 text-[0.8rem] font-bold uppercase tracking-[0.12em] text-[#0a1a11] transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-45 ${rest.className ?? ""}`}
     >
       {children}
     </button>

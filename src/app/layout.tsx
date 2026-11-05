@@ -24,7 +24,7 @@ import { Analytics } from "@/components/layout/Analytics";
 import { UsageTracker } from "@/components/layout/UsageTracker";
 
 export const viewport: Viewport = {
-  themeColor: "#05100b",
+  themeColor: "#ffffff",
   colorScheme: "dark",
   viewportFit: "cover",
 };
@@ -84,7 +84,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="es"
-      data-theme="esmeralda"
+      data-theme="institucional"
       data-navbar={design.parts.navbar ?? "clasico"}
       data-footer={design.parts.footer ?? "completo"}
       data-hero={design.parts.hero ?? "izquierda"}

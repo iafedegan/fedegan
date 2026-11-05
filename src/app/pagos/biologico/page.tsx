@@ -47,7 +47,7 @@ export default function BiologicoPage() {
               href="https://micrositios.goupagos.com.co/fedegan-ma"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-[0.25rem] bg-[var(--fg-lime-500)] px-6 py-3 text-[0.8rem] font-bold uppercase tracking-[0.12em] text-[#0a1a11] transition hover:bg-[var(--fg-lime-400)]"
+              className="inline-flex items-center gap-2 rounded-[0.25rem] bg-[var(--fg-lime-500)] px-6 py-3 text-[0.8rem] font-bold uppercase tracking-[0.12em] text-[#0a1a11] transition hover:brightness-110"
             >
               Pagar el recaudo <ArrowUpRight size={16} />
             </a>

@@ -11,7 +11,7 @@ const fmtMin = (m: number) => (m >= 60 ? `${Math.floor(m / 60)} h ${m % 60} min`
 const fmtDate = (d: string) => new Date(d).toLocaleDateString("es-CO", { day: "numeric", month: "long", year: "numeric" });
 
 const btn = "inline-flex min-h-11 items-center justify-center gap-2 rounded-[0.25rem] px-5 text-[0.74rem] font-bold uppercase tracking-[0.1em] transition-colors";
-const btnPrimary = `${btn} bg-[var(--fg-lime-500)] text-[#0a1a11] hover:bg-[var(--fg-lime-400)]`;
+const btnPrimary = `${btn} bg-[var(--fg-lime-500)] text-[#0a1a11] hover:brightness-110`;
 const btnGhost = `${btn} border border-[var(--border-strong)] text-[var(--text)] hover:border-[var(--fg-lime-500)] hover:text-[var(--fg-lime-400)]`;
 
 export type ProfileData = {
@@ -54,12 +54,12 @@ export function ProfileView({ me, student, stats, mine, origin, carnetQr, inscri
               <span className="flex h-full w-full items-center justify-center rounded-full bg-[var(--bg)] font-[var(--font-display)] text-4xl font-bold text-[var(--fg-lime-400)]">{initials}</span>
             </span>
             <div className="min-w-0 flex-1 basis-72">
-              <p className="text-[0.72rem] font-bold uppercase tracking-[0.22em] text-[var(--fg-lime-500)]">Estudiante UCG</p>
+              <p className="text-[0.72rem] font-bold uppercase tracking-[0.22em] text-[var(--fg-lime-400)]">Estudiante UCG</p>
               <h1 className="mt-1 font-[var(--font-display)] text-4xl font-bold leading-tight text-[var(--text)] sm:text-5xl">{me.name}</h1>
               <ul className="mt-3 flex flex-wrap gap-2 text-sm text-[var(--text-muted)]">
-                <li className="inline-flex items-center gap-2 rounded-full border border-[var(--border-strong)] px-3.5 py-1.5"><Mail size={14} className="text-[var(--fg-lime-500)]" /> {me.key}</li>
-                {student && <li className="inline-flex items-center gap-2 rounded-full border border-[var(--border-strong)] px-3.5 py-1.5"><IdCard size={14} className="text-[var(--fg-lime-500)]" /> <span className="font-mono text-[var(--text)]">{student.code}</span></li>}
-                {since && <li className="inline-flex items-center gap-2 rounded-full border border-[var(--border-strong)] px-3.5 py-1.5"><GraduationCap size={14} className="text-[var(--fg-lime-500)]" /> Desde {since}</li>}
+                <li className="inline-flex items-center gap-2 rounded-full border border-[var(--border-strong)] px-3.5 py-1.5"><Mail size={14} className="text-[var(--fg-lime-400)]" /> {me.key}</li>
+                {student && <li className="inline-flex items-center gap-2 rounded-full border border-[var(--border-strong)] px-3.5 py-1.5"><IdCard size={14} className="text-[var(--fg-lime-400)]" /> <span className="font-mono text-[var(--text)]">{student.code}</span></li>}
+                {since && <li className="inline-flex items-center gap-2 rounded-full border border-[var(--border-strong)] px-3.5 py-1.5"><GraduationCap size={14} className="text-[var(--fg-lime-400)]" /> Desde {since}</li>}
               </ul>
             </div>
             <div className="flex flex-wrap gap-3">
@@ -94,7 +94,7 @@ export function ProfileView({ me, student, stats, mine, origin, carnetQr, inscri
       <Container className="flex flex-col gap-14 py-10 sm:py-12 print:py-0">
         {welcome && (
           <div role="status" className="flex flex-wrap items-center justify-between gap-4 rounded-[var(--radius-lg)] border border-[var(--fg-lime-500)] bg-[rgba(216,181,88,0.08)] p-5 print:hidden">
-            <p className="flex items-center gap-3 font-semibold text-[var(--text)]"><CheckCircle2 className="text-[var(--fg-lime-500)]" /> ¡Listo! Ya está inscrito en «{welcome.course.title}».</p>
+            <p className="flex items-center gap-3 font-semibold text-[var(--text)]"><CheckCircle2 className="text-[var(--fg-lime-400)]" /> ¡Listo! Ya está inscrito en «{welcome.course.title}».</p>
             <Link href={`/escuela-virtual/${welcome.course.slug}/aula`} className={btnPrimary}><PlayCircle size={16} /> Empezar ahora</Link>
           </div>
         )}
@@ -104,7 +104,7 @@ export function ProfileView({ me, student, stats, mine, origin, carnetQr, inscri
           <section aria-labelledby="seguir" className="grid overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border-strong)] bg-[linear-gradient(120deg,rgba(47,156,98,0.14),rgba(255,255,255,0.02))] md:grid-cols-[minmax(0,22rem)_1fr] print:hidden">
             <div className="relative min-h-48 md:min-h-full">{next.course.cover && <Image src={next.course.cover} alt="" fill sizes="(min-width: 768px) 22rem, 100vw" className="object-cover" />}<span aria-hidden className="absolute inset-0 bg-[linear-gradient(90deg,transparent,rgba(5,16,11,0.55))] md:bg-[linear-gradient(90deg,transparent_60%,rgba(5,16,11,0.7))]" /></div>
             <div className="flex flex-col justify-center gap-4 p-6 sm:p-8">
-              <p id="seguir" className="inline-flex items-center gap-2 text-[0.72rem] font-bold uppercase tracking-[0.2em] text-[var(--fg-lime-500)]"><Sparkles size={14} /> Continúe donde iba</p>
+              <p id="seguir" className="inline-flex items-center gap-2 text-[0.72rem] font-bold uppercase tracking-[0.2em] text-[var(--fg-lime-400)]"><Sparkles size={14} /> Continúe donde iba</p>
               <h2 className="font-[var(--font-display)] text-2xl font-bold leading-tight text-[var(--text)] sm:text-3xl">{next.course.title}</h2>
               {next.course.subtitle && <p className="max-w-xl text-[var(--text-muted)]">{next.course.subtitle}</p>}
               <div>
@@ -162,7 +162,7 @@ export function ProfileView({ me, student, stats, mine, origin, carnetQr, inscri
           <p className="mt-1 text-[var(--text-muted)]">Publíquelos en su perfil de LinkedIn con un clic: llevan un enlace para que cualquiera verifique que son auténticos.</p>
           {certs.length === 0 ? (
             <div className="mt-5 flex flex-col items-center gap-3 rounded-[var(--radius-lg)] border border-dashed border-[var(--border-strong)] p-10 text-center">
-              <Award size={34} className="text-[var(--fg-lime-500)]" />
+              <Award size={34} className="text-[var(--fg-lime-400)]" />
               <p className="max-w-md text-[var(--text-muted)]">Todavía no tiene certificados. Termine las lecciones de un curso y apruebe su evaluación para obtenerlo.</p>
             </div>
           ) : (

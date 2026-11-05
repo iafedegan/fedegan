@@ -137,7 +137,7 @@ export function PresidentColumn() {
       <div className="grid gap-5 lg:grid-cols-[1.4fr_1fr]">
         <PresidentQuote />
         <div className="mx-card mx-rise !p-5">
-          <p className="text-[0.7rem] font-bold uppercase tracking-[0.18em] text-[var(--fg-lime-500)]">Columnas anteriores</p>
+          <p className="text-[0.7rem] font-bold uppercase tracking-[0.18em] text-[var(--fg-lime-400)]">Columnas anteriores</p>
           <ul className="mt-3 divide-y divide-[var(--border)]">
             {older.slice(0, 5).map((n) => (
               <li key={n.key}>
@@ -162,7 +162,7 @@ export function QuickRail({ className = "" }: { className?: string }) {
   const items = [pagos[0], tramites.find((t) => t.id === "pqrsd")!, tramites.find((t) => t.id === "ruv")!];
   return (
     <div className={`rounded-[0.25rem] border border-[var(--border-strong)] border-t-2 border-t-[var(--fg-lime-500)] bg-[var(--surface-solid)] p-3 ${className}`}>
-      <p className="px-2.5 pb-2 pt-1 text-[0.7rem] font-bold uppercase tracking-[0.2em] text-[var(--fg-lime-500)]">Accesos rápidos</p>
+      <p className="px-2.5 pb-2 pt-1 text-[0.7rem] font-bold uppercase tracking-[0.2em] text-[var(--fg-lime-400)]">Accesos rápidos</p>
       <ul className="flex flex-col">
         {items.map((a) => (
           <li key={a.id}>

@@ -15,13 +15,13 @@ export async function VoiceAndAgenda() {
         <div className="grid gap-8 lg:grid-cols-[1.2fr_1fr] lg:gap-12">
           <PresidentQuote />
           <div>
-            <p className="mb-1 text-[0.7rem] font-bold uppercase tracking-[0.2em] text-[var(--fg-lime-500)]">Próximos eventos</p>
+            <p className="mb-1 text-[0.7rem] font-bold uppercase tracking-[0.2em] text-[var(--fg-lime-400)]">Próximos eventos</p>
             <ul className="divide-y divide-[var(--border)] border-y border-[var(--border)]">
               {events.map((e) => (
                 <li key={e.slug}>
                   <Link href={`/eventos/${e.slug}`} className="group grid grid-cols-[4rem_1fr] items-center gap-4 py-4">
                     <span className="flex flex-col items-center rounded-[0.25rem] border border-[var(--border-strong)] py-2 transition-colors group-hover:border-[var(--fg-lime-500)]">
-                      <span className="text-[0.62rem] font-bold uppercase tracking-[0.16em] text-[var(--fg-lime-500)]">{e.month}</span>
+                      <span className="text-[0.62rem] font-bold uppercase tracking-[0.16em] text-[var(--fg-lime-400)]">{e.month}</span>
                       <span className="font-[var(--font-display)] text-2xl font-bold leading-none text-[var(--text)]">{e.day}</span>
                     </span>
                     <span className="min-w-0">

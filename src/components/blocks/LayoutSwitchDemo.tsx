@@ -51,7 +51,7 @@ export function LayoutSwitchDemo() {
           <div className="flex flex-col divide-y divide-[var(--border)]">
             {items.map((n, i) => (
               <div key={n.slug} className="flex items-start gap-4 py-4">
-                <span className="font-[var(--font-display)] text-lg text-[var(--fg-lime-500)] w-6 shrink-0">
+                <span className="font-[var(--font-display)] text-lg text-[var(--fg-lime-400)] w-6 shrink-0">
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <div>

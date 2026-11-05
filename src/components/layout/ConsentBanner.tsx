@@ -53,7 +53,7 @@ export function ConsentBanner() {
         <a href="/privacidad" className="inline-block py-2 underline underline-offset-2 hover:text-[var(--fg-lime-400)]">Política de datos</a>
       </p>
       <div className="mt-2.5 flex flex-wrap items-center gap-2 md:mt-4">
-        <button type="button" onClick={() => decidir(true)} className="rounded-[0.25rem] bg-[var(--fg-lime-500)] px-4 py-2 text-[0.76rem] font-bold uppercase tracking-[0.1em] text-[#0a1a11] md:py-2.5 hover:bg-[var(--fg-lime-400)]">
+        <button type="button" onClick={() => decidir(true)} className="rounded-[0.25rem] bg-[var(--fg-lime-500)] px-4 py-2 text-[0.76rem] font-bold uppercase tracking-[0.1em] text-[#0a1a11] md:py-2.5 hover:brightness-110">
           {estado === true ? "Mantener activado" : "Aceptar"}
         </button>
         <button type="button" onClick={() => decidir(false)} className="rounded-[0.25rem] border border-[var(--border-strong)] px-4 py-2 text-[0.76rem] font-bold uppercase tracking-[0.1em] text-[var(--text-muted)] md:py-2.5 hover:text-[var(--text)]">

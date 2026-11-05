@@ -95,7 +95,7 @@ export function TerritorialExplorer({ bovinos, predios, orientacion }: { bovinos
         <ol className="mt-3 flex flex-col gap-3">
           {top.map((d, k) => (
             <li key={d.nombre} className="grid grid-cols-[1.6rem_1fr_3.5rem] items-center gap-3">
-              <span className="font-[var(--font-display)] text-lg font-bold text-[var(--fg-lime-500)]">{k + 1}</span>
+              <span className="font-[var(--font-display)] text-lg font-bold text-[var(--fg-lime-400)]">{k + 1}</span>
               <span>
                 <span className="flex items-baseline justify-between gap-2 text-sm font-semibold text-[var(--text)]"><span>{d.nombre}</span><span className="tabular-nums text-[var(--text-muted)]">{corto(d.v)}</span></span>
                 <span className="mt-1 block h-2 rounded-full bg-[var(--bg-sunken)]"><span className="block h-full rounded-full bg-gradient-to-r from-[var(--fg-lime-500)] to-[#34a868] transition-[width] duration-500" style={{ width: `${(d.v / maxV) * 100}%` }} /></span>

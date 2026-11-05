@@ -15,7 +15,7 @@ export function ContactChannels({ tinted = true }: { tinted?: boolean }) {
         <ul className="grid gap-4 sm:grid-cols-2">
           {contacto.correos.map((c) => (
             <li key={c.email} className="mx-card flex flex-col gap-1.5 !p-5">
-              <p className="flex items-center gap-2 text-[0.7rem] font-bold uppercase tracking-[0.16em] text-[var(--fg-lime-500)]"><Mail size={14} />{c.label}</p>
+              <p className="flex items-center gap-2 text-[0.7rem] font-bold uppercase tracking-[0.16em] text-[var(--fg-lime-400)]"><Mail size={14} />{c.label}</p>
               <a href={`mailto:${c.email}`} className="break-all text-base font-bold text-[var(--text)] hover:text-[var(--fg-lime-400)]">{c.email}</a>
               <p className="text-sm leading-relaxed text-[var(--text-muted)]">{c.text}</p>
             </li>

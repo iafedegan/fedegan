@@ -148,7 +148,7 @@ export function Header({ nav: mainNav }: { nav: { label: string; href: string }[
       />
       <button
         type="submit"
-        className="rounded-full bg-[var(--fg-lime-500)] px-3.5 py-1.5 text-[0.68rem] font-bold uppercase tracking-[0.12em] text-[var(--fg-green-900)] transition-colors hover:bg-[var(--fg-lime-400)]"
+        className="rounded-full bg-[var(--fg-lime-500)] px-3.5 py-1.5 text-[0.68rem] font-bold uppercase tracking-[0.12em] text-[var(--fg-green-900)] transition-colors hover:brightness-110"
       >
         Buscar
       </button>
@@ -286,7 +286,7 @@ export function Header({ nav: mainNav }: { nav: { label: string; href: string }[
                         aria-current={active ? "page" : undefined}
                         className="group flex items-center gap-[0.9rem] py-[0.95rem]"
                       >
-                        <span className="text-[0.75rem] font-bold leading-normal tracking-[0.12em] text-[var(--fg-lime-500)]">{String(i + 1).padStart(2, "0")}</span>
+                        <span className="text-[0.75rem] font-bold leading-normal tracking-[0.12em] text-[var(--fg-lime-400)]">{String(i + 1).padStart(2, "0")}</span>
                         <span className={`flex-1 text-[1.02rem] font-semibold leading-normal ${active ? "text-[var(--fg-lime-400)]" : "text-[#e7e3d4]"}`}>
                           {item.label}
                         </span>

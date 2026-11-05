@@ -14,7 +14,7 @@ const variants: Record<Variant, string> = {
     "bg-[var(--surface-solid)] text-[var(--fg-green-800)] border border-[var(--border-strong)] hover:border-[var(--fg-green-700)] hover:-translate-y-0.5",
   ghost:
     "bg-transparent text-[var(--fg-green-800)] hover:bg-[var(--bg-muted)]",
-  lime: "bg-[var(--fg-lime-500)] text-[var(--fg-green-900)] hover:bg-[var(--fg-lime-400)] hover:-translate-y-0.5 shadow-[var(--shadow-sm)]",
+  lime: "bg-[var(--fg-lime-500)] text-[var(--fg-green-900)] hover:brightness-110 hover:-translate-y-0.5 shadow-[var(--shadow-sm)]",
 };
 
 const sizes: Record<Size, string> = {

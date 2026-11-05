@@ -55,7 +55,7 @@ export function InstructivoTabs() {
       </ol>
 
       <p className="mt-9 border-l-2 border-[var(--fg-lime-500)] pl-4 text-sm font-semibold leading-relaxed text-[var(--text)]">
-        <span className="mr-2 text-[0.7rem] font-bold uppercase tracking-[0.18em] text-[var(--fg-lime-500)]">Importante</span>
+        <span className="mr-2 text-[0.7rem] font-bold uppercase tracking-[0.18em] text-[var(--fg-lime-400)]">Importante</span>
         {importante}
       </p>
     </div>
