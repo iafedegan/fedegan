@@ -95,8 +95,8 @@ export function AdminSidebar({ user, groups }: { user: { name: string; email: st
               {g.group}
               <ChevronDown size={14} className={`transition-transform duration-300 ${cerrado ? "-rotate-90" : ""}`} />
             </button>
-            <div id={`grupo-${g.group}`} className={`grid transition-[grid-template-rows] duration-300 ${cerrado ? "grid-rows-[0fr]" : "grid-rows-[1fr]"}`}>
-            <ul className="flex min-h-0 flex-col gap-0.5 overflow-hidden" inert={cerrado}>
+            <div id={`grupo-${g.group}`} data-cerrado={cerrado} className="ad-grupo grid grid-rows-[1fr] transition-[grid-template-rows] duration-300">
+            <ul className="flex min-h-0 flex-col gap-0.5 overflow-hidden" inert={cerrado && !rail}>
               {g.items.map((it) => {
                 const Icon = icons[it.icon] ?? FileText;
                 const active = !it.external && isActive(pathname, it.href);
@@ -143,7 +143,7 @@ export function AdminSidebar({ user, groups }: { user: { name: string; email: st
       <div className={`hidden shrink-0 transition-[width] duration-300 lg:block ${pinned ? "w-72" : "w-[4.75rem]"}`}>
         <aside
           data-pinned={pinned}
-          className={`ad-side group/side fixed inset-y-0 left-0 z-40 flex flex-col gap-6 overflow-hidden px-2.5 py-6 transition-[width,box-shadow] duration-300 ${
+          className={`ad-side ad-rail group/side fixed inset-y-0 left-0 z-40 flex flex-col gap-6 overflow-hidden px-2.5 py-6 transition-[width,box-shadow] duration-300 ${
             pinned ? "w-72" : "w-[4.75rem] hover:w-72 hover:shadow-[24px_0_60px_-24px_rgba(7,40,29,0.65)] focus-within:w-72 focus-within:shadow-[24px_0_60px_-24px_rgba(7,40,29,0.65)]"
           }`}
         >

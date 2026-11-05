@@ -1392,3 +1392,8 @@ a.mx-card:hover, .mx-lift:hover, .gl-hover:hover { transform: translateY(-2px); 
 
 /* Las tarjetas recortan su contenido (overflow: hidden) y eso anulaba el scroll de los menús laterales largos: se restablece donde se pide. */
 :is(.gl, .mx-card, .mx-stat, .mx-quote, .mx-panel):is(.overflow-y-auto, .overflow-auto) { overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: rgba(216, 181, 88, 0.45) transparent; }
+
+/* Menú del panel: un grupo plegado se oculta, pero con la barra lateral cerrada (solo iconos) todos los iconos siguen a la vista. */
+.ad-grupo[data-cerrado="true"] { grid-template-rows: 0fr; }
+.ad-rail:not(:hover):not(:focus-within):not([data-pinned="true"]) .ad-grupo[data-cerrado="true"] { grid-template-rows: 1fr; }
+.ad-rail:is(:hover, :focus-within, [data-pinned="true"]) .ad-grupo[data-cerrado="true"] > ul { visibility: hidden; }
