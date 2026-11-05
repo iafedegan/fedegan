@@ -37,26 +37,26 @@ export function ConsentBanner() {
   const usos = Object.values(getUso()).reduce((a, b) => a + b, 0);
 
   return (
-    <section role="dialog" aria-labelledby="consent-title" className="fixed bottom-24 left-4 z-[80] w-[min(26rem,calc(100vw-2rem))] rounded-[0.25rem] border border-[var(--border-strong)] bg-[var(--surface-solid)] p-5 shadow-[0_30px_60px_-30px_rgba(0,0,0,0.9)] md:bottom-6">
+    <section role="dialog" aria-labelledby="consent-title" className="fixed bottom-[5.5rem] left-3 z-[80] w-[min(26rem,calc(100vw-1.5rem))] rounded-[0.25rem] border border-[var(--border-strong)] bg-[var(--surface-solid)] p-3.5 shadow-[0_30px_60px_-30px_rgba(0,0,0,0.9)] md:bottom-6 md:left-4 md:p-5">
       <button type="button" onClick={() => setAbierto(false)} aria-label="Cerrar" className="absolute right-3 top-3 rounded p-1 text-[var(--text-faint)] hover:text-[var(--text)]">
         <X size={16} />
       </button>
-      <p id="consent-title" className="flex items-center gap-2 font-[var(--font-display)] text-lg font-bold text-[var(--text)]">
+      <p id="consent-title" className="flex items-center gap-2 pr-6 font-[var(--font-display)] text-base font-bold text-[var(--text)] md:text-lg">
         <Cookie size={18} className="text-[var(--fg-lime-400)]" /> Personalice su recorrido
       </p>
-      <p className="mt-2 text-sm leading-relaxed text-[var(--text-muted)]">
+      <p className="mt-1.5 text-[0.8rem] leading-snug text-[var(--text-muted)] md:mt-2 md:text-sm md:leading-relaxed">
         Con su permiso, guardamos en <b className="text-[var(--text)]">este dispositivo</b> una cookie que cuenta qué secciones visita más, para mostrarle primero las que más usa. Si acepta, también medimos el uso del sitio de forma agregada (Google Analytics). No guardamos datos personales ni la dirección MAC.
       </p>
-      <p className="mt-2 text-xs text-[var(--text-faint)]">
+      <p className="mt-1.5 text-[0.72rem] leading-snug text-[var(--text-faint)] md:mt-2 md:text-xs">
         <ShieldCheck size={12} className="mr-1 inline" />
         Puede cambiarlo cuando quiera en «Preferencias de privacidad».{" "}
         <a href="/privacidad" className="inline-block py-2 underline underline-offset-2 hover:text-[var(--fg-lime-400)]">Política de datos</a>
       </p>
-      <div className="mt-4 flex flex-wrap items-center gap-2">
-        <button type="button" onClick={() => decidir(true)} className="rounded-[0.25rem] bg-[var(--fg-lime-500)] px-4 py-2.5 text-[0.76rem] font-bold uppercase tracking-[0.1em] text-[#0a1a11] hover:bg-[var(--fg-lime-400)]">
+      <div className="mt-2.5 flex flex-wrap items-center gap-2 md:mt-4">
+        <button type="button" onClick={() => decidir(true)} className="rounded-[0.25rem] bg-[var(--fg-lime-500)] px-4 py-2 text-[0.76rem] font-bold uppercase tracking-[0.1em] text-[#0a1a11] md:py-2.5 hover:bg-[var(--fg-lime-400)]">
           {estado === true ? "Mantener activado" : "Aceptar"}
         </button>
-        <button type="button" onClick={() => decidir(false)} className="rounded-[0.25rem] border border-[var(--border-strong)] px-4 py-2.5 text-[0.76rem] font-bold uppercase tracking-[0.1em] text-[var(--text-muted)] hover:text-[var(--text)]">
+        <button type="button" onClick={() => decidir(false)} className="rounded-[0.25rem] border border-[var(--border-strong)] px-4 py-2 text-[0.76rem] font-bold uppercase tracking-[0.1em] text-[var(--text-muted)] md:py-2.5 hover:text-[var(--text)]">
           {estado === true ? "Desactivar" : "Ahora no"}
         </button>
         {estado === true && usos > 0 && (
