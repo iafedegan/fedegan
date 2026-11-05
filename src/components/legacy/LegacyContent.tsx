@@ -219,7 +219,7 @@ export function LegacyContent({ blocks }: { blocks: LegacyBlock[] }) {
       const e = embedInfo(b.text ?? "");
       nodes.push(
         e.kind === "video" ? (
-          <div key={key} className="my-6">
+          <div key={key} className="my-6 max-w-[40rem]">
             <div className="aspect-video overflow-hidden rounded-[var(--radius-md)] border border-[var(--border-strong)] bg-black">
               <iframe
                 src={e.src}
