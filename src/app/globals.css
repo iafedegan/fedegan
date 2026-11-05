@@ -1419,11 +1419,11 @@ html[data-theme="institucional"] body { background: transparent; }
 html[data-theme="institucional"] body::before {
   content: ""; position: fixed; inset: -25%; z-index: -1; pointer-events: none;
   background:
-    radial-gradient(38rem 30rem at 12% 8%, rgba(255, 224, 236, 0.62), transparent 62%),
-    radial-gradient(40rem 32rem at 88% 14%, rgba(206, 228, 255, 0.6), transparent 62%),
-    radial-gradient(42rem 34rem at 16% 92%, rgba(210, 245, 228, 0.55), transparent 62%),
-    radial-gradient(38rem 30rem at 90% 88%, rgba(255, 238, 204, 0.6), transparent 62%),
-    radial-gradient(30rem 24rem at 50% 50%, rgba(255, 255, 255, 0.9), transparent 70%),
+    radial-gradient(38rem 30rem at 12% 8%, rgba(255, 196, 220, 0.85), transparent 62%),
+    radial-gradient(40rem 32rem at 88% 14%, rgba(180, 212, 255, 0.85), transparent 62%),
+    radial-gradient(42rem 34rem at 16% 92%, rgba(176, 236, 210, 0.8), transparent 62%),
+    radial-gradient(38rem 30rem at 90% 88%, rgba(255, 224, 168, 0.85), transparent 62%),
+    radial-gradient(30rem 24rem at 50% 50%, rgba(255, 255, 255, 0.55), transparent 70%),
     linear-gradient(180deg, #ffffff 0%, #fbfaf9 100%);
   will-change: transform;
 }
