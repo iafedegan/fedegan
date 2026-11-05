@@ -1,5 +1,6 @@
 import { QuickRail } from "@/components/blocks/Accesos";
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ChevronRight } from "lucide-react";
@@ -7,6 +8,7 @@ import { Container } from "@/components/ui/Container";
 import { Badge } from "@/components/ui/Badge";
 import { getNoticia, getNoticias } from "@/lib/contexto";
 import { SITE_URL } from "@/lib/site-url";
+import { canOptimize } from "@/lib/image-host";
 
 export async function generateStaticParams() {
   const { items } = await getNoticias({ limit: 50 });
@@ -90,8 +92,7 @@ export default async function NoticiaDetailPage({ params }: { params: Promise<{ 
         <div className="min-w-0">
         {n.image && (
           <figure className="mb-10">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={n.image} alt={n.imageAlt ?? ""} className="aspect-[16/9] w-full rounded-[0.25rem] border border-[var(--border)] object-cover shadow-[var(--shadow-lg)]" />
+            <Image src={n.image} alt={n.imageAlt ?? ""} width={1280} height={720} priority sizes="(min-width: 1024px) 60vw, 100vw" unoptimized={!canOptimize(n.image)} className="aspect-[16/9] w-full rounded-[0.25rem] border border-[var(--border)] object-cover shadow-[var(--shadow-lg)]" />
             {generatedByAi && <figcaption className="mt-3 text-xs text-[var(--text-faint)]">Imagen generada con IA</figcaption>}
           </figure>
         )}

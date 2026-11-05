@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { CSSProperties, ReactNode } from "react";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { canOptimize } from "@/lib/image-host";
 
 // "r,g,b" → versión más oscura para el degradado de la ola.
 const darker = (rgb: string) => rgb.split(",").map((n) => Math.round(Number(n) * 0.5)).join(",");
@@ -41,7 +42,7 @@ export function PhotoCard({
   const body = (
     <>
       <span className="wp-img">
-        <Image src={image} alt="" fill unoptimized={image.startsWith("http")} sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="object-cover" style={{ objectPosition: imagePos }} />
+        <Image src={image} alt="" fill unoptimized={!canOptimize(image)} sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="object-cover" style={{ objectPosition: imagePos }} />
       </span>
       {badge && <span className="absolute left-3 top-3 z-[3] flex flex-wrap gap-1.5">{badge}</span>}
       <span aria-hidden className="wc-wave2" />

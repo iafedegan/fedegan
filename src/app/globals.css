@@ -1712,7 +1712,7 @@ body:has(.mx-hero) main .eyebrow::before { content: none; }
 .nw-more-title { margin: 0 0 1.4rem; font: 400 clamp(1.5rem, 2.6vw, 2.1rem)/1 var(--font-body); letter-spacing: -0.035em; color: var(--ed-ink); }
 
 /* Entrada con desenfoque, como el sitio de referencia */
-@keyframes blurIn { from { opacity: 0; filter: blur(12px); transform: translateY(10px); } to { opacity: 1; filter: blur(0); transform: none; } }
+@keyframes blurIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: no-preference) {
   body:has(.mx-hero) :is(.ed-flag, .ed-title, .ed-deck, .pills, .ed-facts, .hub-stats, .sec-search:not(.sec-search-sm), .menu-btn) { animation: blurIn 0.9s var(--ease-lux, ease) both; }
   body:has(.mx-hero) .ed-title { animation-delay: 0.05s; }
@@ -1810,3 +1810,91 @@ html[data-theme="institucional"] .mh-title { background-image: linear-gradient(1
 html[data-theme="institucional"] .nv-brand { color: #e2c373; }
 /* En las páginas interiores oscuras el pie es grafito, y el encabezado va igual */
 html[data-theme="esmeralda"] body:has(.mx-hero) :is(.mh, header[data-region="navbar"]) { background-color: #0e0e0e; }
+
+/* ======================================================================
+   COMPACTO — tamaños de letra moderados y menos aire entre bloques en las páginas interiores.
+   (Se declara al final para que prevalezca sobre los valores de los bloques anteriores.)
+   ====================================================================== */
+/* Titulares */
+.ed-title { font-weight: 600; letter-spacing: -0.03em; line-height: 1.06; }
+.ed-t1 { font-size: clamp(1.9rem, 3.2vw, 2.6rem); }
+.ed-t2 { font-size: clamp(1.7rem, 2.8vw, 2.2rem); }
+.ed-t3 { font-size: clamp(1.5rem, 2.4vw, 1.9rem); }
+.ed-t4 { font-size: clamp(1.3rem, 2vw, 1.6rem); }
+.art-head .ed-t1 { font-size: clamp(1.7rem, 2.8vw, 2.3rem); }
+.art-head .ed-t2 { font-size: clamp(1.55rem, 2.5vw, 2rem); }
+.art-head .ed-t3 { font-size: clamp(1.35rem, 2.1vw, 1.7rem); }
+.art-head .ed-t4 { font-size: clamp(1.2rem, 1.8vw, 1.45rem); }
+.ed-deck { max-width: 42rem; margin-top: 0.45rem; font-size: 0.95rem; line-height: 1.5; }
+.ed-flagrow { margin-bottom: 0.6rem; }
+
+/* Cabeceras */
+.mx-hero.ed-head.ed-band { padding: 0.9rem 0 0.9rem; }
+.ed-bandgrid { gap: 0.9rem; align-items: center; }
+@media (min-width: 1024px) { .ed-bandgrid.has-aside { grid-template-columns: minmax(0, 1fr) 19rem; gap: 2rem; } }
+.ed-bandaside { gap: 0.8rem; }
+.ed-facts { gap: 0.4rem; }
+.ed-facts li { padding: 0.3rem 0.7rem; font-size: 0.75rem; }
+.ed-flag { padding: 0.32rem 0.7rem; font-size: 0.7rem; }
+.hub-stats dd { font-size: 1.7rem; font-weight: 600; letter-spacing: -0.03em; }
+.mx-hero.ed-head.ed-strip { padding: 0.55rem 0 0; }
+.ed-striprow { padding-bottom: 0.55rem; }
+
+/* Página de contenido */
+.doc-split { gap: 1.1rem; padding-top: 0.9rem; padding-bottom: 2.5rem; }
+@media (min-width: 1024px) { .doc-split.has-menu { grid-template-columns: 15rem minmax(0, 1fr); gap: 2.4rem; } }
+.art-head { gap: 0.8rem; margin-bottom: 1rem; }
+.ed-body p { font-size: 0.98rem; line-height: 1.65; }
+.ed-body .ix-lead { margin-bottom: 1.1rem; font-size: 1.1rem; line-height: 1.55; }
+.ed-body h3 { margin: 1.3rem 0 0.4rem; font-size: 1.12rem; font-weight: 600; }
+.ed-item { padding: 0.9rem 0 0.4rem; }
+.toc-m { margin-bottom: 1.3rem; padding: 0.6rem 0; }
+.art-kids { margin-top: 2.2rem; }
+.pn { margin-top: 2.4rem; }
+.pn-card { padding: 1rem 0; gap: 0.4rem; }
+.pn-name { font-size: clamp(1.1rem, 1.8vw, 1.4rem); font-weight: 600; letter-spacing: -0.025em; }
+body:has(.mx-hero) main :is(h2, h3, h4):not(.hub-name):not(.tl-t):not(.ed-item > h3) { font-weight: 600; letter-spacing: -0.025em; }
+body:has(.mx-hero) main h2:not(.hub-name):not(.sec-title):not(.cta-title):not(.nw-more-title) { font-size: clamp(1.35rem, 2.1vw, 1.8rem); line-height: 1.15; }
+.ed-body h2 { margin: 2rem 0 0.7rem; padding-top: 0.8rem; }
+
+/* Portada de sección */
+.hub-body { gap: 1.6rem; padding-top: 0.5rem; padding-bottom: 2.4rem; }
+.hub-head { margin-bottom: 0.7rem; }
+.hub-head h2 { font-size: clamp(1.3rem, 2.1vw, 1.7rem); font-weight: 600; }
+.hub-grid { gap: 0 2rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr)); }
+.hub-cell { gap: 0.3rem; padding: 0.85rem 0 0.95rem; }
+.hub-name { font-size: 1.08rem; font-weight: 600; letter-spacing: -0.02em; }
+.hub-text { font-size: 0.88rem; line-height: 1.5; -webkit-line-clamp: 2; }
+.hub-foot { padding-top: 0.3rem; }
+.hub-label { margin-bottom: 0.9rem; }
+
+/* Secciones, cifras, cita, fichas, línea de tiempo y cierre */
+body:has(.mx-hero) .sec { padding-block: clamp(1rem, 2.2vw, 1.7rem); }
+body:has(.mx-hero) .sec-title { font-size: clamp(1.35rem, 2.1vw, 1.8rem); font-weight: 600; letter-spacing: -0.025em; }
+body:has(.mx-hero) .sec-head { margin-bottom: 0.8rem; }
+body:has(.mx-hero) .mx-stat b { font-size: clamp(1.7rem, 3vw, 2.3rem); font-weight: 600; letter-spacing: -0.03em; }
+body:has(.mx-hero) .mx-stat:not(.ed-rail) { padding-top: 0.6rem; }
+body:has(.mx-hero) .mx-stat > span { font-size: 0.72rem; }
+body:has(.mx-hero) .mx-quote:not(.ed-rail) { padding-top: 0.9rem; }
+body:has(.mx-hero) .mx-quote p { font-size: clamp(1.15rem, 1.9vw, 1.5rem) !important; line-height: 1.3 !important; font-weight: 500 !important; letter-spacing: -0.025em; }
+body:has(.mx-hero) .wp .wp-img { aspect-ratio: 16 / 9; }
+body:has(.mx-hero) .wc.wp { gap: 0.6rem; }
+body:has(.mx-hero) .wp-title { font-size: 1.08rem; font-weight: 600; letter-spacing: -0.02em; }
+body:has(.mx-hero) .wp-text { font-size: 0.88rem; }
+.tl li { gap: 0.3rem 1.5rem; padding: 0.85rem 0; grid-template-columns: minmax(4rem, 7rem) minmax(0, 1fr); }
+.tl-y { font-size: clamp(1.3rem, 2.2vw, 1.7rem); font-weight: 600; }
+.tl-t { margin-bottom: 0.2rem; font-size: 1.05rem; font-weight: 600; }
+.tl-p { font-size: 0.92rem; line-height: 1.55; }
+body:has(.mx-hero) .cta-in { padding-top: 1.3rem; }
+body:has(.mx-hero) .cta-row { gap: 1rem; }
+body:has(.mx-hero) .cta-title { max-width: 30ch; font-size: clamp(1.45rem, 2.6vw, 2rem); font-weight: 600; letter-spacing: -0.03em; line-height: 1.12; }
+body:has(.mx-hero) .cta-text { font-size: 0.95rem; }
+body:has(.mx-hero) .cta-link { padding: 0.6rem 1.1rem; font-size: 0.85rem; }
+
+/* Noticias y menú de sección */
+.nw-top { margin-bottom: 1.6rem; gap: 1.2rem; }
+.nw-lead-title { font-size: clamp(1.3rem, 2vw, 1.7rem); font-weight: 600; letter-spacing: -0.03em; }
+.nw-more-title { margin-bottom: 0.9rem; font-size: clamp(1.25rem, 2vw, 1.6rem); font-weight: 600; }
+.nw-lead-img { min-height: 12rem; }
+.menu-top span { font-size: clamp(1.5rem, 4vw, 2.2rem); font-weight: 600; letter-spacing: -0.03em; }
+.menu-top { padding-bottom: 1.2rem; }

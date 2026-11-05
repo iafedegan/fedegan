@@ -1,8 +1,10 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { getHomeNews } from "@/lib/contexto";
+import { canOptimize } from "@/lib/image-host";
 
 // Últimas noticias en formato editorial: una nota grande y una lista con las siguientes.
 export async function NewsGrid() {
@@ -18,8 +20,7 @@ export async function NewsGrid() {
           <Link href={`/noticias/${lead.slug}`} className="group block">
             <div className="relative aspect-[16/10] overflow-hidden rounded-[0.25rem] border border-[var(--border-strong)] bg-[var(--bg-sunken)]">
               {lead.image && (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={lead.image} alt={lead.imageAlt ?? ""} loading="lazy" className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] [transition-timing-function:var(--ease-lux)] group-hover:scale-[1.04]" />
+                <Image src={lead.image} alt={lead.imageAlt ?? ""} fill sizes="(min-width: 1024px) 50vw, 100vw" unoptimized={!canOptimize(lead.image)} className="object-cover transition-transform duration-[1200ms] [transition-timing-function:var(--ease-lux)] group-hover:scale-[1.04]" />
               )}
             </div>
             <p className="mt-5 flex items-center gap-3 text-[0.7rem] font-bold uppercase tracking-[0.18em] text-[var(--fg-lime-400)]">
@@ -37,8 +38,7 @@ export async function NewsGrid() {
                 <Link href={`/noticias/${n.slug}`} className="group grid grid-cols-[5.5rem_1fr] gap-4 py-4 sm:grid-cols-[7rem_1fr]">
                   <span className="relative block aspect-[4/3] overflow-hidden rounded-[0.25rem] bg-[var(--bg-sunken)]">
                     {n.image && (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img src={n.image} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 [transition-timing-function:var(--ease-lux)] group-hover:scale-110" />
+                      <Image src={n.image} alt="" fill sizes="120px" unoptimized={!canOptimize(n.image)} className="object-cover transition-transform duration-700 [transition-timing-function:var(--ease-lux)] group-hover:scale-110" />
                     )}
                   </span>
                   <span className="min-w-0">

@@ -8,8 +8,17 @@ export function PwaRegister({ build }: { build: string }) {
   const [offline, setOffline] = useState(false);
 
   useEffect(() => {
+    // El service worker descarga varias páginas para el uso sin conexión: se registra con la página ya cargada y en reposo,
+    // para que esa descarga no compita con lo que la persona está viendo.
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const register = () => {
+      timer = setTimeout(() => {
+        navigator.serviceWorker.register(`/sw.js?v=${encodeURIComponent(build)}`, { scope: "/" }).catch(() => {});
+      }, 6000);
+    };
     if ("serviceWorker" in navigator && process.env.NODE_ENV === "production") {
-      navigator.serviceWorker.register(`/sw.js?v=${encodeURIComponent(build)}`, { scope: "/" }).catch(() => {});
+      if (document.readyState === "complete") register();
+      else window.addEventListener("load", register, { once: true });
     }
     const sync = () => setOffline(!navigator.onLine);
     const t = setTimeout(sync, 0);
@@ -17,6 +26,7 @@ export function PwaRegister({ build }: { build: string }) {
     window.addEventListener("offline", sync);
     return () => {
       clearTimeout(t);
+      if (timer) clearTimeout(timer);
       window.removeEventListener("online", sync);
       window.removeEventListener("offline", sync);
     };

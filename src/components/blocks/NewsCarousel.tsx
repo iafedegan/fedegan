@@ -1,11 +1,13 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Badge } from "@/components/ui/Badge";
 import type { Noticia } from "@/lib/contexto";
+import { canOptimize } from "@/lib/image-host";
 
 const INTERVAL_MS = 5500;
 
@@ -89,11 +91,14 @@ export function NewsCarousel({ items }: { items: Noticia[] }) {
               >
                 <div className="relative aspect-[16/9] overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border)] bg-[#06130c] shadow-[var(--shadow-lg)]">
                   {n.image ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
+                    // Optimizada y con carga diferida: el original de la nota puede pesar varios MB.
+                    <Image
                       src={n.image}
                       alt={n.imageAlt ?? ""}
-                      className={`absolute inset-0 h-full w-full object-cover transition-transform duration-[7000ms] ease-linear ${
+                      fill
+                      sizes="(min-width: 1024px) 58vw, 100vw"
+                      unoptimized={!canOptimize(n.image)}
+                      className={`object-cover transition-transform duration-[7000ms] ease-linear ${
                         active && !reduced ? "scale-[1.06]" : "scale-100"
                       }`}
                     />
