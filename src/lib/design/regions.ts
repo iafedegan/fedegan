@@ -69,6 +69,10 @@ export const AD_ZONES = [
 export type AdZoneId = (typeof AD_ZONES)[number]["id"];
 export type AdConfig = { on?: boolean; image?: string; href?: string; alt?: string };
 
+// ---- edición de cualquier elemento de cualquier página --------------------------------
+// La clave es «ruta::selector» (la ruta es «*» para todo el sitio). El selector lo calcula el editor al hacer clic en la vista previa.
+export type ElementEdit = { text?: string; image?: string; href?: string; bg?: string; color?: string; scale?: number; hidden?: boolean };
+
 export type DesignConfig = {
   v: 1;
   regions: Partial<Record<RegionId, RegionStyle>>;
@@ -78,9 +82,24 @@ export type DesignConfig = {
   ticker: TickerConfig;
   popup: PopupConfig;
   ads: Partial<Record<AdZoneId, AdConfig>>;
+  elements: Record<string, ElementEdit>;
 };
 
-export const EMPTY_DESIGN: DesignConfig = { v: 1, regions: {}, parts: {}, order: [], locals: {}, ticker: {}, popup: {}, ads: {} };
+export const EMPTY_DESIGN: DesignConfig = { v: 1, regions: {}, parts: {}, order: [], locals: {}, ticker: {}, popup: {}, ads: {}, elements: {} };
+
+export const ELEMENT_KEY_SEP = "::";
+const PATH_OK = /^(\*|\/[A-Za-z0-9_\-/.]{0,120})$/;
+// Solo caracteres de selector inofensivos: nada que pueda cerrar la regla CSS o la etiqueta <style>.
+const SELECTOR_OK = /^[A-Za-z0-9_\-.#:>()[\]="' *~+]{1,240}$/;
+const URL_OK = /^[^"'()\s<>\\]+$/;
+export const elementKey = (path: string, selector: string) => `${path}${ELEMENT_KEY_SEP}${selector}`;
+export function splitElementKey(key: string): { path: string; selector: string } | null {
+  const i = key.indexOf(ELEMENT_KEY_SEP);
+  if (i < 0) return null;
+  const path = key.slice(0, i);
+  const selector = key.slice(i + ELEMENT_KEY_SEP.length);
+  return PATH_OK.test(path) && SELECTOR_OK.test(selector) ? { path, selector } : null;
+}
 
 // ---- validación -----------------------------------------------------------------------
 const HEX = /^#[0-9a-f]{6}$/i;
@@ -136,7 +155,7 @@ function sanitizeLocal(raw: unknown): LocalStyle {
 /** Valida cualquier valor guardado: lo desconocido o inválido se descarta, nunca rompe la página. */
 export function normalizeDesign(raw: unknown): DesignConfig {
   const src = obj(raw);
-  const d: DesignConfig = { v: 1, regions: {}, parts: {}, order: [], locals: {}, ticker: {}, popup: {}, ads: {} };
+  const d: DesignConfig = { v: 1, regions: {}, parts: {}, order: [], locals: {}, ticker: {}, popup: {}, ads: {}, elements: {} };
 
   const regions = obj(src.regions);
   for (const id of REGION_IDS) {
@@ -190,6 +209,27 @@ export function normalizeDesign(raw: unknown): DesignConfig {
     const a = obj(ads[z.id]);
     const image = href(a.image);
     if (a.on === true || image) d.ads[z.id] = { on: a.on === true, image, href: href(a.href), alt: str(a.alt, 120) };
+  }
+
+  const els = obj(src.elements);
+  for (const [k, v] of Object.entries(els).slice(0, 300)) {
+    if (!splitElementKey(k)) continue;
+    const e = obj(v);
+    const out: ElementEdit = {};
+    const text = typeof e.text === "string" ? e.text.replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f]/g, "").slice(0, 3000) : undefined;
+    if (text !== undefined) out.text = text;
+    const image = href(e.image);
+    if (image && URL_OK.test(image)) out.image = image;
+    const link = href(e.href);
+    if (link) out.href = link;
+    const bg = hex(e.bg);
+    if (bg) out.bg = bg;
+    const color = hex(e.color);
+    if (color) out.color = color;
+    const sc = num(e.scale, 40, 250);
+    if (sc !== undefined && sc !== 100) out.scale = sc;
+    if (e.hidden === true) out.hidden = true;
+    if (Object.keys(out).length) d.elements[k] = out;
   }
   return d;
 }

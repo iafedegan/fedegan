@@ -6,6 +6,7 @@ import { getNav } from "@/lib/cms/content";
 import { Providers } from "@/components/layout/Providers";
 import { ChromeGate } from "@/components/layout/ChromeGate";
 import { SiteChrome } from "@/components/layout/SiteChrome";
+import { ElementEdits } from "@/components/design/ElementEdits";
 import { MobileTabBar } from "@/components/layout/MobileTabBar";
 import { BackToTop } from "@/components/layout/BackToTop";
 import { getPublishedDesign } from "@/lib/design/store";
@@ -100,6 +101,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full flex flex-col">
         {css && <style id="design-css" dangerouslySetInnerHTML={{ __html: css }} />}
         <Providers>
+          <ElementEdits initial={design.elements} />
           <div className="read-progress" aria-hidden />
           <UsageTracker />
           <Analytics />

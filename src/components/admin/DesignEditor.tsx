@@ -2,24 +2,24 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState, useTransition } from "react";
 import {
-  ArrowDown, ArrowUp, ChevronDown, Ellipsis, ExternalLink, GripVertical, LayoutGrid, ListOrdered, Maximize2, Megaphone, MessageSquare, Minimize2, Monitor, Newspaper, Paintbrush,
+  ArrowDown, ArrowUp, ChevronDown, Ellipsis, ExternalLink, GripVertical, LayoutGrid, ListOrdered, Maximize2, Megaphone, MessageSquare, Minimize2, Monitor, MousePointerClick, Newspaper, Paintbrush,
   Redo2, RotateCcw, SlidersHorizontal, Smartphone, Tablet, Undo2, UploadCloud, type LucideIcon,
 } from "lucide-react";
 import {
   AD_ZONES, FONTS, FOOTERS, HEROES, NAVBARS, REGIONS,
-  designCss, isEmptyDesign, normalizeDesign,
-  type AdConfig, type DesignConfig, type LocalStyle, type RegionId, type RegionStyle,
+  designCss, elementKey, isEmptyDesign, normalizeDesign, splitElementKey,
+  type AdConfig, type DesignConfig, type ElementEdit, type LocalStyle, type RegionId, type RegionStyle,
 } from "@/lib/design/regions";
 import { publishDesign, saveDesignDraft, undoDesignPublish } from "@/lib/design/actions";
 
 // Tamaño virtual de cada pantalla: el sitio se dibuja a ese ancho y se escala para caber en el marco.
 const DEVICES = {
-  desktop: { w: 1440, h: 900, name: "Mac", bezel: 10, maxW: 880 },
+  desktop: { w: 1440, h: 900, name: "Mac", bezel: 10, maxW: 1040 },
   tablet: { w: 820, h: 1100, name: "Tableta", bezel: 10, maxW: 520 },
   mobile: { w: 390, h: 800, name: "Celular", bezel: 8, maxW: 300 },
 } as const;
 type Device = keyof typeof DEVICES;
-type Tab = "zonas" | "piezas" | "recorrido" | "cintillo" | "popup" | "publicidad";
+type Tab = "elemento" | "zonas" | "piezas" | "recorrido" | "cintillo" | "popup" | "publicidad";
 export type LocalRef = { id: string; label: string };
 
 const same = (a: DesignConfig, b: DesignConfig) => JSON.stringify(normalizeDesign(a)) === JSON.stringify(normalizeDesign(b));
@@ -28,6 +28,36 @@ const clean = <T extends object>(o: T): T => {
   Object.keys(c).forEach((k) => (c[k] === undefined || c[k] === "") && delete c[k]);
   return c as T;
 };
+
+type Picked = { path: string; selector: string; tag: string; text: string | null; isImg: boolean; isLink: boolean; href: string; src: string };
+
+// Selector CSS estable del elemento: se ancla al ancestro con id, región o local más cercano.
+function selectorOf(el: Element): string {
+  const parts: string[] = [];
+  let cur: Element | null = el;
+  while (cur && cur.tagName !== "BODY" && cur.tagName !== "HTML") {
+    const reg = cur.getAttribute("data-region");
+    const loc = cur.getAttribute("data-local");
+    if (cur.id && /^[A-Za-z][\w-]*$/.test(cur.id)) {
+      parts.unshift(`#${cur.id}`);
+      return parts.join(" > ");
+    }
+    if (reg && /^[a-z-]+$/.test(reg)) {
+      parts.unshift(`[data-region="${reg}"]`);
+      return parts.join(" > ");
+    }
+    if (loc && /^[a-z0-9-]+$/.test(loc)) {
+      parts.unshift(`[data-local="${loc}"]`);
+      return parts.join(" > ");
+    }
+    const node: Element = cur;
+    const tag = node.tagName.toLowerCase();
+    const sibs = node.parentElement ? Array.from(node.parentElement.children).filter((c) => c.tagName === node.tagName) : [];
+    parts.unshift(sibs.length > 1 ? `${tag}:nth-of-type(${sibs.indexOf(node) + 1})` : tag);
+    cur = node.parentElement;
+  }
+  return `body > ${parts.join(" > ")}`;
+}
 
 function Slider({ label, value, min, max, step = 1, unit, onChange }: { label: string; value: number; min: number; max: number; step?: number; unit: string; onChange: (n: number) => void }) {
   return (
@@ -105,10 +135,20 @@ export function DesignEditor({ writable, initialPublished, initialDraft, canUndo
   const prevDesign = useRef<DesignConfig>(initialDraft);
   const fromHistory = useRef(false);
   const stage = useRef<HTMLDivElement>(null);
+  const [modo, setModo] = useState<"editar" | "navegar">("editar");
+  const modoRef = useRef(modo);
+  const [picked, setPicked] = useState<Picked | null>(null);
+  const [alcance, setAlcance] = useState<"page" | "site">("page");
+  const [pagePath, setPagePath] = useState("/");
+  const [ir, setIr] = useState("/");
   const [dragFrom, setDragFrom] = useState<number | null>(null);
   const frame = useRef<HTMLIFrameElement>(null);
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const first = useRef(true);
+
+  useEffect(() => {
+    modoRef.current = modo;
+  }, [modo]);
 
   const css = useMemo(() => designCss(design), [design]);
   const dirty = !same(design, published);
@@ -135,48 +175,85 @@ export function DesignEditor({ writable, initialPublished, initialDraft, canUndo
       doc.head.appendChild(el);
     }
     const mark = resaltar && tab === "zonas" ? `\n[data-region="${region}"]{outline:3px solid #d8b558 !important;outline-offset:-3px}` : "";
-    el.textContent = css + mark;
+    const edit =
+      modo === "editar"
+        ? `\n[data-edit-hover]{outline:2px dashed #d8b558 !important;outline-offset:-2px;cursor:crosshair !important}` +
+          (picked && /^[A-Za-z0-9_\-.#:>()[\]="' *~+]{1,240}$/.test(picked.selector) ? `\n${picked.selector}{outline:3px solid #2f8cff !important;outline-offset:-2px}` : "")
+        : "";
+    el.textContent = css + mark + edit;
     const root = doc.documentElement;
     root.setAttribute("data-navbar", design.parts.navbar ?? "clasico");
     root.setAttribute("data-footer", design.parts.footer ?? "completo");
     root.setAttribute("data-hero", design.parts.hero ?? "izquierda");
     win.postMessage({ type: "design-draft", design }, window.location.origin);
-  }, [css, region, tab, design, resaltar]);
+  }, [css, region, tab, design, resaltar, modo, picked]);
 
   useEffect(sync, [sync]);
 
   const onFrameLoad = () => {
     sync();
-    frame.current?.contentDocument?.addEventListener(
+    const doc = frame.current?.contentDocument;
+    const win = frame.current?.contentWindow;
+    if (win) {
+      setPagePath(win.location.pathname);
+      setIr(win.location.pathname);
+    }
+    doc?.addEventListener(
+      "mouseover",
+      (e) => {
+        if (modoRef.current !== "editar") return;
+        doc.querySelectorAll("[data-edit-hover]").forEach((n) => n.removeAttribute("data-edit-hover"));
+        const t = e.target as Element | null;
+        if (t && t !== doc.body && t !== doc.documentElement) t.setAttribute("data-edit-hover", "");
+      },
+      true,
+    );
+    doc?.addEventListener(
       "click",
       (e) => {
+        if (modoRef.current === "navegar") return; // se navega con normalidad por el sitio
         const t = e.target as Element | null;
-        const local = t?.closest?.("[data-local]")?.getAttribute("data-local");
-        const hit = t?.closest?.("[data-region]")?.getAttribute("data-region") as RegionId | null;
-        if (local && locals.some((l) => l.id === local)) {
-          setLocalId(local);
-          setTab("recorrido");
-        } else if (hit && REGIONS.some((r) => r.id === hit)) {
-          setRegion(hit);
-          setTab("zonas");
-        }
-        // Enlaces y botones del sitio funcionan con normalidad dentro de la vista previa (se puede navegar a cada página);
-        // solo se bloquean los enlaces que salen del sitio. El resto de clics únicamente elige la zona.
-        const control = t?.closest?.("a[href], button");
-        if (control) {
-          const href = control.getAttribute("href");
-          if (href && !href.startsWith("/") && !href.startsWith("#")) {
-            e.preventDefault();
-            e.stopPropagation();
-          }
-          return;
-        }
         e.preventDefault();
         e.stopPropagation();
+        if (!t || t === doc.body || t === doc.documentElement) return;
+        const local = t.closest?.("[data-local]")?.getAttribute("data-local");
+        const hit = t.closest?.("[data-region]")?.getAttribute("data-region") as RegionId | null;
+        if (local && locals.some((l) => l.id === local)) setLocalId(local);
+        else if (hit && REGIONS.some((r) => r.id === hit)) setRegion(hit);
+        const clone = t as HTMLElement;
+        const leaf = t.children.length === 0 && (t.textContent ?? "").trim() !== "";
+        const link = t.closest("a");
+        const selector = selectorOf(t);
+        if (selector.length > 240) {
+          setStatus({ kind: "err", text: "Este elemento está demasiado anidado para editarlo por separado; elija uno más externo." });
+          return;
+        }
+        setPicked({
+          path: win?.location.pathname ?? "/",
+          selector,
+          tag: t.tagName.toLowerCase(),
+          text: leaf ? (clone.textContent ?? "") : null,
+          isImg: t instanceof HTMLImageElement,
+          isLink: Boolean(link && link === t),
+          href: link?.getAttribute("href") ?? "",
+          src: t instanceof HTMLImageElement ? t.currentSrc || t.src : "",
+        });
+        setTab("elemento");
       },
       true,
     );
   };
+
+  // La página puede cambiar por dentro (navegación del sitio): se sigue su ruta.
+  useEffect(() => {
+    const id = window.setInterval(() => {
+      try {
+        const p = frame.current?.contentWindow?.location.pathname;
+        if (p) setPagePath((cur) => (cur === p ? cur : p));
+      } catch {}
+    }, 600);
+    return () => window.clearInterval(id);
+  }, []);
 
   // ---- autoguardado
   useEffect(() => {
@@ -285,6 +362,26 @@ export function DesignEditor({ writable, initialPublished, initialDraft, canUndo
       setPublished(r.design!);
       setStatus({ kind: "ok", text: "Se restauró la publicación anterior." });
     });
+
+  const elKey = picked ? elementKey(alcance === "site" ? "*" : picked.path, picked.selector) : "";
+  const es: ElementEdit = (elKey && design.elements[elKey]) || {};
+  const patchEl = (p: Partial<ElementEdit>) => {
+    if (!elKey) return;
+    update((d) => {
+      const next = clean({ ...(d.elements[elKey] ?? {}), ...p }) as ElementEdit;
+      const els = { ...d.elements };
+      if (Object.keys(next).length) els[elKey] = next;
+      else delete els[elKey];
+      return { ...d, elements: els };
+    });
+  };
+  const nEditados = Object.keys(design.elements).length;
+  const irA = (ruta: string) => {
+    const r = ruta.trim();
+    if (!/^\/[A-Za-z0-9_\-/.?=&%]*$/.test(r)) return setStatus({ kind: "err", text: "Escriba una ruta del sitio, por ejemplo /noticias." });
+    setPicked(null);
+    frame.current?.contentWindow?.location.assign(r);
+  };
 
   const rs: RegionStyle = design.regions[region] ?? {};
   const meta = REGIONS.find((r) => r.id === region)!;
@@ -414,8 +511,70 @@ export function DesignEditor({ writable, initialPublished, initialDraft, canUndo
     </>
   );
 
+  const cuerpoElemento = !picked ? (
+    <p className="text-[#5d6e65]">
+      Haga clic sobre cualquier título, texto, imagen, fondo o tarjeta de la vista previa para editarlo. Está en modo «Editar»; use «Navegar» en la barra para moverse por el sitio.
+    </p>
+  ) : (
+    <>
+      <div className="rounded-lg bg-[#f1efe6] px-3 py-2 text-[#2a3a32]">
+        <span className="font-bold">&lt;{picked.tag}&gt;</span> en <span className="font-mono">{alcance === "site" ? "todo el sitio" : picked.path}</span>
+        {picked.text ? <span className="mt-0.5 block truncate text-[#5d6e65]">«{picked.text}»</span> : null}
+      </div>
+      <fieldset className="flex gap-3 font-semibold">
+        <label className="flex items-center gap-1.5"><input type="radio" name="alcance" checked={alcance === "page"} onChange={() => setAlcance("page")} /> Solo esta página</label>
+        <label className="flex items-center gap-1.5"><input type="radio" name="alcance" checked={alcance === "site"} onChange={() => setAlcance("site")} /> Todo el sitio</label>
+      </fieldset>
+      {picked.text !== null && (
+        <label className="flex flex-col gap-1 font-semibold">
+          Texto
+          <textarea rows={3} maxLength={3000} className="ad-input" value={es.text ?? picked.text} onChange={(e) => patchEl({ text: e.target.value })} />
+        </label>
+      )}
+      {picked.isLink && (
+        <label className="flex flex-col gap-1 font-semibold">
+          Enlace
+          <input className="ad-input" placeholder="/pagina o https://…" value={es.href ?? picked.href} onChange={(e) => patchEl({ href: e.target.value })} />
+        </label>
+      )}
+      <label className="flex flex-col gap-1 font-semibold">
+        {picked.isImg ? "Imagen (dirección)" : "Imagen de fondo (dirección)"}
+        <input className="ad-input" placeholder="/imagenes/foto.jpg o https://…" value={es.image ?? (picked.isImg ? picked.src : "")} onChange={(e) => patchEl({ image: e.target.value })} />
+      </label>
+      <ColorField label="Color de fondo" value={es.bg} fallback="#0a2a20" onChange={(v) => patchEl({ bg: v })} />
+      <ColorField label="Color del texto" value={es.color} fallback="#f4f2e9" onChange={(v) => patchEl({ color: v })} />
+      <Slider label="Tamaño" value={es.scale ?? 100} min={40} max={250} unit="%" onChange={(n) => patchEl({ scale: n })} />
+      <label className="flex items-center gap-2 font-semibold">
+        <input type="checkbox" checked={Boolean(es.hidden)} onChange={(e) => patchEl({ hidden: e.target.checked || undefined })} /> Ocultar este elemento
+      </label>
+      <div className="flex flex-wrap gap-2">
+        <button type="button" className="ad-btn ad-btn-ghost" onClick={() => update((d) => { const els = { ...d.elements }; delete els[elKey]; return { ...d, elements: els }; })}>
+          <RotateCcw size={14} /> Restablecer elemento
+        </button>
+        <button type="button" className="ad-btn ad-btn-ghost" onClick={() => setPicked(null)}>Elegir otro</button>
+      </div>
+    </>
+  );
+  const listaEdiciones =
+    nEditados > 0 ? (
+      <div className="flex flex-col gap-1.5 border-t border-[#e4e1d6] pt-3">
+        <p className="ad-eyebrow">Elementos editados ({nEditados})</p>
+        <ul className="flex flex-col gap-1">
+          {Object.keys(design.elements).map((k) => {
+            const sp = splitElementKey(k);
+            return (
+              <li key={k} className="flex items-center gap-2 rounded-lg border border-[#d9d6cb] px-2 py-1">
+                <span className="min-w-0 flex-1 truncate font-mono text-[0.68rem] text-[#5d6e65]" title={k}>{sp?.path === "*" ? "Todo el sitio" : sp?.path} · {sp?.selector.split(" > ").slice(-2).join(" > ")}</span>
+                <button type="button" aria-label="Quitar edición" className="text-[#a12b2b]" onClick={() => update((d) => { const els = { ...d.elements }; delete els[k]; return { ...d, elements: els }; })}>×</button>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    ) : null;
+
   const dev = DEVICES[device];
-  const maxH = Math.max(360, vh * (full ? 0.7 : 0.55));
+  const maxH = Math.max(360, vh * (full ? 0.78 : 0.66));
   const avail = Math.max(240, stageW - 2 * dev.bezel - 24);
   const scale = Math.min(1, avail / dev.w, maxH / dev.h, dev.maxW / dev.w);
   const viewW = Math.round(dev.w * scale);
@@ -426,6 +585,7 @@ export function DesignEditor({ writable, initialPublished, initialDraft, canUndo
   const abrir = (t: Tab) => setTab((cur) => (cur === t ? null : t));
 
   const secciones: { id: Tab; icon: LucideIcon; title: string; summary: string; body: React.ReactNode }[] = [
+    { id: "elemento", icon: MousePointerClick, title: "Elemento de la página", summary: picked ? `<${picked.tag}> · ${nEditados} editado${nEditados === 1 ? "" : "s"}` : `Elija uno en la página · ${nEditados} editado${nEditados === 1 ? "" : "s"}`, body: <>{cuerpoElemento}{listaEdiciones}</> },
     { id: "zonas", icon: Paintbrush, title: "Colores y tamaños", summary: `Zona: ${meta.label}${design.regions[region] ? " · con cambios" : ""}`, body: cuerpoZonas },
     { id: "piezas", icon: LayoutGrid, title: "Plantilla", summary: `${partLabel(NAVBARS, design.parts.navbar ?? "clasico")} · ${partLabel(HEROES, design.parts.hero ?? "izquierda")}`, body: cuerpoPiezas },
     { id: "recorrido", icon: ListOrdered, title: "Orden y estilo de secciones", summary: `${locals.length} secciones${nEstilos ? ` · ${nEstilos} con estilo propio` : ""}`, body: cuerpoRecorrido },
@@ -456,6 +616,21 @@ export function DesignEditor({ writable, initialPublished, initialDraft, canUndo
               </button>
             ))}
           </div>
+          <div role="group" aria-label="Modo" className="flex gap-1 rounded-full border border-[#d9d6cb] bg-white p-1 text-xs font-bold">
+            {(["editar", "navegar"] as const).map((m) => (
+              <button key={m} type="button" aria-pressed={modo === m} onClick={() => setModo(m)} className={`rounded-full px-3 py-2 capitalize transition-colors ${modo === m ? "bg-[#165a43] text-white" : "text-[#5d6e65] hover:bg-[#f1efe6]"}`}>
+                {m}
+              </button>
+            ))}
+          </div>
+          <form onSubmit={(e) => { e.preventDefault(); irA(ir); }} className="flex items-center gap-1 rounded-full border border-[#d9d6cb] bg-white py-1 pl-3 pr-1" title="Página que se está editando">
+            <label className="sr-only" htmlFor="ruta-editor">Página</label>
+            <input id="ruta-editor" list="rutas-editor" value={ir} onChange={(e) => setIr(e.target.value)} className="w-32 bg-transparent text-xs font-semibold outline-none" spellCheck={false} />
+            <datalist id="rutas-editor">
+              {["/", "/noticias", "/nosotros", "/sala-de-prensa", "/preguntas-frecuentes", "/pagos", "/buscador"].map((r) => <option key={r} value={r} />)}
+            </datalist>
+            <button type="submit" className="rounded-full bg-[#f1efe6] px-3 py-1.5 text-xs font-bold text-[#165a43] hover:bg-[#e4e1d6]">Ir</button>
+          </form>
           <div className="relative">
             <button type="button" aria-haspopup="menu" aria-expanded={menu === "vista"} onClick={() => setMenu(menu === "vista" ? null : "vista")} className="ad-icon-btn !w-auto gap-1 px-3">
               <SlidersHorizontal size={16} /> <ChevronDown size={14} />
@@ -516,7 +691,7 @@ export function DesignEditor({ writable, initialPublished, initialDraft, canUndo
           <p className="mt-4 text-sm text-[#5d6e65]">
             {dev.name} · {dev.w}px · {Math.round(scale * 100)} %{scale < 1 ? " (ajustado al ancho)" : ""}
           </p>
-          <p className="mt-1 text-xs text-[#8a978f]">Haga clic en una zona o un local de la página para editarlo.</p>
+          <p className="mt-1 text-xs text-[#8a978f]">{modo === "editar" ? `Haga clic en cualquier elemento de la página para editarlo. Página: ${pagePath}` : `Modo navegar: use los enlaces del sitio. Página: ${pagePath}`}</p>
         </div>
       </div>
 
