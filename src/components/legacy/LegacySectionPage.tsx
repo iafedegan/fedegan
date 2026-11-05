@@ -75,7 +75,7 @@ export async function LegacySectionPage({ slug, ruta }: { slug: string; ruta: st
         </details>
         )}
 
-        <article className="min-w-0 [overflow-wrap:anywhere] lg:order-first">
+        <article className="ix-paper min-w-0 [overflow-wrap:anywhere] lg:order-first">
           {page.blocks.length > 0 ? (
             <LegacyContent blocks={page.blocks} />
           ) : (

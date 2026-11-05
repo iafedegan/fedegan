@@ -1437,3 +1437,48 @@ html[data-theme="institucional"] body::before {
 }
 /* Las cabeceras y franjas de página dejan ver el fondo nacarado. */
 html[data-theme="institucional"] :is(.mx-hero, .ph, .pg-stage) { background: transparent; }
+
+/* ======================================================================
+   Rediseño de las páginas interiores (tono claro): cabecera con aurora y ornamento,
+   hoja de contenido elevada, tipografía editorial y menú lateral con pastilla activa.
+   ====================================================================== */
+html[data-theme="institucional"] .mx-hero {
+  overflow: hidden; border-bottom: 1px solid rgba(176, 143, 79, 0.5);
+  background:
+    radial-gradient(46rem 20rem at 6% -10%, rgba(15, 61, 46, 0.13), transparent 70%),
+    radial-gradient(40rem 18rem at 96% 110%, rgba(176, 143, 79, 0.26), transparent 70%),
+    radial-gradient(30rem 14rem at 70% 0%, rgba(190, 220, 255, 0.3), transparent 70%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.78), rgba(255, 255, 255, 0.5));
+}
+.mx-hero-orn { position: absolute; z-index: -1; pointer-events: none; border-radius: 50%; }
+.mx-hero-orn-a { right: -6rem; top: -9rem; width: 26rem; height: 26rem; border: 1px solid rgba(176, 143, 79, 0.45); box-shadow: 0 0 0 1.6rem rgba(176, 143, 79, 0.07), 0 0 0 3.4rem rgba(176, 143, 79, 0.045); }
+.mx-hero-orn-b { right: 14%; bottom: -7rem; width: 14rem; height: 14rem; background: radial-gradient(circle at 30% 30%, rgba(15, 61, 46, 0.14), rgba(15, 61, 46, 0) 70%); }
+html[data-theme="institucional"] .mx-title { font-size: clamp(2rem, 4.4vw, 3.4rem); color: #0f3d2e; letter-spacing: -0.015em; }
+html[data-theme="institucional"] .mx-title::after { content: ""; display: block; width: 4rem; height: 3px; margin-top: 1rem; border-radius: 2px; background: linear-gradient(90deg, #b08f4f, #e6cf94); }
+html[data-theme="institucional"] .mx-lead { color: #3f4f46; }
+html[data-theme="institucional"] .mx-crumb { padding: 0.3rem 0.75rem; border-radius: 999px; background: rgba(255, 255, 255, 0.72); border: 1px solid rgba(15, 61, 46, 0.12); box-shadow: 0 6px 16px -12px rgba(19, 33, 26, 0.45); }
+html[data-theme="institucional"] .mx-fact { background: #fff; border: 1px solid rgba(176, 143, 79, 0.55); border-radius: 999px; color: #5a4310; box-shadow: 0 6px 14px -10px rgba(176, 143, 79, 0.7); }
+
+/* Hoja de contenido */
+html[data-theme="institucional"] .ix-paper {
+  position: relative; padding: clamp(1.25rem, 3vw, 2.6rem); border-radius: 1.1rem;
+  background: linear-gradient(180deg, #ffffff 0%, rgba(255, 255, 255, 0.94) 100%);
+  border: 1px solid rgba(15, 61, 46, 0.1); border-top: 3px solid #b08f4f;
+  box-shadow: 0 30px 60px -38px rgba(19, 33, 26, 0.45), 0 2px 0 rgba(255, 255, 255, 0.8) inset;
+}
+html[data-theme="institucional"] .ix-paper :is(h2, h3, h4) { font-family: var(--font-display); color: #0f3d2e; line-height: 1.2; }
+html[data-theme="institucional"] .ix-paper h2 { margin-top: 2.2rem; padding-bottom: 0.55rem; font-size: 1.6rem; border-bottom: 1px solid rgba(176, 143, 79, 0.45); }
+html[data-theme="institucional"] .ix-paper p { line-height: 1.75; color: #26352d; }
+html[data-theme="institucional"] .ix-paper > :is(p, div):first-child { font-size: 1.12rem; }
+html[data-theme="institucional"] .ix-paper a:not([class*="bg-"]) { color: #0f5a43; text-decoration-color: rgba(176, 143, 79, 0.8); text-underline-offset: 3px; }
+html[data-theme="institucional"] .ix-paper table { width: 100%; border-collapse: separate; border-spacing: 0; overflow: hidden; border: 1px solid rgba(15, 61, 46, 0.14); border-radius: 0.7rem; }
+html[data-theme="institucional"] .ix-paper :is(th, td) { padding: 0.65rem 0.9rem; border-bottom: 1px solid rgba(15, 61, 46, 0.08); }
+html[data-theme="institucional"] .ix-paper th { background: #0f3d2e; color: #fff; text-align: left; }
+html[data-theme="institucional"] .ix-paper tr:nth-child(even) td { background: #f7f5ee; }
+html[data-theme="institucional"] .ix-paper ul { padding-left: 1.2rem; }
+html[data-theme="institucional"] .ix-paper li::marker { color: #b08f4f; }
+
+/* Menú lateral: pastilla verde para la página activa y tarjeta de cristal */
+html[data-theme="institucional"] nav[aria-label^="Menú de"].mx-card { background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(247, 245, 238, 0.9)); border-top: 3px solid #b08f4f; }
+html[data-theme="institucional"] nav[aria-label^="Menú de"] a[aria-current="page"] { background: #0f3d2e; color: #fff; font-weight: 700; box-shadow: 0 8px 16px -10px rgba(15, 61, 46, 0.8); }
+html[data-theme="institucional"] nav[aria-label^="Menú de"] a:not([aria-current="page"]):hover { background: rgba(15, 61, 46, 0.07); color: #0f3d2e; }
