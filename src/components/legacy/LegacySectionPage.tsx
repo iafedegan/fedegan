@@ -70,19 +70,19 @@ export async function LegacySectionPage({ slug, ruta }: { slug: string; ruta: st
         imagePos={photo?.pos}
         breadcrumbs={crumbs}
       />
-      <Container className={`grid gap-8 py-5 sm:py-8 ${hasMenu ? "lg:grid-cols-[minmax(0,1fr)_18rem] lg:gap-10" : ""}`}>
+      <Container className={`grid gap-8 py-5 sm:py-8 ${hasMenu ? "lg:grid-cols-[17.5rem_minmax(0,1fr)] lg:gap-12" : ""}`}>
         {hasMenu && (
-        <details className="rounded-[var(--radius-md)] border border-[var(--border-strong)] bg-[var(--surface-2)] lg:hidden">
-          <summary className="flex cursor-pointer list-none items-center gap-2 p-4 text-sm font-bold uppercase tracking-[0.1em] text-[var(--fg-lime-400)]">
+        <details className="ed-rail ed-rail-m lg:hidden">
+          <summary className="flex cursor-pointer list-none items-center gap-2 p-1 text-sm font-bold uppercase tracking-[0.14em] text-[var(--fg-lime-400)]">
             <Menu size={16} aria-hidden /> En esta sección
           </summary>
-          <nav aria-label={`Menú de ${section.label}`} className="border-t border-[var(--border)] p-3">
+          <nav aria-label={`Menú de ${section.label}`} className="mt-3 border-t border-[var(--border)] pt-3">
             <NavTree nodes={menuItems} current={key} />
           </nav>
         </details>
         )}
 
-        <article className="ix-paper min-w-0 [overflow-wrap:anywhere] lg:order-first">
+        <article className="ed-body min-w-0 [overflow-wrap:anywhere]">
           {page.blocks.length > 0 ? (
             <LegacyContent blocks={page.blocks} />
           ) : (
@@ -118,10 +118,11 @@ export async function LegacySectionPage({ slug, ruta }: { slug: string; ruta: st
         </article>
 
         {hasMenu && (
-        <aside className="hidden lg:block">
+        <aside className="hidden lg:order-first lg:block">
           <div className="sticky top-36 flex max-h-[calc(100svh-10rem)] flex-col gap-3">
-            <nav aria-label={`Menú de ${section.label}`} className="mx-card min-h-0 flex-1 overflow-y-auto !p-3">
-              <p className="px-2.5 pb-2 pt-1 text-[0.7rem] font-bold uppercase tracking-[0.18em] text-[var(--fg-lime-400)]">{section.label}</p>
+            <nav aria-label={`Menú de ${section.label}`} className="ed-rail min-h-0 flex-1 overflow-y-auto">
+              <p className="ed-rail-kicker">Sección</p>
+              <p className="ed-rail-title">{section.label}</p>
               <NavTree nodes={menuItems} current={key} />
             </nav>
             {toc.length >= 3 && (
