@@ -30,8 +30,9 @@
   --border-strong: #0f3d2e;
 
   --text: #13211a;
-  --text-muted: #5d6b62;
-  --text-faint: #5b6a61;
+  /* Más oscuros que antes: sobre los colores intensos del fondo en movimiento (rosa, azul) siguen dando ≥ 4,5:1. */
+  --text-muted: #394540;
+  --text-faint: #3f4b44;
   --text-on-brand: #f7f6f1;
   --on-accent: #f7f6f1;
 
@@ -1412,28 +1413,55 @@ a.mx-card:hover, .mx-lift:hover, .gl-hover:hover { transform: translateY(-2px); 
 [data-theme="institucional"] .mx-hero-photo :is(.mx-crumb, .mx-crumb a, .mx-crumb span) { color: #f4f2e9; }
 [data-theme="institucional"] footer a:not([class*="text-white"]) { color: inherit; }
 
-/* Tono claro: sin banners de foto y con un fondo blanco nacarado (degradados suaves que se desplazan muy despacio). */
+/* Fondo de color en movimiento (rosa, azul, menta y durazno). Dos capas que derivan en direcciones distintas, para que se note el movimiento.
+   Solo se animan transform y opacidad (las capas se pintan una vez y se mueven en la tarjeta gráfica): no pesa en el hilo principal. */
 .pg-photo, .ph-photo, .mx-hero-shade { display: none !important; }
 html[data-theme="institucional"] { background: #fff; }
 html[data-theme="institucional"] body { background: transparent; }
+html[data-theme="institucional"] body::before,
+html[data-theme="institucional"] body::after,
+html[data-theme="esmeralda"] body:has(.mx-hero)::before,
+html[data-theme="esmeralda"] body:has(.mx-hero)::after {
+  content: ""; position: fixed; inset: -24%; z-index: -1; pointer-events: none; will-change: transform;
+}
+/* Tono claro */
 html[data-theme="institucional"] body::before {
-  content: ""; position: fixed; inset: -25%; z-index: -1; pointer-events: none;
   background:
-    radial-gradient(38rem 30rem at 12% 8%, rgba(255, 196, 220, 0.85), transparent 62%),
-    radial-gradient(40rem 32rem at 88% 14%, rgba(180, 212, 255, 0.85), transparent 62%),
-    radial-gradient(42rem 34rem at 16% 92%, rgba(176, 236, 210, 0.8), transparent 62%),
-    radial-gradient(38rem 30rem at 90% 88%, rgba(255, 224, 168, 0.85), transparent 62%),
-    radial-gradient(30rem 24rem at 50% 50%, rgba(255, 255, 255, 0.55), transparent 70%),
+    radial-gradient(min(58rem, 120vw) min(44rem, 90vw) at 27% 25%, rgba(255, 160, 202, 0.95), transparent 66%),
+    radial-gradient(min(58rem, 120vw) min(44rem, 90vw) at 73% 27%, rgba(140, 190, 255, 0.95), transparent 66%),
     linear-gradient(180deg, #ffffff 0%, #fbfaf9 100%);
-  will-change: transform;
+}
+html[data-theme="institucional"] body::after {
+  background:
+    radial-gradient(min(60rem, 125vw) min(46rem, 94vw) at 27% 76%, rgba(140, 228, 190, 0.92), transparent 66%),
+    radial-gradient(min(58rem, 120vw) min(44rem, 90vw) at 73% 74%, rgba(255, 200, 130, 0.95), transparent 66%);
+}
+/* Tono oscuro de las páginas interiores: los mismos colores como destellos suaves sobre el grafito */
+html[data-theme="esmeralda"]:has(.mx-hero) { background: #141414; }
+html[data-theme="esmeralda"] body:has(.mx-hero) { background: transparent; }
+html[data-theme="esmeralda"] body:has(.mx-hero)::before {
+  background:
+    radial-gradient(min(54rem, 105vw) min(42rem, 78vw) at 27% 25%, rgba(255, 150, 196, 0.28), transparent 66%),
+    radial-gradient(min(54rem, 105vw) min(42rem, 78vw) at 73% 27%, rgba(120, 170, 255, 0.28), transparent 66%);
+}
+html[data-theme="esmeralda"] body:has(.mx-hero)::after {
+  background:
+    radial-gradient(min(56rem, 108vw) min(44rem, 80vw) at 27% 76%, rgba(120, 220, 180, 0.28), transparent 66%),
+    radial-gradient(min(54rem, 105vw) min(42rem, 78vw) at 73% 74%, rgba(255, 190, 120, 0.27), transparent 66%);
 }
 @media (prefers-reduced-motion: no-preference) {
-  html[data-theme="institucional"] body::before { animation: nacar 48s ease-in-out infinite alternate; }
+  html[data-theme="institucional"] body::before, html[data-theme="esmeralda"] body:has(.mx-hero)::before { animation: nacar-a 20s ease-in-out infinite alternate; }
+  html[data-theme="institucional"] body::after, html[data-theme="esmeralda"] body:has(.mx-hero)::after { animation: nacar-b 26s ease-in-out infinite alternate; }
 }
-@keyframes nacar {
-  0% { transform: translate3d(-3%, -2%, 0) rotate(0deg) scale(1); }
-  50% { transform: translate3d(3%, 2%, 0) rotate(4deg) scale(1.06); }
-  100% { transform: translate3d(-2%, 3%, 0) rotate(-3deg) scale(1.02); }
+@keyframes nacar-a {
+  0%   { transform: translate3d(-9%, -7%, 0) rotate(-5deg) scale(1); }
+  50%  { transform: translate3d(8%, 6%, 0) rotate(7deg) scale(1.16); }
+  100% { transform: translate3d(11%, -5%, 0) rotate(-3deg) scale(1.06); }
+}
+@keyframes nacar-b {
+  0%   { transform: translate3d(10%, 8%, 0) rotate(6deg) scale(1.12); }
+  50%  { transform: translate3d(-9%, -7%, 0) rotate(-7deg) scale(1); }
+  100% { transform: translate3d(-11%, 6%, 0) rotate(4deg) scale(1.14); }
 }
 /* Las cabeceras y franjas de página dejan ver el fondo nacarado. */
 html[data-theme="institucional"] :is(.mx-hero, .ph, .pg-stage) { background: transparent; }
