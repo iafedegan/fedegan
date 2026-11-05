@@ -1,49 +1,26 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ExternalLink, Menu } from "lucide-react";
+import { Menu } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { LegacyContent } from "@/components/legacy/LegacyContent";
 import { QuickRail } from "@/components/blocks/Accesos";
 import { WaveCard } from "@/components/ui/WaveCard";
+import { NavTree, type NavItem } from "@/components/legacy/NavTree";
 import { journeyPhotos } from "@/content/scroll-world";
 import { getPageOverride } from "@/lib/cms/paginas";
 import { excerptOf, findTrail, getLegacyPage, getLegacySection, legacyHref, type NavNode } from "@/content/legacy";
 
 const PHOTO_ID: Record<string, string> = { "cifras-del-sector": "cifras", "sistema-integrado-de-gestion": "sig" };
 
-const holds = (n: NavNode, key: string): boolean => n.key === key || Boolean(n.children?.some((c) => holds(c, key)));
-
-function NavTree({ nodes, slug, current, depth = 0 }: { nodes: NavNode[]; slug: string; current: string; depth?: number }) {
-  return (
-    <ul className={depth === 0 ? "flex flex-col" : "mt-0.5 flex flex-col border-l border-[var(--border)] pl-3"}>
-      {nodes.map((n, i) => {
-        const active = n.key === current;
-        const cls = `block rounded-[var(--radius-sm)] px-2.5 py-1.5 text-sm leading-snug transition-colors ${
-          active
-            ? "bg-[rgba(216,181,88,0.12)] font-bold text-[var(--fg-lime-400)]"
-            : "text-[var(--text-muted)] hover:bg-[var(--surface-2)] hover:text-[var(--text)]"
-        }`;
-        return (
-          <li key={`${n.label}-${i}`}>
-            {n.key ? (
-              <Link href={legacyHref(slug, n.key)} className={cls} aria-current={active ? "page" : undefined}>
-                {n.label}
-              </Link>
-            ) : n.href ? (
-              <a href={n.href} target="_blank" rel="noopener noreferrer" className={cls}>
-                {n.label} <ExternalLink size={12} aria-hidden className="ml-0.5 inline -translate-y-px" />
-              </a>
-            ) : (
-              <span className="block px-2.5 py-1.5 text-sm font-bold text-[var(--text)]">{n.label}</span>
-            )}
-            {n.children && holds(n, current) && <NavTree nodes={n.children} slug={slug} current={current} depth={depth + 1} />}
-          </li>
-        );
-      })}
-    </ul>
-  );
-}
+// Resuelve las rutas del menú en el servidor para no enviar el contenido migrado al navegador.
+const toItems = (nodes: NavNode[], slug: string): NavItem[] =>
+  nodes.map((n) => ({
+    label: n.label,
+    key: n.key,
+    href: n.key ? legacyHref(slug, n.key) : n.href,
+    external: !n.key && Boolean(n.href),
+    children: n.children ? toItems(n.children, slug) : undefined,
+  }));
 
 // Página de una sección con el texto copiado del portal actual: menú lateral, migas y contenido.
 export async function LegacySectionPage({ slug, ruta }: { slug: string; ruta: string[] }) {
@@ -72,6 +49,7 @@ export async function LegacySectionPage({ slug, ruta }: { slug: string; ruta: st
   }
 
   const hasMenu = section.tree.length > 0;
+  const menuItems = toItems(section.tree, slug);
   const photo = journeyPhotos[PHOTO_ID[slug] ?? slug] ?? (slug === "cartas-de-presidencia" ? { src: "/headers/ia-cartas.jpg", pos: "50% 50%", alt: "" } : undefined);
   const children = isLanding ? section.tree.filter((n) => n.key && n.key !== key) : [];
 
@@ -92,7 +70,7 @@ export async function LegacySectionPage({ slug, ruta }: { slug: string; ruta: st
             <Menu size={16} aria-hidden /> En esta sección
           </summary>
           <nav aria-label={`Menú de ${section.label}`} className="border-t border-[var(--border)] p-3">
-            <NavTree nodes={section.tree} slug={slug} current={key} />
+            <NavTree nodes={menuItems} current={key} />
           </nav>
         </details>
         )}
@@ -137,7 +115,7 @@ export async function LegacySectionPage({ slug, ruta }: { slug: string; ruta: st
           <div className="sticky top-36 flex max-h-[calc(100svh-10rem)] flex-col gap-3">
             <nav aria-label={`Menú de ${section.label}`} className="mx-card min-h-0 flex-1 overflow-y-auto !p-3">
               <p className="px-2.5 pb-2 pt-1 text-[0.7rem] font-bold uppercase tracking-[0.18em] text-[var(--fg-lime-500)]">{section.label}</p>
-              <NavTree nodes={section.tree} slug={slug} current={key} />
+              <NavTree nodes={menuItems} current={key} />
             </nav>
             <QuickRail />
           </div>
