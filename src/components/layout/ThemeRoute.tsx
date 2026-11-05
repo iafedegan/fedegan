@@ -17,7 +17,7 @@ export function ThemeRoute() {
     const next = dark ? "esmeralda" : "institucional";
     const root = document.documentElement;
     if (root.getAttribute("data-theme") !== next) root.setAttribute("data-theme", next);
-    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", dark ? "#141414" : "#ffffff");
+    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", dark ? "#0e0e0e" : "#0a2a20");
   }, [pathname]);
   return null;
 }

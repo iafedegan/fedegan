@@ -24,7 +24,7 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
     try {
       localStorage.setItem(KEY, next === LIGHT ? "claro" : "oscuro");
     } catch {}
-    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", next === LIGHT ? "#ffffff" : "#05100b");
+    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", next === LIGHT ? "#0a2a20" : "#0e0e0e");
   }
 
   return (

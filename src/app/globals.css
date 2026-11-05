@@ -1794,3 +1794,19 @@ body:has(.mx-hero) .mx-stat b { text-shadow: none; }
 /* Banner «Zona de pagos»: sin caja ni borde dorado, solo filetes */
 body:has(.mx-hero) .ah-banner { border: 0; border-block: 1px solid var(--ed-hair); border-radius: 0; background: none; padding-inline: 0; }
 body:has(.mx-hero) .ah-banner:hover { border-color: var(--ed-gold); }
+
+/* ======================================================================
+   Encabezado (cabecera con el nombre y barra de menú) en el mismo verde del pie de página.
+   Sobre ese verde el texto y los dorados se vuelven claros, igual que en el pie.
+   ====================================================================== */
+:is(.mh, header[data-region="navbar"]) { background-color: var(--fg-green-900); }
+html[data-theme="institucional"] :is(.mh, header[data-region="navbar"]) {
+  --fg-lime-500: #d8b558; --fg-lime-400: #e2c373; --link: #e2c373;
+  --text: #f4f2e9; --text-muted: rgba(244, 242, 233, 0.82); --text-faint: rgba(244, 242, 233, 0.68);
+  --bg: var(--fg-green-900); --bg-muted: rgba(255, 255, 255, 0.08); --surface-solid: #0f3d2e; --surface-2: rgba(255, 255, 255, 0.06);
+  --border: rgba(255, 255, 255, 0.14); --border-strong: rgba(255, 255, 255, 0.28);
+}
+html[data-theme="institucional"] .mh-title { background-image: linear-gradient(100deg, #b98f35 0%, #e7cf8c 35%, #fff2c8 55%, #d8b558 100%); }
+html[data-theme="institucional"] .nv-brand { color: #e2c373; }
+/* En las páginas interiores oscuras el pie es grafito, y el encabezado va igual */
+html[data-theme="esmeralda"] body:has(.mx-hero) :is(.mh, header[data-region="navbar"]) { background-color: #0e0e0e; }

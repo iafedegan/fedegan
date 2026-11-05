@@ -25,7 +25,7 @@ import { Analytics } from "@/components/layout/Analytics";
 import { UsageTracker } from "@/components/layout/UsageTracker";
 
 export const viewport: Viewport = {
-  themeColor: "#ffffff",
+  themeColor: "#0a2a20",
   colorScheme: "dark",
   viewportFit: "cover",
 };
