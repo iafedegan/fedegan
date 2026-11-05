@@ -208,6 +208,21 @@ export function DesignEditor({ writable, initialPublished, initialDraft, canUndo
       },
       true,
     );
+    // En modo editar, el doble clic sobre un enlace entra a esa página (un clic solo lo selecciona para editarlo).
+    doc?.addEventListener(
+      "dblclick",
+      (e) => {
+        const a = (e.target as Element | null)?.closest?.("a[href]");
+        const h = a?.getAttribute("href");
+        if (h && /^\/[A-Za-z0-9_\-/.?=&%#]*$/.test(h)) {
+          e.preventDefault();
+          e.stopPropagation();
+          setPicked(null);
+          win?.location.assign(h);
+        }
+      },
+      true,
+    );
     doc?.addEventListener(
       "click",
       (e) => {
@@ -513,7 +528,7 @@ export function DesignEditor({ writable, initialPublished, initialDraft, canUndo
 
   const cuerpoElemento = !picked ? (
     <p className="text-[#5d6e65]">
-      Haga clic sobre cualquier título, texto, imagen, fondo o tarjeta de la vista previa para editarlo. Está en modo «Editar»; use «Navegar» en la barra para moverse por el sitio.
+      Haga clic sobre cualquier título, texto, imagen, fondo o tarjeta de la vista previa para editarlo. Para entrar a otra página: doble clic en un enlace, «Ir a esta página», la barra de ruta o el modo «Navegar».
     </p>
   ) : (
     <>
@@ -525,6 +540,11 @@ export function DesignEditor({ writable, initialPublished, initialDraft, canUndo
         <label className="flex items-center gap-1.5"><input type="radio" name="alcance" checked={alcance === "page"} onChange={() => setAlcance("page")} /> Solo esta página</label>
         <label className="flex items-center gap-1.5"><input type="radio" name="alcance" checked={alcance === "site"} onChange={() => setAlcance("site")} /> Todo el sitio</label>
       </fieldset>
+      {/^\/[A-Za-z0-9_\-/.?=&%#]*$/.test(picked.href) && (
+        <button type="button" className="ad-btn ad-btn-primary justify-center" onClick={() => irA(picked.href)}>
+          <ExternalLink size={14} /> Ir a esta página ({picked.href})
+        </button>
+      )}
       {picked.text !== null && (
         <label className="flex flex-col gap-1 font-semibold">
           Texto
@@ -600,40 +620,40 @@ export function DesignEditor({ writable, initialPublished, initialDraft, canUndo
     <div className="grid items-start gap-5 xl:grid-cols-[minmax(0,1fr)_20rem]">
       {/* Barra superior + vista previa */}
       <div className={full ? "fixed inset-0 z-50 overflow-y-auto bg-[#f4f2ea] p-4" : "min-w-0"}>
-        <div className="ad-card relative mb-4 flex flex-wrap items-center gap-2 p-3">
-          <span className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-bold ${dirty ? "border-[#e2c874] bg-[#fbf3d9] text-[#7c5f1f]" : "border-[#d9d6cb] bg-white text-[#11271d]"}`}>
-            <span className={`h-2.5 w-2.5 rounded-full ${dirty ? "bg-[#d8a21f]" : "bg-[#1fa65a]"}`} />
+        <div className="ad-card relative mb-3 flex flex-wrap items-center gap-1.5 p-2 [&_.ad-icon-btn]:!h-8 [&_.ad-icon-btn]:!min-w-8 [&_.ad-icon-btn]:!w-8 [&_.ad-btn]:!min-h-8 [&_.ad-btn]:!px-3 [&_.ad-btn]:!py-1 [&_.ad-btn]:!text-xs">
+          <span className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-bold ${dirty ? "border-[#e2c874] bg-[#fbf3d9] text-[#7c5f1f]" : "border-[#d9d6cb] bg-white text-[#11271d]"}`}>
+            <span className={`h-2 w-2 rounded-full ${dirty ? "bg-[#d8a21f]" : "bg-[#1fa65a]"}`} />
             {dirty ? "Sin publicar" : "Publicado"}
           </span>
           <div className="flex gap-1.5">
-            <button type="button" aria-label="Deshacer cambio" title="Deshacer cambio" disabled={!hist.p} onClick={undoEdit} className="ad-icon-btn disabled:opacity-40"><Undo2 size={16} /></button>
-            <button type="button" aria-label="Rehacer cambio" title="Rehacer cambio" disabled={!hist.f} onClick={redoEdit} className="ad-icon-btn disabled:opacity-40"><Redo2 size={16} /></button>
+            <button type="button" aria-label="Deshacer cambio" title="Deshacer cambio" disabled={!hist.p} onClick={undoEdit} className="ad-icon-btn disabled:opacity-40"><Undo2 size={14} /></button>
+            <button type="button" aria-label="Rehacer cambio" title="Rehacer cambio" disabled={!hist.f} onClick={redoEdit} className="ad-icon-btn disabled:opacity-40"><Redo2 size={14} /></button>
           </div>
           <div role="group" aria-label="Pantalla" className="flex gap-1 rounded-full border border-[#d9d6cb] bg-white p-1">
             {([["desktop", Monitor, "Computador"], ["tablet", Tablet, "Tableta"], ["mobile", Smartphone, "Celular"]] as const).map(([d, Icon, label]) => (
-              <button key={d} type="button" aria-label={label} title={label} aria-pressed={device === d} onClick={() => setDevice(d)} className={`flex h-9 w-11 items-center justify-center rounded-full transition-colors ${device === d ? "bg-[#165a43] text-white" : "text-[#5d6e65] hover:bg-[#f1efe6]"}`}>
-                <Icon size={17} />
+              <button key={d} type="button" aria-label={label} title={label} aria-pressed={device === d} onClick={() => setDevice(d)} className={`flex h-7 w-9 items-center justify-center rounded-full transition-colors ${device === d ? "bg-[#165a43] text-white" : "text-[#5d6e65] hover:bg-[#f1efe6]"}`}>
+                <Icon size={15} />
               </button>
             ))}
           </div>
-          <div role="group" aria-label="Modo" className="flex gap-1 rounded-full border border-[#d9d6cb] bg-white p-1 text-xs font-bold">
+          <div role="group" aria-label="Modo" className="flex gap-0.5 rounded-full border border-[#d9d6cb] bg-white p-0.5 text-[0.7rem] font-bold">
             {(["editar", "navegar"] as const).map((m) => (
-              <button key={m} type="button" aria-pressed={modo === m} onClick={() => setModo(m)} className={`rounded-full px-3 py-2 capitalize transition-colors ${modo === m ? "bg-[#165a43] text-white" : "text-[#5d6e65] hover:bg-[#f1efe6]"}`}>
+              <button key={m} type="button" aria-pressed={modo === m} onClick={() => setModo(m)} className={`rounded-full px-2.5 py-1.5 capitalize transition-colors ${modo === m ? "bg-[#165a43] text-white" : "text-[#5d6e65] hover:bg-[#f1efe6]"}`}>
                 {m}
               </button>
             ))}
           </div>
-          <form onSubmit={(e) => { e.preventDefault(); irA(ir); }} className="flex items-center gap-1 rounded-full border border-[#d9d6cb] bg-white py-1 pl-3 pr-1" title="Página que se está editando">
+          <form onSubmit={(e) => { e.preventDefault(); irA(ir); }} className="flex items-center gap-1 rounded-full border border-[#d9d6cb] bg-white py-0.5 pl-2.5 pr-0.5" title="Página que se está editando">
             <label className="sr-only" htmlFor="ruta-editor">Página</label>
-            <input id="ruta-editor" list="rutas-editor" value={ir} onChange={(e) => setIr(e.target.value)} className="w-32 bg-transparent text-xs font-semibold outline-none" spellCheck={false} />
+            <input id="ruta-editor" list="rutas-editor" value={ir} onChange={(e) => setIr(e.target.value)} className="w-24 bg-transparent text-xs font-semibold outline-none" spellCheck={false} />
             <datalist id="rutas-editor">
               {["/", "/noticias", "/nosotros", "/sala-de-prensa", "/preguntas-frecuentes", "/pagos", "/buscador"].map((r) => <option key={r} value={r} />)}
             </datalist>
-            <button type="submit" className="rounded-full bg-[#f1efe6] px-3 py-1.5 text-xs font-bold text-[#165a43] hover:bg-[#e4e1d6]">Ir</button>
+            <button type="submit" className="rounded-full bg-[#f1efe6] px-2.5 py-1 text-[0.7rem] font-bold text-[#165a43] hover:bg-[#e4e1d6]">Ir</button>
           </form>
           <div className="relative">
-            <button type="button" aria-haspopup="menu" aria-expanded={menu === "vista"} onClick={() => setMenu(menu === "vista" ? null : "vista")} className="ad-icon-btn !w-auto gap-1 px-3">
-              <SlidersHorizontal size={16} /> <ChevronDown size={14} />
+            <button type="button" aria-haspopup="menu" aria-expanded={menu === "vista"} onClick={() => setMenu(menu === "vista" ? null : "vista")} className="ad-icon-btn !w-auto gap-1 px-2">
+              <SlidersHorizontal size={14} /> <ChevronDown size={12} />
             </button>
             {menu === "vista" && (
               <div role="menu" className="absolute left-0 top-full z-30 mt-2 w-64 rounded-xl border border-[#d9d6cb] bg-white p-1.5 shadow-xl">
@@ -643,16 +663,16 @@ export function DesignEditor({ writable, initialPublished, initialDraft, canUndo
               </div>
             )}
           </div>
-          <div className="ml-auto flex items-center gap-1.5">
+          <div className="ml-auto flex items-center gap-1">
             <button type="button" aria-label={full ? "Salir de pantalla completa" : "Pantalla completa"} title={full ? "Salir de pantalla completa" : "Pantalla completa"} onClick={() => setFull((v) => !v)} className="ad-icon-btn">
-              {full ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
+              {full ? <Minimize2 size={14} /> : <Maximize2 size={14} />}
             </button>
-            <a href="/" target="_blank" rel="noreferrer" aria-label="Abrir el sitio en otra pestaña" title="Abrir el sitio en otra pestaña" className="ad-icon-btn"><ExternalLink size={16} /></a>
+            <a href="/" target="_blank" rel="noreferrer" aria-label="Abrir el sitio en otra pestaña" title="Abrir el sitio en otra pestaña" className="ad-icon-btn"><ExternalLink size={14} /></a>
             <button type="button" className="ad-btn ad-btn-primary" disabled={!writable || pending || !dirty} onClick={doPublish}>
-              <UploadCloud size={15} /> {pending ? "Procesando…" : "Publicar"}
+              <UploadCloud size={14} /> {pending ? "Procesando…" : "Publicar"}
             </button>
             <div className="relative">
-              <button type="button" aria-label="Más opciones" aria-haspopup="menu" aria-expanded={menu === "mas"} onClick={() => setMenu(menu === "mas" ? null : "mas")} className="ad-icon-btn"><Ellipsis size={16} /></button>
+              <button type="button" aria-label="Más opciones" aria-haspopup="menu" aria-expanded={menu === "mas"} onClick={() => setMenu(menu === "mas" ? null : "mas")} className="ad-icon-btn"><Ellipsis size={14} /></button>
               {menu === "mas" && (
                 <div role="menu" className="absolute right-0 top-full z-30 mt-2 w-72 rounded-xl border border-[#d9d6cb] bg-white p-1.5 shadow-xl">
                   <button type="button" role="menuitem" className={menuItem} disabled={!writable || pending || !undoable} onClick={() => { setMenu(null); doUndo(); }}>
