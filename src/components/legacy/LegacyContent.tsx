@@ -152,6 +152,7 @@ function toExplorer(entries: Entry[]): ExplorerEntry[] {
 // Pinta el texto copiado (títulos, párrafos, listas, tablas y tableros) con el estilo del portal.
 export function LegacyContent({ blocks }: { blocks: LegacyBlock[] }) {
   const nodes: ReactNode[] = [];
+  let leadDone = false;
   for (let i = 0; i < blocks.length; i++) {
     const b = blocks[i];
     const key = `b${i}`;
@@ -260,6 +261,7 @@ export function LegacyContent({ blocks }: { blocks: LegacyBlock[] }) {
       nodes.push(
         <Tag
           key={key}
+          id={`s${i}`}
           className={
             big
               ? "mb-3 mt-10 font-[var(--font-display)] text-2xl font-bold leading-snug text-[var(--text)] first:mt-0 sm:text-[1.7rem]"
@@ -284,8 +286,10 @@ export function LegacyContent({ blocks }: { blocks: LegacyBlock[] }) {
       continue;
     }
 
+    const lead = !leadDone && b.t === "p" && plain(b.text ?? "").length > 60;
+    if (lead) leadDone = true;
     nodes.push(
-      <p key={key} className="read my-4 max-w-4xl text-[1.08rem] leading-[1.7] text-[var(--text-muted)]">
+      <p key={key} className={lead ? "ix-lead read my-4 max-w-4xl" : "read my-4 max-w-4xl text-[1.08rem] leading-[1.7] text-[var(--text-muted)]"}>
         <Inline text={b.text ?? ""} />
       </p>,
     );

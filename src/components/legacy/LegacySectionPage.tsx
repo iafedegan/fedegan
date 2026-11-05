@@ -50,6 +50,13 @@ export async function LegacySectionPage({ slug, ruta }: { slug: string; ruta: st
 
   const hasMenu = section.tree.length > 0;
   const menuItems = toItems(section.tree, slug);
+  // Índice de la página: sus títulos (sin las entradas que son solo un enlace), con el mismo id que pinta LegacyContent.
+  const toc = page.blocks
+    .map((b, i) => ({ b, i }))
+    .filter(({ b }) => /^h[2-4]$/.test(b.t) && !/^\[[^\]]+\]\([^)]+\)$/.test((b.text ?? "").trim()))
+    .map(({ b, i }) => ({ id: `s${i}`, label: (b.text ?? "").replace(/\[([^\]]*)\]\([^)]*\)/g, "$1").replace(/\*\*/g, "").trim() }))
+    .filter((t) => t.label.length > 0)
+    .slice(0, 16);
   const photo = journeyPhotos[PHOTO_ID[slug] ?? slug] ?? (slug === "cartas-de-presidencia" ? { src: "/headers/ia-cartas.jpg", pos: "50% 50%", alt: "" } : undefined);
   const children = isLanding ? section.tree.filter((n) => n.key && n.key !== key) : [];
 
@@ -117,6 +124,16 @@ export async function LegacySectionPage({ slug, ruta }: { slug: string; ruta: st
               <p className="px-2.5 pb-2 pt-1 text-[0.7rem] font-bold uppercase tracking-[0.18em] text-[var(--fg-lime-400)]">{section.label}</p>
               <NavTree nodes={menuItems} current={key} />
             </nav>
+            {toc.length >= 3 && (
+              <nav aria-label="En esta página" className="ix-toc shrink-0">
+                <p>En esta página</p>
+                <ol>
+                  {toc.map((t) => (
+                    <li key={t.id}><a href={`#${t.id}`}>{t.label}</a></li>
+                  ))}
+                </ol>
+              </nav>
+            )}
             <QuickRail />
           </div>
         </aside>

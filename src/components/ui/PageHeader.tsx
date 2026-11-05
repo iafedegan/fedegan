@@ -47,27 +47,32 @@ export function PageHeader({
   return (
     <section className="mx-hero" data-region="pagehead">
       {crumbLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(crumbLd) }} />}
-      <span aria-hidden className="mx-hero-orn mx-hero-orn-a" />
-      <span aria-hidden className="mx-hero-orn mx-hero-orn-b" />
-      <Container className={`relative flex flex-col items-start text-left ${compact ? "py-6 sm:py-8" : "py-8 sm:py-12"}`}>
-        <nav aria-label="Ruta de navegación" className="mx-crumb mb-5 max-w-full flex-nowrap overflow-hidden text-xs">
-          <Link href={root.href} className="rounded px-1 py-0.5 transition-colors hover:text-[var(--fg-lime-400)]">{root.label}</Link>
-          {trail.map((b, i) => (
-            <span key={`${b.label}-${i}`} className="flex min-w-0 items-center gap-1">
-              <ChevronRight size={12} aria-hidden />
-              {b.href ? (
-                <Link href={b.href} title={b.label} className="max-w-[12rem] truncate rounded px-1 py-0.5 transition-colors hover:text-[var(--fg-lime-400)]">{b.label}</Link>
-              ) : (
-                <span aria-current={i === trail.length - 1 ? "page" : undefined} title={b.label} className="max-w-[16rem] truncate px-1 py-0.5 font-semibold">{b.label}</span>
-              )}
-            </span>
-          ))}
-        </nav>
-        {eyebrow && <span className="mx-kicker mb-3">{eyebrow}</span>}
-        <h1 className={`mx-title max-w-4xl text-balance break-words font-[var(--font-display)] font-bold leading-[1.08] ${size}`}>{title}</h1>
-        {description && <p className="mx-lead mt-4 line-clamp-3 max-w-2xl text-base leading-relaxed sm:text-lg">{description}</p>}
+      <Container className={`relative flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between ${compact ? "py-4" : "py-5 sm:py-6"}`}>
+        <div className="min-w-0">
+          <nav aria-label="Ruta de navegación" className="mx-crumb mb-2 max-w-full flex-nowrap overflow-hidden text-xs">
+            <Link href={root.href} className="rounded px-1 py-0.5 transition-colors hover:text-[var(--fg-lime-400)]">{root.label}</Link>
+            {trail.map((b, i) => (
+              <span key={`${b.label}-${i}`} className="flex min-w-0 items-center gap-1">
+                <ChevronRight size={12} aria-hidden />
+                {b.href ? (
+                  <Link href={b.href} title={b.label} className="max-w-[12rem] truncate rounded px-1 py-0.5 transition-colors hover:text-[var(--fg-lime-400)]">{b.label}</Link>
+                ) : (
+                  <span aria-current={i === trail.length - 1 ? "page" : undefined} title={b.label} className="max-w-[16rem] truncate px-1 py-0.5 font-semibold">{b.label}</span>
+                )}
+              </span>
+            ))}
+          </nav>
+          <div className="flex items-stretch gap-3">
+            <span aria-hidden className="mx-title-bar" />
+            <div className="min-w-0">
+              {eyebrow && <span className="mx-kicker mb-1">{eyebrow}</span>}
+              <h1 className={`mx-title max-w-4xl text-balance break-words font-[var(--font-display)] font-bold leading-[1.1] ${size}`}>{title}</h1>
+              {description && <p className="mx-lead mt-1.5 line-clamp-2 max-w-2xl text-sm leading-relaxed">{description}</p>}
+            </div>
+          </div>
+        </div>
         {chips.length > 0 && (
-          <ul className="mt-6 flex flex-wrap gap-2">
+          <ul className="flex flex-wrap gap-1.5 lg:justify-end">
             {chips.map((c) => (
               <li key={c} className="mx-fact">{c}</li>
             ))}
