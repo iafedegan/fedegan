@@ -1411,3 +1411,29 @@ a.mx-card:hover, .mx-lift:hover, .gl-hover:hover { transform: translateY(-2px); 
 }
 [data-theme="institucional"] .mx-hero-photo :is(.mx-crumb, .mx-crumb a, .mx-crumb span) { color: #f4f2e9; }
 [data-theme="institucional"] footer a:not([class*="text-white"]) { color: inherit; }
+
+/* Tono claro: sin banners de foto y con un fondo blanco nacarado (degradados suaves que se desplazan muy despacio). */
+.pg-photo, .ph-photo, .mx-hero-shade { display: none !important; }
+html[data-theme="institucional"] { background: #fff; }
+html[data-theme="institucional"] body { background: transparent; }
+html[data-theme="institucional"] body::before {
+  content: ""; position: fixed; inset: -25%; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(38rem 30rem at 12% 8%, rgba(255, 224, 236, 0.62), transparent 62%),
+    radial-gradient(40rem 32rem at 88% 14%, rgba(206, 228, 255, 0.6), transparent 62%),
+    radial-gradient(42rem 34rem at 16% 92%, rgba(210, 245, 228, 0.55), transparent 62%),
+    radial-gradient(38rem 30rem at 90% 88%, rgba(255, 238, 204, 0.6), transparent 62%),
+    radial-gradient(30rem 24rem at 50% 50%, rgba(255, 255, 255, 0.9), transparent 70%),
+    linear-gradient(180deg, #ffffff 0%, #fbfaf9 100%);
+  will-change: transform;
+}
+@media (prefers-reduced-motion: no-preference) {
+  html[data-theme="institucional"] body::before { animation: nacar 48s ease-in-out infinite alternate; }
+}
+@keyframes nacar {
+  0% { transform: translate3d(-3%, -2%, 0) rotate(0deg) scale(1); }
+  50% { transform: translate3d(3%, 2%, 0) rotate(4deg) scale(1.06); }
+  100% { transform: translate3d(-2%, 3%, 0) rotate(-3deg) scale(1.02); }
+}
+/* Las cabeceras y franjas de página dejan ver el fondo nacarado. */
+html[data-theme="institucional"] :is(.mx-hero, .ph, .pg-stage) { background: transparent; }

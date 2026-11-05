@@ -1,18 +1,15 @@
 import { SITE_URL } from "@/lib/site-url";
-import Image from "next/image";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { Container } from "./Container";
 
-// Cabecera de las páginas interiores: foto a sangre con velo de color, ruta en cápsula,
-// título con degradado y datos clave. Compacta: la foto acompaña, no empuja el contenido.
+// Cabecera de las páginas interiores: ruta, título y datos clave sobre el fondo nacarado de la página.
+// Ya no lleva foto de banner; las propiedades image/imagePos se aceptan por compatibilidad y se ignoran.
 export function PageHeader({
   eyebrow,
   title,
   description,
   breadcrumbs = [],
-  image,
-  imagePos = "50% 50%",
   facts,
   meta,
   compact = false,
@@ -48,14 +45,8 @@ export function PageHeader({
       }
     : null;
   return (
-    <section className={`mx-hero ${image ? "mx-hero-photo" : ""}`} data-region="pagehead">
+    <section className="mx-hero" data-region="pagehead">
       {crumbLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(crumbLd) }} />}
-      {image && (
-        <>
-          <Image src={image} alt="" fill priority sizes="100vw" className="-z-20 object-cover" style={{ objectPosition: imagePos }} />
-          <span aria-hidden className="mx-hero-shade" />
-        </>
-      )}
       <Container className={`relative flex flex-col items-center justify-start text-center lg:min-h-40 ${compact ? "py-4 sm:py-5" : "py-5 sm:py-6"}`}>
         <div className="flex min-w-0 max-w-full flex-col items-start self-start lg:absolute lg:left-10 lg:top-6 lg:max-w-[14rem]">
           <nav aria-label="Ruta de navegación" className="mx-crumb mb-3 max-w-full flex-nowrap self-start overflow-hidden text-xs">
