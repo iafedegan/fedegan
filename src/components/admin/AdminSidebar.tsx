@@ -80,17 +80,17 @@ export function AdminSidebar({ user, groups }: { user: { name: string; email: st
         </div>
       </div>
 
-      <nav aria-label="Menú del panel" className={`mt-6 flex flex-1 flex-col gap-5 pr-1 ${rail ? "overflow-x-hidden overflow-y-auto" : "overflow-y-auto"}`}>
+      <nav aria-label="Menú del panel" className={`ad-nav mt-6 flex flex-1 flex-col gap-5 pr-1 ${rail ? "overflow-x-hidden overflow-y-auto" : "overflow-y-auto"}`}>
         {groups.map((g) => {
           const cerrado = cerrados.includes(g.group);
           return (
-          <div key={g.group}>
+          <div key={g.group} className="ad-grupo-box">
             <button
               type="button"
               onClick={() => alternar(g.group)}
               aria-expanded={!cerrado}
               aria-controls={`grupo-${g.group}`}
-              className={`mb-2 flex w-full items-center justify-between px-3 text-left text-[0.66rem] font-bold uppercase tracking-[0.22em] text-[#7fa392] transition-colors hover:text-white ${lbl(rail)}`}
+              className={`ad-grupo-titulo mb-2 flex w-full items-center justify-between px-3 text-left text-[0.66rem] font-bold uppercase tracking-[0.22em] text-[#7fa392] transition-colors hover:text-white ${lbl(rail)}`}
             >
               {g.group}
               <ChevronDown size={14} className={`transition-transform duration-300 ${cerrado ? "-rotate-90" : ""}`} />

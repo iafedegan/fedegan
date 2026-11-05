@@ -1397,3 +1397,8 @@ a.mx-card:hover, .mx-lift:hover, .gl-hover:hover { transform: translateY(-2px); 
 .ad-grupo[data-cerrado="true"] { grid-template-rows: 0fr; }
 .ad-rail:not(:hover):not(:focus-within):not([data-pinned="true"]) .ad-grupo[data-cerrado="true"] { grid-template-rows: 1fr; }
 .ad-rail:is(:hover, :focus-within, [data-pinned="true"]) .ad-grupo[data-cerrado="true"] > ul { visibility: hidden; }
+
+/* Barra lateral cerrada: los títulos de grupo no ocupan espacio y los iconos quedan juntos, con una línea fina entre grupos. */
+.ad-rail:not(:hover):not(:focus-within):not([data-pinned="true"]) .ad-nav { gap: 0.5rem; }
+.ad-rail:not(:hover):not(:focus-within):not([data-pinned="true"]) .ad-grupo-titulo { height: 0; margin: 0; padding: 0; overflow: hidden; }
+.ad-rail:not(:hover):not(:focus-within):not([data-pinned="true"]) .ad-grupo-box + .ad-grupo-box { padding-top: 0.5rem; border-top: 1px solid rgba(255, 255, 255, 0.12); }
