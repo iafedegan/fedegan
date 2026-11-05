@@ -8,6 +8,7 @@ export default function DirectorioPage() {
   return (
     <>
       <PageHeader
+        variant="band"
         eyebrow="Plano del ecosistema"
         title="Directorio del portal"
         description="Una sola entrada, varios locales: cada línea de valor de FEDEGÁN–FNG tiene su espacio dentro del mismo portal, con buscador y navegación comunes."

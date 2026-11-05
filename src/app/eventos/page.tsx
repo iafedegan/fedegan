@@ -11,6 +11,7 @@ export default async function EventosPage() {
   return (
     <>
       <PageHeader
+        variant="band"
         eyebrow="Agenda"
         title="Eventos"
         description="Webinars, seminarios y foros del sector ganadero colombiano."

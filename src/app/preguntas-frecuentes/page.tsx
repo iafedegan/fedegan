@@ -13,6 +13,7 @@ export default async function FaqPage() {
   return (
     <>
       <PageHeader
+        variant="band"
         eyebrow="Ayuda"
         title="Preguntas frecuentes"
         description="Resuelva sus dudas más comunes sobre trámites, servicios y procesos de FEDEGÁN–FNG."

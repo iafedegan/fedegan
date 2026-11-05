@@ -39,6 +39,7 @@ export default function QuienesSomosPage() {
   return (
     <>
       <PageHeader
+        variant="band"
         eyebrow="El gremio"
         title="Quiénes somos"
         description="Federación Colombiana de Ganaderos: gremio sin ánimo de lucro que administra el Fondo Nacional del Ganado y representa a los productores bovinos del país."

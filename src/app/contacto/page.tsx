@@ -25,6 +25,7 @@ export default function ContactoPage() {
   return (
     <>
       <PageHeader
+        variant="band"
         eyebrow="Atención al ganadero"
         title="Contacto"
         description="Escríbanos por PQRSD o comuníquese directamente con la Federación Colombiana de Ganaderos."

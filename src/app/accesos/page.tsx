@@ -9,6 +9,7 @@ export default function AccesosPage() {
   return (
     <>
       <PageHeader
+        variant="band"
         eyebrow="Acceso directo"
         title="Pagos, trámites y avisos"
         description="Pague la cuota, consulte su registro, radique una solicitud y vea los avisos vigentes, todo en un solo lugar."

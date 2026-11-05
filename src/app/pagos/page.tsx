@@ -52,6 +52,7 @@ export default function PagosPage() {
   return (
     <>
       <PageHeader
+        variant="band"
         eyebrow="Fondo Nacional del Ganado"
         title="Zona de pagos"
         description="Todos los pagos de FEDEGÁN–FNG en un solo lugar."

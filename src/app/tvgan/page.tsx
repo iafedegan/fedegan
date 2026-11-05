@@ -15,6 +15,7 @@ export default function TvganPage() {
   return (
     <>
       <PageHeader
+        variant="band"
         eyebrow="Medios"
         title="TVGAN"
         description="El canal del ganadero colombiano: programas, entrevistas y contenido audiovisual del sector."

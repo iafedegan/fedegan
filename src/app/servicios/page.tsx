@@ -23,6 +23,7 @@ export default function ServiciosPage() {
   return (
     <>
       <PageHeader
+        variant="band"
         eyebrow="Autogestión"
         title="Servicios en línea"
         description="Pagos, trámites y consultas de FEDEGÁN–FNG para ganaderos y aliados del sector."

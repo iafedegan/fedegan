@@ -150,9 +150,11 @@ function toExplorer(entries: Entry[]): ExplorerEntry[] {
 }
 
 // Pinta el texto copiado (títulos, párrafos, listas, tablas y tableros) con el estilo del portal.
-export function LegacyContent({ blocks }: { blocks: LegacyBlock[] }) {
+export function LegacyContent({ blocks, lead: allowLead = true }: { blocks: LegacyBlock[]; lead?: boolean }) {
   const nodes: ReactNode[] = [];
-  let leadDone = false;
+  let leadDone = !allowLead;
+  // Páginas con varios apartados de tercer nivel (programas, servicios…): cada apartado va en su propia ficha.
+  const grouped3 = allowLead && blocks.filter((x) => x.t === "h3").length >= 3;
   for (let i = 0; i < blocks.length; i++) {
     const b = blocks[i];
     const key = `b${i}`;
@@ -164,6 +166,21 @@ export function LegacyContent({ blocks }: { blocks: LegacyBlock[] }) {
         i = grouped.next - 1;
         continue;
       }
+    }
+
+    if (b.t === "h3" && grouped3) {
+      let j = i + 1;
+      while (j < blocks.length && !/^h[1-6]$/.test(blocks[j].t)) j++;
+      nodes.push(
+        <section key={key} className="ed-item">
+          <h3 id={`s${i}`} className="font-[var(--font-display)] text-xl font-bold leading-snug text-[var(--text)]">
+            <Inline text={b.text ?? ""} />
+          </h3>
+          <LegacyContent blocks={blocks.slice(i + 1, j)} lead={false} />
+        </section>,
+      );
+      i = j - 1;
+      continue;
     }
 
     if (b.t === "li") {

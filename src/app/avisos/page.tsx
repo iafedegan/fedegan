@@ -8,6 +8,7 @@ export default function AvisosPage() {
   return (
     <>
       <PageHeader
+        variant="band"
         eyebrow="Avisos"
         title="Avisos y convocatorias"
         description="Comunicados del recaudo, campañas del sector y avisos de aliados, ordenados por tema."

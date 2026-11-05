@@ -1,16 +1,16 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Menu } from "lucide-react";
+import { ExternalLink, Menu } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { LegacyContent } from "@/components/legacy/LegacyContent";
 import { QuickRail } from "@/components/blocks/Accesos";
-import { WaveCard } from "@/components/ui/WaveCard";
 import { NavTree, type NavItem } from "@/components/legacy/NavTree";
-import { journeyPhotos } from "@/content/scroll-world";
+import { TocRail, type TocItem } from "@/components/legacy/TocRail";
+import { ArticleTools } from "@/components/legacy/ArticleTools";
+import { PrevNext, SectionSearch, SectionTiles, countBelow, flattenTree } from "@/components/legacy/SectionParts";
 import { getPageOverride } from "@/lib/cms/paginas";
-import { excerptOf, findTrail, getLegacyPage, getLegacySection, legacyHref, type NavNode } from "@/content/legacy";
-
-const PHOTO_ID: Record<string, string> = { "cifras-del-sector": "cifras", "sistema-integrado-de-gestion": "sig" };
+import { findTrail, getLegacyPage, getLegacySection, legacyHref, type NavNode } from "@/content/legacy";
 
 // Resuelve las rutas del menú en el servidor para no enviar el contenido migrado al navegador.
 const toItems = (nodes: NavNode[], slug: string): NavItem[] =>
@@ -22,7 +22,11 @@ const toItems = (nodes: NavNode[], slug: string): NavItem[] =>
     children: n.children ? toItems(n.children, slug) : undefined,
   }));
 
-// Página de una sección con el texto copiado del portal actual: menú lateral, migas y contenido.
+const sizeOf = (title: string) => (title.length > 90 ? "ed-t4" : title.length > 60 ? "ed-t3" : title.length > 32 ? "ed-t2" : "ed-t1");
+
+// Páginas de una sección con el texto copiado del portal actual. Tienen dos composiciones:
+//  · Portada de la sección: franja con titular y buscador, fichas de cada rama y, debajo, el texto de presentación.
+//  · Página de contenido: migas, menú de la sección a la izquierda, texto en el centro e índice de la página a la derecha.
 export async function LegacySectionPage({ slug, ruta }: { slug: string; ruta: string[] }) {
   const section = getLegacySection(slug);
   if (!section) notFound();
@@ -35,6 +39,7 @@ export async function LegacySectionPage({ slug, ruta }: { slug: string; ruta: st
 
   const trail = findTrail(section.tree, key) ?? [];
   const isLanding = key === section.landing;
+  const here = trail[trail.length - 1];
 
   const crumbs: { label: string; href?: string }[] = [{ label: section.label, href: isLanding ? undefined : `/seccion/${slug}` }];
   if (!isLanding) {
@@ -51,94 +56,153 @@ export async function LegacySectionPage({ slug, ruta }: { slug: string; ruta: st
   const hasMenu = section.tree.length > 0;
   const menuItems = toItems(section.tree, slug);
   // Índice de la página: sus títulos (sin las entradas que son solo un enlace), con el mismo id que pinta LegacyContent.
-  const toc = page.blocks
+  const toc: TocItem[] = page.blocks
     .map((b, i) => ({ b, i }))
     .filter(({ b }) => /^h[2-4]$/.test(b.t) && !/^\[[^\]]+\]\([^)]+\)$/.test((b.text ?? "").trim()))
     .map(({ b, i }) => ({ id: `s${i}`, label: (b.text ?? "").replace(/\[([^\]]*)\]\([^)]*\)/g, "$1").replace(/\*\*/g, "").trim() }))
     .filter((t) => t.label.length > 0)
     .slice(0, 16);
-  const photo = journeyPhotos[PHOTO_ID[slug] ?? slug] ?? (slug === "cartas-de-presidencia" ? { src: "/headers/ia-cartas.jpg", pos: "50% 50%", alt: "" } : undefined);
-  const children = isLanding ? section.tree.filter((n) => n.key && n.key !== key) : [];
 
+  // Orden de lectura de la sección: la portada y luego las páginas del menú.
+  const order = [{ label: section.label, href: `/seccion/${slug}` }, ...flattenTree(section.tree, slug).filter((p) => p.href !== `/seccion/${slug}`)];
+  const at = order.findIndex((p) => p.href === legacyHref(slug, key));
+  const prev = at > 0 ? order[at - 1] : undefined;
+  const next = at >= 0 && at < order.length - 1 ? order[at + 1] : undefined;
+
+  const empty = (
+    <p className="rounded-[0.25rem] border border-dashed border-[var(--border-strong)] bg-[var(--surface-2)] p-6 text-[var(--text-muted)]">
+      Esta página reúne documentos y tableros del portal actual. Puede consultarla directamente allí.
+    </p>
+  );
+  const source = (
+    <p className="art-source">
+      Contenido copiado del portal actual de FEDEGÁN.{" "}
+      <a href={page.source} target="_blank" rel="noopener noreferrer">
+        Ver página original <ExternalLink size={12} aria-hidden className="inline -translate-y-px" />
+      </a>
+    </p>
+  );
+
+  /* ───────────── Portada de la sección ───────────── */
+  if (isLanding) {
+    const branches = section.tree.filter((n) => n.key !== key);
+    const pages = branches.reduce((a, n) => a + 1 + countBelow(n), 0);
+    return (
+      <>
+        <PageHeader
+          variant="band"
+          eyebrow="Sección"
+          title={section.label}
+          description={page.title.length > 12 && page.title !== section.label ? page.title : undefined}
+          breadcrumbs={crumbs}
+          aside={
+            <>
+              {branches.length > 0 && (
+                <dl className="hub-stats">
+                  <div><dt>Temas</dt><dd>{branches.length}</dd></div>
+                  <div><dt>Páginas</dt><dd>{pages}</dd></div>
+                </dl>
+              )}
+              <SectionSearch label={section.label} />
+            </>
+          }
+        />
+        <Container className="hub-body">
+          {branches.length > 0 && (
+            <section aria-labelledby="hub-explorar">
+              <div className="hub-head">
+                <h2 id="hub-explorar">Explore {section.label}</h2>
+                <p>Elija un tema. Cada ficha muestra lo que encontrará dentro.</p>
+              </div>
+              <SectionTiles nodes={branches} slug={slug} />
+            </section>
+          )}
+
+          <div className={`hub-intro ${page.blocks.length > 0 ? "" : "is-empty"}`}>
+            <article className="ed-body min-w-0 [overflow-wrap:anywhere]">
+              {page.blocks.length > 0 && (
+                <>
+                  <p className="hub-label">Sobre esta sección</p>
+                  <LegacyContent blocks={page.blocks} />
+                </>
+              )}
+              {page.blocks.length === 0 && branches.length === 0 && empty}
+              {source}
+            </article>
+            <aside className="min-w-0">
+              <QuickRail />
+            </aside>
+          </div>
+        </Container>
+      </>
+    );
+  }
+
+  /* ───────────── Página de contenido ───────────── */
+  const kids = (here?.children ?? []).filter((n) => n.key !== key);
   return (
     <>
-      <PageHeader
-        eyebrow={isLanding ? "Sección" : section.label}
-        title={isLanding ? section.label : page.title}
-        description={isLanding && page.title.length > 12 && page.title !== section.label ? page.title : undefined}
-        image={photo?.src}
-        imagePos={photo?.pos}
-        breadcrumbs={crumbs}
-      />
-      <Container className={`grid gap-8 py-5 sm:py-8 ${hasMenu ? "lg:grid-cols-[17.5rem_minmax(0,1fr)] lg:gap-12" : ""}`}>
+      <PageHeader variant="strip" title={page.title} breadcrumbs={crumbs} aside={<SectionSearch label={section.label} className="sec-search-sm" />} />
+      <Container className={`doc-grid ${hasMenu ? "has-menu" : ""}`}>
+        {/* Menú de la sección (escritorio) */}
         {hasMenu && (
-        <details className="ed-rail ed-rail-m lg:hidden">
-          <summary className="flex cursor-pointer list-none items-center gap-2 p-1 text-sm font-bold uppercase tracking-[0.14em] text-[var(--fg-lime-400)]">
-            <Menu size={16} aria-hidden /> En esta sección
-          </summary>
-          <nav aria-label={`Menú de ${section.label}`} className="mt-3 border-t border-[var(--border)] pt-3">
-            <NavTree nodes={menuItems} current={key} />
-          </nav>
-        </details>
+          <aside className="doc-left hidden lg:block">
+            <div className="doc-sticky flex">
+              <nav aria-label={`Menú de ${section.label}`} className="ed-rail">
+                <Link href={`/seccion/${slug}`} className="ed-rail-title">{section.label}</Link>
+                <NavTree nodes={menuItems} current={key} />
+              </nav>
+            </div>
+          </aside>
         )}
 
-        <article className="ed-body min-w-0 [overflow-wrap:anywhere]">
-          {page.blocks.length > 0 ? (
-            <LegacyContent blocks={page.blocks} />
-          ) : (
-            <p className="rounded-[0.25rem] border border-dashed border-[var(--border-strong)] bg-[var(--surface-2)] p-6 text-[var(--text-muted)]">
-              Esta página reúne documentos y tableros del portal actual. Puede consultarla directamente allí.
-            </p>
+        {/* Texto */}
+        <article className="doc-main ed-body min-w-0 [overflow-wrap:anywhere]">
+          <header className="art-head">
+            <p className="art-kicker">{(trail.length > 1 ? trail[0].label : section.label)}</p>
+            <h1 className={`ed-title ${sizeOf(page.title)}`}>{page.title}</h1>
+            <ArticleTools />
+          </header>
+
+          {hasMenu && (
+            <details className="doc-menu-m mb-3 lg:hidden">
+              <summary>
+                <Menu size={16} aria-hidden /> En esta sección
+              </summary>
+              <nav aria-label={`Menú de ${section.label}`} className="mt-3 border-t border-[var(--border)] pt-3">
+                <NavTree nodes={menuItems} current={key} />
+              </nav>
+            </details>
           )}
 
-          {children.length > 0 && (
-            <div className="mt-12 border-t border-[var(--border)] pt-10">
-              <h2 className="mb-5 font-[var(--font-display)] text-2xl font-bold text-[var(--text)]">Contenido de {section.label}</h2>
-              <ul className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
-                {children.map((n, i) => {
-                  const child = getLegacyPage(n.key!);
-                  return (
-                    <li key={n.key}>
-                      <WaveCard href={legacyHref(slug, n.key!)} accent={(["esmeralda", "oro", "terracota", "turquesa"] as const)[i % 4]} icon="libro" title={n.label} text={child ? excerptOf(child, 150) : undefined} />
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
+          {toc.length >= 3 && (
+            <details className="toc-m xl:hidden">
+              <summary>En esta página <span>{toc.length}</span></summary>
+              <TocRail items={toc} title="Ir a" />
+            </details>
           )}
 
-          <QuickRail className="mt-10 lg:hidden" />
+          {page.blocks.length > 0 ? <LegacyContent blocks={page.blocks} /> : empty}
 
-          <p className="mt-12 border-t border-[var(--border)] pt-5 text-sm text-[var(--text-faint)]">
-            Contenido copiado del portal actual de FEDEGÁN.{" "}
-            <a href={page.source} target="_blank" rel="noopener noreferrer" className="font-semibold text-[var(--fg-lime-400)] underline underline-offset-[3px]">
-              Ver página original
-            </a>
-          </p>
+          {kids.length > 0 && (
+            <section className="art-kids" aria-labelledby="art-kids-h">
+              <h2 id="art-kids-h">Dentro de {here?.label}</h2>
+              <SectionTiles nodes={kids} slug={slug} />
+            </section>
+          )}
+
+          <PrevNext prev={prev} next={next} />
+          <QuickRail className="mt-10 xl:hidden" />
+          {source}
         </article>
 
-        {hasMenu && (
-        <aside className="hidden lg:order-first lg:block">
-          <div className="sticky top-36 flex max-h-[calc(100svh-10rem)] flex-col gap-3">
-            <nav aria-label={`Menú de ${section.label}`} className="ed-rail min-h-0 flex-1 overflow-y-auto">
-              <p className="ed-rail-kicker">Sección</p>
-              <p className="ed-rail-title">{section.label}</p>
-              <NavTree nodes={menuItems} current={key} />
-            </nav>
-            {toc.length >= 3 && (
-              <nav aria-label="En esta página" className="ix-toc shrink-0">
-                <p>En esta página</p>
-                <ol>
-                  {toc.map((t) => (
-                    <li key={t.id}><a href={`#${t.id}`}>{t.label}</a></li>
-                  ))}
-                </ol>
-              </nav>
-            )}
+        {/* Índice de la página y ayuda */}
+        <aside className="doc-right">
+          <div className="doc-sticky flex">
+            {toc.length >= 3 && <TocRail items={toc} />}
             <QuickRail />
           </div>
         </aside>
-        )}
       </Container>
     </>
   );

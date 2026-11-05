@@ -26,6 +26,7 @@ export default async function PublicacionesPage() {
   return (
     <>
       <PageHeader
+        variant="band"
         eyebrow="Biblioteca"
         title="Publicaciones"
         description="Informes, manuales y boletines institucionales del sector ganadero."

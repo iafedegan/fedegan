@@ -4,6 +4,7 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { NoticiaCard } from "@/components/blocks/NoticiaCard";
+import { NoticiaDestacada, NoticiaFila } from "@/components/blocks/NoticiaDestacada";
 import { NewsUnavailable } from "@/components/blocks/NewsUnavailable";
 import { getNoticias, getSecciones } from "@/lib/contexto";
 
@@ -36,6 +37,7 @@ export default async function NoticiasPage({ searchParams }: { searchParams: Pro
   return (
     <>
       <PageHeader
+        variant="band"
         eyebrow="Actualidad"
         title="Noticias"
         description="Notas, análisis y actualidad del sector ganadero colombiano, publicadas por CONtexto Ganadero."
@@ -66,11 +68,36 @@ export default async function NoticiasPage({ searchParams }: { searchParams: Pro
           </div>
         ) : (
           <>
-            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {items.map((n) => (
-                <NoticiaCard key={n.slug} n={n} />
-              ))}
-            </div>
+            {/* Primera página: nota principal + «Lo último»; después, el resto en cuadrícula. */}
+            {!cursor && items.length >= 3 ? (
+              <>
+                <div className="nw-top">
+                  <NoticiaDestacada n={items[0]} />
+                  <aside aria-label="Lo último" className="nw-side">
+                    <h2 className="nw-side-title">Lo último</h2>
+                    {items.slice(1, 4).map((n) => (
+                      <NoticiaFila key={n.slug} n={n} />
+                    ))}
+                  </aside>
+                </div>
+                {items.length > 4 && (
+                  <>
+                    <h2 className="nw-more-title">Más notas</h2>
+                    <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                      {items.slice(4).map((n) => (
+                        <NoticiaCard key={n.slug} n={n} />
+                      ))}
+                    </div>
+                  </>
+                )}
+              </>
+            ) : (
+              <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                {items.map((n) => (
+                  <NoticiaCard key={n.slug} n={n} />
+                ))}
+              </div>
+            )}
             {(cursor || nextCursor) && (
               <div className="mt-12 flex flex-wrap items-center justify-between gap-4">
                 {cursor ? (
