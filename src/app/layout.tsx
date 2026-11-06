@@ -85,6 +85,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="es"
+      data-scroll-behavior="smooth"
       data-theme="institucional"
       data-navbar={design.parts.navbar ?? "clasico"}
       data-footer={design.parts.footer ?? "completo"}
