@@ -254,3 +254,9 @@ html .mh { border-top: 0 !important; border-image: none !important; }
 @media (max-width: 767px) {
   html .mh { padding-top: calc(env(safe-area-inset-top, 0px) + 0.6rem) !important; }
 }
+
+/* iOS tiñe el borde superior con el fondo de la página: html en verde, el cuerpo sigue en blanco */
+@media (max-width: 767px) {
+  html { background-color: #72bf44; }
+  html body { background-color: #fff; }
+}
