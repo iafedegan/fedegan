@@ -194,3 +194,9 @@ header[data-region="navbar"] { border-bottom: 1px solid #dcdcd6 !important; bord
 @media (min-width: 1024px) { [data-footer] footer[data-region="footer"] > div:first-child { grid-template-columns: 1.2fr 0.8fr 0.9fr 1.2fr 1.1fr !important; } }
 @media (min-width: 640px) and (max-width: 1023px) { [data-footer] footer[data-region="footer"] > div:first-child { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; } }
 @media (max-width: 639px) { [data-footer] footer[data-region="footer"] > div:first-child { grid-template-columns: minmax(0, 1fr) !important; } }
+
+/* Hero: fondo blanco (sin color de zona) y espacio abajo para que los botones no queden bajo las tarjetas */
+.hi-hero, section.hi-hero[data-region="hero"] { background: #fff !important; background-color: #fff !important; padding-bottom: 4.5rem; }
+.hi-hero-img::after { background: linear-gradient(90deg, #fff, transparent); }
+.hi-hero-img { margin-bottom: 0; }
+.hi-banner .portada-btn { bottom: 1.2rem; }
