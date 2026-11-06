@@ -81,3 +81,7 @@ footer[data-region="footer"] .ft-allies span.ring-2 { background: #fff; }
 .ad-side [class*="border-white"], .ad-side [class*="bg-white"] { border-color: rgba(16, 36, 15, 0.25) !important; }
 .ad-btn-primary { background: #89114c; }
 .ad-btn-primary:hover:not(:disabled) { background: #6b0c3a; }
+
+/* Títulos del pie en negro */
+footer[data-region="footer"] h4, footer[data-region="footer"] h4 * { color: #000 !important; }
+footer[data-region="footer"] [class*="text-[var(--fg-lime"] { color: #000 !important; }
