@@ -1,14 +1,10 @@
 import type { ReactNode } from "react";
-import { HeroNews } from "@/components/blocks/HeroNews";
-import { NewsGrid } from "@/components/blocks/NewsGrid";
-import { PublicationsGrid } from "@/components/blocks/PublicationsGrid";
-import { PaymentsBand } from "@/components/blocks/PaymentsBand";
-import { VoiceAndAgenda } from "@/components/blocks/VoiceAndAgenda";
 import { AccountStrip } from "@/components/blocks/AccountStrip";
 import { CampaignWall } from "@/components/blocks/Accesos";
 import { AdSlot } from "@/components/design/AdSlot";
 import type { DesignConfig, TemplateId } from "@/lib/design/regions";
 import { getHomeData } from "./data";
+import { HomeInstitucional } from "./HomeInstitucional";
 import { HomeBento } from "./HomeBento";
 import { HomeEditorial } from "./HomeEditorial";
 import { HomeAurora } from "./HomeAurora";
@@ -25,14 +21,8 @@ export async function HomeView({ kind, design }: { kind: HomeKind; design: Desig
   if (kind === "clasico") {
     cuerpo = (
       <>
-        <HeroNews />
-        <PaymentsBand />
-        <NewsGrid />
+        <HomeInstitucional d={await getHomeData()} />
         {ad}
-        <VoiceAndAgenda />
-        <PublicationsGrid />
-        <CampaignWall />
-        <AccountStrip />
       </>
     );
   } else {
