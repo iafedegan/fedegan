@@ -12,7 +12,8 @@ import { ArticleTools } from "@/components/legacy/ArticleTools";
 import { PrevNext, SectionSearch, SectionTiles, countBelow, flattenTree } from "@/components/legacy/SectionParts";
 import { journeyPhotos } from "@/content/scroll-world";
 import { getPageOverride } from "@/lib/cms/paginas";
-import { findTrail, getLegacyPage, getLegacySection, legacyHref, type NavNode } from "@/content/legacy";
+import { findTrail, legacyHref, type NavNode } from "@/content/legacy";
+import { customPagesOf, getPage, getSection } from "@/lib/cms/nodos";
 
 // Resuelve las rutas del menú en el servidor para no enviar el contenido migrado al navegador.
 const toItems = (nodes: NavNode[], slug: string): NavItem[] =>
@@ -20,7 +21,7 @@ const toItems = (nodes: NavNode[], slug: string): NavItem[] =>
     label: n.label,
     key: n.key,
     href: n.key ? legacyHref(slug, n.key) : n.href,
-    external: !n.key && Boolean(n.href),
+    external: !n.key && /^https?:\/\//.test(n.href ?? ""),
     children: n.children ? toItems(n.children, slug) : undefined,
   }));
 
@@ -32,11 +33,13 @@ const sizeOf = (title: string) => (title.length > 90 ? "ed-t4" : title.length > 
 //  · Portada de la sección: franja con titular y buscador, fichas de cada rama y, debajo, el texto de presentación.
 //  · Página de contenido: migas, menú de la sección a la izquierda, texto en el centro e índice de la página a la derecha.
 export async function LegacySectionPage({ slug, ruta }: { slug: string; ruta: string[] }) {
-  const section = getLegacySection(slug);
+  // La sección y sus páginas incluyen lo que el equipo creó en /admin/arbol.
+  const section = await getSection(slug);
   if (!section) notFound();
   const key = ruta.length ? ruta.map((s) => decodeURIComponent(s)).join("/") : section.landing;
-  const base = getLegacyPage(key);
+  const base = await getPage(key);
   if (!base || !base.sections.includes(slug)) notFound();
+  const custom = await customPagesOf(slug);
   // Si el equipo editó el texto en /admin/paginas, ese texto reemplaza a la copia original.
   const override = await getPageOverride(key);
   const page = override ? { ...base, title: override.title, blocks: override.blocks } : base;
@@ -52,7 +55,7 @@ export async function LegacySectionPage({ slug, ruta }: { slug: string; ruta: st
     if (ancestors.length) {
       ancestors.forEach((n) => crumbs.push({ label: n.label, href: n.key ? legacyHref(slug, n.key) : undefined }));
     } else if (page.parent) {
-      const parent = getLegacyPage(page.parent);
+      const parent = await getPage(page.parent);
       if (parent && page.parent !== section.landing) crumbs.push({ label: parent.title, href: legacyHref(slug, page.parent) });
     }
     crumbs.push({ label: page.title });
@@ -79,14 +82,14 @@ export async function LegacySectionPage({ slug, ruta }: { slug: string; ruta: st
       Esta página reúne documentos y tableros del portal actual. Puede consultarla directamente allí.
     </p>
   );
-  const source = (
+  const source = page.source ? (
     <p className="art-source">
       Contenido copiado del portal actual de FEDEGÁN.{" "}
       <a href={page.source} target="_blank" rel="noopener noreferrer">
         Ver página original <ExternalLink size={12} aria-hidden className="inline -translate-y-px" />
       </a>
     </p>
-  );
+  ) : null;
 
   /* ───────────── Portada de la sección ───────────── */
   if (isLanding) {
@@ -120,7 +123,7 @@ export async function LegacySectionPage({ slug, ruta }: { slug: string; ruta: st
                 <h2 id="hub-explorar">Explore {section.label}</h2>
                 <p>Elija un tema. Cada ficha muestra lo que encontrará dentro.</p>
               </div>
-              <SectionTiles nodes={branches} slug={slug} />
+              <SectionTiles nodes={branches} slug={slug} custom={custom} />
             </section>
           )}
 
@@ -188,7 +191,7 @@ export async function LegacySectionPage({ slug, ruta }: { slug: string; ruta: st
           {kids.length > 0 && (
             <section className="art-kids" aria-labelledby="art-kids-h">
               <h2 id="art-kids-h">Dentro de {here?.label}</h2>
-              <SectionTiles nodes={kids} slug={slug} />
+              <SectionTiles nodes={kids} slug={slug} custom={custom} />
             </section>
           )}
 

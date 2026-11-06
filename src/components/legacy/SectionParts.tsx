@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { CSSProperties } from "react";
 import { ArrowLeft, ArrowRight, ArrowUpRight, Search } from "lucide-react";
-import { excerptOf, getLegacyPage, legacyHref, type NavNode } from "@/content/legacy";
+import { excerptOf, getLegacyPage, legacyHref, type LegacyPage, type NavNode } from "@/content/legacy";
 
 export const countBelow = (n: NavNode): number => (n.children ?? []).reduce((a, c) => a + 1 + countBelow(c), 0);
 
@@ -17,16 +17,16 @@ export function SectionSearch({ label, className = "" }: { label: string; classN
 }
 
 // Entrada de la sección: celda de texto con número, título, extracto y cuántas páginas trae. Sin fotos repetidas: se escanea rápido.
-export function SectionTiles({ nodes, slug }: { nodes: NavNode[]; slug: string }) {
+export function SectionTiles({ nodes, slug, custom = {} }: { nodes: NavNode[]; slug: string; custom?: Record<string, LegacyPage> }) {
   return (
     <ol className="hub-grid">
       {nodes.map((n, i) => {
         const kids = n.children ?? [];
         const total = countBelow(n);
         const href = n.key ? legacyHref(slug, n.key) : n.href;
-        const page = n.key ? getLegacyPage(n.key) : null;
+        const page = n.key ? (getLegacyPage(n.key) ?? custom[n.key] ?? null) : null;
         const text = page ? excerptOf(page, 120).replace(/\*\*/g, "") : "";
-        const external = !n.key && Boolean(n.href);
+        const external = !n.key && /^https?:\/\//.test(n.href ?? "");
         const style = { ["--i" as string]: i % 8 } as CSSProperties;
         const head = (
           <>
@@ -65,7 +65,7 @@ export function SectionTiles({ nodes, slug }: { nodes: NavNode[]; slug: string }
                     const kh = k.key ? legacyHref(slug, k.key) : k.href;
                     return (
                       <li key={k.label}>
-                        {kh ? (k.key ? <Link href={kh}>{k.label}</Link> : <a href={kh} target="_blank" rel="noopener noreferrer">{k.label}</a>) : <span>{k.label}</span>}
+                        {kh ? (k.key || kh.startsWith("/") ? <Link href={kh}>{k.label}</Link> : <a href={kh} target="_blank" rel="noopener noreferrer">{k.label}</a>) : <span>{k.label}</span>}
                       </li>
                     );
                   })}

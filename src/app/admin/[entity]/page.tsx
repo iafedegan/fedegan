@@ -50,6 +50,11 @@ export default async function EntityListPage({
           </nav>
           <h1 className="mt-2 text-3xl font-bold sm:text-4xl">{entity.plural}</h1>
           <p className="mt-1.5 max-w-2xl text-[#5d6e65]">{entity.description}</p>
+          {entity.key === "menu" && (
+            <p className="mt-2 text-sm">
+              <Link href="/admin/arbol" className="inline-flex items-center gap-1.5 font-semibold text-[#165a43] hover:underline"><ListTree size={14} /> Ver el árbol completo del sitio (secciones y subsecciones) y crear en cualquier nivel</Link>
+            </p>
+          )}
         </div>
         {writable && (
           <Link href={`/admin/${entity.key}/nuevo`} className="ad-btn ad-btn-primary">

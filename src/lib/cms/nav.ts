@@ -32,6 +32,7 @@ export const adminNav: AdminNavGroup[] = [
     group: "Sitio",
     items: [
       { label: "Diseño del sitio", href: "/admin/diseno", icon: "palette" },
+      { label: "Árbol del sitio", href: "/admin/arbol", icon: "tree" },
       { label: "Menú principal", href: "/admin/menu", icon: "menu" },
       { label: "Conexiones (APIs)", href: "/admin/apis", icon: "plug" },
       { label: "Actividad", href: "/admin/actividad", icon: "history" },

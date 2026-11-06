@@ -8,7 +8,8 @@ import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
 import { Observatorio } from "@/components/observatorio/Observatorio";
 import { LegacySectionPage } from "@/components/legacy/LegacySectionPage";
-import { getLegacyPage, getLegacySection, legacyParams } from "@/content/legacy";
+import { legacyParams } from "@/content/legacy";
+import { getPage, getSection } from "@/lib/cms/nodos";
 
 // Secciones aún sin contenido copiado del portal actual.
 const pendientes: Record<string, { nombre: string; kicker: string; descripcion: string; image: string; pos: string }> = {
@@ -23,10 +24,10 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: Promise<Params> }): Promise<Metadata> {
   const { slug, ruta = [] } = await params;
-  const section = getLegacySection(slug);
+  const section = await getSection(slug);
   if (section) {
     const key = ruta.length ? ruta.map((s) => decodeURIComponent(s)).join("/") : section.landing;
-    const page = getLegacyPage(key);
+    const page = await getPage(key);
     return { title: ruta.length && page ? page.title : section.label };
   }
   return { title: pendientes[slug]?.nombre ?? "Sección" };
@@ -36,7 +37,7 @@ export default async function SeccionPage({ params }: { params: Promise<Params> 
   const { slug, ruta = [] } = await params;
   // Cifras del sector: el Observatorio ganadero con las cifras vivas de CONtexto.
   if (slug === "cifras-del-sector" && ruta.length === 0) return <Observatorio />;
-  if (getLegacySection(slug)) return <LegacySectionPage slug={slug} ruta={ruta} />;
+  if (await getSection(slug)) return <LegacySectionPage slug={slug} ruta={ruta} />;
 
   const seccion = pendientes[slug];
   if (!seccion || ruta.length) notFound();

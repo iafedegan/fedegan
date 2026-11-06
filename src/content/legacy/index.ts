@@ -5,7 +5,7 @@ import raw from "./portal.json";
 // Se generó con una copia única; el contenido nuevo se gestiona en el CMS.
 
 export type LegacyBlock = { t: string; text?: string; rows?: string[][] };
-export type NavNode = { label: string; key?: string; href?: string; children?: NavNode[] };
+export type NavNode = { label: string; key?: string; href?: string; children?: NavNode[]; /** Id del nodo creado en /admin/arbol (las páginas copiadas no lo tienen). */ nid?: string };
 export type LegacyPage = { title: string; source: string; blocks: LegacyBlock[]; sections: string[]; parent?: string };
 export type LegacySection = { label: string; landing: string; tree: NavNode[] };
 
@@ -25,7 +25,9 @@ export function getLegacyPage(key: string): LegacyPage | null {
 /** Ruta pública de una página dentro de una sección. */
 export function legacyHref(slug: string, key: string): string {
   const s = data.sections[slug];
-  return s && s.landing === key ? `/seccion/${slug}` : `/seccion/${slug}/${key}`;
+  // En una sección nueva (creada en /admin/arbol) la portada usa como clave el propio nombre de la sección.
+  const landing = s ? s.landing === key : key === slug;
+  return landing ? `/seccion/${slug}` : `/seccion/${slug}/${key}`;
 }
 
 /** Camino de nodos del menú hasta la página (para migas de pan y el menú lateral). */
