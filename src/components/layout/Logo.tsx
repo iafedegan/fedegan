@@ -11,7 +11,7 @@ export function Logo({
   return (
     <Link href="/" className={`flex shrink-0 items-center gap-2.5 ${className}`} aria-label="Fedegán, inicio">
       <Image
-        src="/brand/fedegan-horizontal-blanco.svg"
+        src="/brand/fedegan-horizontal.svg"
         alt="FEDEGÁN, Federación Colombiana de Ganaderos"
         width={1071}
         height={385}

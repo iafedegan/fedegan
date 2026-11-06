@@ -60,7 +60,7 @@ function MoreMenu({ items, pathname }: { items: { label: string; href: string }[
         >
           {extra.map((it, k) => {
             return (
-              <li key={it.href} role="none" className={inMoreOnlyBelow(k + 3)}>
+              <li key={`${it.href}-${k}`} role="none" className={inMoreOnlyBelow(k + 3)}>
                 <Link
                   href={it.href}
                   role="menuitem"
@@ -197,14 +197,14 @@ export function Header({ nav: mainNav }: { nav: { label: string; href: string }[
         <Container className="flex items-center justify-between gap-6 py-3">
           {/* Marca compacta: solo se ve en las páginas interiores, donde la cabecera grande se oculta. */}
           <Link href="/" className="nv-brand" aria-label="FEDEGÁN FNG, inicio">
-            <Image src="/brand/fedegan-horizontal-blanco.svg" alt="FEDEGÁN" width={1071} height={385} unoptimized className="nv-emblem" />
+            <Image src="/brand/fedegan-horizontal.svg" alt="FEDEGÁN" width={1071} height={385} unoptimized className="nv-emblem" />
           </Link>
           <div className="flex min-w-0 flex-1 items-center justify-center gap-0.5">
             {mainNav.map((item, i) => {
               const active = isActive(pathname, item.href);
               return (
                 <Link
-                  key={item.href}
+                  key={`${item.href}-${i}`}
                   href={item.href}
                   aria-current={active ? "page" : undefined}
                   className={`nv-link ${visibleFrom(i)} ${active ? "text-[var(--fg-lime-400)] nv-active" : ""}`}
@@ -284,7 +284,7 @@ export function Header({ nav: mainNav }: { nav: { label: string; href: string }[
                 {mainNav.map((item, i) => {
                   const active = isActive(pathname, item.href);
                   return (
-                    <li key={item.href} className="border-b border-[rgba(255,255,255,0.07)] last:border-0">
+                    <li key={`${item.href}-${i}`} className="border-b border-[rgba(255,255,255,0.07)] last:border-0">
                       <Link
                         href={item.href}
                         onClick={() => setOpenAt(null)}

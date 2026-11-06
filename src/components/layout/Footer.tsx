@@ -20,7 +20,7 @@ export async function Footer() {
   const partners = await getPartners();
   return (
     <footer data-region="footer" className="mt-16 bg-[#72bf44] text-white/85">
-      <Container className="grid gap-x-8 gap-y-10 py-12 sm:grid-cols-2 lg:grid-cols-[1.25fr_0.8fr_0.8fr_1.2fr] xl:gap-x-12">
+      <Container className="grid gap-x-8 gap-y-10 py-12 sm:grid-cols-2 lg:grid-cols-[1.2fr_0.8fr_0.9fr_1.2fr_1.1fr] xl:gap-x-12">
         <div className="flex flex-col gap-4">
           <Link href="/" aria-label="FEDEGÁN FNG, inicio" className="w-fit">
             <Image src="/brand/fedegan-horizontal-desc-blanco.svg" alt="FEDEGÁN, Federación Colombiana de Ganaderos" width={917} height={329} unoptimized className="h-24 w-auto" />
@@ -87,17 +87,12 @@ export async function Footer() {
             ))}
           </ul>
         </div>
+        <div>
+          <h4 className={head}>Suscríbase a nuestro boletín</h4>
+          <p className="mb-3 text-sm text-white/75">Reciba noticias, publicaciones y eventos del sector ganadero en su correo.</p>
+          <NewsletterForm />
+        </div>
       </Container>
-
-      <div className="ft-news border-t border-white/22">
-        <Container className="flex flex-col items-start gap-4 py-7 md:flex-row md:items-center md:justify-between">
-          <div>
-            <h4 className={`${head} !mb-1`}>Suscríbase al boletín</h4>
-            <p className="text-sm text-white/75">Reciba las noticias y los comunicados del gremio en su correo.</p>
-          </div>
-          <div className="w-full md:max-w-xl"><NewsletterForm /></div>
-        </Container>
-      </div>
 
       {partners.length > 0 && (
         <div className="ft-allies border-t border-white/12">
