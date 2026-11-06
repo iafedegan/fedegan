@@ -249,3 +249,8 @@ html .mh, html header[data-region="navbar"] {
 
 /* Sin cintillo en lo más alto del cabezote; queda solo el de encima del menú */
 html .mh { border-top: 0 !important; border-image: none !important; }
+
+/* Celular / app instalada: el cabezote baja lo que mide la barra de estado para que el logo no quede tapado */
+@media (max-width: 767px) {
+  html .mh { padding-top: calc(env(safe-area-inset-top, 0px) + 0.6rem) !important; }
+}

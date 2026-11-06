@@ -28,7 +28,7 @@ import { UsageTracker } from "@/components/layout/UsageTracker";
 import { SideMenu } from "@/components/layout/SideMenu";
 
 export const viewport: Viewport = {
-  themeColor: "#0a2a20",
+  themeColor: "#72bf44",
   colorScheme: "dark",
   viewportFit: "cover",
 };
