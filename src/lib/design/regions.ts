@@ -49,6 +49,18 @@ export const HEROES = [
   { id: "centro", label: "Texto centrado", description: "Títulos y botones al centro de la foto." },
 ] as const;
 
+// ---- plantillas completas ----------------------------------------------------------
+// Cada plantilla cambia el lenguaje visual de todo el sitio (colores, tipografía, formas, tarjetas) y propone sus piezas.
+// Todo lo demás (colores por zona, tipografías, textos, imágenes, orden) se sigue gestionando encima desde el editor.
+export const TEMPLATES = [
+  { id: "bento", label: "Bento", description: "Módulos redondeados sobre fondo suave, como las bandejas bento de Apple.", parts: { navbar: "compacta", footer: "completo", hero: "izquierda" }, swatch: ["#f1eee6", "#ffffff", "#2f9c62", "#d8b558"] },
+  { id: "editorial", label: "Editorial", description: "Papel claro, serif grande, filetes finos y esquinas rectas.", parts: { navbar: "centrada", footer: "central", hero: "centro" }, swatch: ["#fbf8f1", "#ffffff", "#1b1b1b", "#8a2b2b"] },
+  { id: "aurora", label: "Aurora", description: "Oscuro con vidrio esmerilado y brillos de color, solo en superficies.", parts: { navbar: "compacta", footer: "completo", hero: "centro" }, swatch: ["#0b1210", "#16211c", "#5eead4", "#a78bfa"] },
+  { id: "brutalista", label: "Brutalista", description: "Contraste crudo, bordes gruesos, tipografía mono y un amarillo ácido.", parts: { navbar: "clasico", footer: "minimo", hero: "izquierda" }, swatch: ["#f4f4ef", "#ffffff", "#111111", "#ffe600"] },
+  { id: "campo", label: "Campo", description: "Tierra, arcilla y verde pasto: cálido, orgánico y de formas suaves.", parts: { navbar: "centrada", footer: "completo", hero: "izquierda" }, swatch: ["#f3ead9", "#fffaf0", "#4d6b3a", "#c2693a"] },
+] as const;
+export type TemplateId = (typeof TEMPLATES)[number]["id"];
+
 export type Parts = {
   navbar?: (typeof NAVBARS)[number]["id"];
   footer?: (typeof FOOTERS)[number]["id"];
@@ -75,6 +87,7 @@ export type ElementEdit = { text?: string; image?: string; href?: string; bg?: s
 
 export type DesignConfig = {
   v: 1;
+  template?: TemplateId;
   regions: Partial<Record<RegionId, RegionStyle>>;
   parts: Parts;
   order: string[];
@@ -162,6 +175,8 @@ export function normalizeDesign(raw: unknown): DesignConfig {
     const s = sanitizeRegion(regions[id]);
     if (Object.keys(s).length) d.regions[id] = s;
   }
+
+  if (TEMPLATES.some((t) => t.id === src.template)) d.template = src.template as TemplateId;
 
   const p = obj(src.parts);
   if (NAVBARS.some((n) => n.id === p.navbar) && p.navbar !== "clasico") d.parts.navbar = p.navbar as Parts["navbar"];
