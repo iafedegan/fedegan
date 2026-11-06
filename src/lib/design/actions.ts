@@ -40,7 +40,7 @@ export async function undoDesignPublish(): Promise<DesignResult> {
   return { design: r.design };
 }
 
-const TIPOS = new Map([["image/jpeg", "jpg"], ["image/png", "png"], ["image/webp", "webp"], ["image/gif", "gif"]]);
+const TIPOS = new Map([["image/jpeg", "jpg"], ["image/png", "png"], ["image/webp", "webp"], ["image/gif", "gif"], ["image/avif", "avif"]]);
 
 /** Sube una imagen del editor (banner de portada, anuncios) al almacenamiento y devuelve su dirección pública. */
 export async function subirImagenDiseno(fd: FormData): Promise<{ url?: string; error?: string }> {
@@ -50,7 +50,7 @@ export async function subirImagenDiseno(fd: FormData): Promise<{ url?: string; e
   const file = fd.get("archivo");
   if (!(file instanceof File) || file.size === 0) return { error: "Elija una imagen." };
   const ext = TIPOS.get(file.type);
-  if (!ext) return { error: "Use una imagen JPG, PNG, WebP o GIF." };
+  if (!ext) return { error: "Use una imagen JPG, PNG, WebP, AVIF o GIF." };
   if (file.size > 5 * 1024 * 1024) return { error: "La imagen supera 5 MB." };
   const path = `diseno/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
   const { error } = await db.storage.from(MEDIA_BUCKET).upload(path, await file.arrayBuffer(), { contentType: file.type });

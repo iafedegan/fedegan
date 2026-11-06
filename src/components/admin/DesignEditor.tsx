@@ -561,7 +561,7 @@ export function DesignEditor({ writable, initialPublished, initialDraft, canUndo
                         <div className="flex flex-col gap-1.5">
                           <label className="ad-btn ad-btn-primary w-fit cursor-pointer">
                             Cargar imagen desde mi computador
-                            <input type="file" accept="image/jpeg,image/png,image/webp,image/gif" className="sr-only" onChange={async (e) => {
+                            <input type="file" accept="image/jpeg,image/png,image/webp,image/avif,image/gif" className="sr-only" onChange={async (e) => {
                               const f = e.target.files?.[0];
                               e.target.value = "";
                               if (!f) return;
@@ -575,7 +575,7 @@ export function DesignEditor({ writable, initialPublished, initialDraft, canUndo
                               } else setMsgAd((m) => ({ ...m, [z.id]: r.error ?? "No se pudo subir la imagen." }));
                             }} />
                           </label>
-                          <span className="text-xs text-[#5d6e65]">JPG, PNG, WebP o GIF, máx. 5 MB. También puede pegar una dirección arriba.</span>
+                          <span className="text-xs text-[#5d6e65]">JPG, PNG, WebP, AVIF o GIF, máx. 5 MB. También puede pegar una dirección arriba.</span>
                           {msgAd[z.id] && <span role="status" className="text-xs font-semibold text-[#165a43]">{msgAd[z.id]}</span>}
                         </div>
                         {z.id === "portada" && (
