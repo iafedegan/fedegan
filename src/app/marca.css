@@ -246,3 +246,6 @@ html .mh, html header[data-region="navbar"] {
   border-top: 4px solid transparent !important;
   border-image: linear-gradient(90deg, #faa619 0 16.66%, #b10069 16.66% 33.33%, #005387 33.33% 50%, #7396ce 50% 66.66%, #ed0c6e 66.66% 83.33%, #567c8e 83.33%) 1 0 0 0 !important;
 }
+
+/* Sin cintillo en lo más alto del cabezote; queda solo el de encima del menú */
+html .mh { border-top: 0 !important; border-image: none !important; }
