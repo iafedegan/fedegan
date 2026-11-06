@@ -1961,7 +1961,7 @@ html[data-theme="esmeralda"]:has(.doc-split) { --veil-a: 0.76; --veil-b: 0.9; --
 .hub-grid { gap: 1rem; }
 .hub-cell {
   --t: 47, 156, 98;
-  position: relative; overflow: hidden; isolation: isolate; padding: 1.1rem 1.2rem 1.15rem; border: 1px solid rgba(var(--t), 0.2); border-radius: 0.25rem;
+  position: relative; overflow: hidden; isolation: isolate; padding: 1.1rem 1.2rem 1.15rem; border: 1px solid rgba(var(--t), 0.2); border-radius: var(--card-r, 1.4rem);
   background: linear-gradient(145deg, rgba(var(--t), 0.14) 0%, rgba(var(--t), 0.05) 55%, rgba(var(--t), 0.12) 100%);
   transition: transform 0.45s var(--ease-lux, ease), box-shadow 0.45s var(--ease-lux, ease), border-color 0.3s;
 }
@@ -1980,7 +1980,7 @@ html[data-theme="esmeralda"] .hub-cell::after { background: linear-gradient(110d
 body:has(.mx-hero) .mx-stat:not(.ed-rail) {
   --t: 47, 156, 98;
   position: relative; overflow: hidden; isolation: isolate; padding: 1.1rem 1.2rem 1.15rem !important;
-  border: 1px solid rgba(var(--t), 0.2) !important; border-radius: 0.25rem !important;
+  border: 1px solid rgba(var(--t), 0.2) !important; border-radius: var(--card-r, 1.4rem) !important;
   background: linear-gradient(145deg, rgba(var(--t), 0.14) 0%, rgba(var(--t), 0.05) 55%, rgba(var(--t), 0.12) 100%) !important;
   transition: transform 0.45s var(--ease-lux, ease), box-shadow 0.45s var(--ease-lux, ease), border-color 0.3s;
 }
@@ -1996,9 +1996,9 @@ html[data-theme="esmeralda"] body:has(.mx-hero) .mx-stat:not(.ed-rail)::after { 
 @media (prefers-reduced-motion: reduce) { body:has(.mx-hero) .mx-stat:not(.ed-rail), body:has(.mx-hero) .mx-stat:not(.ed-rail)::before, body:has(.mx-hero) .mx-stat:not(.ed-rail)::after { transition: none; } }
 
 /* Todas las tarjetas del sitio (notas, fichas, paneles, citas): fondo tenue en degradé del color de cada una, halo y brillo al pasar el cursor */
-body:has(.mx-hero) :is(.wc.wp, .mx-card, .gl, .mx-quote, .mx-panel, .pn-card):not(.ed-rail) {
+body:has(.mx-hero) :is(.wc.wp, .mx-card, .gl, .mx-panel, .pn-card):not(.ed-rail) {
   --t: var(--wa, 47, 156, 98);
-  position: relative; isolation: isolate; border: 1px solid rgba(var(--t), 0.2) !important; border-radius: 0.25rem !important;
+  position: relative; isolation: isolate; border: 1px solid rgba(var(--t), 0.2) !important; border-radius: var(--card-r, 1.4rem) !important;
   background: linear-gradient(145deg, rgba(var(--t), 0.14) 0%, rgba(var(--t), 0.05) 55%, rgba(var(--t), 0.12) 100%) !important;
   transition: transform 0.45s var(--ease-lux, ease), box-shadow 0.45s var(--ease-lux, ease), border-color 0.3s;
 }
@@ -2006,19 +2006,19 @@ body:has(.mx-hero) .wc.wp:not(.ed-rail) { padding: 0.8rem 0.8rem 1.1rem; overflo
 body:has(.mx-hero) .wc.wp .wc-wave { padding: 0 0.2rem; }
 body:has(.mx-hero) .pn-card:not(.ed-rail) { padding: 1.1rem 1.2rem; }
 body:has(.mx-hero) :is(.mx-card, .gl, .mx-panel):not(.ed-rail):not(.wc):not(.mx-stat) { --t: 47, 156, 98; }
-body:has(.mx-hero) :is(.wc.wp, .mx-card, .gl, .mx-quote, .mx-panel, .pn-card):not(.ed-rail)::before {
+body:has(.mx-hero) :is(.wc.wp, .mx-card, .gl, .mx-panel, .pn-card):not(.ed-rail)::before {
   content: ""; position: absolute; z-index: -1; width: 11rem; height: 11rem; right: -3rem; top: -4rem; border-radius: 50%; pointer-events: none;
   background: radial-gradient(circle, rgba(var(--t), 0.28), transparent 70%); transition: transform 0.7s var(--ease-lux, ease);
 }
-body:has(.mx-hero) :is(.wc.wp, .mx-card, .gl, .mx-quote, .mx-panel, .pn-card):not(.ed-rail)::after {
+body:has(.mx-hero) :is(.wc.wp, .mx-card, .gl, .mx-panel, .pn-card):not(.ed-rail)::after {
   content: ""; position: absolute; z-index: -1; inset: 0; pointer-events: none; transform: translateX(-120%); transition: transform 0.9s var(--ease-lux, ease);
   background: linear-gradient(110deg, transparent 35%, rgba(255, 255, 255, 0.4) 50%, transparent 65%);
 }
 body:has(.mx-hero) :is(a.wc.wp, a.mx-card, a.gl, a.pn-card, .mx-lift):not(.ed-rail):hover { transform: translateY(-4px); border-color: rgba(var(--t), 0.5) !important; box-shadow: 0 14px 28px -16px rgba(var(--t), 0.55) !important; }
 body:has(.mx-hero) :is(a.wc.wp, a.mx-card, a.gl, a.pn-card, .mx-lift):not(.ed-rail):hover::before { transform: scale(1.35) translate(-0.5rem, 0.5rem); }
 body:has(.mx-hero) :is(a.wc.wp, a.mx-card, a.gl, a.pn-card, .mx-lift):not(.ed-rail):hover::after { transform: translateX(120%); }
-html[data-theme="esmeralda"] body:has(.mx-hero) :is(.wc.wp, .mx-card, .gl, .mx-quote, .mx-panel, .pn-card):not(.ed-rail)::after { background: linear-gradient(110deg, transparent 35%, rgba(255, 255, 255, 0.1) 50%, transparent 65%); }
-@media (prefers-reduced-motion: reduce) { body:has(.mx-hero) :is(.wc.wp, .mx-card, .gl, .mx-quote, .mx-panel, .pn-card)::before, body:has(.mx-hero) :is(.wc.wp, .mx-card, .gl, .mx-quote, .mx-panel, .pn-card)::after { transition: none; } }
+html[data-theme="esmeralda"] body:has(.mx-hero) :is(.wc.wp, .mx-card, .gl, .mx-panel, .pn-card):not(.ed-rail)::after { background: linear-gradient(110deg, transparent 35%, rgba(255, 255, 255, 0.1) 50%, transparent 65%); }
+@media (prefers-reduced-motion: reduce) { body:has(.mx-hero) :is(.wc.wp, .mx-card, .gl, .mx-panel, .pn-card)::before, body:has(.mx-hero) :is(.wc.wp, .mx-card, .gl, .mx-panel, .pn-card)::after { transition: none; } }
 
 /* Menú lateral derecho (recorrido de la portada en las demás páginas): franja fina que se abre al pasar el cursor */
 .sm { position: fixed; z-index: 60; top: 50%; right: 0; transform: translateY(-50%); display: none; }
@@ -2134,3 +2134,7 @@ html[data-template="campo"] { --veil: 243, 234, 217; }
 @keyframes smarrow { 0% { transform: translateX(3px) rotate(45deg); opacity: 0; } 40% { opacity: 1; } 100% { transform: translateX(-4px) rotate(45deg); opacity: 0; } }
 @keyframes smpulse { 0% { transform: scale(0.7); opacity: 0.9; } 100% { transform: scale(1.5); opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .sm-arrow::before, .sm-arrow::after { animation: none; } .sm-arrow::before { opacity: 1; } }
+
+/* Tarjetas más redondeadas: la foto interior sigue la curva de la tarjeta */
+body:has(.mx-hero) .wc.wp .wp-img { border-radius: 0.95rem; }
+body:has(.mx-hero) .wc.wp:not(.ed-rail) { padding: 0.85rem 0.85rem 1.2rem; }
