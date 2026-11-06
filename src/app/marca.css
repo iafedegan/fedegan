@@ -200,3 +200,4 @@ header[data-region="navbar"] { border-bottom: 1px solid #dcdcd6 !important; bord
 .hi-hero-img::after { background: linear-gradient(90deg, #fff, transparent); }
 .hi-hero-img { margin-bottom: 0; }
 .hi-banner .portada-btn { bottom: 1.2rem; }
+section.hi-hero[data-region="hero"] { padding-top: 1rem !important; padding-bottom: 4.5rem !important; }
