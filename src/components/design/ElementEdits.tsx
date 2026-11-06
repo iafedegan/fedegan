@@ -8,7 +8,9 @@ import { applyElements } from "./elements";
 
 /** Aplica sobre la página las ediciones por elemento del CMS (y, dentro del editor, las del borrador en vivo). */
 export function ElementEdits({ initial }: { initial: Record<string, ElementEdit> }) {
-  const pathname = usePathname();
+  const raw = usePathname();
+  // La vista previa de la portada de cada plantilla (/vista-previa/…) se edita como la portada.
+  const pathname = raw.startsWith("/vista-previa/") ? "/" : raw;
   const { value } = useLiveDesign(initial, (d) => d.elements);
 
   useEffect(() => {

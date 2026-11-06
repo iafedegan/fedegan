@@ -114,6 +114,9 @@ function Choice<T extends string>({ title, current, options, onPick }: { title: 
   );
 }
 
+// La vista previa de la portada de cada plantilla (/vista-previa/…) cuenta como la portada.
+const canon = (p: string) => (p.startsWith("/vista-previa/") ? "/" : p);
+
 export function DesignEditor({ writable, initialPublished, initialDraft, canUndo, locals }: { writable: boolean; initialPublished: DesignConfig; initialDraft: DesignConfig; canUndo: boolean; locals: LocalRef[] }) {
   const [design, setDesign] = useState<DesignConfig>(initialDraft);
   const [published, setPublished] = useState<DesignConfig>(initialPublished);
@@ -196,6 +199,13 @@ export function DesignEditor({ writable, initialPublished, initialDraft, canUndo
       marco?.removeAttribute("data-template");
       root.removeAttribute("data-tpl-mode");
     }
+    // Cada plantilla tiene su propia portada: si la que se ve no es la del borrador, se carga la vista previa de esa composición.
+    const home = doc.querySelector("[data-home]")?.getAttribute("data-home");
+    const want = design.template ?? "clasico";
+    if (home && home !== want) {
+      win.location.replace(`/vista-previa/${want}`);
+      return;
+    }
     win.postMessage({ type: "design-draft", design }, window.location.origin);
   }, [css, region, tab, design, resaltar, modo, picked]);
 
@@ -206,8 +216,8 @@ export function DesignEditor({ writable, initialPublished, initialDraft, canUndo
     const doc = frame.current?.contentDocument;
     const win = frame.current?.contentWindow;
     if (win) {
-      setPagePath(win.location.pathname);
-      setIr(win.location.pathname);
+      setPagePath(canon(win.location.pathname));
+      setIr(canon(win.location.pathname));
     }
     doc?.addEventListener(
       "mouseover",
@@ -255,7 +265,7 @@ export function DesignEditor({ writable, initialPublished, initialDraft, canUndo
           return;
         }
         setPicked({
-          path: win?.location.pathname ?? "/",
+          path: canon(win?.location.pathname ?? "/"),
           selector,
           tag: t.tagName.toLowerCase(),
           text: leaf ? (clone.textContent ?? "") : null,
@@ -274,7 +284,7 @@ export function DesignEditor({ writable, initialPublished, initialDraft, canUndo
   useEffect(() => {
     const id = window.setInterval(() => {
       try {
-        const p = frame.current?.contentWindow?.location.pathname;
+        const p = canon(frame.current?.contentWindow?.location.pathname ?? "");
         if (p) setPagePath((cur) => (cur === p ? cur : p));
       } catch {}
     }, 600);

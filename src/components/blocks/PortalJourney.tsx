@@ -41,7 +41,8 @@ function subsOf(id: string): JourneySub[] {
   return out;
 }
 
-export async function PortalJourney() {
+/** Las secciones del recorrido (CMS + orden del editor de diseño): las usan la portada clásica y las portadas de las plantillas. */
+export async function getJourneyScenes(): Promise<JourneyScene[]> {
   const [pisos, news, design, secciones, aliados] = await Promise.all([getPisos(), getHomeNews(), getPublishedDesign(), getSecciones(), getPartners()]);
   const scenes: JourneyScene[] = [];
   for (const l of pisos.flatMap((p) => p.locales)) {
@@ -150,6 +151,11 @@ export async function PortalJourney() {
     scenes.sort((a, b) => rank(a.id) - rank(b.id));
   }
 
+  return scenes;
+}
+
+export async function PortalJourney() {
+  const scenes = await getJourneyScenes();
   if (scenes.length < 2) return null;
   return <ScrollWorld scenes={scenes} />;
 }
