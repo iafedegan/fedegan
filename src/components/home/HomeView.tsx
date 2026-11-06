@@ -1,6 +1,5 @@
 import type { ReactNode } from "react";
 import { HeroNews } from "@/components/blocks/HeroNews";
-import { PortalJourney } from "@/components/blocks/PortalJourney";
 import { NewsGrid } from "@/components/blocks/NewsGrid";
 import { PublicationsGrid } from "@/components/blocks/PublicationsGrid";
 import { PaymentsBand } from "@/components/blocks/PaymentsBand";
@@ -26,7 +25,6 @@ export async function HomeView({ kind, design }: { kind: HomeKind; design: Desig
   if (kind === "clasico") {
     cuerpo = (
       <>
-        <PortalJourney />
         <HeroNews />
         <PaymentsBand />
         <NewsGrid />
