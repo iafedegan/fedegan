@@ -181,3 +181,8 @@ header[data-region="navbar"] { border-bottom: 1px solid #dcdcd6 !important; bord
 .mh-mob { text-align: center; }
 .mh-tag, .mh-date { color: #4d5a4b; }
 .mh-rule-l, .mh-rule-r { background: none; }
+.hi-banner { position: absolute; inset: 0; display: block; }
+.hi-banner-img { display: block; width: 100%; height: 100%; object-fit: cover; margin-inline: auto; }
+.hi-banner .portada-btn { left: 1.2rem; bottom: 1.2rem; }
+.hi-banner:hover .portada-btn { background: #89114c; color: #fff; }
+.hi-hero-img:has(.hi-banner)::after { display: none; }

@@ -21,7 +21,7 @@ export async function HomeView({ kind, design }: { kind: HomeKind; design: Desig
   if (kind === "clasico") {
     cuerpo = (
       <>
-        <HomeInstitucional d={await getHomeData()} />
+        <HomeInstitucional d={await getHomeData()} banner={design.ads.portada} />
         {ad}
       </>
     );
@@ -39,7 +39,7 @@ export async function HomeView({ kind, design }: { kind: HomeKind; design: Desig
   }
   return (
     <div data-home={kind} style={{ display: "contents" }}>
-      <AdSlot zone="portada" initial={design.ads.portada} />
+      {kind !== "clasico" && <AdSlot zone="portada" initial={design.ads.portada} />}
       {cuerpo}
     </div>
   );
