@@ -1975,3 +1975,22 @@ a.hub-cell:hover::before { transform: scale(1.35) translate(-0.5rem, 0.5rem); }
 a.hub-cell:hover::after { transform: translateX(120%); }
 html[data-theme="esmeralda"] .hub-cell::after { background: linear-gradient(110deg, transparent 35%, rgba(255, 255, 255, 0.1) 50%, transparent 65%); }
 @media (prefers-reduced-motion: reduce) { .hub-cell, .hub-cell::before, .hub-cell::after { transition: none; } }
+
+/* Cifras (.mx-stat): mismo fondo tenue en degradé, halo y brillo que las entradas de sección */
+body:has(.mx-hero) .mx-stat:not(.ed-rail) {
+  --t: 47, 156, 98;
+  position: relative; overflow: hidden; isolation: isolate; padding: 1.1rem 1.2rem 1.15rem !important;
+  border: 1px solid rgba(var(--t), 0.2) !important; border-radius: 0.25rem !important;
+  background: linear-gradient(145deg, rgba(var(--t), 0.14) 0%, rgba(var(--t), 0.05) 55%, rgba(var(--t), 0.12) 100%) !important;
+  transition: transform 0.45s var(--ease-lux, ease), box-shadow 0.45s var(--ease-lux, ease), border-color 0.3s;
+}
+body:has(.mx-hero) li:nth-child(4n+2) > .mx-stat:not(.ed-rail) { --t: 216, 181, 88; }
+body:has(.mx-hero) li:nth-child(4n+3) > .mx-stat:not(.ed-rail) { --t: 112, 214, 196; }
+body:has(.mx-hero) li:nth-child(4n) > .mx-stat:not(.ed-rail) { --t: 230, 160, 108; }
+body:has(.mx-hero) .mx-stat:not(.ed-rail)::before { content: ""; position: absolute; z-index: -1; width: 11rem; height: 11rem; right: -3rem; top: -4rem; border-radius: 50%; background: radial-gradient(circle, rgba(var(--t), 0.3), transparent 70%); transition: transform 0.7s var(--ease-lux, ease); }
+body:has(.mx-hero) .mx-stat:not(.ed-rail)::after { content: ""; position: absolute; z-index: -1; inset: 0; background: linear-gradient(110deg, transparent 35%, rgba(255, 255, 255, 0.45) 50%, transparent 65%); transform: translateX(-120%); transition: transform 0.9s var(--ease-lux, ease); pointer-events: none; }
+body:has(.mx-hero) .mx-stat:not(.ed-rail):hover { transform: translateY(-4px); border-color: rgba(var(--t), 0.5) !important; box-shadow: 0 14px 28px -16px rgba(var(--t), 0.55) !important; }
+body:has(.mx-hero) .mx-stat:not(.ed-rail):hover::before { transform: scale(1.35) translate(-0.5rem, 0.5rem); }
+body:has(.mx-hero) .mx-stat:not(.ed-rail):hover::after { transform: translateX(120%); }
+html[data-theme="esmeralda"] body:has(.mx-hero) .mx-stat:not(.ed-rail)::after { background: linear-gradient(110deg, transparent 35%, rgba(255, 255, 255, 0.1) 50%, transparent 65%); }
+@media (prefers-reduced-motion: reduce) { body:has(.mx-hero) .mx-stat:not(.ed-rail), body:has(.mx-hero) .mx-stat:not(.ed-rail)::before, body:has(.mx-hero) .mx-stat:not(.ed-rail)::after { transition: none; } }
