@@ -17,6 +17,8 @@ export default async function IngresarPage({ searchParams }: { searchParams: Pro
   if (session?.user) redirect("/mi-fedegan");
 
   return (
+    <>
+    <i hidden className="nomast" />
     <section className="pg-stage flex min-h-[calc(100dvh-4.7rem)] items-center border-b-0 lg:min-h-[calc(100dvh-7.8rem)]">
       <div className="pg-photo" aria-hidden="true">
         <Image src="/headers/campo.jpg" alt="" fill priority sizes="(min-width: 1024px) 56vw, 100vw" style={{ objectPosition: "50% 55%" }} />
@@ -47,5 +49,6 @@ export default async function IngresarPage({ searchParams }: { searchParams: Pro
         <SignInPanel entra={entraConfigured} demo={demoEnabled} />
       </Container>
     </section>
+    </>
   );
 }

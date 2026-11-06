@@ -1756,9 +1756,9 @@ body:has(.mx-hero) main .eyebrow::before { content: none; }
 
 /* Encabezado compacto en las páginas interiores: la cabecera grande (logo y fecha) se oculta y la marca pasa a la barra */
 .nv-brand { display: none; }
-body:has(.mx-hero) .nv-brand { display: inline-flex; align-items: baseline; gap: 0.35rem; font: 700 1.2rem/1 var(--font-display); letter-spacing: 0.01em; color: var(--ed-gold-ink); text-decoration: none; white-space: nowrap; }
-body:has(.mx-hero) .nv-brand span { color: var(--text); }
-@media (min-width: 768px) { body:has(.mx-hero) .mh { display: none; } }
+body:has(.mx-hero, .nomast) .nv-brand { display: inline-flex; align-items: baseline; gap: 0.35rem; font: 700 1.2rem/1 var(--font-display); letter-spacing: 0.01em; color: var(--ed-gold-ink); text-decoration: none; white-space: nowrap; }
+body:has(.mx-hero, .nomast) .nv-brand span { color: var(--text); }
+@media (min-width: 768px) { body:has(.mx-hero, .nomast) .mh { display: none; } }
 body:has(.mx-hero) .mh-date { display: none; }
 
 /* ======================================================================
@@ -1994,3 +1994,46 @@ body:has(.mx-hero) .mx-stat:not(.ed-rail):hover::before { transform: scale(1.35)
 body:has(.mx-hero) .mx-stat:not(.ed-rail):hover::after { transform: translateX(120%); }
 html[data-theme="esmeralda"] body:has(.mx-hero) .mx-stat:not(.ed-rail)::after { background: linear-gradient(110deg, transparent 35%, rgba(255, 255, 255, 0.1) 50%, transparent 65%); }
 @media (prefers-reduced-motion: reduce) { body:has(.mx-hero) .mx-stat:not(.ed-rail), body:has(.mx-hero) .mx-stat:not(.ed-rail)::before, body:has(.mx-hero) .mx-stat:not(.ed-rail)::after { transition: none; } }
+
+/* Todas las tarjetas del sitio (notas, fichas, paneles, citas): fondo tenue en degradé del color de cada una, halo y brillo al pasar el cursor */
+body:has(.mx-hero) :is(.wc.wp, .mx-card, .gl, .mx-quote, .mx-panel, .pn-card):not(.ed-rail) {
+  --t: var(--wa, 47, 156, 98);
+  position: relative; isolation: isolate; border: 1px solid rgba(var(--t), 0.2) !important; border-radius: 0.25rem !important;
+  background: linear-gradient(145deg, rgba(var(--t), 0.14) 0%, rgba(var(--t), 0.05) 55%, rgba(var(--t), 0.12) 100%) !important;
+  transition: transform 0.45s var(--ease-lux, ease), box-shadow 0.45s var(--ease-lux, ease), border-color 0.3s;
+}
+body:has(.mx-hero) .wc.wp:not(.ed-rail) { padding: 0.8rem 0.8rem 1.1rem; overflow: hidden; }
+body:has(.mx-hero) .wc.wp .wc-wave { padding: 0 0.2rem; }
+body:has(.mx-hero) .pn-card:not(.ed-rail) { padding: 1.1rem 1.2rem; }
+body:has(.mx-hero) :is(.mx-card, .gl, .mx-panel):not(.ed-rail):not(.wc):not(.mx-stat) { --t: 47, 156, 98; }
+body:has(.mx-hero) :is(.wc.wp, .mx-card, .gl, .mx-quote, .mx-panel, .pn-card):not(.ed-rail)::before {
+  content: ""; position: absolute; z-index: -1; width: 11rem; height: 11rem; right: -3rem; top: -4rem; border-radius: 50%; pointer-events: none;
+  background: radial-gradient(circle, rgba(var(--t), 0.28), transparent 70%); transition: transform 0.7s var(--ease-lux, ease);
+}
+body:has(.mx-hero) :is(.wc.wp, .mx-card, .gl, .mx-quote, .mx-panel, .pn-card):not(.ed-rail)::after {
+  content: ""; position: absolute; z-index: -1; inset: 0; pointer-events: none; transform: translateX(-120%); transition: transform 0.9s var(--ease-lux, ease);
+  background: linear-gradient(110deg, transparent 35%, rgba(255, 255, 255, 0.4) 50%, transparent 65%);
+}
+body:has(.mx-hero) :is(a.wc.wp, a.mx-card, a.gl, a.pn-card, .mx-lift):not(.ed-rail):hover { transform: translateY(-4px); border-color: rgba(var(--t), 0.5) !important; box-shadow: 0 14px 28px -16px rgba(var(--t), 0.55) !important; }
+body:has(.mx-hero) :is(a.wc.wp, a.mx-card, a.gl, a.pn-card, .mx-lift):not(.ed-rail):hover::before { transform: scale(1.35) translate(-0.5rem, 0.5rem); }
+body:has(.mx-hero) :is(a.wc.wp, a.mx-card, a.gl, a.pn-card, .mx-lift):not(.ed-rail):hover::after { transform: translateX(120%); }
+html[data-theme="esmeralda"] body:has(.mx-hero) :is(.wc.wp, .mx-card, .gl, .mx-quote, .mx-panel, .pn-card):not(.ed-rail)::after { background: linear-gradient(110deg, transparent 35%, rgba(255, 255, 255, 0.1) 50%, transparent 65%); }
+@media (prefers-reduced-motion: reduce) { body:has(.mx-hero) :is(.wc.wp, .mx-card, .gl, .mx-quote, .mx-panel, .pn-card)::before, body:has(.mx-hero) :is(.wc.wp, .mx-card, .gl, .mx-quote, .mx-panel, .pn-card)::after { transition: none; } }
+
+/* Menú lateral derecho (recorrido de la portada en las demás páginas): franja fina que se abre al pasar el cursor */
+.sm { position: fixed; z-index: 60; top: 50%; right: 0; transform: translateY(-50%); display: none; }
+@media (min-width: 1024px) { .sm { display: block; } }
+.sm-tab { display: flex; flex-direction: column; align-items: flex-end; gap: 0.55rem; padding: 0.9rem 0.55rem 0.9rem 1.2rem; cursor: pointer; }
+.sm-tab i { display: block; width: 0.55rem; height: 0.55rem; border-radius: 50%; border: 1.5px solid rgba(var(--veil, 255, 255, 255), 1); background: rgba(0, 0, 0, 0.35); box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.25); }
+.sm-tab i:first-child { background: #d8b558; border-color: #d8b558; }
+.sm-panel { position: absolute; right: 0.5rem; top: 50%; margin: 0; padding: 1.1rem 1.3rem 1.1rem 1.6rem; list-style: none; display: flex; flex-direction: column; gap: 0.15rem; min-width: 17rem; max-height: 86vh; overflow-y: auto;
+  border-radius: 0.9rem; background: rgba(12, 20, 15, 0.86); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); border: 1px solid rgba(216, 181, 88, 0.3); box-shadow: 0 24px 50px -20px rgba(0, 0, 0, 0.6);
+  opacity: 0; visibility: hidden; transform: translate(1rem, -50%); transition: opacity 0.3s, transform 0.45s var(--ease-lux, ease), visibility 0s 0.3s; }
+.sm:hover .sm-panel, .sm:focus-within .sm-panel { opacity: 1; visibility: visible; transform: translate(0, -50%); transition-delay: 0s; }
+.sm:hover .sm-tab, .sm:focus-within .sm-tab { opacity: 0; }
+.sm-panel a { display: flex; align-items: center; justify-content: flex-end; gap: 0.7rem; padding: 0.42rem 0; font: 600 0.78rem/1.2 var(--font-body); letter-spacing: 0.14em; text-transform: uppercase; color: rgba(244, 242, 233, 0.82); text-decoration: none; text-align: right; transition: color 0.2s; }
+.sm-panel a b { flex: none; width: 0.62rem; height: 0.62rem; border-radius: 50%; border: 2px solid currentColor; }
+.sm-panel a:hover, .sm-panel a:focus-visible { color: #fff; }
+.sm-panel li[data-on] a { color: #d8b558; }
+.sm-panel li[data-on] a b { background: #d8b558; }
+@media (prefers-reduced-motion: reduce) { .sm-panel { transition: none; } }
