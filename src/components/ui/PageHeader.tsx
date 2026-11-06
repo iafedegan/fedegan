@@ -79,7 +79,7 @@ export function PageHeader({
   const photo = bgOk ? (
     <>
       <i hidden className="ed-bgmark" />
-      <style>{`html{--page-photo:url("/_next/image?url=${encodeURIComponent(image!)}&w=1920&q=70");--page-photo-sm:url("/_next/image?url=${encodeURIComponent(image!)}&w=768&q=70");--page-pos:${posOk}}`}</style>
+      <style>{`html{--page-photo:url("/_next/image?url=${encodeURIComponent(image!)}&w=1920&q=75");--page-photo-sm:url("/_next/image?url=${encodeURIComponent(image!)}&w=768&q=75");--page-pos:${posOk}}`}</style>
     </>
   ) : null;
   const ld = crumbLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(crumbLd) }} />;
