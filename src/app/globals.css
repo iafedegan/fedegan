@@ -2112,3 +2112,12 @@ html[data-template="bento"] { --veil: 241, 238, 230; }
 html[data-template="editorial"] { --veil: 251, 248, 241; }
 html[data-template="brutalista"] { --veil: 244, 244, 239; }
 html[data-template="campo"] { --veil: 243, 234, 217; }
+
+/* Franja del menú lateral: fondo propio y una flecha que avisa que hay un menú */
+.sm-tab { align-items: center; gap: 0.5rem; padding: 0.6rem 0.5rem 0.7rem; border-radius: 0.9rem 0 0 0.9rem; background: rgba(12, 20, 15, 0.82); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border: 1px solid rgba(216, 181, 88, 0.35); border-right: 0; box-shadow: -8px 10px 24px -14px rgba(0, 0, 0, 0.55); transition: opacity 0.25s, padding 0.3s var(--ease-lux, ease); }
+.sm-tab::before { content: ""; width: 0.5rem; height: 0.5rem; margin: 0.15rem 0 0.2rem; border-left: 2px solid #d8b558; border-bottom: 2px solid #d8b558; transform: rotate(45deg); animation: smnudge 1.8s ease-in-out infinite; }
+.sm-tab i { border-color: rgba(244, 242, 233, 0.85); background: transparent; box-shadow: none; }
+.sm-tab i:first-child { background: #d8b558; border-color: #d8b558; }
+.sm:hover .sm-tab { padding-left: 0.9rem; }
+@keyframes smnudge { 0%, 100% { transform: translateX(0) rotate(45deg); } 50% { transform: translateX(-3px) rotate(45deg); } }
+@media (prefers-reduced-motion: reduce) { .sm-tab::before { animation: none; } }
