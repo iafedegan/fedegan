@@ -593,6 +593,18 @@ export function DesignEditor({ writable, initialPublished, initialDraft, canUndo
                         <input className="ad-input" placeholder="Enlace del anuncio" value={a.href ?? ""} onChange={(e) => patchAd(z.id, { href: e.target.value })} aria-label={`Enlace de ${z.label}`} />
                         <input className="ad-input" placeholder="Texto alternativo" maxLength={120} value={a.alt ?? ""} onChange={(e) => patchAd(z.id, { alt: e.target.value })} aria-label={`Texto alternativo de ${z.label}`} />
                         {z.id === "portada" && (
+                          <div className="flex flex-col gap-1.5 rounded-lg border border-[#e4e1d6] p-2.5">
+                            <p className="text-xs font-bold text-[#11271d]">Texto de esta sección (vacío = el de siempre)</p>
+                            <input className="ad-input" placeholder="Título (p. ej. FEDEGÁN–FNG,)" maxLength={120} value={a.titulo ?? ""} onChange={(e) => patchAd(z.id, { titulo: e.target.value })} aria-label="Título de la sección" />
+                            <input className="ad-input" placeholder="Subtítulo en verde" maxLength={160} value={a.subtitulo ?? ""} onChange={(e) => patchAd(z.id, { subtitulo: e.target.value })} aria-label="Subtítulo de la sección" />
+                            <textarea className="ad-input min-h-[5rem]" placeholder="Párrafo" maxLength={400} value={a.texto ?? ""} onChange={(e) => patchAd(z.id, { texto: e.target.value })} aria-label="Párrafo de la sección" />
+                            <input className="ad-input" placeholder="Botón 1: texto" maxLength={50} value={a.boton1 ?? ""} onChange={(e) => patchAd(z.id, { boton1: e.target.value })} aria-label="Texto del botón 1" />
+                            <input className="ad-input" placeholder="Botón 1: enlace (/quienes-somos o https://…)" value={a.enlace1 ?? ""} onChange={(e) => patchAd(z.id, { enlace1: e.target.value })} aria-label="Enlace del botón 1" />
+                            <input className="ad-input" placeholder="Botón 2: texto" maxLength={50} value={a.boton2 ?? ""} onChange={(e) => patchAd(z.id, { boton2: e.target.value })} aria-label="Texto del botón 2" />
+                            <input className="ad-input" placeholder="Botón 2: enlace" value={a.enlace2 ?? ""} onChange={(e) => patchAd(z.id, { enlace2: e.target.value })} aria-label="Enlace del botón 2" />
+                          </div>
+                        )}
+                        {z.id === "portada" && (
                           <div className="mt-2 flex flex-col gap-2 border-t border-[#d9d6cb] pt-3">
                             <p className="text-xs font-bold text-[#11271d]">Más banners en esta posición ({(design.banners ?? []).length}/8): se alternan solos con puntos para elegir.</p>
                             {(design.banners ?? []).map((b, k) => (

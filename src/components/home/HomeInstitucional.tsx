@@ -3,11 +3,13 @@ import { ArrowRight, CalendarDays, Clock, Download, FileText, GraduationCap, Hel
 import { Container } from "@/components/ui/Container";
 import { Pic } from "./Pic";
 import { HeroMedia } from "./HeroMedia";
+import { HeroText } from "./HeroText";
 import type { AdConfig } from "@/lib/design/regions";
 import { fechaCorta, type HomeData } from "./data";
 
 // Portada institucional: hero con dos botones, accesos rápidos, noticias, publicaciones, agenda, tres bloques de información y Mi FEDEGÁN.
 export function HomeInstitucional({ d, banners }: { d: HomeData; banners: AdConfig[] }) {
+  const portada = banners[0];
   const foto = d.lead?.image ?? d.secciones[0]?.image ?? "/headers/campo.jpg";
   const accesos = [
     { href: "/servicios", icon: FileText, t: "Trámites y servicios", x: "Gestione aquí sus trámites y solicitudes." },
@@ -26,14 +28,7 @@ export function HomeInstitucional({ d, banners }: { d: HomeData; banners: AdConf
     <div className="hi">
       <section data-region="hero" className="hi-hero">
         <Container className="hi-hero-in">
-          <div className="hi-hero-text">
-            <h1>FEDEGÁN–FNG,<span>el hub del ecosistema digital ganadero de Colombia</span></h1>
-            <p>Conectamos a los actores del sector, promovemos el desarrollo sostenible y facilitamos el acceso a información, conocimiento y servicios para una ganadería más competitiva y sostenible.</p>
-            <div className="hi-btns">
-              <Link href="/quienes-somos" className="hi-btn">Conozca más sobre FEDEGÁN–FNG <ArrowRight size={16} aria-hidden /></Link>
-              <Link href="/servicios" className="hi-btn hi-ghost">Explorar servicios <ArrowRight size={16} aria-hidden /></Link>
-            </div>
-          </div>
+          <HeroText initial={portada} />
           <div className="hi-hero-img"><HeroMedia initial={banners} fallback={<Pic src={foto} alt={d.lead?.imageAlt ?? ""} sizes="(min-width: 1024px) 50vw, 100vw" priority />} /></div>
         </Container>
       </section>

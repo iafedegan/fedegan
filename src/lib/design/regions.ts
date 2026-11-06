@@ -129,7 +129,7 @@ export const AD_ZONES = [
   { id: "bottom", label: "Sobre el pie de página", size: "Banner ancho (1200×150 aprox.)" },
 ] as const;
 export type AdZoneId = (typeof AD_ZONES)[number]["id"];
-export type AdConfig = { on?: boolean; image?: string; href?: string; alt?: string; label?: string; /** % del ancho (por defecto 100) */ width?: number; /** alto fijo en px (vacío = automático) */ height?: number };
+export type AdConfig = { on?: boolean; image?: string; href?: string; alt?: string; label?: string; /** Texto de la sección del banner (solo «Banner de portada») */ titulo?: string; subtitulo?: string; texto?: string; boton1?: string; enlace1?: string; boton2?: string; enlace2?: string; /** % del ancho (por defecto 100) */ width?: number; /** alto fijo en px (vacío = automático) */ height?: number };
 
 // ---- edición de cualquier elemento de cualquier página --------------------------------
 // La clave es «ruta::selector» (la ruta es «*» para todo el sitio). El selector lo calcula el editor al hacer clic en la vista previa.
@@ -275,7 +275,7 @@ export function normalizeDesign(raw: unknown): DesignConfig {
   for (const z of AD_ZONES) {
     const a = obj(ads[z.id]);
     const image = href(a.image);
-    if (a.on === true || image) d.ads[z.id] = { on: a.on === true, image, href: href(a.href), alt: str(a.alt, 120), label: str(a.label, 40), ...(Number(a.width) >= 20 && Number(a.width) < 100 ? { width: Math.round(Number(a.width)) } : {}), ...(Number(a.height) >= 80 ? { height: Math.min(1200, Math.round(Number(a.height))) } : {}) };
+    if (a.on === true || image) d.ads[z.id] = { on: a.on === true, image, href: href(a.href), alt: str(a.alt, 120), label: str(a.label, 40), titulo: str(a.titulo, 120), subtitulo: str(a.subtitulo, 160), texto: str(a.texto, 400), boton1: str(a.boton1, 50), enlace1: href(a.enlace1), boton2: str(a.boton2, 50), enlace2: href(a.enlace2), ...(Number(a.width) >= 20 && Number(a.width) < 100 ? { width: Math.round(Number(a.width)) } : {}), ...(Number(a.height) >= 80 ? { height: Math.min(1200, Math.round(Number(a.height))) } : {}) };
   }
 
   if (Array.isArray(src.banners)) {
