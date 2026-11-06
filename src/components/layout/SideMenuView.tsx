@@ -13,9 +13,8 @@ export function SideMenuView({ items }: { items: SideItem[] }) {
   return (
     <nav className="sm" aria-label="Secciones del portal">
       <span className="sm-tab" aria-hidden>
-        {items.slice(0, 7).map((i) => (
-          <i key={i.id} />
-        ))}
+        <em className="sm-arrow" />
+        <span className="sm-label">Más secciones</span>
       </span>
       <ul className="sm-panel">
         {items.map((i) => {

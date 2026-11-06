@@ -2121,3 +2121,16 @@ html[data-template="campo"] { --veil: 243, 234, 217; }
 .sm:hover .sm-tab { padding-left: 0.9rem; }
 @keyframes smnudge { 0%, 100% { transform: translateX(0) rotate(45deg); } 50% { transform: translateX(-3px) rotate(45deg); } }
 @media (prefers-reduced-motion: reduce) { .sm-tab::before { animation: none; } }
+
+/* Franja del menú lateral: «Más secciones» en vertical y una flecha con pulso y estela */
+.sm-tab { gap: 0.7rem; padding: 0.9rem 0.55rem 1rem; overflow: hidden; }
+.sm-tab::before { content: none; }
+.sm-tab i { display: none; }
+.sm-label { writing-mode: vertical-rl; transform: rotate(180deg); font: 700 0.72rem/1 var(--font-body); letter-spacing: 0.22em; text-transform: uppercase; color: #f4f2e9; white-space: nowrap; }
+.sm-arrow { position: relative; display: block; width: 1.5rem; height: 1.5rem; border-radius: 50%; background: rgba(216, 181, 88, 0.16); }
+.sm-arrow::before { content: ""; position: absolute; left: 0.62rem; top: 0.52rem; width: 0.42rem; height: 0.42rem; border-left: 2px solid #d8b558; border-bottom: 2px solid #d8b558; transform: rotate(45deg); animation: smarrow 1.6s var(--ease-lux, ease) infinite; }
+.sm-arrow::after { content: ""; position: absolute; inset: 0; border-radius: 50%; border: 1.5px solid #d8b558; animation: smpulse 1.6s ease-out infinite; }
+.sm:hover .sm-arrow::before { animation-duration: 0.8s; }
+@keyframes smarrow { 0% { transform: translateX(3px) rotate(45deg); opacity: 0; } 40% { opacity: 1; } 100% { transform: translateX(-4px) rotate(45deg); opacity: 0; } }
+@keyframes smpulse { 0% { transform: scale(0.7); opacity: 0.9; } 100% { transform: scale(1.5); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .sm-arrow::before, .sm-arrow::after { animation: none; } .sm-arrow::before { opacity: 1; } }
