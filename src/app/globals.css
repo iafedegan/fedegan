@@ -1929,8 +1929,8 @@ body:has(.mx-hero) .cta-link { padding: 0.6rem 1.1rem; font-size: 0.85rem; }
 
 /* Foto de fondo de toda la página: fija detrás del contenido, con un degradé del color de la página encima (más foto arriba,
    más color abajo, donde está el texto) y una deriva muy lenta. Las capas de color en movimiento se apagan en esas páginas. */
-html { --veil: 255, 255, 255; --veil-a: 0.06; --veil-b: 0.74; --veil-c: 0.95; }
-html[data-theme="esmeralda"] { --veil: 20, 20, 20; --veil-a: 0.18; --veil-b: 0.62; --veil-c: 0.88; }
+html { --veil: 255, 255, 255; --veil-a: 0.3; --veil-b: 0.84; --veil-c: 0.96; }
+html[data-theme="esmeralda"] { --veil: 20, 20, 20; --veil-a: 0.36; --veil-b: 0.74; --veil-c: 0.9; }
 html::before { content: none; }
 html:has(.ed-bgmark)::before {
   content: ""; position: fixed; inset: -3%; z-index: -3; pointer-events: none; will-change: transform;
@@ -1954,5 +1954,5 @@ body:has(.ed-bgmark)::before, body:has(.ed-bgmark)::after { display: none; }
 @keyframes bgdrift { from { transform: scale(1) translate3d(0, 0, 0); } to { transform: scale(1.07) translate3d(-1.2%, -1%, 0); } }
 .ed-facts li { background: color-mix(in srgb, var(--bg, #fff) 78%, transparent); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
 /* Páginas de lectura larga (secciones): el velo es más fuerte para que el texto no compita con la foto */
-html:has(.doc-split) { --veil-a: 0.1; --veil-b: 0.8; --veil-c: 0.95; }
-html[data-theme="esmeralda"]:has(.doc-split) { --veil-a: 0.28; --veil-b: 0.74; --veil-c: 0.9; }
+html:has(.doc-split) { --veil-a: 0.4; --veil-b: 0.88; --veil-c: 0.96; }
+html[data-theme="esmeralda"]:has(.doc-split) { --veil-a: 0.46; --veil-b: 0.8; --veil-c: 0.92; }
