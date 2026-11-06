@@ -240,3 +240,9 @@ header[data-region="navbar"] { border-bottom: 0 !important; box-shadow: 0 8px 18
 .mh-tag { font-weight: 800; letter-spacing: 0.22em; text-transform: uppercase; color: #10240f; }
 .mh-date { text-transform: uppercase; letter-spacing: 0.18em; color: rgba(16, 36, 15, 0.85); }
 header[data-region="navbar"] { border-top: 6px solid transparent; border-image: linear-gradient(90deg, #faa619 0 14.3%, #b10069 14.3% 28.6%, #005387 28.6% 42.9%, #7396ce 42.9% 57.2%, #ed0c6e 57.2% 71.5%, #567c8e 71.5% 85.8%, #ffffff 85.8%) 1 0 0 0; }
+
+/* Cintillo corporativo: gana a las reglas de tema anteriores */
+html .mh, html header[data-region="navbar"] {
+  border-top: 8px solid transparent !important;
+  border-image: linear-gradient(90deg, #faa619 0 16.66%, #b10069 16.66% 33.33%, #005387 33.33% 50%, #7396ce 50% 66.66%, #ed0c6e 66.66% 83.33%, #567c8e 83.33%) 1 0 0 0 !important;
+}
