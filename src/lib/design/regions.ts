@@ -123,12 +123,13 @@ export type LocalStyle = { titleFont?: FontId; titleScale?: number; color?: stri
 export type TickerConfig = { on?: boolean; messages?: string[]; speed?: number };
 export type PopupConfig = { on?: boolean; title?: string; text?: string; ctaLabel?: string; ctaHref?: string; delay?: number };
 export const AD_ZONES = [
+  { id: "portada", label: "Banner de portada (imagen con botón)", size: "Imagen ancha (1920×700 aprox.). Se ve arriba del inicio y el botón lleva al enlace." },
   { id: "top", label: "Bajo el encabezado", size: "Banner ancho (1200×150 aprox.)" },
   { id: "mid", label: "Entre secciones del inicio", size: "Banner ancho (1200×200 aprox.)" },
   { id: "bottom", label: "Sobre el pie de página", size: "Banner ancho (1200×150 aprox.)" },
 ] as const;
 export type AdZoneId = (typeof AD_ZONES)[number]["id"];
-export type AdConfig = { on?: boolean; image?: string; href?: string; alt?: string };
+export type AdConfig = { on?: boolean; image?: string; href?: string; alt?: string; label?: string };
 
 // ---- edición de cualquier elemento de cualquier página --------------------------------
 // La clave es «ruta::selector» (la ruta es «*» para todo el sitio). El selector lo calcula el editor al hacer clic en la vista previa.
@@ -272,7 +273,7 @@ export function normalizeDesign(raw: unknown): DesignConfig {
   for (const z of AD_ZONES) {
     const a = obj(ads[z.id]);
     const image = href(a.image);
-    if (a.on === true || image) d.ads[z.id] = { on: a.on === true, image, href: href(a.href), alt: str(a.alt, 120) };
+    if (a.on === true || image) d.ads[z.id] = { on: a.on === true, image, href: href(a.href), alt: str(a.alt, 120), label: str(a.label, 40) };
   }
 
   const els = obj(src.elements);

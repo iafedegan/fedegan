@@ -51,6 +51,7 @@ export async function HomeView({ kind, design }: { kind: HomeKind; design: Desig
   }
   return (
     <div data-home={kind} style={{ display: "contents" }}>
+      <AdSlot zone="portada" initial={design.ads.portada} />
       {cuerpo}
     </div>
   );

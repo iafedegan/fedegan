@@ -10,7 +10,7 @@ import {
   designCss, elementKey, isEmptyDesign, normalizeDesign, splitElementKey,
   type AdConfig, type DesignConfig, type ElementEdit, type LocalStyle, type RegionId, type RegionStyle,
 } from "@/lib/design/regions";
-import { publishDesign, saveDesignDraft, undoDesignPublish } from "@/lib/design/actions";
+import { publishDesign, saveDesignDraft, subirImagenDiseno, undoDesignPublish } from "@/lib/design/actions";
 
 // Tamaño virtual de cada pantalla: el sitio se dibuja a ese ancho y se escala para caber en el marco.
 const DEVICES = {
@@ -557,6 +557,18 @@ export function DesignEditor({ writable, initialPublished, initialDraft, canUndo
                         <p className="text-xs text-[#8a978f]">{z.size}</p>
                         <label className="flex items-center gap-2 text-sm font-semibold"><input type="checkbox" checked={Boolean(a.on)} onChange={(e) => patchAd(z.id, { on: e.target.checked })} /> Activa</label>
                         <input className="ad-input" placeholder="Imagen: /anuncios/banner.jpg o https://…" value={a.image ?? ""} onChange={(e) => patchAd(z.id, { image: e.target.value })} aria-label={`Imagen de ${z.label}`} />
+                        <label className="flex flex-col gap-1 text-xs font-semibold text-[#5d6e65]">Subir imagen (JPG, PNG, WebP; máx. 5 MB)
+                          <input type="file" accept="image/jpeg,image/png,image/webp,image/gif" className="text-xs font-normal" onChange={async (e) => {
+                            const f = e.target.files?.[0];
+                            if (!f) return;
+                            const fd = new FormData();
+                            fd.set("archivo", f);
+                            const r = await subirImagenDiseno(fd);
+                            if (r.url) patchAd(z.id, { image: r.url, on: true });
+                            else setStatus({ kind: "err", text: r.error ?? "No se pudo subir la imagen." });
+                          }} />
+                        </label>
+                        {z.id === "portada" && <input className="ad-input" placeholder="Texto del botón (p. ej. Ver más)" maxLength={40} value={a.label ?? ""} onChange={(e) => patchAd(z.id, { label: e.target.value })} aria-label="Texto del botón" />}
                         <input className="ad-input" placeholder="Enlace del anuncio" value={a.href ?? ""} onChange={(e) => patchAd(z.id, { href: e.target.value })} aria-label={`Enlace de ${z.label}`} />
                         <input className="ad-input" placeholder="Texto alternativo" maxLength={120} value={a.alt ?? ""} onChange={(e) => patchAd(z.id, { alt: e.target.value })} aria-label={`Texto alternativo de ${z.label}`} />
                       </fieldset>

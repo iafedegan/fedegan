@@ -61,3 +61,23 @@ footer[data-region="footer"] input::placeholder { color: #5a625c; }
 footer[data-region="footer"] .ft-allies h4, footer[data-region="footer"] .ft-news h4 { color: #6b0c3a; }
 footer[data-region="footer"] [class*="border-white/22"] { border-color: rgba(16, 36, 15, 0.22); }
 footer[data-region="footer"] .ft-allies span.ring-2 { background: #fff; }
+
+/* Menú principal en negrilla */
+.nv-link, header[data-region="navbar"] .nv-link { font-weight: 700 !important; }
+
+/* Banner de portada: imagen cargada desde el editor, con botón al enlace */
+.portada-banner { position: relative; background: #fff; }
+.portada-banner a, .portada-banner > div { position: relative; display: block; max-width: 100%; }
+.portada-btn { position: absolute; left: clamp(1rem, 4vw, 4rem); bottom: clamp(1rem, 4vw, 3rem); padding: 0.75rem 1.5rem; border-radius: 0.25rem; background: #72bf44; color: #10240f; font: 800 0.95rem/1 var(--font-body); text-transform: uppercase; letter-spacing: 0.06em; box-shadow: 0 10px 24px -12px rgba(0, 0, 0, 0.6); transition: background 0.2s, transform 0.2s; }
+.portada-banner a:hover .portada-btn { background: #89114c; color: #fff; transform: translateY(-2px); }
+
+/* Panel de administración: el verde corporativo en lugar del verde oscuro */
+.ad-side { background: #72bf44 !important; color: #10240f !important; }
+.ad-side .ad-navlink { color: #10240f; font-weight: 600; }
+.ad-side .ad-navlink:hover { background: rgba(255, 255, 255, 0.35); color: #10240f; }
+.ad-side .ad-navlink[aria-current="page"] { background: rgba(255, 255, 255, 0.5); color: #10240f; }
+.ad-side .ad-navlink[aria-current="page"]::before { background: #89114c; }
+.ad-side :is([class*="text-white"], [class*="text-[#"]) { color: #10240f !important; }
+.ad-side [class*="border-white"], .ad-side [class*="bg-white"] { border-color: rgba(16, 36, 15, 0.25) !important; }
+.ad-btn-primary { background: #89114c; }
+.ad-btn-primary:hover:not(:disabled) { background: #6b0c3a; }
