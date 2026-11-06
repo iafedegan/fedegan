@@ -714,3 +714,6 @@ html[data-tpl-mode] body:has([data-template="campo"]) {
 /* La próxima fecha límite toma los colores del bloque donde se pone */
 .hb-pay { --text: #fff; --text-muted: rgba(255, 255, 255, 0.82); --text-faint: rgba(255, 255, 255, 0.66); --surface-solid: rgba(255, 255, 255, 0.1); --border-strong: rgba(255, 255, 255, 0.3); --fg-lime-400: #8de3bb; --fg-lime-500: #8de3bb; }
 .hr-cuota { --text: #111; --text-muted: #111; --text-faint: #111; --surface-solid: #fff; --border-strong: #111; --fg-lime-400: #111; --fg-lime-500: #111; }
+
+/* El logo es blanco: sobre las barras claras (Bento, Brutalista) y el papel (Editorial) se ve en negro */
+html[data-tpl-mode] body:has([data-template="bento"], [data-template="editorial"], [data-template="brutalista"]) :is(.mh-logo, .nv-emblem) { filter: brightness(0); }
