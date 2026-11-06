@@ -1956,3 +1956,22 @@ body:has(.ed-bgmark)::before, body:has(.ed-bgmark)::after { display: none; }
 /* Páginas de lectura larga (secciones): el velo es más fuerte para que el texto no compita con la foto */
 html:has(.doc-split) { --veil-a: 0.78; --veil-b: 0.95; --veil-c: 0.98; }
 html[data-theme="esmeralda"]:has(.doc-split) { --veil-a: 0.76; --veil-b: 0.9; --veil-c: 0.96; }
+
+/* Entradas de sección (hub): tarjetas con fondo tenue en degradé, brillo que cruza al pasar el cursor y elevación suave */
+.hub-grid { gap: 1rem; }
+.hub-cell {
+  --t: 47, 156, 98;
+  position: relative; overflow: hidden; isolation: isolate; padding: 1.1rem 1.2rem 1.15rem; border: 1px solid rgba(var(--t), 0.2); border-radius: 0.25rem;
+  background: linear-gradient(145deg, rgba(var(--t), 0.14) 0%, rgba(var(--t), 0.05) 55%, rgba(var(--t), 0.12) 100%);
+  transition: transform 0.45s var(--ease-lux, ease), box-shadow 0.45s var(--ease-lux, ease), border-color 0.3s;
+}
+.hub-grid > li:nth-child(4n+2) .hub-cell { --t: 216, 181, 88; }
+.hub-grid > li:nth-child(4n+3) .hub-cell { --t: 112, 214, 196; }
+.hub-grid > li:nth-child(4n) .hub-cell { --t: 230, 160, 108; }
+.hub-cell::before { content: ""; position: absolute; z-index: -1; width: 11rem; height: 11rem; right: -3rem; top: -4rem; border-radius: 50%; background: radial-gradient(circle, rgba(var(--t), 0.3), transparent 70%); transition: transform 0.7s var(--ease-lux, ease); }
+.hub-cell::after { content: ""; position: absolute; z-index: -1; inset: 0; background: linear-gradient(110deg, transparent 35%, rgba(255, 255, 255, 0.45) 50%, transparent 65%); transform: translateX(-120%); transition: transform 0.9s var(--ease-lux, ease); pointer-events: none; }
+a.hub-cell:hover, a.hub-cell:focus-visible { transform: translateY(-4px); border-color: rgba(var(--t), 0.5); box-shadow: 0 14px 28px -16px rgba(var(--t), 0.55); }
+a.hub-cell:hover::before { transform: scale(1.35) translate(-0.5rem, 0.5rem); }
+a.hub-cell:hover::after { transform: translateX(120%); }
+html[data-theme="esmeralda"] .hub-cell::after { background: linear-gradient(110deg, transparent 35%, rgba(255, 255, 255, 0.1) 50%, transparent 65%); }
+@media (prefers-reduced-motion: reduce) { .hub-cell, .hub-cell::before, .hub-cell::after { transition: none; } }
