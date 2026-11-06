@@ -20,7 +20,7 @@ export async function Footer() {
   const partners = await getPartners();
   return (
     <footer data-region="footer" className="mt-16 bg-[#72bf44] text-white/85">
-      <Container className="grid gap-x-8 gap-y-10 py-12 sm:grid-cols-2 lg:grid-cols-[1.15fr_0.8fr_0.8fr_1.5fr] xl:gap-x-12">
+      <Container className="grid gap-x-8 gap-y-10 py-12 sm:grid-cols-2 lg:grid-cols-[1.25fr_0.8fr_0.8fr_1.2fr] xl:gap-x-12">
         <div className="flex flex-col gap-4">
           <Link href="/" aria-label="FEDEGÁN FNG, inicio" className="w-fit">
             <Image src="/brand/fedegan-horizontal-desc-blanco.svg" alt="FEDEGÁN, Federación Colombiana de Ganaderos" width={917} height={329} unoptimized className="h-24 w-auto" />
@@ -72,27 +72,32 @@ export async function Footer() {
         </div>
 
         <div>
-          <h4 className={head}>Contacto y canales oficiales</h4>
+          <h4 className={head}>Contacto</h4>
           <ul className="flex flex-col gap-2.5 text-sm text-white/75">
             <li className="flex gap-2.5"><MapPin size={16} className="mt-0.5 shrink-0" />{contacto.direccion}</li>
             <li className="flex gap-2.5"><Phone size={16} className="mt-0.5 shrink-0" /><a href={contacto.telefonoHref} className="hover:text-white">{contacto.telefono}</a></li>
             <li className="flex gap-2.5"><Clock size={16} className="mt-0.5 shrink-0" />{contacto.horario}</li>
           </ul>
-          <ul className="mt-4 grid gap-3 sm:grid-cols-2">
+          <ul className="mt-5 flex flex-col divide-y divide-[rgba(16,36,15,0.22)] border-t border-white/22">
             {contacto.correos.map((c) => (
-              <li key={c.email} className="rounded-[var(--radius-sm)] border border-white/12 p-3">
-                <p className="flex items-center gap-1.5 text-[0.66rem] font-bold uppercase tracking-[0.12em] text-[var(--fg-lime-400)]"><Mail size={12} />{c.label}</p>
-                <a href={`mailto:${c.email}`} className="mt-1 block break-all text-sm font-semibold text-white hover:text-[var(--fg-lime-400)]">{c.email}</a>
-                <p className="mt-1 text-xs leading-snug text-white/55">{c.text}</p>
+              <li key={c.email} className="py-2.5">
+                <p className="flex items-center gap-1.5 text-[0.64rem] font-bold uppercase tracking-[0.12em] text-[var(--fg-lime-400)]"><Mail size={12} />{c.label}</p>
+                <a href={`mailto:${c.email}`} className="mt-0.5 block break-words text-sm font-semibold text-white hover:underline">{c.email}</a>
               </li>
             ))}
           </ul>
-          <div className="mt-5">
-            <h4 className={head}>Suscríbase al boletín</h4>
-            <NewsletterForm />
-          </div>
         </div>
       </Container>
+
+      <div className="ft-news border-t border-white/22">
+        <Container className="flex flex-col items-start gap-4 py-7 md:flex-row md:items-center md:justify-between">
+          <div>
+            <h4 className={`${head} !mb-1`}>Suscríbase al boletín</h4>
+            <p className="text-sm text-white/75">Reciba las noticias y los comunicados del gremio en su correo.</p>
+          </div>
+          <div className="w-full md:max-w-xl"><NewsletterForm /></div>
+        </Container>
+      </div>
 
       {partners.length > 0 && (
         <div className="ft-allies border-t border-white/12">

@@ -54,3 +54,10 @@ footer[data-region="footer"] a:hover { color: #6b0c3a !important; }
 .ed-flag::before { background: #72bf44; }
 .sw-cta { border-radius: 0.25rem; }
 .mh { border-bottom: 0 !important; }
+header[data-region="navbar"] { border-bottom-width: 0 !important; }
+footer[data-region="footer"] button[type="submit"] { background: #89114c !important; color: #fff !important; }
+footer[data-region="footer"] input { background: #fff !important; color: #10240f !important; border-color: rgba(16, 36, 15, 0.3) !important; }
+footer[data-region="footer"] input::placeholder { color: #5a625c; }
+footer[data-region="footer"] .ft-allies h4, footer[data-region="footer"] .ft-news h4 { color: #6b0c3a; }
+footer[data-region="footer"] [class*="border-white/22"] { border-color: rgba(16, 36, 15, 0.22); }
+footer[data-region="footer"] .ft-allies span.ring-2 { background: #fff; }
