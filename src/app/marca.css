@@ -232,3 +232,11 @@ header[data-region="navbar"] { border-bottom: 0 !important; box-shadow: 0 8px 18
 .hi-quick svg:first-child, .hi-trio svg:first-child { box-sizing: content-box; padding: 0.6rem; border-radius: 0.9rem; background: #eef8e6; color: #3d7a22; }
 .hi-quick svg:last-child { margin-top: auto; }
 .hi-cal svg, .hi-meta svg { color: #3d7a22; }
+
+/* Cabezote centrado: logo con filetes, razón social y fecha, entre cintas corporativas */
+.mh { text-align: center; border-top: 6px solid transparent; border-image: linear-gradient(90deg, #faa619 0 14.3%, #b10069 14.3% 28.6%, #005387 28.6% 42.9%, #7396ce 42.9% 57.2%, #ed0c6e 57.2% 71.5%, #567c8e 71.5% 85.8%, #ffffff 85.8%) 1 0 0 0; }
+.mh-rule { background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.7)); }
+.mh-rule-r { background: linear-gradient(270deg, transparent, rgba(255, 255, 255, 0.7)); }
+.mh-tag { font-weight: 800; letter-spacing: 0.22em; text-transform: uppercase; color: #10240f; }
+.mh-date { text-transform: uppercase; letter-spacing: 0.18em; color: rgba(16, 36, 15, 0.85); }
+header[data-region="navbar"] { border-top: 6px solid transparent; border-image: linear-gradient(90deg, #faa619 0 14.3%, #b10069 14.3% 28.6%, #005387 28.6% 42.9%, #7396ce 42.9% 57.2%, #ed0c6e 57.2% 71.5%, #567c8e 71.5% 85.8%, #ffffff 85.8%) 1 0 0 0; }
