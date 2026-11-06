@@ -427,6 +427,7 @@ export function DesignEditor({ writable, initialPublished, initialDraft, canUndo
   const popup = design.popup;
   const patchTicker = (p: Partial<typeof ticker>) => update((d) => ({ ...d, ticker: { ...d.ticker, ...p } }));
   const patchPopup = (p: Partial<typeof popup>) => update((d) => ({ ...d, popup: { ...d.popup, ...p } }));
+  const [msgAd, setMsgAd] = useState<Record<string, string>>({});
   const patchAd = (zone: (typeof AD_ZONES)[number]["id"], p: Partial<AdConfig>) => update((d) => ({ ...d, ads: { ...d.ads, [zone]: { ...(d.ads[zone] ?? {}), ...p } } }));
 
   const cuerpoZonas = (
@@ -557,17 +558,36 @@ export function DesignEditor({ writable, initialPublished, initialDraft, canUndo
                         <p className="text-xs text-[#8a978f]">{z.size}</p>
                         <label className="flex items-center gap-2 text-sm font-semibold"><input type="checkbox" checked={Boolean(a.on)} onChange={(e) => patchAd(z.id, { on: e.target.checked })} /> Activa</label>
                         <input className="ad-input" placeholder="Imagen: /anuncios/banner.jpg o https://…" value={a.image ?? ""} onChange={(e) => patchAd(z.id, { image: e.target.value })} aria-label={`Imagen de ${z.label}`} />
-                        <label className="flex flex-col gap-1 text-xs font-semibold text-[#5d6e65]">Subir imagen (JPG, PNG, WebP; máx. 5 MB)
-                          <input type="file" accept="image/jpeg,image/png,image/webp,image/gif" className="text-xs font-normal" onChange={async (e) => {
-                            const f = e.target.files?.[0];
-                            if (!f) return;
-                            const fd = new FormData();
-                            fd.set("archivo", f);
-                            const r = await subirImagenDiseno(fd);
-                            if (r.url) patchAd(z.id, { image: r.url, on: true });
-                            else setStatus({ kind: "err", text: r.error ?? "No se pudo subir la imagen." });
-                          }} />
-                        </label>
+                        <div className="flex flex-col gap-1.5">
+                          <label className="ad-btn ad-btn-primary w-fit cursor-pointer">
+                            Cargar imagen desde mi computador
+                            <input type="file" accept="image/jpeg,image/png,image/webp,image/gif" className="sr-only" onChange={async (e) => {
+                              const f = e.target.files?.[0];
+                              e.target.value = "";
+                              if (!f) return;
+                              setMsgAd((m) => ({ ...m, [z.id]: "Subiendo…" }));
+                              const fd = new FormData();
+                              fd.set("archivo", f);
+                              const r = await subirImagenDiseno(fd);
+                              if (r.url) {
+                                patchAd(z.id, { image: r.url, on: true });
+                                setMsgAd((m) => ({ ...m, [z.id]: "Imagen cargada. Recuerde guardar y publicar." }));
+                              } else setMsgAd((m) => ({ ...m, [z.id]: r.error ?? "No se pudo subir la imagen." }));
+                            }} />
+                          </label>
+                          <span className="text-xs text-[#5d6e65]">JPG, PNG, WebP o GIF, máx. 5 MB. También puede pegar una dirección arriba.</span>
+                          {msgAd[z.id] && <span role="status" className="text-xs font-semibold text-[#165a43]">{msgAd[z.id]}</span>}
+                        </div>
+                        {z.id === "portada" && (
+                          <div className="grid grid-cols-2 gap-2">
+                            <label className="flex flex-col gap-1 text-xs font-semibold text-[#5d6e65]">Ancho: {a.width ?? 100} %
+                              <input type="range" min={20} max={100} step={5} value={a.width ?? 100} onChange={(e) => patchAd(z.id, { width: Number(e.target.value) })} />
+                            </label>
+                            <label className="flex flex-col gap-1 text-xs font-semibold text-[#5d6e65]">Alto (px; vacío = automático)
+                              <input className="ad-input" type="number" min={80} max={1200} placeholder="Automático" value={a.height ?? ""} onChange={(e) => patchAd(z.id, { height: e.target.value ? Number(e.target.value) : undefined })} />
+                            </label>
+                          </div>
+                        )}
                         {z.id === "portada" && <input className="ad-input" placeholder="Texto del botón (p. ej. Ver más)" maxLength={40} value={a.label ?? ""} onChange={(e) => patchAd(z.id, { label: e.target.value })} aria-label="Texto del botón" />}
                         <input className="ad-input" placeholder="Enlace del anuncio" value={a.href ?? ""} onChange={(e) => patchAd(z.id, { href: e.target.value })} aria-label={`Enlace de ${z.label}`} />
                         <input className="ad-input" placeholder="Texto alternativo" maxLength={120} value={a.alt ?? ""} onChange={(e) => patchAd(z.id, { alt: e.target.value })} aria-label={`Texto alternativo de ${z.label}`} />

@@ -13,12 +13,12 @@ export function AdSlot({ zone, initial }: { zone: AdZoneId; initial?: AdConfig }
     const go = (
       <>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={value.image} alt={value.alt || ""} className="block h-auto w-full object-cover" />
+        <img src={value.image} alt={value.alt || ""} className="block w-full object-cover" style={{ height: value.height ? `${value.height}px` : "auto" }} />
         {value.href && <span className="portada-btn">{value.label || "Ver más"}</span>}
       </>
     );
     return (
-      <section aria-label="Destacado" className="portada-banner">
+      <section aria-label="Destacado" className="portada-banner" style={value.width ? { maxWidth: `${value.width}%`, marginInline: "auto" } : undefined}>
         {value.href ? (
           ext ? <a href={value.href} target="_blank" rel="noopener noreferrer">{go}</a> : <Link href={value.href}>{go}</Link>
         ) : (
