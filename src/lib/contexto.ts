@@ -109,10 +109,19 @@ type ApiResult<T> = { ok: true; data: T } | { ok: false; status: number | null }
 const lastGood = new Map<string, unknown>();
 
 async function call(base: string, key: string, path: string) {
-  return fetch(`${base}${path}`, {
-    headers: { Authorization: `Bearer ${key}`, Accept: "application/json" },
-    next: { revalidate: REVALIDATE_SECONDS },
-  });
+  const pedir = () =>
+    fetch(`${base}${path}`, {
+      headers: { Authorization: `Bearer ${key}`, Accept: "application/json" },
+      next: { revalidate: REVALIDATE_SECONDS },
+    });
+  const res = await pedir();
+  // Límite de peticiones (429) o fallo momentáneo del servidor: se espera un poco y se reintenta una vez.
+  if (res.status === 429 || res.status >= 500) {
+    const espera = Math.min(3000, (Number(res.headers.get("retry-after")) || 1.5) * 1000);
+    await new Promise((r) => setTimeout(r, espera));
+    return pedir();
+  }
+  return res;
 }
 
 async function api<T>(path: string): Promise<ApiResult<T>> {

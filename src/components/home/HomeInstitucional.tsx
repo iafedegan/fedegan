@@ -49,6 +49,7 @@ export function HomeInstitucional({ d, banners }: { d: HomeData; banners: AdConf
         <section data-region="news" className="hi-sec">
           <div className="hi-head"><h2>Noticias destacadas</h2><Link href="/noticias">Ver todas las noticias <ArrowRight size={14} aria-hidden /></Link></div>
           <div className="hi-grid3">
+            {noticias.length === 0 && <p className="hi-empty">Las noticias no están disponibles en este momento. Puede leerlas en <Link href="/noticias">la sala de prensa</Link>.</p>}
             {noticias.map((n) => (
               <Link key={n.slug} href={`/noticias/${n.slug}`} className="hi-card">
                 <span className="hi-img">{n.image && <Pic src={n.image} alt={n.imageAlt ?? ""} sizes="(min-width: 1024px) 30vw, 100vw" />}<em>{n.section}</em></span>
