@@ -227,3 +227,8 @@ header[data-region="navbar"] { border-bottom: 0 !important; box-shadow: 0 8px 18
 .mh-search { border-color: rgba(16, 36, 15, 0.25); background: #fff; }
 .mh-tag, .mh-date { color: #10240f; }
 .hi-empty { grid-column: 1 / -1; padding: 1.5rem; border: 1px dashed #b9c7b0; border-radius: 0.6rem; color: #484f4a; } .hi-empty a { color: #3d7a22; font-weight: 700; }
+
+/* Iconos duotono dentro de una ficha redondeada */
+.hi-quick svg:first-child, .hi-trio svg:first-child { box-sizing: content-box; padding: 0.6rem; border-radius: 0.9rem; background: #eef8e6; color: #3d7a22; }
+.hi-quick svg:last-child { margin-top: auto; }
+.hi-cal svg, .hi-meta svg { color: #3d7a22; }
