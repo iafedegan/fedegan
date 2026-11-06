@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { MastheadTools } from "./MastheadTools";
 
@@ -9,7 +10,7 @@ export function Masthead() {
       <div className="mh-row">
         <span aria-hidden className="mh-rule mh-rule-l" />
         <Link href="/" className="mh-title" aria-label="FEDEGÁN FNG, inicio">
-          FEDEGÁN <span>FNG</span>
+          <Image src="/brand/fedegan-horizontal-desc-blanco.svg" alt="FEDEGÁN, Federación Colombiana de Ganaderos" width={917} height={329} priority unoptimized className="mh-logo" />
         </Link>
         <span aria-hidden className="mh-rule mh-rule-r" />
       </div>

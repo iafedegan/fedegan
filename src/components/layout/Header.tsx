@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
@@ -196,7 +197,7 @@ export function Header({ nav: mainNav }: { nav: { label: string; href: string }[
         <Container className="flex items-center justify-between gap-6 py-3">
           {/* Marca compacta: solo se ve en las páginas interiores, donde la cabecera grande se oculta. */}
           <Link href="/" className="nv-brand" aria-label="FEDEGÁN FNG, inicio">
-            FEDEGÁN <span>FNG</span>
+            <Image src="/brand/fedegan-horizontal-blanco.svg" alt="FEDEGÁN" width={1071} height={385} unoptimized className="nv-emblem" />
           </Link>
           <div className="flex min-w-0 flex-1 items-center justify-center gap-0.5">
             {mainNav.map((item, i) => {

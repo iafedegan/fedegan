@@ -1,10 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight, Clock, Mail, MapPin, Phone } from "lucide-react";
+import { Clock, Mail, MapPin, Phone } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { footerLinks } from "@/content/site";
-import { aliados, contacto, legales, pqrsdForm, redes } from "@/content/accesos";
-import { Logo } from "./Logo";
+import { contacto, legales, pqrsdForm, redes } from "@/content/accesos";
+import { getPartners } from "@/lib/cms/content";
+import { canOptimize } from "@/lib/image-host";
 import { FooterAccess } from "./FooterAccess";
 import { PrivacyButton } from "./PrivacyButton";
 import { FacebookIcon, XIcon, InstagramIcon, YoutubeIcon } from "@/components/ui/SocialIcons";
@@ -14,14 +15,16 @@ const socialIcon = { facebook: FacebookIcon, x: XIcon, youtube: YoutubeIcon, ins
 
 const head = "mb-3.5 text-[0.72rem] font-bold uppercase tracking-[0.14em] text-[var(--fg-lime-400)]";
 
-export function Footer() {
+// Pie de página: mismo verde de la barra de navegación, con el logo de FEDEGÁN y los portales aliados con sus logos.
+export async function Footer() {
+  const partners = await getPartners();
   return (
-    <footer data-region="footer" className="mt-16 bg-[var(--fg-green-900)] text-white/85">
+    <footer data-region="footer" className="mt-16 bg-[#72bf44] text-white/85">
       <Container className="grid gap-x-8 gap-y-10 py-12 sm:grid-cols-2 lg:grid-cols-[1.15fr_0.8fr_0.8fr_1.5fr] xl:gap-x-12">
         <div className="flex flex-col gap-4">
-          <div className="[&_span]:text-white [&_span:last-child]:text-white/60">
-            <Logo />
-          </div>
+          <Link href="/" aria-label="FEDEGÁN FNG, inicio" className="w-fit">
+            <Image src="/brand/fedegan-horizontal-desc-blanco.svg" alt="FEDEGÁN, Federación Colombiana de Ganaderos" width={917} height={329} unoptimized className="h-24 w-auto" />
+          </Link>
           <p className="text-sm leading-relaxed text-white/65">Lideramos el desarrollo sostenible de la ganadería colombiana.</p>
           <a
             href={pqrsdForm}
@@ -66,16 +69,6 @@ export function Footer() {
               </li>
             ))}
           </ul>
-          <h4 className={`${head} mt-8`}>Portales aliados</h4>
-          <ul className="flex flex-wrap gap-x-4 gap-y-2 text-sm">
-            {aliados.map((a) => (
-              <li key={a.href}>
-                <a href={a.href} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-white/75 transition-colors hover:text-white">
-                  {a.label} <ArrowUpRight size={12} />
-                </a>
-              </li>
-            ))}
-          </ul>
         </div>
 
         <div>
@@ -100,6 +93,26 @@ export function Footer() {
           </div>
         </div>
       </Container>
+
+      {partners.length > 0 && (
+        <div className="ft-allies border-t border-white/12">
+          <Container className="py-9">
+            <h4 className={`${head} text-center`}>Portales aliados</h4>
+            <ul className="mt-6 flex flex-wrap items-start justify-center gap-x-9 gap-y-7">
+              {partners.map((p) => (
+                <li key={p.href}>
+                  <a href={p.href} target="_blank" rel="noopener noreferrer" aria-label={`${p.nombre}${p.detalle ? `: ${p.detalle}` : ""} (se abre en otra pestaña)`} className="group flex w-28 flex-col items-center gap-2.5 text-center">
+                    <span className="relative block h-24 w-24 overflow-hidden rounded-full bg-white/5 ring-2 ring-white/15 transition duration-300 group-hover:scale-105 group-hover:ring-[var(--fg-lime-400)] sm:h-28 sm:w-28">
+                      <Image src={p.logo} alt="" fill sizes="112px" unoptimized={!canOptimize(p.logo)} className="object-cover" />
+                    </span>
+                    <span className="text-xs font-semibold leading-tight text-white/75 transition-colors group-hover:text-white">{p.nombre}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </Container>
+        </div>
+      )}
 
       <div className="border-t border-white/12">
         <Container className="flex flex-col gap-4 py-5 text-xs text-white/60 lg:flex-row lg:items-start lg:justify-between">

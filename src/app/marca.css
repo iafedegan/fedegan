@@ -1,0 +1,56 @@
+/* ======================================================================
+   MARCA FEDEGÁN — Manual de logo: verde Pantone DS290-1 C (#72BF44), rojo Pantone 222 C (#89114C),
+   fondo blanco, tipografía Meta (aquí Fira Sans, de la misma familia de diseño), barra corporativa con los colores de las submarcas.
+   Sin fotos ni colores de fondo en las páginas. Las plantillas (templates.css) van después y mandan cuando hay una activa.
+   ====================================================================== */
+:root, [data-theme="institucional"], [data-theme="esmeralda"] {
+  --brand-green: #72bf44; --brand-green-ink: #3d7a22; --brand-red: #89114c; --brand-ink: #10240f;
+  --bg: #fff; --bg-muted: #f6f6f4; --bg-sunken: #efefec; --surface: #fff; --surface-solid: #fff; --surface-2: #f6f6f4; --card-a: #fff; --card-b: #f6f6f4;
+  --border: #dcdcd6; --border-strong: #89114c; --border-hover: #72bf44;
+  --text: #1f2421; --text-muted: #484f4a; --text-faint: #5a625c; --text-on-brand: #fff; --on-accent: #10240f;
+  --fg-green-900: #10240f; --fg-green-800: #2f6a18; --fg-green-700: #3d7a22; --fg-green-600: #3d7a22; --fg-teal-600: #3d7a22;
+  --fg-lime-500: #72bf44; --fg-lime-400: #3d7a22; --accent: #3d7a22; --accent-2: #89114c; --link: #89114c; --focus-ring: #89114c;
+  --font-display: "Fira Sans", "Inter", system-ui, sans-serif; --font-body: "Fira Sans", "Inter", system-ui, sans-serif; --font-read: "Fira Sans", "Inter", system-ui, sans-serif;
+  --ed-ink: #1f2421; --ed-on-ink: #fff; --ed-gold: #72bf44; --ed-gold-ink: #89114c; --ed-hair: #dcdcd6; --ed-card: #fff; --pill: #89114c; --pill-ink: #fff;
+  color-scheme: light;
+}
+html, html[data-theme] { background: #fff !important; }
+html[data-theme] body { background: #fff; color: var(--text); }
+h1, h2, h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
+/* Sin fotos ni degradados de fondo */
+body::before, body::after, html[data-theme] body::before, html[data-theme] body::after { display: none !important; }
+html:has(.ed-bgmark)::before { display: none !important; }
+.pg-photo, .mx-hero-orn { display: none !important; }
+:is(.mx-hero, .ph, .pg-stage, .ed-head) { background: none !important; }
+:is(.wc.wp, .mx-card, .mx-panel, .gl, .mx-stat, .hub-cell, .pn-card):not(.ed-rail) { background: #fff !important; border: 1px solid #dcdcd6 !important; box-shadow: none !important; border-radius: 0.5rem !important; }
+:is(.wc.wp, .mx-card, .mx-panel, .gl, .mx-stat, .hub-cell, .pn-card):not(.ed-rail)::before, :is(.wc.wp, .mx-card, .mx-panel, .gl, .mx-stat, .hub-cell, .pn-card):not(.ed-rail)::after { display: none !important; }
+a:is(.wc.wp, .mx-card, .gl, .hub-cell, .pn-card):hover { border-color: #72bf44 !important; }
+[data-theme-toggle] { display: none !important; }
+/* Cabecera y barra: verde corporativo, logo blanco (versión negativa del manual), texto en tinta oscura */
+:is(.mh, header[data-region="navbar"]), html[data-theme] :is(.mh, header[data-region="navbar"]) {
+  background-color: #72bf44;
+  --text: #10240f; --text-muted: rgba(16, 36, 15, 0.86); --text-faint: rgba(16, 36, 15, 0.7); --link: #10240f;
+  --fg-lime-500: #89114c; --fg-lime-400: #89114c; --bg: #72bf44; --bg-muted: rgba(255, 255, 255, 0.28); --surface-solid: #6cb73f; --surface-2: rgba(255, 255, 255, 0.2);
+  --border: rgba(16, 36, 15, 0.2); --border-strong: rgba(16, 36, 15, 0.4);
+  border-top: 6px solid transparent; border-image: linear-gradient(90deg, #faa619 0 14.3%, #b10069 14.3% 28.6%, #005387 28.6% 42.9%, #7396ce 42.9% 57.2%, #ed0c6e 57.2% 71.5%, #567c8e 71.5% 85.8%, #ffffff 85.8%) 1 0 0 0;
+}
+.mh-logo { height: clamp(3.6rem, 8vw, 6rem); }
+.mh-tag, .mh-date { color: rgba(16, 36, 15, 0.85); }
+.mh-rule-l, .mh-rule-r { background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6)); }
+.nv-emblem { height: 2.3rem; }
+.nv-link { color: #10240f; }
+.nv-link::after { background: #89114c; }
+.nv-link:hover, .nv-active { color: #89114c; }
+header[data-region="navbar"] .nv-pill { border-color: rgba(16, 36, 15, 0.4); }
+/* Pie: mismo verde, texto en tinta oscura, títulos en rojo corporativo */
+footer[data-region="footer"] { background-color: #72bf44; color: #10240f; --fg-lime-400: #6b0c3a; --fg-lime-500: #6b0c3a; border-top: 6px solid transparent; border-image: linear-gradient(90deg, #faa619 0 14.3%, #b10069 14.3% 28.6%, #005387 28.6% 42.9%, #7396ce 42.9% 57.2%, #ed0c6e 57.2% 71.5%, #567c8e 71.5% 85.8%, #ffffff 85.8%) 1 0 0 0; }
+footer[data-region="footer"] :is([class*="text-white"]) { color: #10240f !important; }
+footer[data-region="footer"] [class*="border-white"] { border-color: rgba(16, 36, 15, 0.22) !important; }
+footer[data-region="footer"] [class*="bg-white"] { background-color: rgba(255, 255, 255, 0.3) !important; }
+footer[data-region="footer"] [class*="ring-white"] { --tw-ring-color: #fff; }
+footer[data-region="footer"] a:hover { color: #6b0c3a !important; }
+/* Botones y acentos en rojo corporativo */
+.cta-link-main, .ed-flag { background: #89114c !important; color: #fff !important; }
+.ed-flag::before { background: #72bf44; }
+.sw-cta { border-radius: 0.25rem; }
+.mh { border-bottom: 0 !important; }
