@@ -50,16 +50,65 @@ export const HEROES = [
 ] as const;
 
 // ---- plantillas completas ----------------------------------------------------------
-// Cada plantilla cambia el lenguaje visual de todo el sitio (colores, tipografía, formas, tarjetas) y propone sus piezas.
-// Todo lo demás (colores por zona, tipografías, textos, imágenes, orden) se sigue gestionando encima desde el editor.
+// Cada plantilla es un diseño distinto del sitio: cambia la forma de la barra, las cabeceras de página, las tarjetas,
+// el pie, la composición de la portada, la tipografía y los colores. Lo que el equipo ajuste en el editor (colores y
+// tipografías por zona, textos, imágenes, orden, piezas) se aplica encima de la plantilla elegida.
+// La plantilla fija el tono (claro u oscuro): el botón de tono se oculta mientras haya una activa.
+const GF = "https://fonts.googleapis.com/css2?family=";
 export const TEMPLATES = [
-  { id: "bento", label: "Bento", description: "Módulos redondeados sobre fondo suave, como las bandejas bento de Apple.", parts: { navbar: "compacta", footer: "completo", hero: "izquierda" }, swatch: ["#f1eee6", "#ffffff", "#2f9c62", "#d8b558"] },
-  { id: "editorial", label: "Editorial", description: "Papel claro, serif grande, filetes finos y esquinas rectas.", parts: { navbar: "centrada", footer: "central", hero: "centro" }, swatch: ["#fbf8f1", "#ffffff", "#1b1b1b", "#8a2b2b"] },
-  { id: "aurora", label: "Aurora", description: "Oscuro con vidrio esmerilado y brillos de color, solo en superficies.", parts: { navbar: "compacta", footer: "completo", hero: "centro" }, swatch: ["#0b1210", "#16211c", "#5eead4", "#a78bfa"] },
-  { id: "brutalista", label: "Brutalista", description: "Contraste crudo, bordes gruesos, tipografía mono y un amarillo ácido.", parts: { navbar: "clasico", footer: "minimo", hero: "izquierda" }, swatch: ["#f4f4ef", "#ffffff", "#111111", "#ffe600"] },
-  { id: "campo", label: "Campo", description: "Tierra, arcilla y verde pasto: cálido, orgánico y de formas suaves.", parts: { navbar: "centrada", footer: "completo", hero: "izquierda" }, swatch: ["#f3ead9", "#fffaf0", "#4d6b3a", "#c2693a"] },
+  {
+    id: "bento",
+    label: "Bento",
+    description: "Barra flotante en píldora de vidrio, módulos redondeados en mosaico y tipografía geométrica. Estilo SaaS moderno.",
+    traits: ["Barra flotante", "Mosaico de módulos", "Sans geométrica"],
+    mode: "claro",
+    fonts: `${GF}Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap`,
+    parts: { navbar: "clasico", footer: "completo", hero: "izquierda" },
+    swatch: ["#ecebe4", "#ffffff", "#27a06b", "#16201a"],
+  },
+  {
+    id: "editorial",
+    label: "Editorial",
+    description: "Cabecera de periódico con filetes, titulares serif grandes, páginas centradas y noticias en filas con filete.",
+    traits: ["Cabecera de periódico", "Filas con filetes", "Serif"],
+    mode: "claro",
+    fonts: "",
+    parts: { navbar: "clasico", footer: "central", hero: "izquierda" },
+    swatch: ["#fbf8f1", "#ffffff", "#1b1b1b", "#8a2b2b"],
+  },
+  {
+    id: "aurora",
+    label: "Aurora",
+    description: "Menú lateral fijo, fondo oscuro con brillos de color, tarjetas de vidrio y titulares con degradado.",
+    traits: ["Menú lateral", "Vidrio sobre oscuro", "Titulares con degradado"],
+    mode: "oscuro",
+    fonts: `${GF}Sora:wght@300;400;600;700&display=swap`,
+    parts: { navbar: "clasico", footer: "completo", hero: "izquierda" },
+    swatch: ["#0b1210", "#16211c", "#5eead4", "#a78bfa"],
+  },
+  {
+    id: "brutalista",
+    label: "Brutalista",
+    description: "Bordes gruesos, sombras duras, bloques de color plano que giran y tipografía mono. Crudo y de alto contraste.",
+    traits: ["Bordes y sombras duras", "Bloques de color", "Mono"],
+    mode: "claro",
+    fonts: `${GF}Space+Mono:wght@400;700&family=Archivo+Black&display=swap`,
+    parts: { navbar: "clasico", footer: "minimo", hero: "izquierda" },
+    swatch: ["#f4f4ef", "#ffe600", "#ff6fae", "#111111"],
+  },
+  {
+    id: "campo",
+    label: "Campo",
+    description: "Formas orgánicas: fotos en arco, ondas, tarjetas escalonadas y serif suave en tonos de tierra y pasto.",
+    traits: ["Fotos en arco", "Ondas", "Serif suave"],
+    mode: "claro",
+    fonts: `${GF}Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Nunito:wght@400;600;700&display=swap`,
+    parts: { navbar: "clasico", footer: "completo", hero: "izquierda" },
+    swatch: ["#f3ead9", "#fffaf0", "#4d6b3a", "#c2693a"],
+  },
 ] as const;
 export type TemplateId = (typeof TEMPLATES)[number]["id"];
+export const TEMPLATE_BY_ID = Object.fromEntries(TEMPLATES.map((t) => [t.id, t])) as Record<TemplateId, (typeof TEMPLATES)[number]>;
 
 export type Parts = {
   navbar?: (typeof NAVBARS)[number]["id"];

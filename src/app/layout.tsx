@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import "./templates.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { getNav } from "@/lib/cms/content";
@@ -10,7 +11,7 @@ import { ElementEdits } from "@/components/design/ElementEdits";
 import { MobileTabBar } from "@/components/layout/MobileTabBar";
 import { BackToTop } from "@/components/layout/BackToTop";
 import { getPublishedDesign } from "@/lib/design/store";
-import { designCss } from "@/lib/design/regions";
+import { designCss, TEMPLATE_BY_ID } from "@/lib/design/regions";
 import { Ticker } from "@/components/design/Ticker";
 import { AdSlot } from "@/components/design/AdSlot";
 import { Masthead } from "@/components/layout/Masthead";
@@ -83,11 +84,12 @@ const siteJsonLd = {
 export default async function RootLayout({ children }: LayoutProps<"/">) {
   const [nav, design] = await Promise.all([getNav(), getPublishedDesign()]);
   const css = designCss(design);
+  const tpl = design.template ? TEMPLATE_BY_ID[design.template] : null;
   return (
     <html
       lang="es"
       data-scroll-behavior="smooth"
-      data-template={design.template}
+      data-tpl-mode={tpl?.mode}
       data-theme="institucional"
       data-navbar={design.parts.navbar ?? "clasico"}
       data-footer={design.parts.footer ?? "completo"}
@@ -97,6 +99,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
     >
       <head>
         <ThemeScript />
+        {tpl?.fonts && <link rel="stylesheet" href={tpl.fonts} />}
         <link rel="preconnect" href="https://pzaxysfoenujkdgotncb.supabase.co" crossOrigin="" />
         <link rel="dns-prefetch" href="https://contexto-olive.vercel.app" />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(siteJsonLd) }} />
@@ -113,6 +116,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
           <WebVitals />
           <ConsentBanner />
           <SiteChrome
+            template={tpl?.id}
             top={
               <>
                 <a

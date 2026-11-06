@@ -149,7 +149,11 @@ export function ScrollWorld({ scenes: base }: { scenes: JourneyScene[] }) {
     const mh = document.querySelector<HTMLElement>(".mh");
     const setTop = () => {
       const fija = mh && getComputedStyle(mh).position === "sticky" ? mh.getBoundingClientRect().height : 0;
-      track.style.setProperty("--sw-top", `${fija + (header ? header.getBoundingClientRect().height : 72)}px`);
+      // Barra lateral fija (plantilla Aurora): no resta altura a la escena. Los márgenes de una barra flotante sí cuentan.
+      const hs = header ? getComputedStyle(header) : null;
+      const lateral = hs?.position === "fixed";
+      const margen = hs ? parseFloat(hs.marginTop) + parseFloat(hs.marginBottom) : 0;
+      track.style.setProperty("--sw-top", `${lateral ? 0 : fija + (header ? header.getBoundingClientRect().height + margen : 72)}px`);
     };
     setTop();
 

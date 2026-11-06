@@ -30,6 +30,7 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
   return (
     <button
       type="button"
+      data-theme-toggle
       onClick={toggle}
       aria-label={light ? "Cambiar a tono oscuro" : "Cambiar a tono claro"}
       title={light ? "Tono oscuro" : "Tono claro"}

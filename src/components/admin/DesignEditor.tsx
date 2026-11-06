@@ -6,7 +6,7 @@ import {
   Redo2, RotateCcw, SlidersHorizontal, Smartphone, Tablet, Undo2, UploadCloud, type LucideIcon,
 } from "lucide-react";
 import {
-  AD_ZONES, FONTS, FOOTERS, HEROES, NAVBARS, REGIONS, TEMPLATES,
+  AD_ZONES, FONTS, FOOTERS, HEROES, NAVBARS, REGIONS, TEMPLATES, TEMPLATE_BY_ID,
   designCss, elementKey, isEmptyDesign, normalizeDesign, splitElementKey,
   type AdConfig, type DesignConfig, type ElementEdit, type LocalStyle, type RegionId, type RegionStyle,
 } from "@/lib/design/regions";
@@ -185,8 +185,17 @@ export function DesignEditor({ writable, initialPublished, initialDraft, canUndo
     root.setAttribute("data-navbar", design.parts.navbar ?? "clasico");
     root.setAttribute("data-footer", design.parts.footer ?? "completo");
     root.setAttribute("data-hero", design.parts.hero ?? "izquierda");
-    if (design.template) root.setAttribute("data-template", design.template);
-    else root.removeAttribute("data-template");
+    // La plantilla vive en el marco del sitio (no en <html>) para no tocar el panel; el tono lo fija ella.
+    const marco = doc.querySelector("[data-site-chrome]");
+    const tpl = design.template ? TEMPLATE_BY_ID[design.template] : null;
+    if (tpl) {
+      marco?.setAttribute("data-template", tpl.id);
+      root.setAttribute("data-tpl-mode", tpl.mode);
+      root.setAttribute("data-theme", tpl.mode === "oscuro" ? "esmeralda" : "institucional");
+    } else {
+      marco?.removeAttribute("data-template");
+      root.removeAttribute("data-tpl-mode");
+    }
     win.postMessage({ type: "design-draft", design }, window.location.origin);
   }, [css, region, tab, design, resaltar, modo, picked]);
 
@@ -437,7 +446,7 @@ export function DesignEditor({ writable, initialPublished, initialDraft, canUndo
                   <fieldset className="flex flex-col gap-2">
                     <legend className="ad-eyebrow mb-1">Plantilla del sitio</legend>
                     <label className={`flex cursor-pointer items-center gap-2.5 rounded-xl border p-2.5 text-sm ${!design.template ? "border-[#b08f4f] bg-[#f7edcf]" : "border-[#d9d6cb] bg-white"}`}>
-                      <input type="radio" name="plantilla" checked={!design.template} onChange={() => update((d) => { const { template: _t, ...rest } = d; return rest; })} />
+                      <input type="radio" name="plantilla" checked={!design.template} onChange={() => update((d) => ({ ...d, template: undefined }))} />
                       <span><span className="block font-semibold">Actual</span><span className="text-xs text-[#5d6e65]">El diseño de siempre, sin plantilla.</span></span>
                     </label>
                     {TEMPLATES.map((t) => (
@@ -446,10 +455,11 @@ export function DesignEditor({ writable, initialPublished, initialDraft, canUndo
                         <span className="min-w-0 flex-1">
                           <span className="flex items-center justify-between gap-2"><span className="font-semibold">{t.label}</span><span className="flex shrink-0 overflow-hidden rounded-full border border-black/10">{t.swatch.map((c) => <i key={c} style={{ background: c, width: 14, height: 14 }} />)}</span></span>
                           <span className="text-xs text-[#5d6e65]">{t.description}</span>
+                          <span className="mt-1.5 flex flex-wrap gap-1">{t.traits.map((x) => <span key={x} className="rounded-full border border-[#d9d6cb] bg-[#faf8f1] px-2 py-0.5 text-[0.66rem] font-semibold text-[#5d6e65]">{x}</span>)}</span>
                         </span>
                       </label>
                     ))}
-                    <p className="text-xs text-[#5d6e65]">Al elegir una plantilla se ajustan también las piezas de abajo; después puede cambiar colores, tipografías, textos, imágenes y orden como siempre.</p>
+                    <p className="text-xs text-[#5d6e65]">Cada plantilla cambia la estructura del sitio (barra, cabeceras, tarjetas, pie y portada), no solo los colores. Después puede ajustar colores y tipografías por zona, textos, imágenes y orden como siempre.</p>
                   </fieldset>
                   <Choice title="Encabezado" current={design.parts.navbar ?? "clasico"} options={NAVBARS} onPick={(id) => update((d) => ({ ...d, parts: { ...d.parts, navbar: id } }))} />
                   <Choice title="Recorrido de portada" current={design.parts.hero ?? "izquierda"} options={HEROES} onPick={(id) => update((d) => ({ ...d, parts: { ...d.parts, hero: id } }))} />
