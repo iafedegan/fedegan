@@ -151,7 +151,8 @@ export async function getJourneyScenes(): Promise<JourneyScene[]> {
     scenes.sort((a, b) => rank(a.id) - rank(b.id));
   }
 
-  return scenes;
+  // Los portales aliados (TvGan, Fundagán, Bursagán, Maestro de la Carne, Colombian Beef) viven en el pie de página, no en el recorrido.
+  return scenes.filter((s) => s.id !== "tvgan" && !s.id.startsWith("aliado-"));
 }
 
 export async function PortalJourney() {
