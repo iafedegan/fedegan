@@ -21,7 +21,7 @@ export async function HomeView({ kind, design }: { kind: HomeKind; design: Desig
   if (kind === "clasico") {
     cuerpo = (
       <>
-        <HomeInstitucional d={await getHomeData()} banner={design.ads.portada} />
+        <HomeInstitucional d={await getHomeData()} banners={[design.ads.portada, ...(design.banners ?? [])].filter((b): b is NonNullable<typeof b> => Boolean(b))} />
         {ad}
       </>
     );

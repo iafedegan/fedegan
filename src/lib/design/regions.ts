@@ -145,6 +145,8 @@ export type DesignConfig = {
   ticker: TickerConfig;
   popup: PopupConfig;
   ads: Partial<Record<AdZoneId, AdConfig>>;
+  /** Banners adicionales del hero de la portada: se alternan con el banner de portada. */
+  banners?: AdConfig[];
   elements: Record<string, ElementEdit>;
 };
 
@@ -274,6 +276,17 @@ export function normalizeDesign(raw: unknown): DesignConfig {
     const a = obj(ads[z.id]);
     const image = href(a.image);
     if (a.on === true || image) d.ads[z.id] = { on: a.on === true, image, href: href(a.href), alt: str(a.alt, 120), label: str(a.label, 40), ...(Number(a.width) >= 20 && Number(a.width) < 100 ? { width: Math.round(Number(a.width)) } : {}), ...(Number(a.height) >= 80 ? { height: Math.min(1200, Math.round(Number(a.height))) } : {}) };
+  }
+
+  if (Array.isArray(src.banners)) {
+    const lista: AdConfig[] = [];
+    for (const raw of src.banners.slice(0, 8)) {
+      const a = obj(raw);
+      const image = href(a.image);
+      if (!image) continue;
+      lista.push({ on: a.on !== false, image, href: href(a.href), alt: str(a.alt, 120), label: str(a.label, 40) });
+    }
+    if (lista.length) d.banners = lista;
   }
 
   const els = obj(src.elements);

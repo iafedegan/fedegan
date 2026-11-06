@@ -427,6 +427,7 @@ export function DesignEditor({ writable, initialPublished, initialDraft, canUndo
   const popup = design.popup;
   const patchTicker = (p: Partial<typeof ticker>) => update((d) => ({ ...d, ticker: { ...d.ticker, ...p } }));
   const patchPopup = (p: Partial<typeof popup>) => update((d) => ({ ...d, popup: { ...d.popup, ...p } }));
+  const patchBanner = (k: number, p: Partial<AdConfig>) => update((d) => ({ ...d, banners: (d.banners ?? []).map((b, x) => (x === k ? { ...b, ...p } : b)) }));
   const [msgAd, setMsgAd] = useState<Record<string, string>>({});
   const patchAd = (zone: (typeof AD_ZONES)[number]["id"], p: Partial<AdConfig>) => update((d) => ({ ...d, ads: { ...d.ads, [zone]: { ...(d.ads[zone] ?? {}), ...p } } }));
 
@@ -591,6 +592,39 @@ export function DesignEditor({ writable, initialPublished, initialDraft, canUndo
                         {z.id === "portada" && <input className="ad-input" placeholder="Texto del botón (p. ej. Ver más)" maxLength={40} value={a.label ?? ""} onChange={(e) => patchAd(z.id, { label: e.target.value })} aria-label="Texto del botón" />}
                         <input className="ad-input" placeholder="Enlace del anuncio" value={a.href ?? ""} onChange={(e) => patchAd(z.id, { href: e.target.value })} aria-label={`Enlace de ${z.label}`} />
                         <input className="ad-input" placeholder="Texto alternativo" maxLength={120} value={a.alt ?? ""} onChange={(e) => patchAd(z.id, { alt: e.target.value })} aria-label={`Texto alternativo de ${z.label}`} />
+                        {z.id === "portada" && (
+                          <div className="mt-2 flex flex-col gap-2 border-t border-[#d9d6cb] pt-3">
+                            <p className="text-xs font-bold text-[#11271d]">Más banners en esta posición ({(design.banners ?? []).length}/8): se alternan solos con puntos para elegir.</p>
+                            {(design.banners ?? []).map((b, k) => (
+                              <div key={k} className="flex flex-col gap-1.5 rounded-lg border border-[#e4e1d6] p-2.5">
+                                <p className="text-xs font-semibold text-[#5d6e65]">Banner {k + 2}</p>
+                                <input className="ad-input" placeholder="Imagen: dirección https://…" value={b.image ?? ""} onChange={(e) => patchBanner(k, { image: e.target.value })} aria-label={`Imagen del banner ${k + 2}`} />
+                                <label className="ad-btn ad-btn-primary w-fit cursor-pointer">Cargar imagen
+                                  <input type="file" accept="image/jpeg,image/png,image/webp,image/avif,image/gif" className="sr-only" onChange={async (e) => {
+                                    const f = e.target.files?.[0];
+                                    e.target.value = "";
+                                    if (!f) return;
+                                    const fd = new FormData();
+                                    fd.set("archivo", f);
+                                    const r = await subirImagenDiseno(fd);
+                                    if (r.url) patchBanner(k, { image: r.url, on: true });
+                                    else setStatus({ kind: "err", text: r.error ?? "No se pudo subir la imagen." });
+                                  }} />
+                                </label>
+                                <input className="ad-input" placeholder="Texto del botón (p. ej. Ver más)" maxLength={40} value={b.label ?? ""} onChange={(e) => patchBanner(k, { label: e.target.value })} aria-label={`Texto del botón ${k + 2}`} />
+                                <input className="ad-input" placeholder="Enlace" value={b.href ?? ""} onChange={(e) => patchBanner(k, { href: e.target.value })} aria-label={`Enlace del banner ${k + 2}`} />
+                                <input className="ad-input" placeholder="Texto alternativo" maxLength={120} value={b.alt ?? ""} onChange={(e) => patchBanner(k, { alt: e.target.value })} aria-label={`Texto alternativo ${k + 2}`} />
+                                <div className="flex items-center justify-between">
+                                  <label className="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" checked={b.on !== false} onChange={(e) => patchBanner(k, { on: e.target.checked })} /> Activo</label>
+                                  <button type="button" className="ad-btn ad-btn-ghost !min-h-0 !px-3 !py-1 !text-xs" onClick={() => update((d) => ({ ...d, banners: (d.banners ?? []).filter((_, x) => x !== k) }))}>Quitar</button>
+                                </div>
+                              </div>
+                            ))}
+                            {(design.banners ?? []).length < 8 && (
+                              <button type="button" className="ad-btn ad-btn-ghost w-fit" onClick={() => update((d) => ({ ...d, banners: [...(d.banners ?? []), { on: true, image: "", href: "", alt: "", label: "" }] }))}>+ Agregar otro banner</button>
+                            )}
+                          </div>
+                        )}
                       </fieldset>
                     );
                   })}

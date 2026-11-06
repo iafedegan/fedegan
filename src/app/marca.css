@@ -201,3 +201,7 @@ header[data-region="navbar"] { border-bottom: 1px solid #dcdcd6 !important; bord
 .hi-hero-img { margin-bottom: 0; }
 .hi-banner .portada-btn { bottom: 1.2rem; }
 section.hi-hero[data-region="hero"] { padding-top: 1rem !important; padding-bottom: 4.5rem !important; }
+.hi-carousel { position: absolute; inset: 0; }
+.hi-dots { position: absolute; left: 50%; bottom: 0.7rem; display: flex; gap: 0.45rem; transform: translateX(-50%); padding: 0.3rem 0.6rem; border-radius: 999px; background: rgba(16, 36, 15, 0.45); }
+.hi-dots button { width: 0.6rem; height: 0.6rem; padding: 0; border: 0; border-radius: 50%; background: rgba(255, 255, 255, 0.7); cursor: pointer; }
+.hi-dots button.on { background: #72bf44; }

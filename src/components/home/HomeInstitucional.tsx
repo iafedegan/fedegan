@@ -7,7 +7,7 @@ import type { AdConfig } from "@/lib/design/regions";
 import { fechaCorta, type HomeData } from "./data";
 
 // Portada institucional: hero con dos botones, accesos rápidos, noticias, publicaciones, agenda, tres bloques de información y Mi FEDEGÁN.
-export function HomeInstitucional({ d, banner }: { d: HomeData; banner?: AdConfig }) {
+export function HomeInstitucional({ d, banners }: { d: HomeData; banners: AdConfig[] }) {
   const foto = d.lead?.image ?? d.secciones[0]?.image ?? "/headers/campo.jpg";
   const accesos = [
     { href: "/servicios", icon: FileText, t: "Trámites y servicios", x: "Gestione aquí sus trámites y solicitudes." },
@@ -34,7 +34,7 @@ export function HomeInstitucional({ d, banner }: { d: HomeData; banner?: AdConfi
               <Link href="/servicios" className="hi-btn hi-ghost">Explorar servicios <ArrowRight size={16} aria-hidden /></Link>
             </div>
           </div>
-          <div className="hi-hero-img"><HeroMedia initial={banner} fallback={<Pic src={foto} alt={d.lead?.imageAlt ?? ""} sizes="(min-width: 1024px) 50vw, 100vw" priority />} /></div>
+          <div className="hi-hero-img"><HeroMedia initial={banners} fallback={<Pic src={foto} alt={d.lead?.imageAlt ?? ""} sizes="(min-width: 1024px) 50vw, 100vw" priority />} /></div>
         </Container>
       </section>
 
