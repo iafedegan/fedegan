@@ -210,3 +210,19 @@ section.hi-hero[data-region="hero"] { padding-top: 1rem !important; padding-bott
 .mh-util { background: #72bf44; color: #10240f; }
 .mh-util a, .mh-country, .mh-util-tag { color: #10240f; }
 .mh-util a:hover { color: #89114c; text-decoration: underline; }
+
+/* Cabecera: la fila del logo y el menú van en el verde de FEDEGÁN (#72BF44) con el logo blanco; la barra de servicios vuelve al verde oscuro */
+.mh-util { background: #2f6a18; color: #fff; }
+.mh-util a, .mh-country, .mh-util-tag { color: #fff; }
+.mh-util a:hover { color: #fff; }
+:is(.mh, header[data-region="navbar"]), html[data-theme] :is(.mh, header[data-region="navbar"]) {
+  background-color: #72bf44;
+  --text: #10240f; --text-muted: rgba(16, 36, 15, 0.88); --text-faint: rgba(16, 36, 15, 0.72); --link: #10240f; --fg-lime-500: #6b0c3a; --fg-lime-400: #6b0c3a;
+  --bg: #72bf44; --bg-muted: rgba(255, 255, 255, 0.32); --surface-solid: #fff; --surface-2: rgba(255, 255, 255, 0.25); --border: rgba(16, 36, 15, 0.22); --border-strong: rgba(16, 36, 15, 0.42);
+}
+header[data-region="navbar"] { border-bottom: 0 !important; box-shadow: 0 8px 18px -16px rgba(16, 36, 15, 0.6); }
+.nv-link { color: #10240f; }
+.nv-link::after { background: #6b0c3a; }
+.nv-link:hover, .nv-active { color: #6b0c3a; }
+.mh-search { border-color: rgba(16, 36, 15, 0.25); background: #fff; }
+.mh-tag, .mh-date { color: #10240f; }

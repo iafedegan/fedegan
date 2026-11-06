@@ -23,7 +23,7 @@ export function Masthead() {
       <div className="mh-desk mh-main">
         <Container className="mh-main-in">
           <Link href="/" aria-label="FEDEGÁN FNG, inicio">
-            <Image src="/brand/fedegan-horizontal-desc.svg" alt="FEDEGÁN, Federación Colombiana de Ganaderos" width={917} height={329} priority unoptimized className="mh-logo-d" />
+            <Image src="/brand/fedegan-horizontal-desc-blanco.svg" alt="FEDEGÁN, Federación Colombiana de Ganaderos" width={917} height={329} priority unoptimized className="mh-logo-d" />
           </Link>
           <form action="/buscador" method="get" role="search" className="mh-search">
             <input type="search" name="q" placeholder="¿Qué está buscando?" aria-label="Buscar en el portal" autoComplete="off" />
@@ -34,7 +34,7 @@ export function Masthead() {
       <div className="mh-mob">
         <div className="mh-row">
           <Link href="/" className="mh-title" aria-label="FEDEGÁN FNG, inicio">
-            <Image src="/brand/fedegan-horizontal-desc.svg" alt="FEDEGÁN, Federación Colombiana de Ganaderos" width={917} height={329} priority unoptimized className="mh-logo" />
+            <Image src="/brand/fedegan-horizontal-desc-blanco.svg" alt="FEDEGÁN, Federación Colombiana de Ganaderos" width={917} height={329} priority unoptimized className="mh-logo" />
           </Link>
         </div>
         <p className="mh-date">{date}</p>
