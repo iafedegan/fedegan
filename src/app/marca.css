@@ -186,3 +186,11 @@ header[data-region="navbar"] { border-bottom: 1px solid #dcdcd6 !important; bord
 .hi-banner .portada-btn { left: 1.2rem; bottom: 1.2rem; }
 .hi-banner:hover .portada-btn { background: #89114c; color: #fff; }
 .hi-hero-img:has(.hi-banner)::after { display: none; }
+
+/* Pie institucional fijo: las cinco columnas del diseño del cliente, sin importar la variante guardada en el editor */
+[data-footer] footer[data-region="footer"] > div:first-child { text-align: left !important; justify-items: stretch !important; }
+[data-footer] footer[data-region="footer"] > div:first-child > div { display: block !important; align-items: initial !important; }
+[data-footer] footer[data-region="footer"] > div:first-child > div:first-child { display: flex !important; flex-direction: column; align-items: flex-start !important; }
+@media (min-width: 1024px) { [data-footer] footer[data-region="footer"] > div:first-child { grid-template-columns: 1.2fr 0.8fr 0.9fr 1.2fr 1.1fr !important; } }
+@media (min-width: 640px) and (max-width: 1023px) { [data-footer] footer[data-region="footer"] > div:first-child { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; } }
+@media (max-width: 639px) { [data-footer] footer[data-region="footer"] > div:first-child { grid-template-columns: minmax(0, 1fr) !important; } }
