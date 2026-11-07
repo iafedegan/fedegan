@@ -10,7 +10,7 @@ import {
   designCss, elementKey, isEmptyDesign, normalizeDesign, splitElementKey,
   type AdConfig, type DesignConfig, type ElementEdit, type LocalStyle, type RegionId, type RegionStyle,
 } from "@/lib/design/regions";
-import { publishDesign, saveDesignDraft, subirImagenDiseno, undoDesignPublish } from "@/lib/design/actions";
+import { prepararSubidaImagen, publishDesign, saveDesignDraft, undoDesignPublish } from "@/lib/design/actions";
 
 // Tamaño virtual de cada pantalla: el sitio se dibuja a ese ancho y se escala para caber en el marco.
 const DEVICES = {
@@ -21,6 +21,19 @@ const DEVICES = {
 type Device = keyof typeof DEVICES;
 type Tab = "elemento" | "zonas" | "piezas" | "recorrido" | "cintillo" | "popup" | "publicidad";
 export type LocalRef = { id: string; label: string };
+
+/** Sube una imagen directo a Supabase (sin pasar por el límite de tamaño del servidor) y siempre responde, con la dirección o con el motivo del error. */
+async function subirImagen(file: File): Promise<{ url?: string; error?: string }> {
+  try {
+    const p = await prepararSubidaImagen({ nombre: file.name, tamano: file.size, tipo: file.type });
+    if (!p.ok) return { error: p.message };
+    const res = await fetch(p.signedUrl, { method: "PUT", body: file, headers: { "content-type": p.contentType, "x-upsert": "false", "cache-control": "max-age=31536000" } });
+    if (!res.ok) return { error: `No se pudo subir la imagen (Supabase respondió ${res.status}).` };
+    return { url: p.publicUrl };
+  } catch {
+    return { error: "No se pudo subir la imagen: falló la conexión. Intente de nuevo." };
+  }
+}
 
 const same = (a: DesignConfig, b: DesignConfig) => JSON.stringify(normalizeDesign(a)) === JSON.stringify(normalizeDesign(b));
 const clean = <T extends object>(o: T): T => {
@@ -559,10 +572,8 @@ export function DesignEditor({ writable, initialPublished, initialDraft, canUndo
   const portadaAd = design.ads.portada ?? {};
   const subirA = async (f: File | undefined, done: (url: string) => void) => {
     if (!f) return;
-    setMsgAd((m) => ({ ...m, portada: "Subiendo imagen…" }));
-    const fd = new FormData();
-    fd.set("archivo", f);
-    const r = await subirImagenDiseno(fd);
+    setMsgAd((m) => ({ ...m, portada: `Subiendo imagen (${(f.size / 1048576).toFixed(1)} MB)…` }));
+    const r = await subirImagen(f);
     if (r.url) {
       done(r.url);
       setMsgAd((m) => ({ ...m, portada: "Imagen cargada. Recuerde publicar." }));
@@ -589,7 +600,7 @@ export function DesignEditor({ writable, initialPublished, initialDraft, canUndo
           <input className="ad-input" placeholder="Imagen: /headers/foto.jpg o https://…" value={s.image ?? ""} onChange={(e) => patch({ image: e.target.value })} aria-label={`Imagen de la diapositiva ${n}`} />
           <label className="ad-btn ad-btn-primary w-fit cursor-pointer !min-h-0 !py-1.5 text-xs">
             Cargar imagen
-            <input type="file" accept="image/jpeg,image/png,image/webp,image/avif,image/gif" className="sr-only" onChange={(e) => { const f = e.target.files?.[0]; e.target.value = ""; subirA(f, (url) => patch({ image: url, on: true })); }} />
+            <input type="file" accept="image/jpeg,image/png,image/webp,image/avif" className="sr-only" onChange={(e) => { const f = e.target.files?.[0]; e.target.value = ""; subirA(f, (url) => patch({ image: url, on: true })); }} />
           </label>
         </div>
       </div>
@@ -691,21 +702,19 @@ export function DesignEditor({ writable, initialPublished, initialDraft, canUndo
                         <div className="flex flex-col gap-1.5">
                           <label className="ad-btn ad-btn-primary w-fit cursor-pointer">
                             Cargar imagen desde mi computador
-                            <input type="file" accept="image/jpeg,image/png,image/webp,image/avif,image/gif" className="sr-only" onChange={async (e) => {
+                            <input type="file" accept="image/jpeg,image/png,image/webp,image/avif" className="sr-only" onChange={async (e) => {
                               const f = e.target.files?.[0];
                               e.target.value = "";
                               if (!f) return;
                               setMsgAd((m) => ({ ...m, [z.id]: "Subiendo…" }));
-                              const fd = new FormData();
-                              fd.set("archivo", f);
-                              const r = await subirImagenDiseno(fd);
+                              const r = await subirImagen(f);
                               if (r.url) {
                                 patchAd(z.id, { image: r.url, on: true });
                                 setMsgAd((m) => ({ ...m, [z.id]: "Imagen cargada. Recuerde guardar y publicar." }));
                               } else setMsgAd((m) => ({ ...m, [z.id]: r.error ?? "No se pudo subir la imagen." }));
                             }} />
                           </label>
-                          <span className="text-xs text-[#5d6e65]">JPG, PNG, WebP, AVIF o GIF, máx. 5 MB. También puede pegar una dirección arriba.</span>
+                          <span className="text-xs text-[#5d6e65]">JPG, PNG, WebP o AVIF, máx. 5 MB. También puede pegar una dirección arriba.</span>
                           {msgAd[z.id] && <span role="status" className="text-xs font-semibold text-[#165a43]">{msgAd[z.id]}</span>}
                         </div>
                         <input className="ad-input" placeholder="Enlace del anuncio" value={a.href ?? ""} onChange={(e) => patchAd(z.id, { href: e.target.value })} aria-label={`Enlace de ${z.label}`} />

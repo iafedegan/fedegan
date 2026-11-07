@@ -42,18 +42,18 @@ export async function undoDesignPublish(): Promise<DesignResult> {
 
 const TIPOS = new Map([["image/jpeg", "jpg"], ["image/png", "png"], ["image/webp", "webp"], ["image/gif", "gif"], ["image/avif", "avif"]]);
 
-/** Sube una imagen del editor (banner de portada, anuncios) al almacenamiento y devuelve su dirección pública. */
-export async function subirImagenDiseno(fd: FormData): Promise<{ url?: string; error?: string }> {
-  if (!(await actor())) return { error: "Sin permiso para subir imágenes." };
+export type SubidaImagen = { ok: true; signedUrl: string; publicUrl: string; contentType: string } | { ok: false; message: string };
+
+/** Firma una subida directa de imagen a Supabase: el archivo no pasa por el servidor del portal (que limita el tamaño de cada petición). */
+export async function prepararSubidaImagen(input: { nombre: string; tamano: number; tipo: string }): Promise<SubidaImagen> {
+  if (!(await actor())) return { ok: false, message: "Sin permiso para subir imágenes." };
   const db = adminDb();
-  if (!db) return { error: "El servidor no tiene la clave de servicio de Supabase." };
-  const file = fd.get("archivo");
-  if (!(file instanceof File) || file.size === 0) return { error: "Elija una imagen." };
-  const ext = TIPOS.get(file.type);
-  if (!ext) return { error: "Use una imagen JPG, PNG, WebP, AVIF o GIF." };
-  if (file.size > 5 * 1024 * 1024) return { error: "La imagen supera 5 MB." };
+  if (!db) return { ok: false, message: "El servidor no tiene la clave de servicio de Supabase." };
+  const ext = TIPOS.get(String(input.tipo ?? ""));
+  if (!ext || ext === "gif") return { ok: false, message: "Use una imagen JPG, PNG, WebP o AVIF." };
+  if (!(input.tamano > 0) || input.tamano > 5 * 1024 * 1024) return { ok: false, message: `La imagen pesa ${(input.tamano / 1048576).toFixed(1)} MB y el máximo es 5 MB. Redúzcala o expórtela en WebP/AVIF.` };
   const path = `diseno/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
-  const { error } = await db.storage.from(MEDIA_BUCKET).upload(path, await file.arrayBuffer(), { contentType: file.type });
-  if (error) return { error: `No se pudo subir: ${error.message}` };
-  return { url: publicMediaUrl(path) };
+  const { data, error } = await db.storage.from(MEDIA_BUCKET).createSignedUploadUrl(path);
+  if (error || !data) return { ok: false, message: `No se pudo preparar la subida (${error?.message ?? "sin detalle"}).` };
+  return { ok: true, signedUrl: data.signedUrl, publicUrl: publicMediaUrl(path), contentType: input.tipo };
 }
