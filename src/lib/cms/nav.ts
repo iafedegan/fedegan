@@ -25,7 +25,6 @@ export const adminNav: AdminNavGroup[] = [
       { label: "Publicaciones", href: "/admin/publicaciones", icon: "file" },
       { label: "Eventos", href: "/admin/eventos", icon: "calendar" },
       { label: "Preguntas frecuentes", href: "/admin/preguntas", icon: "help" },
-      { label: "Páginas migradas", href: "/admin/paginas", icon: "pages" },
     ],
   },
   {
