@@ -1615,6 +1615,22 @@ a.hub-cell:hover .hub-name { color: var(--ed-gold-ink); }
 .hub-foot svg { transition: transform 0.2s; }
 a.hub-cell:hover .hub-foot { color: var(--ed-gold-ink); }
 a.hub-cell:hover .hub-foot svg { transform: translateX(3px); }
+.hub-grid { align-items: start; }
+.hub-grid > li { height: auto; }
+.hub-exp { height: auto; }
+.hub-toggle { display: flex; flex-direction: column; gap: 0.5rem; width: 100%; padding: 0; border: 0; background: none; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+.hub-toggle:hover .hub-name, .hub-exp.is-open .hub-name { color: var(--ed-gold-ink); }
+.hub-toggle:hover .hub-foot { color: var(--ed-gold-ink); }
+.hub-chev { transition: transform 0.25s; }
+.hub-exp.is-open .hub-chev { transform: rotate(180deg); }
+.hub-panel { margin-top: 0.9rem; padding-top: 0.8rem; border-top: 1px dashed var(--ed-hair); }
+.hub-panel[hidden] { display: none; }
+.hub-open { display: inline-flex; align-items: center; gap: 0.35rem; margin-bottom: 0.6rem; font: 600 0.82rem/1 var(--font-body); color: var(--ed-gold-ink); text-decoration: none; }
+.hub-sub { display: flex; flex-direction: column; gap: 0.1rem; margin: 0; padding: 0; list-style: none; }
+.hub-sub .hub-sub { margin: 0.1rem 0 0.2rem 0.9rem; padding-left: 0.7rem; border-left: 1px solid var(--ed-hair); }
+.hub-sub a, .hub-sub-h { display: block; padding: 0.3rem 0; font-size: 0.9rem; line-height: 1.35; color: var(--ed-ink); text-decoration: none; }
+.hub-sub a:hover { color: var(--ed-gold-ink); }
+.hub-sub-h { font-weight: 600; color: var(--text-muted); }
 .hub-links { display: flex; flex-direction: column; gap: 0.35rem; margin: 0; padding: 0; list-style: none; }
 .hub-links li { font-size: 0.9rem; color: var(--text-muted); }
 .hub-links a { color: var(--ed-ink); text-decoration: none; border-bottom: 1px solid var(--ed-hair); }

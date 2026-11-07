@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { CSSProperties } from "react";
 import { ArrowLeft, ArrowRight, ArrowUpRight, Search } from "lucide-react";
+import { HubExpand, type HubLink } from "@/components/legacy/HubExpand";
 import { excerptOf, getLegacyPage, legacyHref, type LegacyPage, type NavNode } from "@/content/legacy";
 
 export const countBelow = (n: NavNode): number => (n.children ?? []).reduce((a, c) => a + 1 + countBelow(c), 0);
@@ -15,6 +16,14 @@ export function SectionSearch({ label, className = "" }: { label: string; classN
     </form>
   );
 }
+
+const toLinks = (nodes: NavNode[], slug: string): HubLink[] =>
+  nodes.map((n) => ({
+    label: n.label,
+    href: n.key ? legacyHref(slug, n.key) : n.href,
+    external: !n.key && /^https?:\/\//.test(n.href ?? ""),
+    children: n.children ? toLinks(n.children, slug) : undefined,
+  }));
 
 // Entrada de la sección: celda de texto con número, título, extracto y cuántas páginas trae. Sin fotos repetidas: se escanea rápido.
 export function SectionTiles({ nodes, slug, custom = {} }: { nodes: NavNode[]; slug: string; custom?: Record<string, LegacyPage> }) {
@@ -42,7 +51,9 @@ export function SectionTiles({ nodes, slug, custom = {} }: { nodes: NavNode[]; s
         );
         return (
           <li key={`${n.label}-${i}`} style={style}>
-            {href ? (
+            {total > 0 && !external ? (
+              <HubExpand head={head} text={text} count={total} href={href} items={toLinks(kids, slug)} />
+            ) : href ? (
               external ? (
                 <a href={href} target="_blank" rel="noopener noreferrer" className="hub-cell">
                   {head}
