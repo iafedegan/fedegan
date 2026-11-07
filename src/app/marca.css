@@ -268,3 +268,11 @@ html .mh-main { background: #72bf44; }
 html .mh-main-in { padding-block: 1rem; }
 html .mh-logo-d { height: 4.2rem; }
 html .mh-search { max-width: 36rem; box-shadow: 0 6px 16px -10px rgba(16, 36, 15, 0.5); }
+
+/* Con banner cargado, la portada es solo el banner (una imagen a lo ancho, con su botón); sin banner queda texto + foto */
+.hi-hero-in:has(.hi-banner) { display: block; min-height: 0; }
+.hi-hero-in:has(.hi-banner) > :first-child:not(.hi-hero-img) { display: none; }
+.hi-hero-img:has(.hi-banner) { min-height: 0; border-radius: 0.9rem; overflow: hidden; }
+.hi-hero-img:has(.hi-banner) .hi-carousel, .hi-hero-img:has(.hi-banner) .hi-banner { position: relative; inset: auto; }
+.hi-hero-img:has(.hi-banner) .hi-banner-img { width: 100%; height: auto; object-fit: contain; }
+section.hi-hero[data-region="hero"]:has(.hi-banner) { padding-bottom: 2.5rem !important; }
