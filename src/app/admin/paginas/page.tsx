@@ -63,11 +63,19 @@ export default async function PaginasAdminPage({ searchParams }: { searchParams:
           <strong className="text-3xl text-[#89114c]">{resumen.faltan}</strong>
           <span className="text-sm text-[#5d6e65]">en {resumen.paginasConFaltantes} páginas: se ven en el sitio actual pero no en la copia</span>
         </Link>
-        <a href="#no-migradas" className="ad-card flex flex-col gap-1 p-5 hover:border-[#72bf44]">
-          <span className="ad-eyebrow">Páginas sin migrar</span>
-          <strong className="text-3xl">{resumen.noMigradas}</strong>
-          <span className="text-sm text-[#5d6e65]">del sitio actual con {resumen.docsNoMigradas} documentos (actas, hojas de ruta…)</span>
-        </a>
+        {resumen.noMigradas > 0 ? (
+          <a href="#no-migradas" className="ad-card flex flex-col gap-1 p-5 hover:border-[#72bf44]">
+            <span className="ad-eyebrow">Páginas sin migrar</span>
+            <strong className="text-3xl">{resumen.noMigradas}</strong>
+            <span className="text-sm text-[#5d6e65]">del sitio actual con {resumen.docsNoMigradas} documentos</span>
+          </a>
+        ) : (
+          <div className="ad-card flex flex-col gap-1 p-5">
+            <span className="ad-eyebrow">Páginas en el portal</span>
+            <strong className="text-3xl">{allLegacyPages().length}</strong>
+            <span className="text-sm text-[#5d6e65]">copiadas del sitio actual, revisado el {inventarioFecha}: no quedan páginas con documentos sin migrar</span>
+          </div>
+        )}
       </section>
 
       <form action="/admin/paginas" className="ad-card flex flex-col gap-3 p-4 sm:flex-row sm:items-center">
@@ -146,6 +154,7 @@ export default async function PaginasAdminPage({ searchParams }: { searchParams:
           {actual < paginas && <Link href={href({ p: String(actual + 1) })} className="ad-btn ad-btn-ghost">Siguiente →</Link>}
         </nav>
       )}
+      {paginasNoMigradas.length > 0 && (
       <section id="no-migradas" className="ad-card overflow-hidden">
         <div className="border-b border-[#eceae0] px-5 py-4 sm:px-6">
           <h2 className="text-lg font-bold">Páginas del sitio actual con documentos que aún no están en el portal</h2>
@@ -170,6 +179,7 @@ export default async function PaginasAdminPage({ searchParams }: { searchParams:
           ))}
         </ul>
       </section>
+      )}
     </div>
   );
 }
