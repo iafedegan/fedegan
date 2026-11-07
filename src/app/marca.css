@@ -260,3 +260,11 @@ html .mh { border-top: 0 !important; border-image: none !important; }
   html { background-color: #72bf44; }
   html body { background-color: #fff; }
 }
+
+/* Cabecera como el mockup: logo a la izquierda y buscador a la derecha, menú verde debajo */
+html .mh { text-align: left; }
+html .mh .mh-mob { text-align: center; }
+html .mh-main { background: #72bf44; }
+html .mh-main-in { padding-block: 1rem; }
+html .mh-logo-d { height: 4.2rem; }
+html .mh-search { max-width: 36rem; box-shadow: 0 6px 16px -10px rgba(16, 36, 15, 0.5); }
