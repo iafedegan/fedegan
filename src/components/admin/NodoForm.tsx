@@ -1,84 +1,82 @@
 "use client";
 
-import { useActionState, useMemo, useRef, useState } from "react";
+import { useActionState, useEffect, useMemo, useState } from "react";
 import { useFormStatus } from "react-dom";
-import { CheckCircle2, Loader2, XCircle } from "lucide-react";
+import { AlertTriangle, CheckCircle2, Loader2, XCircle } from "lucide-react";
 import { editarNodo, type NodoState } from "@/lib/cms/nodos-actions";
-import { LegacyContent } from "@/components/legacy/LegacyContent";
-import { textToBlocks } from "@/lib/cms/paginas-texto";
-import { RedactarIA, type OpcionIA } from "./RedactarIA";
-import { DocumentosPanel } from "./DocumentosPanel";
+import { aBloques, aElementos, problema, type Bloque, type Elemento } from "@/lib/cms/bloques";
+import { Constructor } from "./constructor/Constructor";
 
-function Guardar({ writable }: { writable: boolean }) {
+function Publicar({ writable, etiqueta }: { writable: boolean; etiqueta: string }) {
   const { pending } = useFormStatus();
   return (
     <button type="submit" disabled={pending || !writable} className="ad-btn ad-btn-primary">
-      {pending ? <Loader2 size={16} className="animate-spin" /> : null} {pending ? "Publicando…" : "Publicar cambios"}
+      {pending ? <Loader2 size={16} className="animate-spin" /> : null} {pending ? "Publicando…" : etiqueta}
     </button>
   );
 }
 
-export type IAConfig = { opciones: OpcionIA[]; guia: string; ruta: string; seccion: string };
+// Edita una página, sección o enlace creado en el árbol del sitio. Una página se arma arrastrando elementos
+// (botones, tarjetas, carruseles…) y no se publica hasta pulsar «Publicar cambios».
+export function NodoForm({ id, label, title, href, bloques, esEnlace, writable }: { id: string; label: string; title: string; href: string; bloques: Bloque[]; esEnlace: boolean; writable: boolean }) {
+  const [elementos, setElementos] = useState<Elemento[]>(() => aElementos(bloques));
+  const publicables = useMemo(() => JSON.stringify(aBloques(elementos)), [elementos]);
+  // Lo último que se publicó: con él se sabe si quedan cambios por publicar.
+  const [publicado, setPublicado] = useState(publicables);
+  const [state, action] = useActionState<NodoState, FormData>(async (prev, fd) => {
+    const r = await editarNodo(prev, fd);
+    if (r.ok) setPublicado(String(fd.get("bloques") ?? ""));
+    return r;
+  }, {});
+  const sucio = !esEnlace && publicables !== publicado;
+  const incompletos = useMemo(() => elementos.filter((e) => problema(e) !== null).length, [elementos]);
 
-// Edita una página, sección o enlace creado en el árbol del sitio.
-export function NodoForm({ id, label, title, href, texto, esEnlace, writable, ia }: { id: string; label: string; title: string; href: string; texto: string; esEnlace: boolean; writable: boolean; ia?: IAConfig }) {
-  const [state, action] = useActionState<NodoState, FormData>(editarNodo, {});
-  const labelRef = useRef<HTMLInputElement>(null);
-  const titleRef = useRef<HTMLInputElement>(null);
-  const textoRef = useRef<HTMLTextAreaElement>(null);
-  const [borrador, setBorrador] = useState(texto);
-  const vista = useMemo(() => textToBlocks(borrador), [borrador]);
+  // Con cambios sin publicar, el navegador avisa antes de cerrar o recargar la página.
+  useEffect(() => {
+    if (!sucio) return;
+    const aviso = (e: BeforeUnloadEvent) => e.preventDefault();
+    window.addEventListener("beforeunload", aviso);
+    return () => window.removeEventListener("beforeunload", aviso);
+  }, [sucio]);
+
   return (
-    <form action={action} className="flex flex-col gap-5">
+    <form
+      action={action}
+      // Enter en un campo de una línea no debe publicar la página sin querer.
+      onKeyDown={(e) => {
+        if (e.key === "Enter" && (e.target as HTMLElement).tagName === "INPUT") e.preventDefault();
+      }}
+      className="flex flex-col gap-5"
+    >
       <input type="hidden" name="id" value={id} />
-      <div className="flex flex-col gap-2">
-        <label htmlFor="label" className="text-sm font-semibold text-[#11271d]">Nombre en el menú</label>
-        <input ref={labelRef} id="label" name="label" defaultValue={label} maxLength={120} required className="ad-input" />
-      </div>
       {esEnlace ? (
-        <div className="flex flex-col gap-2">
-          <label htmlFor="href" className="text-sm font-semibold text-[#11271d]">Enlace</label>
-          <input id="href" name="href" defaultValue={href} required placeholder="/pagos o https://…" className="ad-input" />
-        </div>
-      ) : (
         <>
           <div className="flex flex-col gap-2">
-            <label htmlFor="title" className="text-sm font-semibold text-[#11271d]">Título de la página</label>
-            <input ref={titleRef} id="title" name="title" defaultValue={title} maxLength={200} required className="ad-input" />
-          </div>
-          {ia && (
-            <RedactarIA
-              opciones={ia.opciones}
-              guia={ia.guia}
-              contexto={{ titulo: () => titleRef.current?.value ?? title, nombre: () => labelRef.current?.value ?? label, ruta: ia.ruta, seccion: ia.seccion }}
-              leer={() => textoRef.current?.value ?? ""}
-              escribir={(t) => {
-                if (!textoRef.current) return;
-                textoRef.current.value = t;
-                setBorrador(t);
-                textoRef.current.focus();
-              }}
-            />
-          )}
-          <DocumentosPanel
-            carpeta={`arbol-${id}`}
-            leer={() => textoRef.current?.value ?? ""}
-            escribir={(t) => {
-              if (textoRef.current) textoRef.current.value = t;
-            }}
-          />
-          <div className="flex flex-col gap-2">
-            <label htmlFor="texto" className="text-sm font-semibold text-[#11271d]">Contenido</label>
-            <textarea ref={textoRef} id="texto" name="texto" value={borrador} onChange={(e) => setBorrador(e.target.value)} spellCheck rows={24} className="ad-input min-h-[26rem] resize-y font-mono text-[0.85rem] leading-relaxed" />
+            <label htmlFor="label" className="text-sm font-semibold text-[#11271d]">Nombre en el menú</label>
+            <input id="label" name="label" defaultValue={label} maxLength={120} required className="ad-input" />
           </div>
           <div className="flex flex-col gap-2">
-            <p className="text-sm font-semibold text-[#11271d]">Vista previa <span className="font-normal text-[#5d6e65]">· así quedará; no se publica hasta pulsar «Publicar cambios»</span></p>
-            <div className="rounded-2xl border border-dashed border-[#c9d8bf] bg-white p-5">
-              {vista.length ? <LegacyContent blocks={vista} preview /> : <p className="text-sm text-[#5d6e65]">Aún no hay contenido.</p>}
-            </div>
+            <label htmlFor="href" className="text-sm font-semibold text-[#11271d]">Enlace</label>
+            <input id="href" name="href" defaultValue={href} required placeholder="/pagos o https://…" className="ad-input" />
           </div>
         </>
+      ) : (
+        <>
+          <div className="grid gap-5 sm:grid-cols-2">
+            <div className="flex flex-col gap-2">
+              <label htmlFor="label" className="text-sm font-semibold text-[#11271d]">Nombre en el menú</label>
+              <input id="label" name="label" defaultValue={label} maxLength={120} required className="ad-input" />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label htmlFor="title" className="text-sm font-semibold text-[#11271d]">Título de la página</label>
+              <input id="title" name="title" defaultValue={title} maxLength={200} required className="ad-input" />
+            </div>
+          </div>
+          <input type="hidden" name="bloques" value={publicables} />
+          <Constructor elementos={elementos} setElementos={setElementos} carpeta={`arbol-${id}`} />
+        </>
       )}
+
       {state.message && (
         <p
           role={state.ok ? "status" : "alert"}
@@ -87,8 +85,15 @@ export function NodoForm({ id, label, title, href, texto, esEnlace, writable, ia
           {state.ok ? <CheckCircle2 size={17} className="mt-0.5 shrink-0" /> : <XCircle size={17} className="mt-0.5 shrink-0" />} {state.message}
         </p>
       )}
-      <div className="flex flex-wrap items-center gap-3">
-        <Guardar writable={writable} />
+
+      <div className="sticky bottom-3 z-20 flex flex-wrap items-center gap-3 rounded-2xl border border-[#e4e2d6] bg-white/95 p-3 shadow-[0_12px_30px_-18px_rgba(17,39,29,0.45)] backdrop-blur">
+        <Publicar writable={writable} etiqueta="Publicar cambios" />
+        {sucio && <span className="ad-pill ad-pill-gold">Cambios sin publicar</span>}
+        {!esEnlace && incompletos > 0 && (
+          <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#8a6d1f]">
+            <AlertTriangle size={14} aria-hidden /> {incompletos === 1 ? "1 elemento incompleto no se publicará" : `${incompletos} elementos incompletos no se publicarán`}
+          </span>
+        )}
         {!writable && <span className="text-xs text-[#8a6d1f]">Solo lectura: falta la clave de servicio para guardar.</span>}
       </div>
     </form>

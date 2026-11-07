@@ -6,12 +6,11 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { getLegacyPage, getLegacySection } from "@/content/legacy";
 import { adminDb, CMS_TAG } from "./client";
 import { requireEditorActor } from "./guard";
-import { textToBlocks } from "./paginas-texto";
+import { sanearBloques } from "./bloques";
 import { slugify } from "./nodos";
 
 export type NodoState = { ok?: boolean; message?: string; next?: string };
 
-const MAX_TEXTO = 120_000;
 // Rutas de /seccion/<slug> que ya tienen un uso propio.
 const RESERVADAS = ["seguridad-ganadera", "cifras-del-sector"];
 const SIN_CLAVE = "El servidor no tiene la clave de servicio de Supabase (SUPABASE_SERVICE_ROLE_KEY).";
@@ -50,16 +49,6 @@ async function siguienteOrden(db: SupabaseClient, section: string) {
   return ((data?.[0]?.sort_order as number | undefined) ?? 0) + 1;
 }
 
-function validarContenido(texto: string) {
-  if (texto.length > MAX_TEXTO) return "El texto es demasiado largo.";
-  const blocks = textToBlocks(texto);
-  if (blocks.length > 1500) return "La página tiene demasiados bloques.";
-  const malo = blocks.find((b) => b.t === "embed" && !/^https:\/\/\S+$/.test(b.text ?? ""));
-  const boton = blocks.find((b) => b.t === "button" && !/^(https:\/\/\S+|\/[^\s/]\S*|\/)$/.test((b.text ?? "").split("|")[1] ?? ""));
-  if (boton) return `Un botón debe enlazar a https://… o a una ruta que empiece con / (revise: ${boton.text?.split("|")[0]}).`;
-  return malo ? `El contenido incrustado debe ser una dirección https:// (revise: ${malo.text}).` : null;
-}
-
 /** Crea una página o un enlace nuevo dentro de una sección, colgando del nodo elegido (a cualquier nivel). */
 export async function crearNodo(_prev: NodoState, fd: FormData): Promise<NodoState> {
   const actor = await requireEditorActor();
@@ -71,8 +60,6 @@ export async function crearNodo(_prev: NodoState, fd: FormData): Promise<NodoSta
   const tipo = String(fd.get("tipo") ?? "pagina") === "enlace" ? "enlace" : "pagina";
   const label = String(fd.get("label") ?? "").trim();
   const href = String(fd.get("href") ?? "").trim();
-  const texto = String(fd.get("texto") ?? "");
-
   if (!label || label.length > 120) return { ok: false, message: "El nombre es obligatorio (máximo 120 caracteres)." };
   if (!(await existeSeccion(db, section))) return { ok: false, message: "La sección no existe." };
   if (parent) {
@@ -84,8 +71,6 @@ export async function crearNodo(_prev: NodoState, fd: FormData): Promise<NodoSta
     }
   }
   if (tipo === "enlace" && !HREF_OK.test(href)) return { ok: false, message: "El enlace debe ser una ruta del portal (/pagos) o una dirección https://…" };
-  const malo = tipo === "pagina" ? validarContenido(texto) : null;
-  if (malo) return { ok: false, message: malo };
 
   const key = await claveLibre(db, `${section}/${slugify(label) || "pagina"}`);
   const row = {
@@ -94,7 +79,7 @@ export async function crearNodo(_prev: NodoState, fd: FormData): Promise<NodoSta
     key,
     label,
     title: label,
-    blocks: tipo === "pagina" ? textToBlocks(texto) : [],
+    blocks: [],
     href: tipo === "enlace" ? href : null,
     sort_order: await siguienteOrden(db, section),
     updated_by: actor,
@@ -105,7 +90,7 @@ export async function crearNodo(_prev: NodoState, fd: FormData): Promise<NodoSta
   await refrescar();
   return {
     ok: true,
-    message: tipo === "pagina" ? "Página creada. Ya se ve en el sitio; ahora puede escribir su contenido." : "Enlace creado.",
+    message: tipo === "pagina" ? "Página creada. Ahora arrastre los elementos para armarla." : "Enlace creado.",
     next: tipo === "pagina" ? `/admin/arbol/${data.id}` : undefined,
   };
 }
@@ -145,7 +130,7 @@ export async function crearSeccion(_prev: NodoState, fd: FormData): Promise<Nodo
   return { ok: true, message: enBarra ? "Sección creada y agregada a la barra de navegación." : "Sección creada.", next: `/admin/arbol/${data.id}` };
 }
 
-/** Guarda el nombre, el título y el contenido (o el enlace) de un nodo creado en el panel. */
+/** Guarda el nombre, el título y los elementos (o el enlace) de un nodo creado en el panel. */
 export async function editarNodo(_prev: NodoState, fd: FormData): Promise<NodoState> {
   const actor = await requireEditorActor();
   const db = adminDb();
@@ -155,7 +140,7 @@ export async function editarNodo(_prev: NodoState, fd: FormData): Promise<NodoSt
   const label = String(fd.get("label") ?? "").trim();
   const title = String(fd.get("title") ?? "").trim();
   const href = String(fd.get("href") ?? "").trim();
-  const texto = String(fd.get("texto") ?? "");
+  const bloques = fd.get("bloques");
   const { data: nodo } = await db.from("site_nodes").select("id,href").eq("id", id).maybeSingle();
   if (!nodo) return { ok: false, message: "El nodo no existe." };
   if (!label || label.length > 120) return { ok: false, message: "El nombre es obligatorio (máximo 120 caracteres)." };
@@ -167,10 +152,16 @@ export async function editarNodo(_prev: NodoState, fd: FormData): Promise<NodoSt
     cambios.title = label;
   } else {
     if (!title || title.length > 200) return { ok: false, message: "El título es obligatorio (máximo 200 caracteres)." };
-    const malo = validarContenido(texto);
-    if (malo) return { ok: false, message: malo };
+    let crudo: unknown;
+    try {
+      crudo = JSON.parse(typeof bloques === "string" ? bloques : "");
+    } catch {
+      return { ok: false, message: "El contenido de la página no es válido. Recargue la página e intente de nuevo." };
+    }
+    const r = sanearBloques(crudo);
+    if (!r.ok) return { ok: false, message: r.message };
     cambios.title = title;
-    cambios.blocks = textToBlocks(texto);
+    cambios.blocks = r.bloques;
   }
   const { error } = await db.from("site_nodes").update(cambios).eq("id", id);
   if (error) return { ok: false, message: `No se pudo guardar: ${error.message}` };

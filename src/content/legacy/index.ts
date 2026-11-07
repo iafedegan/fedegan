@@ -4,9 +4,9 @@ import raw from "./portal.json";
 // Publicaciones, Cifras del sector, FNG, FEP y Sistema Integrado de Gestión.
 // Se generó con una copia única; el contenido nuevo se gestiona en el CMS.
 
-export type LegacyBlock = { t: string; text?: string; rows?: string[][] };
+export type LegacyBlock = { t: string; text?: string; rows?: string[][]; /** Datos de los elementos del constructor de páginas (tarjetas, carrusel, imagen…). */ data?: Record<string, unknown> };
 export type NavNode = { label: string; key?: string; href?: string; children?: NavNode[]; /** Id del nodo creado en /admin/arbol (las páginas copiadas no lo tienen). */ nid?: string };
-export type LegacyPage = { title: string; source: string; blocks: LegacyBlock[]; sections: string[]; parent?: string };
+export type LegacyPage = { title: string; source: string; blocks: LegacyBlock[]; sections: string[]; parent?: string; /** Página armada en el constructor: se pinta tal cual, sin las reglas del texto copiado. */ libre?: boolean };
 export type LegacySection = { label: string; landing: string; tree: NavNode[] };
 
 const data = raw as unknown as { sections: Record<string, LegacySection>; pages: Record<string, LegacyPage> };

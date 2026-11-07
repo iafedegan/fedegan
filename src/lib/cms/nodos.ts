@@ -125,6 +125,7 @@ export const nodeToPage = (n: SiteNode): LegacyPage => ({
   blocks: n.blocks,
   sections: [n.section],
   parent: n.parent && !isGroupRef(n.parent) ? n.parent : undefined,
+  libre: true,
 });
 
 /** Una página copiada o una creada en el panel. */

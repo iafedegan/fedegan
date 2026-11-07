@@ -92,7 +92,7 @@ function AgregarForm({ add, nombre, onClose }: { add: { section: string; parent:
         <button type="button" onClick={onClose} aria-label="Cerrar" className="ad-icon-btn"><X size={15} /></button>
       </div>
       <div className="flex flex-wrap gap-2" role="radiogroup" aria-label="Tipo">
-        {([["pagina", "Página con texto"], ["enlace", "Enlace"]] as const).map(([v, t]) => (
+        {([["pagina", "Página"], ["enlace", "Enlace"]] as const).map(([v, t]) => (
           <label key={v} className={`flex cursor-pointer items-center gap-2 rounded-lg border px-3 py-1.5 text-sm ${tipo === v ? "border-[#b08f4f] bg-[#f7edcf]" : "border-[#d9d6cb] bg-white"}`}>
             <input type="radio" name="tipo" value={v} checked={tipo === v} onChange={() => setTipo(v)} /> {t}
           </label>
@@ -113,7 +113,7 @@ function AgregarForm({ add, nombre, onClose }: { add: { section: string; parent:
       <Aviso state={state} />
       <div className="flex flex-wrap items-center gap-2">
         <button type="submit" disabled={pending} className="ad-btn ad-btn-primary">
-          {pending ? <Loader2 size={15} className="animate-spin" /> : <Plus size={15} />} {tipo === "pagina" ? "Crear y escribir el contenido" : "Crear enlace"}
+          {pending ? <Loader2 size={15} className="animate-spin" /> : <Plus size={15} />} {tipo === "pagina" ? "Crear y armar la página" : "Crear enlace"}
         </button>
         <button type="button" onClick={onClose} className="ad-btn ad-btn-ghost">Cancelar</button>
       </div>

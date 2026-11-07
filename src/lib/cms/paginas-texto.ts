@@ -12,7 +12,7 @@
 //
 // Una línea de un párrafo que empiece con \ - # @video o {{ se escribe con una barra \ delante.
 
-export type LegacyBlockLite = { t: string; text?: string; rows?: string[][] };
+export type LegacyBlockLite = { t: string; text?: string; rows?: string[][]; data?: Record<string, unknown> };
 
 const PREFIJO: Record<string, string> = { h2: "## ", h3: "### ", h4: "#### ", li: "- " };
 const ESPECIAL = /^(\\|#|-\s|@video\s|@boton\s|@subir\s|\{\{)/;
@@ -29,7 +29,8 @@ export function blocksToText(blocks: LegacyBlockLite[]): string {
     if (b.t === "table") {
       s = `{{tabla ${++tabla}}}`;
     } else if (b.t === "button") {
-      const [t, u] = (b.text ?? "").split("|");
+      const href = typeof b.data?.href === "string" ? b.data.href : undefined;
+      const [t, u] = href !== undefined ? [b.text ?? "", href] : (b.text ?? "").split("|");
       s = `@boton ${t} | ${u ?? ""}`;
     } else if (b.t === "upload") {
       s = `@subir ${b.text ?? ""}`;

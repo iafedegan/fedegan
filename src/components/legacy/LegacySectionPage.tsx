@@ -137,7 +137,7 @@ export async function LegacySectionPage({ slug, ruta }: { slug: string; ruta: st
               {page.blocks.length > 0 && (
                 <>
                   <p className="hub-label">Sobre esta sección</p>
-                  <LegacyContent blocks={page.blocks} />
+                  <LegacyContent blocks={page.blocks} libre={page.libre} />
                 </>
               )}
               {page.blocks.length === 0 && branches.length === 0 && empty}
@@ -191,7 +191,7 @@ export async function LegacySectionPage({ slug, ruta }: { slug: string; ruta: st
             </details>
           )}
 
-          {page.blocks.length > 0 ? <LegacyContent blocks={page.blocks} /> : empty}
+          {page.blocks.length > 0 ? <LegacyContent blocks={page.blocks} libre={page.libre} /> : empty}
 
           {kids.length > 0 && (
             <section className="art-kids" aria-labelledby="art-kids-h">

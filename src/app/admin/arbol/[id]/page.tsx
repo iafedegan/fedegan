@@ -7,14 +7,9 @@ import { DeleteButton } from "@/components/admin/DeleteButton";
 import { legacyHref, legacySections } from "@/content/legacy";
 import { readDb } from "@/lib/cms/client";
 import { NODE_COLUMNS, rowToNode } from "@/lib/cms/nodos";
-import { blocksToText } from "@/lib/cms/paginas-texto";
 import { eliminarNodo, publicarNodo } from "@/lib/cms/nodos-actions";
-import { credencialIA, GUIA_ESTILO, PROVEEDORES, type Proveedor } from "@/lib/ia";
 
 export const metadata: Metadata = { title: "Editar nodo · Panel del portal", robots: { index: false } };
-
-// Redactar con IA puede tardar más de un minuto: más tiempo para las acciones de esta página.
-export const maxDuration = 300;
 
 export default async function EditarNodoPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -27,8 +22,6 @@ export default async function EditarNodoPage({ params }: { params: Promise<{ id:
   const seccion = legacySections[nodo.section]?.label ?? (await db.from("site_nodes").select("label").eq("section", nodo.section).eq("is_section", true).maybeSingle()).data?.label ?? nodo.section;
   const url = nodo.href ?? legacyHref(nodo.section, nodo.key);
   const esEnlace = Boolean(nodo.href);
-  const ias = await Promise.all((["claude", "gemini"] as Proveedor[]).map(async (p) => ((await credencialIA(p)).key ? { id: p, label: PROVEEDORES[p].label } : null)));
-  const opciones = ias.filter((o): o is { id: Proveedor; label: string } => o !== null);
 
   return (
     <div className="flex flex-col gap-6">
@@ -51,23 +44,11 @@ export default async function EditarNodoPage({ params }: { params: Promise<{ id:
         </p>
       </header>
 
-      <div className="grid gap-6 lg:grid-cols-[1fr_20rem] lg:items-start">
-        <div className="ad-card p-5 sm:p-7">
-          <NodoForm id={nodo.id} label={nodo.label} title={nodo.title} href={nodo.href ?? ""} texto={blocksToText(nodo.blocks)} esEnlace={esEnlace} writable={writable} ia={{ opciones, guia: GUIA_ESTILO, ruta: url, seccion: String(seccion) }} />
+      <div className={esEnlace ? "grid max-w-4xl gap-6 lg:grid-cols-[1fr_16rem] lg:items-start" : "grid gap-6 lg:grid-cols-[minmax(0,1fr)_16rem] lg:items-start"}>
+        <div className="ad-card min-w-0 p-5 sm:p-7">
+          <NodoForm id={nodo.id} label={nodo.label} title={nodo.title} href={nodo.href ?? ""} bloques={nodo.blocks} esEnlace={esEnlace} writable={writable} />
         </div>
         <aside className="flex flex-col gap-4 lg:sticky lg:top-6">
-          {!esEnlace && (
-            <div className="ad-card p-5 text-sm leading-relaxed text-[#5d6e65]">
-              <h2 className="mb-3 text-base font-bold text-[#11271d]">Cómo se escribe</h2>
-              <ul className="flex flex-col gap-2">
-                <li>Una <strong>línea en blanco</strong> separa los párrafos.</li>
-                <li><code className="font-mono text-[0.8rem]">## Título</code> encabezado (<code className="font-mono text-[0.8rem]">###</code> y <code className="font-mono text-[0.8rem]">####</code> más pequeños).</li>
-                <li><code className="font-mono text-[0.8rem]">- elemento</code> lista.</li>
-                <li><code className="font-mono text-[0.8rem]">**negrita**</code> y <code className="font-mono text-[0.8rem]">[texto](https://…)</code> o <code className="font-mono text-[0.8rem]">[texto](/ruta)</code> enlaces.</li>
-                <li><code className="font-mono text-[0.8rem]">@video https://…</code> video, documento o tablero incrustado.</li>
-              </ul>
-            </div>
-          )}
           <div className="ad-card flex flex-col gap-3 p-5 text-sm text-[#5d6e65]">
             <p>Para crear subsecciones o páginas dentro de esta, use «Añadir dentro» en el árbol.</p>
             <Link href="/admin/arbol" className="ad-btn ad-btn-ghost w-full">Volver al árbol</Link>

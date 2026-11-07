@@ -1,60 +1,11 @@
-import Link from "next/link";
 import type { ReactNode } from "react";
-import { ArrowUpRight, ExternalLink, FileText } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 import type { LegacyBlock } from "@/content/legacy";
+import { Inline, linkClass } from "./Inline";
+import { BLOQUES_RICOS, BloqueRico } from "./BloquesRicos";
 import { UploadDocs } from "./UploadDocs";
 import { EntryExplorer, type ExplorerEntry } from "./EntryExplorer";
 import { DocList, tarjetasDeDocumentos } from "./DocList";
-
-const TOKEN = /\*\*([^*]+)\*\*|\[([^\]]*)\]\((https?:\/\/[^)\s]+|\/[^)\s]*)\)/g;
-const FILE = /\.(pdf|docx?|xlsx?|pptx?|zip|rar)(\?|$)/i;
-
-const linkClass =
-  "font-semibold text-[var(--fg-lime-400)] underline decoration-[rgba(216,181,88,0.45)] underline-offset-[3px] transition-colors hover:text-[var(--text)] hover:decoration-[var(--fg-lime-400)]";
-
-function Inline({ text }: { text: string }) {
-  const out: ReactNode[] = [];
-  let last = 0;
-  let i = 0;
-  const pushText = (s: string) => {
-    s.split("\n").forEach((line, n) => {
-      if (n > 0) out.push(<br key={`br${i++}`} />);
-      if (line) out.push(line);
-    });
-  };
-  for (const m of text.matchAll(TOKEN)) {
-    pushText(text.slice(last, m.index));
-    last = (m.index ?? 0) + m[0].length;
-    if (m[1] !== undefined) {
-      out.push(
-        <strong key={`s${i++}`} className="font-bold text-[var(--text)]">
-          <Inline text={m[1]} />
-        </strong>,
-      );
-      continue;
-    }
-    const [, , label, href] = m;
-    const external = !href.startsWith("/");
-    out.push(
-      external ? (
-        <a key={`a${i++}`} href={href} target="_blank" rel="noopener noreferrer" className={linkClass}>
-          {label || href}
-          {FILE.test(href) ? (
-            <FileText size={13} aria-hidden className="ml-1 inline -translate-y-px" />
-          ) : (
-            <ArrowUpRight size={13} aria-hidden className="ml-0.5 inline -translate-y-px" />
-          )}
-        </a>
-      ) : (
-        <Link key={`a${i++}`} href={href} className={linkClass}>
-          {label || href}
-        </Link>
-      ),
-    );
-  }
-  pushText(text.slice(last));
-  return <>{out}</>;
-}
 
 // Celdas con varias líneas: los enlaces sueltos van como lista y el resto como párrafos.
 function CellLines({ text }: { text: string }) {
@@ -152,16 +103,24 @@ function toExplorer(entries: Entry[]): ExplorerEntry[] {
 }
 
 // Pinta el texto copiado (títulos, párrafos, listas, tablas y tableros) con el estilo del portal.
-export function LegacyContent({ blocks, lead: allowLead = true, preview = false }: { blocks: LegacyBlock[]; lead?: boolean; preview?: boolean }) {
+// `libre`: páginas armadas en el constructor. Cada elemento se pinta tal cual, sin las reglas que reagrupan el texto copiado
+// del portal actual (primer párrafo destacado, fichas por subtítulo, listas de publicaciones), para que la página se vea
+// igual que en el editor. `preview`: vista previa dentro del editor (sin anclas ni movimiento).
+export function LegacyContent({ blocks, lead: allowLead = true, preview = false, libre = false }: { blocks: LegacyBlock[]; lead?: boolean; preview?: boolean; libre?: boolean }) {
   const nodes: ReactNode[] = [];
-  let leadDone = !allowLead;
+  let leadDone = !allowLead || libre;
   // Páginas con varios apartados de tercer nivel (programas, servicios…): cada apartado va en su propia ficha.
-  const grouped3 = allowLead && blocks.filter((x) => x.t === "h3").length >= 3;
+  const grouped3 = allowLead && !libre && blocks.filter((x) => x.t === "h3").length >= 3;
   for (let i = 0; i < blocks.length; i++) {
     const b = blocks[i];
     const key = `b${i}`;
 
-    if (b.t === "h3") {
+    if (BLOQUES_RICOS.has(b.t)) {
+      nodes.push(<BloqueRico key={key} b={b} preview={preview} />);
+      continue;
+    }
+
+    if (b.t === "h3" && !libre) {
       const grouped = takeEntries(blocks, i);
       if (grouped) {
         nodes.push(<EntryExplorer key={key} entries={toExplorer(grouped.entries)} />);
@@ -175,10 +134,10 @@ export function LegacyContent({ blocks, lead: allowLead = true, preview = false 
       while (j < blocks.length && !/^h[1-6]$/.test(blocks[j].t)) j++;
       nodes.push(
         <section key={key} className="ed-item">
-          <h3 id={`s${i}`} className="font-[var(--font-display)] text-xl font-bold leading-snug text-[var(--text)]">
+          <h3 id={preview ? undefined : `s${i}`} className="font-[var(--font-display)] text-xl font-bold leading-snug text-[var(--text)]">
             <Inline text={b.text ?? ""} />
           </h3>
-          <LegacyContent blocks={blocks.slice(i + 1, j)} lead={false} />
+          <LegacyContent blocks={blocks.slice(i + 1, j)} lead={false} libre={libre} />
         </section>,
       );
       i = j - 1;
@@ -240,20 +199,6 @@ export function LegacyContent({ blocks, lead: allowLead = true, preview = false 
       continue;
     }
 
-    if (b.t === "button") {
-      const [label, url = "#"] = (b.text ?? "").split("|");
-      const ext = /^https?:\/\//.test(url);
-      const cls = "my-3 mr-3 inline-flex items-center gap-2 rounded-full bg-[var(--fg-lime-500)] px-5 py-2.5 text-sm font-bold text-white no-underline transition-opacity hover:opacity-90";
-      nodes.push(
-        ext ? (
-          <a key={key} href={url} target="_blank" rel="noopener noreferrer" className={cls}>{label} <ArrowUpRight size={15} /></a>
-        ) : (
-          <Link key={key} href={url} className={cls}>{label}</Link>
-        ),
-      );
-      continue;
-    }
-
     if (b.t === "upload") {
       nodes.push(<UploadDocs key={key} label={b.text ?? "Cargar documentos"} preview={preview} />);
       continue;
@@ -304,7 +249,7 @@ export function LegacyContent({ blocks, lead: allowLead = true, preview = false 
       nodes.push(
         <Tag
           key={key}
-          id={`s${i}`}
+          id={preview ? undefined : `s${i}`}
           className={
             big
               ? "mb-3 mt-10 font-[var(--font-display)] text-2xl font-bold leading-snug text-[var(--text)] first:mt-0 sm:text-[1.7rem]"
@@ -318,7 +263,7 @@ export function LegacyContent({ blocks, lead: allowLead = true, preview = false 
     }
 
     // etiqueta + valor ("Autor:" / "José …") en una sola línea
-    if (isLabel(b) && blocks[i + 1]?.t === "p" && !isLabel(blocks[i + 1])) {
+    if (!libre && isLabel(b) && blocks[i + 1]?.t === "p" && !isLabel(blocks[i + 1])) {
       nodes.push(
         <p key={key} className="my-1.5 max-w-4xl leading-relaxed text-[var(--text-muted)]">
           <span className="mr-2 text-[0.72rem] font-bold uppercase tracking-[0.14em] text-[var(--text-faint)]">{b.text}</span>
