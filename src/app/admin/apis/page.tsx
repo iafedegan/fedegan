@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ChevronRight, Database, ExternalLink, KeyRound, Newspaper, ShieldCheck, Sparkles } from "lucide-react";
+import { ChevronRight, Database, ExternalLink, FolderArchive, KeyRound, Newspaper, ShieldCheck, Sparkles } from "lucide-react";
 import { auth, demoEnabled, entraConfigured } from "@/auth";
 import { ROLES, hasAnyRole } from "@/lib/access";
 import { ApiKeyForm, ApiTestButton } from "@/components/admin/ApiForms";
@@ -10,16 +10,21 @@ import { getStoredMeta } from "@/lib/cms/integrations";
 import { secretsAvailable } from "@/lib/cms/secrets";
 import { contextoCredentials } from "@/lib/contexto";
 import { removeApiKey } from "@/lib/cms/api-actions";
+import { CopiaDocumentos } from "@/components/admin/CopiaDocumentos";
+import { estadoCopia } from "@/lib/cms/documentos-copia";
 import { credencialIA, PROVEEDORES, type Proveedor } from "@/lib/ia";
 
 export const metadata: Metadata = { title: "Conexiones · Panel del portal", robots: { index: false } };
+
+// La copia de documentos trabaja por lotes de ~40 s.
+export const maxDuration = 60;
 
 const dot = (ok: boolean) => <i className={`inline-block h-2 w-2 rounded-full ${ok ? "bg-[#1f8a5b]" : "bg-[#d64545]"}`} />;
 
 export default async function ApisPage() {
   const session = await auth();
   const isAdmin = hasAnyRole(session?.user?.roles, [ROLES.portalAdmin]);
-  const [creds, meta] = await Promise.all([contextoCredentials(), getStoredMeta("contexto")]);
+  const [creds, meta, copia] = await Promise.all([contextoCredentials(), getStoredMeta("contexto"), estadoCopia()]);
   const ias = await Promise.all(
     (["claude", "gemini"] as Proveedor[]).map(async (id) => {
       const [c, m] = await Promise.all([credencialIA(id), getStoredMeta(id)]);
@@ -129,6 +134,18 @@ export default async function ApisPage() {
             </div>
           ))}
         </div>
+      </section>
+
+      {/* Documentos migrados */}
+      <section className="ad-card flex flex-col gap-5 p-6 sm:p-8">
+        <div className="flex items-start gap-4">
+          <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#eef8e6] text-[#3d7a22]"><FolderArchive size={22} /></span>
+          <div>
+            <h2 className="text-xl font-bold">Documentos del portal en Supabase</h2>
+            <p className="mt-0.5 max-w-2xl text-sm text-[#5d6e65]">Los documentos migrados (actas, informes, cuadros de datos e indicadores…) siguen enlazados al almacenamiento del sitio anterior. Aquí se copian al depósito de Supabase del portal y los enlaces pasan a usar la copia. Los archivos de más de 50 MB y los que ya no existen en el original se omiten y quedan como estaban.</p>
+          </div>
+        </div>
+        <CopiaDocumentos inicial={copia} puede={isAdmin} />
       </section>
 
       <div className="grid gap-6 lg:grid-cols-2">

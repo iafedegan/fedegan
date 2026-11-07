@@ -12,6 +12,8 @@ import { ArticleTools } from "@/components/legacy/ArticleTools";
 import { PrevNext, SectionSearch, SectionTiles, countBelow, flattenTree } from "@/components/legacy/SectionParts";
 import { journeyPhotos } from "@/content/scroll-world";
 import { getPageOverride } from "@/lib/cms/paginas";
+import { getCopias } from "@/lib/cms/documentos-copia";
+import { aplicarCopias } from "@/lib/cms/documentos-copia-util";
 import { findTrail, legacyHref, type NavNode } from "@/content/legacy";
 import { customPagesOf, getPage, getSection } from "@/lib/cms/nodos";
 
@@ -42,7 +44,10 @@ export async function LegacySectionPage({ slug, ruta }: { slug: string; ruta: st
   const custom = await customPagesOf(slug);
   // Si el equipo editó el texto en /admin/paginas, ese texto reemplaza a la copia original.
   const override = await getPageOverride(key);
-  const page = override ? { ...base, title: override.title, blocks: override.blocks } : base;
+  const copias = await getCopias();
+  const pagina = override ? { ...base, title: override.title, blocks: override.blocks } : base;
+  // Los documentos que ya se copiaron a Supabase se enlazan desde ahí; el resto sigue apuntando al original.
+  const page = { ...pagina, blocks: aplicarCopias(pagina.blocks, copias) };
 
   const sectionPhoto = journeyPhotos[PHOTO_ID[slug] ?? slug] ?? (slug === "cartas-de-presidencia" ? { src: "/headers/ia-cartas.jpg", pos: "50% 50%", alt: "" } : undefined);
   const trail = findTrail(section.tree, key) ?? [];
