@@ -268,7 +268,7 @@ html .mh .mh-mob { text-align: center; }
 html .mh-main { background: #72bf44; }
 html .mh-main-in { padding-block: 1rem; }
 html .mh-logo-d { height: 4.2rem; }
-html .mh-search { max-width: 36rem; box-shadow: 0 6px 16px -10px rgba(16, 36, 15, 0.5); }
+html .mh-search { max-width: 22rem; box-shadow: 0 6px 16px -10px rgba(16, 36, 15, 0.5); }
 
 /* Con banner cargado, la portada es solo el banner (una imagen a lo ancho, con su botón); sin banner queda texto + foto */
 .hi-hero-in:has(.hi-banner) { display: block; min-height: 0; }
@@ -303,3 +303,7 @@ section.hi-hero[data-region="hero"], .hi-hero { background: #f3f4f1 !important; 
 .hi-hero-img:has(.hi-banner)::after { display: block; content: ""; position: absolute; inset: 0; width: auto; z-index: 1; pointer-events: none; background: linear-gradient(90deg, rgba(8, 24, 8, 0.72), rgba(8, 24, 8, 0.25) 55%, transparent); }
 .hi-hero-img:has(.hi-banner) .hi-banner-img { max-width: none !important; min-height: 22rem; object-fit: cover; }
 .hi-hero-img:has(.hi-banner) .portada-btn { z-index: 3; }
+
+/* Cabecera: el buscador y «Equipo» van juntos a la derecha. */
+.mh-main-in .mh-search { flex: 0 1 22rem; margin-left: auto; }
+.mh-main-in > div:last-child, .mh-main-in > a:last-child { margin-left: 0 !important; }
