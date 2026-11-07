@@ -276,3 +276,19 @@ html .mh-search { max-width: 36rem; box-shadow: 0 6px 16px -10px rgba(16, 36, 15
 .hi-hero-img:has(.hi-banner) .hi-carousel, .hi-hero-img:has(.hi-banner) .hi-banner { position: relative; inset: auto; }
 .hi-hero-img:has(.hi-banner) .hi-banner-img { width: 100%; height: auto; object-fit: contain; }
 section.hi-hero[data-region="hero"]:has(.hi-banner) { padding-bottom: 2.5rem !important; }
+
+/* Banner de portada sobre gris muy suave */
+section.hi-hero[data-region="hero"], .hi-hero { background: #f3f4f1 !important; background-color: #f3f4f1 !important; }
+.hi-hero-img::after { background: linear-gradient(90deg, #f3f4f1, transparent); }
+
+/* Cintillo de mercado: franja oscura arriba del encabezado (solo escritorio) */
+.mk { display: none; overflow: hidden; background: #10240f; color: #fff; }
+@media (min-width: 768px) { .mk { display: block; } }
+.mk-track { display: flex; width: max-content; gap: 2.6rem; padding: 0.42rem 0; animation: mk-run 60s linear infinite; }
+.mk:hover .mk-track { animation-play-state: paused; }
+.mk-item { white-space: nowrap; font-size: 0.78rem; letter-spacing: 0.02em; }
+.mk-item b { font-weight: 700; color: #cfe9bd; margin-right: 0.3rem; }
+.mk-item i { font-style: normal; font-weight: 700; margin-left: 0.2rem; color: #d8dcd5; }
+.mk-item i.up { color: #8fe05a; } .mk-item i.down { color: #ff8a8a; }
+@keyframes mk-run { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) { .mk-track { animation: none; } }
