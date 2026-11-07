@@ -103,8 +103,9 @@ footer[data-region="footer"] [class*="text-[var(--fg-lime"] { color: #000 !impor
 .hi-hero-img { position: relative; align-self: stretch; min-height: 20rem; }
 .hi-hero-img::after { content: ""; position: absolute; inset: 0 auto 0 0; width: 30%; background: linear-gradient(90deg, #f4f9ef, transparent); }
 .hi-quick { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0.8rem; margin: -2rem 0 0; padding: 0; list-style: none; }
-.hi-quick a { display: flex; flex-direction: column; gap: 0.4rem; height: 100%; padding: 1.1rem; border: 1px solid #dcdcd6; border-radius: 0.6rem; background: #fff; box-shadow: 0 14px 30px -24px rgba(16, 36, 15, 0.4); color: #10240f; text-decoration: none; transition: border-color 0.2s, transform 0.2s; }
-.hi-quick a:hover { border-color: #72bf44; transform: translateY(-3px); }
+/* Accesos rápidos: fondo verde muy tenue y sombras suaves en capas; al pasar el cursor suben un poco y la sombra se acentúa. */
+.hi-quick a { display: flex; flex-direction: column; gap: 0.4rem; height: 100%; padding: 1.1rem; border: 1px solid #dcebd2; border-radius: 0.6rem; background: linear-gradient(155deg, #fafdf7 0%, #f0f8e9 100%); box-shadow: 0 1px 2px rgba(16, 36, 15, 0.06), 0 8px 16px -8px rgba(16, 36, 15, 0.16), 0 22px 34px -24px rgba(16, 36, 15, 0.3); color: #10240f; text-decoration: none; transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s; }
+.hi-quick a:hover { border-color: #72bf44; transform: translateY(-3px); box-shadow: 0 2px 4px rgba(16, 36, 15, 0.08), 0 14px 24px -10px rgba(16, 36, 15, 0.24), 0 30px 42px -26px rgba(16, 36, 15, 0.36); }
 .hi-quick svg:first-child { color: #3d7a22; }
 .hi-quick strong { font-size: 1rem; }
 .hi-quick span { font-size: 0.82rem; color: #484f4a; line-height: 1.4; }
@@ -231,6 +232,8 @@ header[data-region="navbar"] { border-bottom: 0 !important; box-shadow: 0 8px 18
 
 /* Iconos duotono dentro de una ficha redondeada */
 .hi-quick svg:first-child, .hi-trio svg:first-child { box-sizing: content-box; padding: 0.6rem; border-radius: 0.9rem; background: #eef8e6; color: #3d7a22; }
+/* En los accesos rápidos la ficha del icono es blanca, para que destaque sobre el fondo tenue. */
+.hi-quick svg:first-child { background: #fff; box-shadow: 0 2px 8px -3px rgba(61, 122, 34, 0.35); }
 .hi-quick svg:last-child { margin-top: auto; }
 .hi-cal svg, .hi-meta svg { color: #3d7a22; }
 
