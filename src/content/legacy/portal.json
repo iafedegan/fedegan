@@ -5234,7 +5234,8 @@
     }
    ],
    "sections": [
-    "atencion-ciudadania"
+    "atencion-ciudadania",
+    "fng"
    ]
   },
   "identificacion-de-problemas-y-diagnostico-de-necesidades": {
@@ -5516,8 +5517,12 @@
    "source": "https://www.fedegan.org.co/por-area",
    "blocks": [
     {
-     "t": "embed",
-     "text": "https://storage.googleapis.com/static-fedegan/documentacion_fng_fep_2019/Tab_fep_fng_por_area-update.html"
+     "t": "li",
+     "text": "[Portafolio de Servicios 2018-2019.pdf (PDF)](https://storage.googleapis.com/static-fedegan/documentacion_fng_fep_2019/FEP/2.%20NUESTRAS%20FUNCIONES/SERVICIOS_FEP_PARA_FOMENTO_EXPORTACION_CARNE_LECHE_Y_DERIVADOS_2016-2017.pdf)"
+    },
+    {
+     "t": "li",
+     "text": "[Portafolio de Servicios 2016-2017.pdf (PDF)](https://storage.googleapis.com/static-fedegan/documentacion_fng_fep_2019/FEP/2.%20NUESTRAS%20FUNCIONES/SERVICIOS_FEP_PARA_FOMENTO_EXPORTACION_CARNE_LECHE_Y_DERIVADOS_2018-2019.pdf)"
     }
    ],
    "sections": [
@@ -5529,8 +5534,8 @@
    "source": "https://www.fedegan.org.co/normas-generales-y-reglamentarias",
    "blocks": [
     {
-     "t": "embed",
-     "text": "https://storage.googleapis.com/static-fedegan/documentacion_fng_fep_2019/Tab_fep-normas_generales-2022.html"
+     "t": "li",
+     "text": "[Normas Fundamentales FNG.pdf (PDF)](https://storage.googleapis.com/static-fedegan/documentacion_fng_fep_2019/documentos/Normas_Fundamentales_FNG.pdf)"
     }
    ],
    "sections": [
@@ -5542,8 +5547,52 @@
    "source": "https://www.fedegan.org.co/normatividad-covid-19",
    "blocks": [
     {
-     "t": "embed",
-     "text": "https://storage.googleapis.com/static-fedegan/documentacion_fng_fep_2019/Tab_fep_normatividad_Covid-19-2022.html"
+     "t": "li",
+     "text": "[Planes Departamentales de Extensión Agropecuarias.pdf (PDF)](https://storage.googleapis.com/static-fedegan/documentacion_fng_fep_2019/documentos/Normatividad_Covid-19/Circular_002_28-03-2020.pdf)"
+    },
+    {
+     "t": "li",
+     "text": "[Política para precios de insumos agropecuarios.pdf (PDF)](https://storage.googleapis.com/static-fedegan/documentacion_fng_fep_2019/documentos/Normatividad_Covid-19/Decreto_471_25-03-2020.pdf)"
+    },
+    {
+     "t": "li",
+     "text": "[Incentivo económico para trabajadores y productores del campo.pdf (PDF)](https://storage.googleapis.com/static-fedegan/documentacion_fng_fep_2019/documentos/Normatividad_Covid-19/Decreto_485_27-03-2020.pdf)"
+    },
+    {
+     "t": "li",
+     "text": "[Incentivo económico para trabajadores y productores del campo mayores a 70 años.pdf (PDF)](https://storage.googleapis.com/static-fedegan/documentacion_fng_fep_2019/documentos/Normatividad_Covid-19/Decreto_486_27-03-2020.pdf)"
+    },
+    {
+     "t": "li",
+     "text": "[Protocolos de Bioseguridad.pdf (PDF)](https://storage.googleapis.com/static-fedegan/documentacion_fng_fep_2019/documentos/Normatividad_Covid-19/Decreto_539_13-04-2020.pdf)"
+    },
+    {
+     "t": "li",
+     "text": "[Aislamiento preventivo a partir del 27 de abril hasta el 11 de mayo.pdf (PDF)](https://storage.googleapis.com/static-fedegan/documentacion_fng_fep_2019/documentos/Normatividad_Covid-19/Decreto_593_24-04-2020.pdf)"
+    },
+    {
+     "t": "li",
+     "text": "[Protocolo de seguridad para ciclo de vacunación.pdf (PDF)](https://storage.googleapis.com/static-fedegan/documentacion_fng_fep_2019/documentos/Normatividad_Covid-19/Protocolo_bioseguridad_aftosa.pdf)"
+    },
+    {
+     "t": "li",
+     "text": "[Política para fijar precios de insumos agropecuarios.pdf (PDF)](https://storage.googleapis.com/static-fedegan/documentacion_fng_fep_2019/documentos/Normatividad_Covid-19/Resolucion_071_28-03-2020.pdf)"
+    },
+    {
+     "t": "li",
+     "text": "[Sistemas de fijación para el precio de la leche cruda al proveedor.pdf (PDF)](https://storage.googleapis.com/static-fedegan/documentacion_fng_fep_2019/documentos/Normatividad_Covid-19/Resolucion_072_28-03-2020.pdf)"
+    },
+    {
+     "t": "li",
+     "text": "[Medidas sanitarias para prevenir, controlar el COVID-19.pdf (PDF)](https://storage.googleapis.com/static-fedegan/documentacion_fng_fep_2019/documentos/Normatividad_Covid-19/Resolucion_385_12-03-2020.pdf)"
+    },
+    {
+     "t": "li",
+     "text": "[Adaptación del protocolo de Bioseguridad para todas las actividades económicas.pdf (PDF)](https://storage.googleapis.com/static-fedegan/documentacion_fng_fep_2019/documentos/Normatividad_Covid-19/Resolucion_666_24-04-2020.pdf)"
+    },
+    {
+     "t": "li",
+     "text": "[Medidas y acciones de limpieza para prevenir COVID-19.pdf (PDF)](https://storage.googleapis.com/static-fedegan/documentacion_fng_fep_2019/documentos/Normatividad_Covid-19/DG_Protocolo_Bioseguridad_COVID-19.pdf)"
     }
    ],
    "sections": [
@@ -5555,8 +5604,28 @@
    "source": "https://www.fedegan.org.co/sistema-gestion-de-calidad",
    "blocks": [
     {
-     "t": "embed",
-     "text": "https://storage.googleapis.com/static-fedegan/documentacion_fng_fep_2019/Tab_fep-procesos-2022.html"
+     "t": "li",
+     "text": "[Matriz Grupo de Interés FNG.xlsx (Excel)](https://storage.googleapis.com/static-fedegan/documentacion_fng_fep_2019/documentos/Matriz_Grupo_de_Interes_FNG.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Objetivos de Calidad.pdf (PDF)](https://storage.googleapis.com/static-fedegan/documentacion_fng_fep_2019/documentos/Objetivos_de_Calidad_082020.pdf)"
+    },
+    {
+     "t": "li",
+     "text": "[Alcance del Sistema de Gestión FNG.pdf (PDF)](https://storage.googleapis.com/static-fedegan/documentacion_fng_fep_2019/documentos/Alcance_del_Sistema_de_Gestion_FNG.pdf)"
+    },
+    {
+     "t": "li",
+     "text": "[Políticas de Calidad.pdf (PDF)](https://storage.googleapis.com/static-fedegan/documentacion_fng_fep_2019/documentos/Politicas_Calidad.pdf)"
+    },
+    {
+     "t": "li",
+     "text": "[Manual de Calidad.pdf (PDF)](https://storage.googleapis.com/static-fedegan/documentacion_fng_fep_2019/documentos/Manual_de_Calidad_082020.pdf)"
+    },
+    {
+     "t": "li",
+     "text": "[Manual de Gestión de Riesgos.pdf (PDF)](https://storage.googleapis.com/static-fedegan/documentacion_fng_fep_2019/documentos/M01_Manual_de_gestion_de_Riesgos.pdf)"
     }
    ],
    "sections": [
@@ -5568,8 +5637,20 @@
    "source": "https://www.fedegan.org.co/presupuesto",
    "blocks": [
     {
-     "t": "embed",
-     "text": "https://storage.googleapis.com/static-fedegan/documentacion_fng_fep_2019/Tab_fep_presupuesto-2022.html"
+     "t": "li",
+     "text": "[Presupuesto Fep 2019 (PDF)](https://storage.googleapis.com/static-fedegan/documentacion_fng_fep_2019/FEP/5.%20INFORMACION%20FINANCIERA/PRESUPUESTO/PRESUPUESTO_FEP_2019.pdf)"
+    },
+    {
+     "t": "li",
+     "text": "[Presupuesto Fep 2018 (PDF)](https://storage.googleapis.com/static-fedegan/documentacion_fng_fep_2019/FEP/5.%20INFORMACION%20FINANCIERA/PRESUPUESTO/PRESUPUESTO_FEP_2018.pdf)"
+    },
+    {
+     "t": "li",
+     "text": "[Presupuesto Fep 2017 (PDF)](https://storage.googleapis.com/static-fedegan/documentacion_fng_fep_2019/FEP/5.%20INFORMACION%20FINANCIERA/PRESUPUESTO/PRESUPUESTO_FEP_2017.pdf)"
+    },
+    {
+     "t": "li",
+     "text": "[Presupuesto Fep 2016 (PDF)](https://storage.googleapis.com/static-fedegan/documentacion_fng_fep_2019/FEP/5.%20INFORMACION%20FINANCIERA/PRESUPUESTO/PRESUPUESTO_FEP_2016.pdf)"
     }
    ],
    "sections": [
@@ -5581,8 +5662,20 @@
    "source": "https://www.fedegan.org.co/plan-inversion-y-gastos",
    "blocks": [
     {
-     "t": "embed",
-     "text": "https://storage.googleapis.com/static-fedegan/documentacion_fng_fep_2019/Tab_fep_plan_inversion-2022.html"
+     "t": "li",
+     "text": "[Plan de Inversiones y Gastos 2019.pdf (PDF)](https://storage.googleapis.com/static-fedegan/documentacion_fng_fep_2019/FEP/5.%20INFORMACION%20FINANCIERA/PLAN%20DE%20INVERSIONES%20Y%20GASTOS/PLAN_INVERSIONES_Y_GASTOS_2019.pdf)"
+    },
+    {
+     "t": "li",
+     "text": "[Plan de Inversiones y Gastos 2018.pdf (PDF)](https://storage.googleapis.com/static-fedegan/documentacion_fng_fep_2019/FEP/5.%20INFORMACION%20FINANCIERA/PLAN%20DE%20INVERSIONES%20Y%20GASTOS/PLAN_INVERSIONES_Y_GASTOS_2018.pdf)"
+    },
+    {
+     "t": "li",
+     "text": "[Plan de Inversiones y Gastos 2017.pdf (PDF)](https://storage.googleapis.com/static-fedegan/documentacion_fng_fep_2019/FEP/5.%20INFORMACION%20FINANCIERA/PLAN%20DE%20INVERSIONES%20Y%20GASTOS/PLAN_INVERSIONES_Y_GASTOS_2017.pdf)"
+    },
+    {
+     "t": "li",
+     "text": "[Plan de Inversiones y Gastos 2016.pdf (PDF)](https://storage.googleapis.com/static-fedegan/documentacion_fng_fep_2019/FEP/5.%20INFORMACION%20FINANCIERA/PLAN%20DE%20INVERSIONES%20Y%20GASTOS/PLAN_INVERSIONES_Y_GASTOS_2016.pdf)"
     }
    ],
    "sections": [
@@ -5631,8 +5724,16 @@
    "source": "https://www.fedegan.org.co/acuerdos-presupuestales",
    "blocks": [
     {
-     "t": "embed",
-     "text": "https://storage.googleapis.com/static-fedegan/documentacion_fng_fep_2019/Tab_fep_acuerdos_presupuestales-2022.html"
+     "t": "li",
+     "text": "[Acuerdos Presupuestales 2018 (PDF)](https://storage.googleapis.com/static-fedegan/documentacion_fng_fep_2019/FEP/5.%20INFORMACION%20FINANCIERA/ACUERDOS%20PRESUPUESTALES/ACUERDOS_PRESUPUESTALES_2018.pdf)"
+    },
+    {
+     "t": "li",
+     "text": "[Acuerdos Presupuestales 2017 (PDF)](https://storage.googleapis.com/static-fedegan/documentacion_fng_fep_2019/FEP/5.%20INFORMACION%20FINANCIERA/ACUERDOS%20PRESUPUESTALES/ACUERDOS_PRESUPUESTALES_2017.pdf)"
+    },
+    {
+     "t": "li",
+     "text": "[Acuerdos Presupuestales 2016 (PDF)](https://storage.googleapis.com/static-fedegan/documentacion_fng_fep_2019/FEP/5.%20INFORMACION%20FINANCIERA/ACUERDOS%20PRESUPUESTALES/ACUERDOS_PRESUPUESTALES_2016.pdf)"
     }
    ],
    "sections": [
@@ -5657,8 +5758,44 @@
    "source": "https://www.fedegan.org.co/contratacion",
    "blocks": [
     {
-     "t": "embed",
-     "text": "https://storage.googleapis.com/static-fedegan/documentacion_fng_fep_2019/Tab_fep_contratacion-upgrade.html"
+     "t": "li",
+     "text": "[Gestión Contractual 2018 - Trimestre IV - Contratos (Excel)](https://storage.googleapis.com/static-fedegan/documentacion_fng_fep_2019/FEP/7.%20CONTRATACION/Gestion_Contractual_FEP_2018_IV_trimestre_(Contratos).xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Gestión Contractual 2018 - Trimestre III - Contratos (Excel)](https://storage.googleapis.com/static-fedegan/documentacion_fng_fep_2019/FEP/7.%20CONTRATACION/Gestion_Contractual_FEP_2018_III_trimestre_(Contratos).xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Gestión Contractual 2018 - Trimestre II - Ordenes de Servicio y Compra (Excel)](https://storage.googleapis.com/static-fedegan/documentacion_fng_fep_2019/FEP/7.%20CONTRATACION/Gestion_Contractual_FEP_2018_II_trimestre_(Ordenes_de_servicio_y_compra).xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Gestión Contractual 2018 - Trimestre I - Contratos (Excel)](https://storage.googleapis.com/static-fedegan/documentacion_fng_fep_2019/FEP/7.%20CONTRATACION/Gestion_Contractual_FEP_2018_I_trimestres_(Contratos).xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Gestión Contractual 2017 - Trimestre IV - Ordenes de Servicio y Compra (Excel)](https://storage.googleapis.com/static-fedegan/documentacion_fng_fep_2019/FEP/7.%20CONTRATACION/Gestion_Contractual_FEP_2017_IV_trimestre_(Ordenes_de_servicio_y_compra).xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Gestión Contractual 2017 - Trimestre III - Contratos (Excel)](https://storage.googleapis.com/static-fedegan/documentacion_fng_fep_2019/FEP/7.%20CONTRATACION/Gestion_Contractual_FEP_2017_III_trimestre_(Contratos).xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Gestión Contractual 2017 - Trimestre II - Contratos (Excel)](https://storage.googleapis.com/static-fedegan/documentacion_fng_fep_2019/FEP/7.%20CONTRATACION/Gestion_Contractual_FEP_2017_II_trimestre_(Contratos).xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Gestión Contractual 2017 - Trimestre I - Ordenes de Servicio y Compra (Excel)](https://storage.googleapis.com/static-fedegan/documentacion_fng_fep_2019/FEP/7.%20CONTRATACION/Gestion_Contractual_FEP_2017_I_trimestre_(Ordenes_de_servicio_y_compra).xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Gestión Contractual 2016 - Ordenes de Servicio y Compra (Excel)](https://storage.googleapis.com/static-fedegan/documentacion_fng_fep_2019/FEP/7.%20CONTRATACION/Gestion_Contractual_FEP_2016_(Ordenes_de_Servicio_y_Compra).xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Gestión Contractual 2016 - Contratos (Excel)](https://storage.googleapis.com/static-fedegan/documentacion_fng_fep_2019/FEP/7.%20CONTRATACION/Gestion_Contractual_FEP_2016_(Contratos).xlsx)"
     }
    ],
    "sections": [
@@ -5683,8 +5820,16 @@
    "source": "https://www.fedegan.org.co/informes-de-gestion",
    "blocks": [
     {
-     "t": "embed",
-     "text": "https://storage.googleapis.com/static-fedegan/documentacion_fng_fep_2019/Tab-fep-fng-informes-gestion-upgrade.html"
+     "t": "li",
+     "text": "[Informe de Gestión 2018.pdf (PDF)](https://storage.googleapis.com/static-fedegan/documentacion_fng_fep_2019/FEP/8.%20VIGILANCIA%20Y%20CONTROL/INFORME_GESTION_VIGENCIA_FEP_2018.pdf)"
+    },
+    {
+     "t": "li",
+     "text": "[Informe de Gestión 2017.pdf (PDF)](https://storage.googleapis.com/static-fedegan/documentacion_fng_fep_2019/FEP/8.%20VIGILANCIA%20Y%20CONTROL/INFORME_GESTION_VIGENCIA_FEP_2017.pdf)"
+    },
+    {
+     "t": "li",
+     "text": "[Informe de Gestión 2016.pdf (PDF)](https://storage.googleapis.com/static-fedegan/documentacion_fng_fep_2019/FEP/8.%20VIGILANCIA%20Y%20CONTROL/INFORME_GESTION_VIGENCIA_FEP_2016.pdf)"
     }
    ],
    "sections": [
@@ -6093,7 +6238,8 @@
     }
    ],
    "sections": [
-    "sg-sst"
+    "sg-sst",
+    "sistema-integrado-de-gestion"
    ]
   },
   "que-es-el-sg-sst": {
@@ -6221,8 +6367,48 @@
      "text": "Los metadatos consisten en la información que caracteriza datos, describen el contenido, calidad, condiciones, historia, disponibilidad y otras características de los datos de la operación estadística de Fedegan-FNG, los cuales se describen a continuación."
     },
     {
-     "t": "embed",
-     "text": "https://storage.googleapis.com/static-fedegan/SIG/Metadatos/tabla-metadatos-19092025.html"
+     "t": "li",
+     "text": "[Documento Metodológico (PDF)](https://storage.googleapis.com/static-fedegan/SIG/Metadatos/OE-DG-01%20Documento%20metodolo%CC%81gico%20V20.pdf)"
+    },
+    {
+     "t": "li",
+     "text": "[Ficha Metodológica (PDF)](https://storage.googleapis.com/static-fedegan/SIG/Metadatos/OE-DG-02%20Ficha%20Metodolo%CC%81gica%20V17.pdf)"
+    },
+    {
+     "t": "li",
+     "text": "[Glosario (PDF)](https://storage.googleapis.com/static-fedegan/SIG/Metadatos/OE-DG-03%20Glosario%20Te%CC%81rminos%20y%20Definiciones%20PE%20V12.pdf)"
+    },
+    {
+     "t": "li",
+     "text": "[Inventario bovino y bufalino (PDF)](https://storage.googleapis.com/static-fedegan/SIG/Metadatos/DG-11-Estructura-cuadro-de-salida-Inventario-Bovino-y-Bufalino-V6.pdf)"
+    },
+    {
+     "t": "li",
+     "text": "[PM Predios y población bovina por sexo y categorías de edad (PDF)](https://storage.googleapis.com/static-fedegan/SIG/Metadatos/DG-11-Estructura-cuadro-de-salida-PM-Bovinos-Sexo-y-Edad-V7.pdf)"
+    },
+    {
+     "t": "li",
+     "text": "[PM según tamaño de predio por el número de animales (PDF)](https://storage.googleapis.com/static-fedegan/SIG/Metadatos/DG-11-Estructura-cuadro-salida-PM-Segun-tamano-de-predio-animales-V6.pdf)"
+    },
+    {
+     "t": "li",
+     "text": "[PM Predios y población bufalina por sexo y categorías de edad (PDF)](https://storage.googleapis.com/static-fedegan/SIG/Metadatos/DG-11-Estructura-cuadro-de-salida-PM-Bufalinos-Sexo-y-Edad-V7.pdf)"
+    },
+    {
+     "t": "li",
+     "text": "[Cobertura de vacunación de fiebre aftosa (PDF)](https://storage.googleapis.com/static-fedegan/SIG/Metadatos/DG-11-Estructura-cuadro-de-salida-Cobertura-FA-V6.pdf)"
+    },
+    {
+     "t": "li",
+     "text": "[Series Históricas (PDF)](https://storage.googleapis.com/static-fedegan/SIG/Metadatos/DG-11-Estructura-cuadro-de-salida-Series-Historicas-V5.pdf)"
+    },
+    {
+     "t": "li",
+     "text": "[Tasa de Imputación (PDF)](https://storage.googleapis.com/static-fedegan/SIG/Metadatos/Formula-Tasa-imputacion.pdf)"
+    },
+    {
+     "t": "li",
+     "text": "[Tasa de Imputación (PDF)](https://storage.googleapis.com/static-fedegan/SIG/Metadatos/Analisis-proceso-Imputacion-Poblacion-Marco-Marzo-23.pdf)"
     }
    ],
    "sections": [
@@ -6242,180 +6428,637 @@
      "text": "**Indicadores Estadísticos**"
     },
     {
-     "t": "embed",
-     "text": "https://storage.googleapis.com/static-fedegan/SIG/Indicadores-Estadisticos/tabla-indicadores-estadisticos-19082025v2.html"
+     "t": "li",
+     "text": "[Tasa de Imputación Predios y animales por Departamentos y Municipios (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Indicadores-Estadisticos/Imputacion-Depto-Municipios-1-2019-1-2026.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Tasa de Imputación Predios y animales por Departamentos y Municipios (PDF)](https://storage.googleapis.com/static-fedegan/SIG/Metadatos/Analisis-proceso-Imputacion-Poblacion-Marco-Marzo-23.pdf)"
+    },
+    {
+     "t": "li",
+     "text": "[Participación departamental del inventario de predios ganaderos (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Indicadores-Estadisticos/1-Indicador-Participacion-Deptal-inventario-predios-ganaderos_1_2026.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Participación departamental del inventario bovino y bufalino (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Indicadores-Estadisticos/2-Indicador-Participacion-Deptal-inventario-bovino-bufalino_1_2026.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Participación municipal del inventario de predios ganaderos (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Indicadores-Estadisticos/3-Indicador-Participacion-Municipal-inventario-predios-ganaderos_1_2026.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Participación municipal del inventario Animales (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Indicadores-Estadisticos/4-Indicador-Participacion-Municipal-inventario-animales_1_2026.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Participación categoría de edad del inventario bovino (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Indicadores-Estadisticos/5-Indicador-Participacion-Categoria-Edad-bovinos_1_2026.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Participación categoría de edad del inventario bufalino (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Indicadores-Estadisticos/6-Indicador-Participacion-Categoria-Edad-bufalinos_1_2026.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Participación tamaño de predio según número de animales (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Indicadores-Estadisticos/7-Indicador-Poblacion-Marco-Segun-tamano-predio-numero-animales_1_2026.xlsx)"
     },
     {
      "t": "h2",
      "text": "**Ciclo I de 2026**"
     },
     {
-     "t": "embed",
-     "text": "https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2026/tabla-datos-indicadores-ciclo-I-2026.html"
+     "t": "li",
+     "text": "[Inventario bovino y bufalino — Cuadro de salida (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2026/Cuadro%201.%20Inventario%20Bovino%20y%20Bufalino.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Inventario bovino y bufalino — Instructivo (Word)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2026/Instructivo-Cuadro1_1_2026.docx)"
+    },
+    {
+     "t": "li",
+     "text": "[Cobertura de Vacunación de Fiebre Aftosa por desagregación geográfica predios y animales — Cuadro de salida (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2026/Cuadro%202.%20Cobertura%20de%20Vacunacio%CC%81n%20de%20Fiebre%20Aftosa.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Cobertura de Vacunación de Fiebre Aftosa por desagregación geográfica predios y animales — Instructivo (Word)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2026/Instructivo-Cuadro2_1_2026%20.docx)"
+    },
+    {
+     "t": "li",
+     "text": "[Población Marco final: Población bovina por sexo y categorías de edad por desagregación geográfica departamentos y municipios — Cuadro de salida (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2026/Cuadro%203.%20Poblacio%CC%81n%20Marco%20final_%20Poblacio%CC%81n%20bovina%20por%20sexo%20y%20categori%CC%81as%20de%20edad%20por%20desagregacio%CC%81n%20geogra%CC%81fica%20departamentos.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Población Marco final: Población bovina por sexo y categorías de edad por desagregación geográfica departamentos y municipios — Instructivo (Word)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2026/Instructivo-Cuadro3_1_2026%20.docx)"
+    },
+    {
+     "t": "li",
+     "text": "[Población Marco final: Población bufalina por sexo y categorías de edad por desagregación geográfica departamentos y municipios — Cuadro de salida (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2026/Cuadro%204.%20Poblacio%CC%81n%20Marco%20final_%20Poblacio%CC%81n%20bufalina%20por%20sexo%20y%20categori%CC%81as%20de%20edad%20por%20desagregacio%CC%81n%20geogra%CC%81fica%20departamento.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Población Marco final: Población bufalina por sexo y categorías de edad por desagregación geográfica departamentos y municipios — Instructivo (Word)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2026/Instructivo-Cuadro4_1_2026%20.docx)"
+    },
+    {
+     "t": "li",
+     "text": "[Población Marco final: Según tamaño de predio por el número de animales por desagregación geográfica departamentos y municipios — Cuadro de salida (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2026/Cuadro%205.%20Poblacio%CC%81n%20Marco%20final_%20Segu%CC%81n%20taman%CC%83o%20de%20predio%20por%20el%20nu%CC%81mero%20de%20animales%20por%20desagregacio%CC%81n%20geogra%CC%81fica%20departamento.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Población Marco final: Según tamaño de predio por el número de animales por desagregación geográfica departamentos y municipios — Instructivo (Word)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2026/Instructivo-Cuadro5_1_2026%20.docx)"
     },
     {
      "t": "h4",
      "text": "Escuche el Resultado de las cifras del Inventario Bovino y Bufalino Ciclo I - 2026"
     },
     {
+     "t": "li",
+     "text": "[Escuchar el resultado](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2026/Audio%20cifras%201-2026.mp3)"
+    },
+    {
      "t": "h2",
      "text": "**Ciclo II de 2025**"
     },
     {
-     "t": "embed",
-     "text": "https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2025/tabla-datos-indicadores-ciclo-2-2025v2.html"
+     "t": "li",
+     "text": "[Inventario bovino y bufalino — Cuadro de salida (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2025/Cuadro-1-Inventario-Bovino-y-Bufalino.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Inventario bovino y bufalino — Instructivo (Word)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2025/Instructivo-Cuadro1-2-2025.docx)"
+    },
+    {
+     "t": "li",
+     "text": "[Cobertura de Vacunación de Fiebre Aftosa por desagregación geográfica predios y animales — Cuadro de salida (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2025/Cuadro-2-Cobertura-de-Vacunacion-de-Fiebre-Aftosa.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Cobertura de Vacunación de Fiebre Aftosa por desagregación geográfica predios y animales — Instructivo (Word)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2025/Instructivo-Cuadro2-2-2025.docx)"
+    },
+    {
+     "t": "li",
+     "text": "[Población Marco final: Población bovina por sexo y categorías de edad por desagregación geográfica departamentos y municipios — Cuadro de salida (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2025/Cuadro-3-Poblacion-Marco-final-Poblacion-bovina-por-sexo-y-categorias-de-edad-por-desagregacion-geografica-departamentos.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Población Marco final: Población bovina por sexo y categorías de edad por desagregación geográfica departamentos y municipios — Instructivo (Word)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2025/Instructivo-Cuadro3-2-2025.docx)"
+    },
+    {
+     "t": "li",
+     "text": "[Población Marco final: Según tamaño de predio por el número de animales por desagregación geográfica departamentos y municipios — Cuadro de salida (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2025/Cuadro%205.0%20Poblacio%CC%81n%20Marco%20final_%20Segu%CC%81n%20taman%CC%83o%20de%20predio%20por%20el%20nu%CC%81mero%20de%20animales%20por%20desagregacio%CC%81n%20geogra%CC%81fica%20departamento.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Población Marco final: Según tamaño de predio por el número de animales por desagregación geográfica departamentos y municipios — Instructivo (Word)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2025/Instructivo-Cuadro5-2-2025.docx)"
     },
     {
      "t": "h4",
      "text": "Escuche el Resultado de las cifras del Inventario Bovino y Bufalino Ciclo II - 2025"
     },
     {
+     "t": "li",
+     "text": "[Escuchar el resultado](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2025/Resultados-Ciclo-2-2025.mp3)"
+    },
+    {
      "t": "h2",
      "text": "**Ciclo I de 2025**"
     },
     {
-     "t": "embed",
-     "text": "https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2025/tabla-datos-indicadores-ciclo-1-2025-08152025.html"
+     "t": "li",
+     "text": "[Inventario bovino y bufalino — Cuadro de salida (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2025/Cuadro-1-Inventario-Bovino-y-Bufalino.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Inventario bovino y bufalino — Instructivo (Word)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2025/Instructivo-Cuadro1-1-2025.docx)"
+    },
+    {
+     "t": "li",
+     "text": "[Cobertura de Vacunación de Fiebre Aftosa por desagregación geográfica predios y animales — Cuadro de salida (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2025/Cuadro-2-Cobertura-de-Vacunacion-de-Fiebre-Aftosa.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Cobertura de Vacunación de Fiebre Aftosa por desagregación geográfica predios y animales — Instructivo (Word)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2025/Instructivo-Cuadro2-1-2025.docx)"
+    },
+    {
+     "t": "li",
+     "text": "[Población Marco final: Población bovina por sexo y categorías de edad por desagregación geográfica departamentos y municipios — Cuadro de salida (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2025/Cuadro-3-Poblacion-Marco-final-Poblacion-bovina-por-sexo-y-categorias-de-edad-por-desagregacion-geografica-departamentos-.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Población Marco final: Población bovina por sexo y categorías de edad por desagregación geográfica departamentos y municipios — Instructivo (Word)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2025/Instructivo-Cuadro3-1-2025.docx)"
+    },
+    {
+     "t": "li",
+     "text": "[Población Marco final: Según tamaño de predio por el número de animales por desagregación geográfica departamentos y municipios — Cuadro de salida (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2025/Cuadro-5-Poblacion-Marco-final-Segun-tamano-de-predio-por-el-numero-de-animales-por-desagregacion-geografica-departamento.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Población Marco final: Según tamaño de predio por el número de animales por desagregación geográfica departamentos y municipios — Instructivo (Word)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2025/Instructivo-Cuadro5-1-2025.docx)"
     },
     {
      "t": "h4",
      "text": "Escuche el Resultado de las cifras del Inventario Bovino y Bufalino Ciclo I - 2025"
     },
     {
+     "t": "li",
+     "text": "[Escuchar el resultado](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2025/Resultados-Ciclo-1-2025.mp3)"
+    },
+    {
      "t": "h2",
      "text": "**Ciclo II de 2024**"
     },
     {
-     "t": "embed",
-     "text": "https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2024/tabla-datos-indicadores-ciclo-2-2024-02162025.html"
+     "t": "li",
+     "text": "[Inventario bovino y bufalino — Cuadro de salida (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2024/Cuadro-1-Inventario-Bovino-y-Bufalino.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Inventario bovino y bufalino — Instructivo (Word)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2024/Instructivo-Cuadro1_2_2024.docx)"
+    },
+    {
+     "t": "li",
+     "text": "[Cobertura de Vacunación de Fiebre Aftosa por desagregación geográfica predios y animales — Cuadro de salida (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2024/Cuadro-2-Cobertura-de-Vacunacion-de-Fiebre-Aftosa.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Cobertura de Vacunación de Fiebre Aftosa por desagregación geográfica predios y animales — Instructivo (Word)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2024/Instructivo-Cuadro2_2_2024.docx)"
+    },
+    {
+     "t": "li",
+     "text": "[Población Marco final: Población bovina por sexo y categorías de edad por desagregación geográfica departamentos y municipios — Cuadro de salida (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2024/Cuadro-3-Poblacion-Marco-final-Poblacion-bovina-por-sexo-y-categorias-de-edad-por-desagregacion-geografica-departamentos-y-municipios.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Población Marco final: Población bovina por sexo y categorías de edad por desagregación geográfica departamentos y municipios — Instructivo (Word)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2024/Instructivo-Cuadro3_2_2024.docx)"
+    },
+    {
+     "t": "li",
+     "text": "[Población Marco final: Según tamaño de predio por el número de animales por desagregación geográfica departamentos y municipios — Cuadro de salida (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2024/Cuadro-5-Poblacion-Marco-final-Segun-tamano-de-predio-por-el-numero-de-animales-por-desagregacion-geografica-departamentos-y-municipios.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Población Marco final: Según tamaño de predio por el número de animales por desagregación geográfica departamentos y municipios — Instructivo (Word)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2024/Instructivo-Cuadro5_2_2024.docx)"
     },
     {
      "t": "h4",
      "text": "Escuche el Resultado de las cifras del Inventario Bovino y Bufalino Ciclo II-2024"
     },
     {
+     "t": "li",
+     "text": "[Escuchar el resultado](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2024/Resultados-de-las-cifras-del-Inventario-Bovino-y-Bufalino-Ciclo-II-2024.mp3)"
+    },
+    {
      "t": "h2",
      "text": "**Ciclo I de 2024**"
     },
     {
-     "t": "embed",
-     "text": "https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2024/tabla-datos-indicadores-ciclo-1-2024-23092024.html"
+     "t": "li",
+     "text": "[Inventario bovino y bufalino — Cuadro de salida (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2024/Cuadro-1-Inventario-Bovino-y-Bufalino.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Inventario bovino y bufalino — Instructivo (Word)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2024/Instructivo-Cuadro1_1_2024.docx)"
+    },
+    {
+     "t": "li",
+     "text": "[Cobertura de Vacunación de Fiebre Aftosa por desagregación geográfica predios y animales — Cuadro de salida (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2024/Cuadro-2-Cobertura-de-Vacunacion-de-Fiebre-Aftosa.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Cobertura de Vacunación de Fiebre Aftosa por desagregación geográfica predios y animales — Instructivo (Word)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2024/Instructivo-Cuadro2_1_2024.docx)"
+    },
+    {
+     "t": "li",
+     "text": "[Población Marco final: Población bovina por sexo y categorías de edad por desagregación geográfica departamentos y municipios — Cuadro de salida (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2024/Cuadro-3-Poblacion-Marco-final-Poblacion-bovina-por-sexo-y-categorias-de-edad-por-desagregaci.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Población Marco final: Población bovina por sexo y categorías de edad por desagregación geográfica departamentos y municipios — Instructivo (Word)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2024/Instructivo-Cuadro3_1_2024.docx)"
+    },
+    {
+     "t": "li",
+     "text": "[Población Marco final: Según tamaño de predio por el número de animales por desagregación geográfica departamentos y municipios — Cuadro de salida (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2024/Cuadro-5-Poblacion-Marco-final-Segun-tamano-de-predio-por-el-numero-de-animales-por-desagrega.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Población Marco final: Según tamaño de predio por el número de animales por desagregación geográfica departamentos y municipios — Instructivo (Word)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2024/Instructivo-Cuadro5_1_2024.docx)"
     },
     {
      "t": "h4",
      "text": "Escuche el Resultado de las cifras del Inventario Bovino y Bufalino Ciclo I - 2024"
     },
     {
+     "t": "li",
+     "text": "[Escuchar el resultado](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2024/Resultados-de-las-cifras-del-Inventario-Bovino-y-Bufalino-Ciclo-I-2024.mp3)"
+    },
+    {
      "t": "h2",
      "text": "**Ciclo II de 2023**"
     },
     {
-     "t": "embed",
-     "text": "https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2023/tabla-datos-indicadores-ciclo-2-2023-10042024.html"
+     "t": "li",
+     "text": "[Inventario bovino y bufalino — Cuadro de salida (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2023/Cuadro-1-Inventario-Bovino-Bufalino-C2-2023.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Inventario bovino y bufalino — Instructivo (Word)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2023/Instructivo-Cuadro1_2_2023.docx)"
+    },
+    {
+     "t": "li",
+     "text": "[Cobertura de Vacunación de Fiebre Aftosa por desagregación geográfica predios y animales — Cuadro de salida (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2023/Cuadro-2-Cobertura-Vacunacion-Fiebre-Aftosa-C2-2023.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Cobertura de Vacunación de Fiebre Aftosa por desagregación geográfica predios y animales — Instructivo (Word)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2023/Instructivo-Cuadro2_2_2023.docx)"
+    },
+    {
+     "t": "li",
+     "text": "[Población Marco final: Población bovina por sexo y categorías de edad por desagregación geográfica departamentos y municipios — Cuadro de salida (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2023/Cuadro-3-Poblacion-Marcofinal-Pob-bovina-sexo-categorias-edad-desagr-geo.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Población Marco final: Población bovina por sexo y categorías de edad por desagregación geográfica departamentos y municipios — Instructivo (Word)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2023/Instructivo-Cuadro3_2_2023.docx)"
+    },
+    {
+     "t": "li",
+     "text": "[Población Marco final: Según tamaño de predio por el número de animales por desagregación geográfica departamentos y municipios — Cuadro de salida (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2023/Cuadro-5-Poblacion-Marcofinal-tamano-predio-numero-animales-desagr-geo.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Población Marco final: Según tamaño de predio por el número de animales por desagregación geográfica departamentos y municipios — Instructivo (Word)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2023/Instructivo-Cuadro5_2_2023.docx)"
     },
     {
      "t": "h2",
      "text": "**Ciclo I de 2023**"
     },
     {
-     "t": "embed",
-     "text": "https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2023/tabla-datos-indicadores-ciclo-1-2023-10042024.html"
+     "t": "li",
+     "text": "[Inventario bovino y bufalino — Cuadro de salida (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2023/Cuadro-1-Inventario-Bovino-Bufalino.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Inventario bovino y bufalino — Instructivo (Word)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2023/Instructivo-Cuadro1.docx)"
+    },
+    {
+     "t": "li",
+     "text": "[Cobertura de Vacunación de Fiebre Aftosa por desagregación geográfica predios y animales — Cuadro de salida (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2023/Cuadro-2-Cobertura-Vacunacion-Fiebre-Aftosa.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Cobertura de Vacunación de Fiebre Aftosa por desagregación geográfica predios y animales — Instructivo (Word)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2023/Instructivo-Cuadro2.docx)"
+    },
+    {
+     "t": "li",
+     "text": "[Población Marco final: Población bovina por sexo y categorías de edad por desagregación geográfica departamentos y municipios — Cuadro de salida (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2023/Cuadro3-PM-final-Poblacion-bovina-por-sexo-y-categorias-de-edad.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Población Marco final: Población bovina por sexo y categorías de edad por desagregación geográfica departamentos y municipios — Instructivo (Word)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2023/Instructivo-Cuadro3.docx)"
+    },
+    {
+     "t": "li",
+     "text": "[Población Marco final: Según tamaño de predio por el número de animales por desagregación geográfica departamentos y municipios — Cuadro de salida (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2023/Cuadro-5-PM-final-Segun-tamano-de-predio-por-el-numero-de-animales.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Población Marco final: Según tamaño de predio por el número de animales por desagregación geográfica departamentos y municipios — Instructivo (Word)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2023/Instructivo-Cuadro5.docx)"
     },
     {
      "t": "h2",
      "text": "**Ciclo II de 2022**"
     },
     {
-     "t": "embed",
-     "text": "https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2022/tabla-datos-indicadores-ciclo-2-2022-10042024.html"
+     "t": "li",
+     "text": "[Inventario bovino y bufalino — Cuadro de salida (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2022/Cuadro1-Inventario-Bovino-Bufalino.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Inventario bovino y bufalino — Instructivo (Word)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2022/Instructivo-Cuadro1-Inventario-bovino-y-bufalino.docx)"
+    },
+    {
+     "t": "li",
+     "text": "[Cobertura de Vacunación de Fiebre Aftosa por desagregación geográfica predios y animales — Cuadro de salida (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2022/Cuadro2-Cobertura-vacunacion-fiebre-aftosa-desagregacion-geografica-predios-y-animales.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Cobertura de Vacunación de Fiebre Aftosa por desagregación geográfica predios y animales — Instructivo (Word)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2022/Instructivo-Cuadro2-Cobertura-Vacunacion-Fiebre-Aftosa-desagregacion-geografica.docx)"
+    },
+    {
+     "t": "li",
+     "text": "[Población Marco final: Población bovina por sexo y categorías de edad por desagregación geográfica departamentos y municipios — Cuadro de salida (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2022/Cuadro3-Poblacion-Marco-final-Poblacion-bovina-por-sexo-categorias-edad-desagregacion.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Población Marco final: Población bovina por sexo y categorías de edad por desagregación geográfica departamentos y municipios — Instructivo (Word)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2022/Instructivo-Cuadro3-Poblacion-Marco-final-Poblacion-bovina-por-sexo-y-categorias-de-edad.docx)"
+    },
+    {
+     "t": "li",
+     "text": "[Población Marco final: Según tamaño de predio por el número de animales por desagregación geográfica departamentos y municipios — Cuadro de salida (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2022/Cuadro5-Poblacion-Marco-final-Segun-tamano-predio-por-numero-animales-desagregacion.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Población Marco final: Según tamaño de predio por el número de animales por desagregación geográfica departamentos y municipios — Instructivo (Word)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2022/Instructivo-Cuadro5-Poblacion-Marco-final-Segun-tamano-de-predio-por-el-numero-de-animales.docx)"
     },
     {
      "t": "h2",
      "text": "**Ciclo I de 2022**"
     },
     {
-     "t": "embed",
-     "text": "https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2022/tabla-datos-indicadores-ciclo-1-2022-10042024.html"
+     "t": "li",
+     "text": "[Inventario bovino y bufalino — Cuadro de salida (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2022/Cuadro1-Inventario-Bovino-y-Bufalino.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Inventario bovino y bufalino — Instructivo (PDF)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2022/Instructivo-Cuadro1-Inventario-bovino-y-bufalino.pdf)"
+    },
+    {
+     "t": "li",
+     "text": "[Cobertura de Vacunación de Fiebre Aftosa por desagregación geográfica predios y animales — Cuadro de salida (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2022/Cuadro2-Cobertura-de-Vacunacion-de-Fiebre-Aftosa.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Cobertura de Vacunación de Fiebre Aftosa por desagregación geográfica predios y animales — Instructivo (PDF)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2022/Instructivo-Cuadro2-Cobertura-de-Vacunacion-de-Fiebre-Aftosa-por-desagregacion-geografica.pdf)"
+    },
+    {
+     "t": "li",
+     "text": "[Población Marco final: Población bovina por sexo y categorías de edad por desagregación geográfica departamentos y municipios — Cuadro de salida (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2022/Cuadro3-Poblacion-Marco-final-Poblacion-bovina-por-sexo-y-categorias-de-edad-por-desagregacion-geografica-departamentos-y-municipios.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Población Marco final: Población bovina por sexo y categorías de edad por desagregación geográfica departamentos y municipios — Instructivo (PDF)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2022/Instructivo-Cuadro3-Poblacion-Marco-final-Poblacion-bovina-por-sexo-y-categorias-de-edad.pdf)"
+    },
+    {
+     "t": "li",
+     "text": "[Población Marco final: Población bufalina por sexo y categorías de edad por desagregación geográfica departamentos y municipios — Instructivo (PDF)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2022/Instructivo-Cuadro4-Poblacion-Marco-final-Poblacion-bufalina-por-sexo-y-categorias-de-edad.pdf)"
+    },
+    {
+     "t": "li",
+     "text": "[Población Marco final: Según tamaño de predio por el número de animales por desagregación geográfica departamentos y municipios — Cuadro de salida (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2022/Cuadro5-Poblacion-Marco-final-Segun-tamano-de-predio-por-el-numero-de-animales-por-desagregacion-geografica-departamentos-y-municipios.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Población Marco final: Según tamaño de predio por el número de animales por desagregación geográfica departamentos y municipios — Instructivo (PDF)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2022/Instructivo-Cuadro5-Poblacion-Marco-final-Segun-tamano-de-predio-por-el-numero-de-animales.pdf)"
     },
     {
      "t": "h2",
      "text": "**Ciclo II de 2021**"
     },
     {
-     "t": "embed",
-     "text": "https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2021/tabla-datos-indicadores-ciclo-2-2021-10042024.html"
+     "t": "li",
+     "text": "[Inventario bovino y bufalino — Cuadro de salida (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2021/Cuadro1-Inventario-Bovino-y-Bufalino.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Inventario bovino y bufalino — Instructivo (PDF)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2021/Instructivo-Cuadro1-Inventario-bovino-y-bufalino.pdf)"
+    },
+    {
+     "t": "li",
+     "text": "[Cobertura de Vacunación de Fiebre Aftosa por desagregación geográfica predios y animales — Cuadro de salida (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2021/Cuadro2-Cobertura-de-Vacunacion-de-Fiebre-Aftosa.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Cobertura de Vacunación de Fiebre Aftosa por desagregación geográfica predios y animales — Instructivo (PDF)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2021/Instructivo-Cuadro2-Cobertura-de-Vacunacion-de-Fiebre-Aftosa-por-desagregacion-geografica.pdf)"
+    },
+    {
+     "t": "li",
+     "text": "[Población Marco final: Población bovina por sexo y categorías de edad por desagregación geográfica departamentos y municipios — Cuadro de salida (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2021/Cuadro3-Poblacion-Marco-final-Poblacion-bovina-por-sexo-y-categorias-de-edad-por-desagregacion-geografica-departamentos-y-municipios.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Población Marco final: Población bovina por sexo y categorías de edad por desagregación geográfica departamentos y municipios — Instructivo (PDF)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2021/Instructivo-Cuadro3-Poblacion-Marco-final-Poblacion-bovina-por-sexo-y-categorias-de-edad.pdf)"
+    },
+    {
+     "t": "li",
+     "text": "[Población Marco final: Según tamaño de predio por el número de animales por desagregación geográfica departamentos y municipios — Cuadro de salida (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2021/Cuadro5-PM-final-Segun-tamano-de-predio-por-el-numero-de-animales-por-departamentos-y-municipios.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Población Marco final: Según tamaño de predio por el número de animales por desagregación geográfica departamentos y municipios — Instructivo (PDF)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2021/Instructivo-Cuadro5-Poblacion-Marco-final-Segun-tamano-de-predio-por-el-numero-de-animales.pdf)"
     },
     {
      "t": "h2",
      "text": "**Ciclo I de 2021**"
     },
     {
-     "t": "embed",
-     "text": "https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2021/tabla-datos-indicadores-ciclo-1-2021-10042024.html"
+     "t": "li",
+     "text": "[Inventario bovino y bufalino — Cuadro de salida (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2021/Cuadro1-Inventario-Bovino-y-Bufalino.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Inventario bovino y bufalino — Instructivo (PDF)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2021/Instructivo-Cuadro1-Inventario-bovino-y-bufalino.pdf)"
+    },
+    {
+     "t": "li",
+     "text": "[Cobertura de Vacunación de Fiebre Aftosa por desagregación geográfica predios y animales — Cuadro de salida (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2021/Cuadro2-Cobertura-de-Vacunacion-de-Fiebre-Aftosa-por-desagregacion-geografica.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Cobertura de Vacunación de Fiebre Aftosa por desagregación geográfica predios y animales — Instructivo (PDF)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2021/Instructivo-Cuadro2-Cobertura-de-Vacunacion-de-Fiebre-Aftosa-por-desagregacion-geografica.pdf)"
+    },
+    {
+     "t": "li",
+     "text": "[Población Marco final: Población bovina por sexo y categorías de edad por desagregación geográfica departamentos y municipios — Cuadro de salida (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2021/Cuadro3-Poblacion-Marco-final-Poblacion-bovina-por-sexo-y-categorias-de-edad-por-desagregacion-geografica-departamentos-y-municipios.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Población Marco final: Población bovina por sexo y categorías de edad por desagregación geográfica departamentos y municipios — Instructivo (PDF)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2021/Instructivo-Cuadro3-Poblacion-Marco-final-Predios-y-poblacion-bovina-por-sexo-y-categorias-de-edad.pdf)"
+    },
+    {
+     "t": "li",
+     "text": "[Población Marco final: Según tamaño de predio por el número de animales por desagregación geográfica departamentos y municipios — Cuadro de salida (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2021/Cuadro5-Poblacion-Marco-final-Segun-tamano-de-predio-por-el-numero-de-animales.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Población Marco final: Según tamaño de predio por el número de animales por desagregación geográfica departamentos y municipios — Instructivo (PDF)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2021/Instructivo-Cuadro5-Poblacion-Marco-final-Segun-tamano-de-predio-por-el-numero-de-animales.pdf)"
     },
     {
      "t": "h2",
      "text": "**Ciclo II de 2020**"
     },
     {
-     "t": "embed",
-     "text": "https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2020/tabla-datos-indicadores-ciclo-II-2020-10042024.html"
+     "t": "li",
+     "text": "[Inventario bovino y bufalino — Cuadro de salida (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2020/Cuadro1-Inventario-Bovino-y-Bufalino.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Inventario bovino y bufalino — Instructivo (PDF)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2020/Instructivo-Cuadro1-Inventario-bovino-y-bufalino.pdf)"
+    },
+    {
+     "t": "li",
+     "text": "[Cobertura de Vacunación de Fiebre Aftosa por desagregación geográfica predios y animales — Cuadro de salida (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2020/Cuadro2-Cobertura-de-Vacunacion-de-Fiebre-Aftosa-por-desagregacion-geografica.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Cobertura de Vacunación de Fiebre Aftosa por desagregación geográfica predios y animales — Instructivo (PDF)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2020/Instructivo-Cuadro2-Cobertura-de-Vacunacion-de-Fiebre-Aftosa-por-desagregacion-geografica.pdf)"
+    },
+    {
+     "t": "li",
+     "text": "[Población Marco final: Población bovina por sexo y categorías de edad por desagregación geográfica departamentos y municipios — Cuadro de salida (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2020/Cuadro3-Poblacion-Marco-final-Poblacion-bovina-por-sexo-y-categorias-de-edad-por-desagregacion-geografica-departamentos-y-municipios.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Población Marco final: Población bovina por sexo y categorías de edad por desagregación geográfica departamentos y municipios — Instructivo (PDF)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2020/Instructivo-Cuadro-3-Poblacion-Marco-final-Predios-poblacion-bovina-por-sexo-categorias-edad.pdf)"
+    },
+    {
+     "t": "li",
+     "text": "[Población Marco final: Según tamaño de predio por el número de animales por desagregación geográfica departamentos y municipios — Cuadro de salida (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2020/Cuadro5-Poblacion-Marco-final-Segun-tamano-predio-por-numero-animales.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Población Marco final: Según tamaño de predio por el número de animales por desagregación geográfica departamentos y municipios — Instructivo (PDF)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2020/Instructivo-Cuadro-5-Poblacion-Marco-final-Segun-tamano-predio-por-numero-animales.pdf)"
     },
     {
      "t": "h2",
      "text": "**Ciclo I de 2020**"
     },
     {
-     "t": "embed",
-     "text": "https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2020/tabla-datos-indicadores-ciclo-I-2020-03042024.html"
+     "t": "li",
+     "text": "[Inventario bovino y bufalino — Cuadro de salida (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2020/Cuadro1-Inventario-Bovino-y-Bufalino.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Inventario bovino y bufalino — Instructivo (PDF)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2020/Instructivo-Cuadro1-Inventario-bovino-y-bufalino.pdf)"
+    },
+    {
+     "t": "li",
+     "text": "[Cobertura de Vacunación de Fiebre Aftosa por desagregación geográfica predios y animales — Cuadro de salida (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2020/Cuadro2-Cobertura-de-Vacunacion-de-Fiebre-Aftosa-por-desagregacion-geografica.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Cobertura de Vacunación de Fiebre Aftosa por desagregación geográfica predios y animales — Instructivo (PDF)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2020/Instructivo-Cuadro2-Cobertura-de-Vacunacion-de-Fiebre-Aftosa-por-desagregacion-geografica.pdf)"
+    },
+    {
+     "t": "li",
+     "text": "[Población Marco final: Población bovina por sexo y categorías de edad por desagregación geográfica departamentos y municipios — Cuadro de salida (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2020/Cuadro3-Poblacion-Marco-final-Poblacion-bovina-por-sexo-y-categorias-de-edad-por-desagregacion-geografica-departamentos-y-municipios.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Población Marco final: Población bovina por sexo y categorías de edad por desagregación geográfica departamentos y municipios — Instructivo (PDF)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2020/Instructivo-Cuadro3-Poblacion-Marco-final-Predios-y-poblacion-bovina-por-sexo-y-categorias-de-edad.pdf)"
+    },
+    {
+     "t": "li",
+     "text": "[Población Marco final: Según tamaño de predio por el número de animales por desagregación geográfica departamentos y municipios — Cuadro de salida (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2020/Cuadro5-Poblacion-Marco-final-Segun-tamano-de-predio-por-el-numero-de-animales.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Población Marco final: Según tamaño de predio por el número de animales por desagregación geográfica departamentos y municipios — Instructivo (PDF)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2020/Instructivo-Cuadro5-Poblacion-Marco-final-Segun-tamano-de-predio-por-el-numero-de-animales.pdf)"
     },
     {
      "t": "h2",
      "text": "**Ciclo II de 2019**"
     },
     {
-     "t": "embed",
-     "text": "https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2019/tabla-datos-indicadores-ciclo-II-2019-03042024.html"
+     "t": "li",
+     "text": "[Inventario bovino y bufalino — Cuadro de salida (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2019/Cuadro1-Inventario-Bovino-y-Bufalino.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Inventario bovino y bufalino — Instructivo (PDF)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2019/Instructivo-Cuadro1-Inventario-bovino-y-bufalino.pdf)"
+    },
+    {
+     "t": "li",
+     "text": "[Cobertura de Vacunación de Fiebre Aftosa por desagregación geográfica predios y animales — Cuadro de salida (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2019/Cuadro2-Cobertura-de-Vacunacion-de-Fiebre-Aftosa-por-desagregacion-geografica.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Cobertura de Vacunación de Fiebre Aftosa por desagregación geográfica predios y animales — Instructivo (PDF)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2019/Instructivo-Cuadro2-Cobertura-de-Vacunacion-de-Fiebre-Aftosa-por-desagregacion-geografica.pdf)"
+    },
+    {
+     "t": "li",
+     "text": "[Población Marco final: Población bovina por sexo y categorías de edad por desagregación geográfica departamentos y municipios — Cuadro de salida (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2019/Cuadro3-Poblacion-Marco-final-Poblacion-bovina-por-sexo-y-categorias-de-edad-por-desagregacion-geografica-departamentos-y-municipios.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Población Marco final: Población bovina por sexo y categorías de edad por desagregación geográfica departamentos y municipios — Instructivo (PDF)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2019/Instructivo-Cuadro3-Poblacion-Marco-final-Predios-y-poblacion-bovina-por-sexo-y-categorias-de-edad.pdf)"
+    },
+    {
+     "t": "li",
+     "text": "[Población Marco final: Según tamaño de predio por el número de animales por desagregación geográfica departamentos y municipios — Cuadro de salida (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2019/Cuadro5-Poblacion-Marco-final-Segun-tamano-de-predio-por-el-numero-de-animales.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Población Marco final: Según tamaño de predio por el número de animales por desagregación geográfica departamentos y municipios — Instructivo (PDF)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2019/Instructivo-Cuadro5-Poblacion-Marco-final-Segun-tamano-de-predio-por-el-numero-de-animales.pdf)"
     },
     {
      "t": "h2",
      "text": "**Ciclo I de 2019**"
     },
     {
-     "t": "embed",
-     "text": "https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2019/tabla-datos-indicadores-ciclo-I-2019-27032024.html"
-    },
-    {
-     "t": "p",
-     "text": "Visitas"
-    },
-    {
-     "t": "h2",
-     "text": "Documentos"
+     "t": "li",
+     "text": "[Inventario bovino y bufalino — Cuadro de salida (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2019/Cuadro1-Inventario-Bovino-y-Bufalino.xlsx)"
     },
     {
      "t": "li",
-     "text": "[Escuchar: Audio cifras 1 2026](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2026/Audio%20cifras%201-2026.mp3)"
+     "text": "[Inventario bovino y bufalino — Instructivo (PDF)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2019/Instructivo-Cuadro1-Inventario-bovino-y-bufalino.pdf)"
     },
     {
      "t": "li",
-     "text": "[Escuchar: Resultados Ciclo 2 2025](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2025/Resultados-Ciclo-2-2025.mp3)"
+     "text": "[Cobertura de Vacunación de Fiebre Aftosa por desagregación geográfica predios y animales — Cuadro de salida (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2019/Cuadro2-Cobertura-de-Vacunacion-de-Fiebre-Aftosa-por-desagregacion-geografica.xlsx)"
     },
     {
      "t": "li",
-     "text": "[Escuchar: Resultados Ciclo 1 2025](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2025/Resultados-Ciclo-1-2025.mp3)"
+     "text": "[Cobertura de Vacunación de Fiebre Aftosa por desagregación geográfica predios y animales — Instructivo (PDF)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2019/Instructivo-Cuadro2-Cobertura-de-Vacunacion-de-Fiebre-Aftosa-por-desagregacion-geografica.pdf)"
     },
     {
      "t": "li",
-     "text": "[Escuchar: Resultados de las cifras del Inventario Bovino y Bufalino Ciclo II 2024](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-II-2024/Resultados-de-las-cifras-del-Inventario-Bovino-y-Bufalino-Ciclo-II-2024.mp3)"
+     "text": "[Población Marco final: Población bovina por sexo y categorías de edad por desagregación geográfica departamentos y municipios — Cuadro de salida (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2019/Cuadro3-Poblacion-Marco-final-Poblacion-bovina-por-sexo-y-categorias-de-edad-por-desagregacion-geografica-departamentos-y-municipios.xlsx)"
     },
     {
      "t": "li",
-     "text": "[Escuchar: Resultados de las cifras del Inventario Bovino y Bufalino Ciclo I 2024](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2024/Resultados-de-las-cifras-del-Inventario-Bovino-y-Bufalino-Ciclo-I-2024.mp3)"
+     "text": "[Población Marco final: Población bovina por sexo y categorías de edad por desagregación geográfica departamentos y municipios — Instructivo (PDF)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2019/Instructivo-Cuadro3-Poblacion-Marco-final-Predios-y-poblacion-bovina-por-sexo-y-categorias-de-edad.pdf)"
+    },
+    {
+     "t": "li",
+     "text": "[Población Marco final: Según tamaño de predio por el número de animales por desagregación geográfica departamentos y municipios — Cuadro de salida (Excel)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2019/Cuadro5-Poblacion-Marco-final-Segun-tamano-de-predio-por-el-numero-de-animales.xlsx)"
+    },
+    {
+     "t": "li",
+     "text": "[Población Marco final: Según tamaño de predio por el número de animales por desagregación geográfica departamentos y municipios — Instructivo (PDF)](https://storage.googleapis.com/static-fedegan/SIG/Datos-Indicadores/Ciclo-I-2019/Instructivo-Cuadro5-Poblacion-Marco-final-Segun-tamano-de-predio-por-el-numero-de-animales.pdf)"
     }
    ],
    "sections": [
-    "pagos-y-campanas"
+    "pagos-y-campanas",
+    "sistema-integrado-de-gestion"
    ],
    "parent": "recaudo-de-la-cuota-de-fomento-ganadero-y-lechero"
   },
@@ -13483,7 +14126,8 @@
     }
    ],
    "sections": [
-    "pagos-y-campanas"
+    "pagos-y-campanas",
+    "fng"
    ]
   },
   "tablas-de-retencion-0": {
@@ -13814,7 +14458,8 @@
     }
    ],
    "sections": [
-    "servicios-fedegan"
+    "servicios-fedegan",
+    "fng"
    ],
    "parent": "servicios"
   },
