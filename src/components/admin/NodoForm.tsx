@@ -1,9 +1,11 @@
 "use client";
 
-import { useActionState, useRef } from "react";
+import { useActionState, useMemo, useRef, useState } from "react";
 import { useFormStatus } from "react-dom";
 import { CheckCircle2, Loader2, XCircle } from "lucide-react";
 import { editarNodo, type NodoState } from "@/lib/cms/nodos-actions";
+import { LegacyContent } from "@/components/legacy/LegacyContent";
+import { textToBlocks } from "@/lib/cms/paginas-texto";
 import { RedactarIA, type OpcionIA } from "./RedactarIA";
 import { DocumentosPanel } from "./DocumentosPanel";
 
@@ -11,7 +13,7 @@ function Guardar({ writable }: { writable: boolean }) {
   const { pending } = useFormStatus();
   return (
     <button type="submit" disabled={pending || !writable} className="ad-btn ad-btn-primary">
-      {pending ? <Loader2 size={16} className="animate-spin" /> : null} {pending ? "Guardando…" : "Guardar cambios"}
+      {pending ? <Loader2 size={16} className="animate-spin" /> : null} {pending ? "Publicando…" : "Publicar cambios"}
     </button>
   );
 }
@@ -24,6 +26,8 @@ export function NodoForm({ id, label, title, href, texto, esEnlace, writable, ia
   const labelRef = useRef<HTMLInputElement>(null);
   const titleRef = useRef<HTMLInputElement>(null);
   const textoRef = useRef<HTMLTextAreaElement>(null);
+  const [borrador, setBorrador] = useState(texto);
+  const vista = useMemo(() => textToBlocks(borrador), [borrador]);
   return (
     <form action={action} className="flex flex-col gap-5">
       <input type="hidden" name="id" value={id} />
@@ -51,6 +55,7 @@ export function NodoForm({ id, label, title, href, texto, esEnlace, writable, ia
               escribir={(t) => {
                 if (!textoRef.current) return;
                 textoRef.current.value = t;
+                setBorrador(t);
                 textoRef.current.focus();
               }}
             />
@@ -64,7 +69,13 @@ export function NodoForm({ id, label, title, href, texto, esEnlace, writable, ia
           />
           <div className="flex flex-col gap-2">
             <label htmlFor="texto" className="text-sm font-semibold text-[#11271d]">Contenido</label>
-            <textarea ref={textoRef} id="texto" name="texto" defaultValue={texto} spellCheck rows={24} className="ad-input min-h-[26rem] resize-y font-mono text-[0.85rem] leading-relaxed" />
+            <textarea ref={textoRef} id="texto" name="texto" value={borrador} onChange={(e) => setBorrador(e.target.value)} spellCheck rows={24} className="ad-input min-h-[26rem] resize-y font-mono text-[0.85rem] leading-relaxed" />
+          </div>
+          <div className="flex flex-col gap-2">
+            <p className="text-sm font-semibold text-[#11271d]">Vista previa <span className="font-normal text-[#5d6e65]">· así quedará; no se publica hasta pulsar «Publicar cambios»</span></p>
+            <div className="rounded-2xl border border-dashed border-[#c9d8bf] bg-white p-5">
+              {vista.length ? <LegacyContent blocks={vista} preview /> : <p className="text-sm text-[#5d6e65]">Aún no hay contenido.</p>}
+            </div>
           </div>
         </>
       )}

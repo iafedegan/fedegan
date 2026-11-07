@@ -49,7 +49,7 @@ export function RedactarIA({
       }
       setPrevio(actual);
       escribir(r.texto);
-      setNota({ ok: true, text: `${r.aviso ? `${r.aviso} ` : ""}Listo. Revise el texto abajo y pulse «Guardar cambios» para publicarlo.` });
+      setNota({ ok: true, text: `${r.aviso ? `${r.aviso} ` : ""}Listo. Revise el texto abajo y pulse «Publicar cambios» para que quede en el sitio.` });
     });
   };
 

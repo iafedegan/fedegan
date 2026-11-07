@@ -55,6 +55,8 @@ function validarContenido(texto: string) {
   const blocks = textToBlocks(texto);
   if (blocks.length > 1500) return "La página tiene demasiados bloques.";
   const malo = blocks.find((b) => b.t === "embed" && !/^https:\/\/\S+$/.test(b.text ?? ""));
+  const boton = blocks.find((b) => b.t === "button" && !/^(https:\/\/\S+|\/[^\s/]\S*|\/)$/.test((b.text ?? "").split("|")[1] ?? ""));
+  if (boton) return `Un botón debe enlazar a https://… o a una ruta que empiece con / (revise: ${boton.text?.split("|")[0]}).`;
   return malo ? `El contenido incrustado debe ser una dirección https:// (revise: ${malo.text}).` : null;
 }
 

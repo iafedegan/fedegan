@@ -4,6 +4,8 @@
 //   ## Título        encabezado h2   (### h3, #### h4)
 //   - elemento       elemento de lista
 //   @video URL       contenido incrustado (video, documento o tablero)
+//   @boton Texto | URL   botón con enlace (https://… o /ruta)
+//   @subir Texto         botón para que el visitante cargue documentos
 //   {{tabla 1}}      una tabla de la página original (se conserva; no se edita aquí)
 //   texto            párrafo; una línea en blanco separa bloques
 //   **negrita**  y  [texto](https://enlace)  dentro de cualquier texto
@@ -13,7 +15,7 @@
 export type LegacyBlockLite = { t: string; text?: string; rows?: string[][] };
 
 const PREFIJO: Record<string, string> = { h2: "## ", h3: "### ", h4: "#### ", li: "- " };
-const ESPECIAL = /^(\\|#|-\s|@video\s|\{\{)/;
+const ESPECIAL = /^(\\|#|-\s|@video\s|@boton\s|@subir\s|\{\{)/;
 
 const esc = (linea: string) => (linea === "" ? "\\" : ESPECIAL.test(linea) ? `\\${linea}` : linea);
 const unesc = (linea: string) => (linea.startsWith("\\") ? linea.slice(1) : linea);
@@ -26,6 +28,11 @@ export function blocksToText(blocks: LegacyBlockLite[]): string {
     let s: string;
     if (b.t === "table") {
       s = `{{tabla ${++tabla}}}`;
+    } else if (b.t === "button") {
+      const [t, u] = (b.text ?? "").split("|");
+      s = `@boton ${t} | ${u ?? ""}`;
+    } else if (b.t === "upload") {
+      s = `@subir ${b.text ?? ""}`;
     } else if (b.t === "embed") {
       s = `@video ${b.text ?? ""}`;
     } else {
@@ -64,6 +71,19 @@ export function textToBlocks(texto: string, previos: LegacyBlockLite[] = []): Le
       cerrar();
       const original = tablas[Number(tabla[1]) - 1];
       if (original) out.push({ t: "table", rows: original.rows });
+      continue;
+    }
+    if (linea.startsWith("@boton ")) {
+      cerrar();
+      const [t, ...u] = linea.slice(7).split("|");
+      const url = u.join("|").trim();
+      if (t.trim() && url) out.push({ t: "button", text: `${t.trim()}|${url}` });
+      continue;
+    }
+    if (linea.startsWith("@subir ")) {
+      cerrar();
+      const t = linea.slice(7).trim();
+      if (t) out.push({ t: "upload", text: t });
       continue;
     }
     if (linea.startsWith("@video ")) {

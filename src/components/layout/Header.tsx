@@ -91,7 +91,6 @@ export function Header({ nav: mainNav }: { nav: { label: string; href: string }[
   const open = openAt === pathname;
   const [scrolled, setScrolled] = useState(false);
   const [query, setQuery] = useState("");
-  const [pillOpen, setPillOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -217,35 +216,6 @@ export function Header({ nav: mainNav }: { nav: { label: string; href: string }[
           </div>
 
           <div className="flex shrink-0 items-center gap-3">
-            {pillOpen ? (
-              <form
-                role="search"
-                onSubmit={(e) => {
-                  submitSearch(e);
-                  setPillOpen(false);
-                }}
-                className="nv-pill flex w-60 items-center gap-2 !px-4 !py-1.5"
-              >
-                <Search size={15} className="shrink-0 text-[var(--fg-lime-400)]" />
-                <input
-                  autoFocus
-                  type="search"
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  onBlur={() => !query && setPillOpen(false)}
-                  onKeyDown={(e) => e.key === "Escape" && setPillOpen(false)}
-                  placeholder="¿Qué está buscando?"
-                  aria-label="Buscar en el portal"
-                  className="min-w-0 flex-1 bg-transparent text-[0.82rem] normal-case tracking-normal outline-none placeholder:text-[var(--text-faint)] [&::-webkit-search-cancel-button]:hidden"
-                />
-              </form>
-            ) : (
-              <button type="button" onClick={() => setPillOpen(true)} className="nv-pill flex !h-9 !w-9 items-center justify-center !p-0" aria-label="Buscar" title="Buscar">
-                <Search size={16} />
-              </button>
-            )}
-            <span aria-hidden className="h-7 w-px bg-[var(--border-strong)]" />
-            <LoginMenu />
             <ThemeToggle className="!h-9 !w-9 !border-transparent hover:!border-[var(--border-strong)]" />
           </div>
         </Container>

@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Search } from "lucide-react";
 import { Container } from "@/components/ui/Container";
+import { LoginMenu } from "./LoginMenu";
 import { MastheadTools } from "./MastheadTools";
 
 // Cabecera: logo con buscador (escritorio) y, en móvil, el logo con la fecha y los accesos.
@@ -18,6 +19,7 @@ export function Masthead() {
             <input type="search" name="q" placeholder="¿Qué está buscando?" aria-label="Buscar en el portal" autoComplete="off" />
             <button type="submit" aria-label="Buscar"><Search size={18} aria-hidden /></button>
           </form>
+          <LoginMenu />
         </Container>
       </div>
       <div className="mh-mob">

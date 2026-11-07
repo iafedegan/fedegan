@@ -28,7 +28,8 @@ Formato (el portal solo entiende esto; los colores, fuentes y tamaños los aplic
 - "- elemento" para listas, un elemento por línea.
 - **negrita** para resaltar pocas palabras; [texto](https://enlace) o [texto](/ruta) para enlaces.
 - "@video https://…" en una línea sola para incrustar un video, documento o tablero, solo si el pedido trae esa dirección.
-- Si una línea de párrafo debe empezar con #, -, @video, {{ o \\, ponga una barra invertida \\ delante.
+- "@boton Texto | https://… (o /ruta)" en una línea sola crea un botón con enlace. "@subir Texto" en una línea sola crea un botón para que el visitante cargue documentos (ej.: "@subir Cargar documentos"). Úselos cuando el pedido pida botones; nunca invente la dirección de un botón.
+- Si una línea de párrafo debe empezar con #, -, @video, @boton, @subir, {{ o \\, ponga una barra invertida \\ delante.
 - No use HTML, CSS, tablas, imágenes, bloques de código, comillas de cita (>), listas numeradas con "1." ni separadores (---).
 
 Estructura sugerida

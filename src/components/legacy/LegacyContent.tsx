@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { ArrowUpRight, ExternalLink, FileText } from "lucide-react";
 import type { LegacyBlock } from "@/content/legacy";
+import { UploadDocs } from "./UploadDocs";
 import { EntryExplorer, type ExplorerEntry } from "./EntryExplorer";
 
 const TOKEN = /\*\*([^*]+)\*\*|\[([^\]]*)\]\((https?:\/\/[^)\s]+|\/[^)\s]*)\)/g;
@@ -150,7 +151,7 @@ function toExplorer(entries: Entry[]): ExplorerEntry[] {
 }
 
 // Pinta el texto copiado (títulos, párrafos, listas, tablas y tableros) con el estilo del portal.
-export function LegacyContent({ blocks, lead: allowLead = true }: { blocks: LegacyBlock[]; lead?: boolean }) {
+export function LegacyContent({ blocks, lead: allowLead = true, preview = false }: { blocks: LegacyBlock[]; lead?: boolean; preview?: boolean }) {
   const nodes: ReactNode[] = [];
   let leadDone = !allowLead;
   // Páginas con varios apartados de tercer nivel (programas, servicios…): cada apartado va en su propia ficha.
@@ -230,6 +231,25 @@ export function LegacyContent({ blocks, lead: allowLead = true }: { blocks: Lega
           </div>
         ),
       );
+      continue;
+    }
+
+    if (b.t === "button") {
+      const [label, url = "#"] = (b.text ?? "").split("|");
+      const ext = /^https?:\/\//.test(url);
+      const cls = "my-3 mr-3 inline-flex items-center gap-2 rounded-full bg-[var(--fg-lime-500)] px-5 py-2.5 text-sm font-bold text-white no-underline transition-opacity hover:opacity-90";
+      nodes.push(
+        ext ? (
+          <a key={key} href={url} target="_blank" rel="noopener noreferrer" className={cls}>{label} <ArrowUpRight size={15} /></a>
+        ) : (
+          <Link key={key} href={url} className={cls}>{label}</Link>
+        ),
+      );
+      continue;
+    }
+
+    if (b.t === "upload") {
+      nodes.push(<UploadDocs key={key} label={b.text ?? "Cargar documentos"} preview={preview} />);
       continue;
     }
 
