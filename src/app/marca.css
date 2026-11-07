@@ -292,3 +292,13 @@ section.hi-hero[data-region="hero"], .hi-hero { background: #f3f4f1 !important; 
 .mk-item i.up { color: #8fe05a; } .mk-item i.down { color: #ff8a8a; }
 @keyframes mk-run { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 @media (prefers-reduced-motion: reduce) { .mk-track { animation: none; } }
+
+/* Banner con el texto y los botones encima de la imagen */
+.hi-hero-in:has(.hi-banner) { display: grid; grid-template-columns: minmax(0, 1fr); }
+.hi-hero-in:has(.hi-banner) > * { grid-area: 1 / 1; }
+.hi-hero-in:has(.hi-banner) > :first-child:not(.hi-hero-img) { display: block; position: relative; z-index: 2; align-self: center; max-width: 36rem; padding: 2rem clamp(1.2rem, 4vw, 3.5rem); }
+.hi-hero-in:has(.hi-banner) h1, .hi-hero-in:has(.hi-banner) p { color: #fff; text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45); }
+.hi-hero-in:has(.hi-banner) h1 span { color: #b9f08f; }
+.hi-hero-img:has(.hi-banner)::after { display: block; content: ""; position: absolute; inset: 0; width: auto; z-index: 1; pointer-events: none; background: linear-gradient(90deg, rgba(8, 24, 8, 0.72), rgba(8, 24, 8, 0.25) 55%, transparent); }
+.hi-hero-img:has(.hi-banner) .hi-banner-img { max-width: none !important; min-height: 22rem; object-fit: cover; }
+.hi-hero-img:has(.hi-banner) .portada-btn { z-index: 3; }
