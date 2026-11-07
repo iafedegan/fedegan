@@ -23,11 +23,12 @@ function Boton({ href, children, cls }: { href: string; children: ReactNode; cls
 export function HeroCarousel({ initial, fallback }: { initial: Slide[]; fallback: ReactNode }) {
   const { value } = useLiveDesign<Slide[]>(initial, (d) => [d.ads.portada, ...(d.banners ?? [])].filter((b): b is Slide => Boolean(b)));
   const conf = value[0] ?? {};
-  // La diapositiva 1 (banner de portada) completa con el texto de siempre los campos que deje vacíos.
+  // La diapositiva 1 (banner de portada) usa el texto de siempre solo si no se ha escrito nada de texto en ella;
+  // en cuanto se escribe algo, lo que quede vacío no se muestra (por ejemplo, un botón sin rellenar).
   const conDefecto = (b: Slide): Slide => {
-    const out: Slide = { ...b };
-    for (const k of Object.keys(HERO_DEFAULTS) as (keyof typeof HERO_DEFAULTS)[]) if (!String(b[k] ?? "").trim()) out[k] = HERO_DEFAULTS[k];
-    return out;
+    const claves = Object.keys(HERO_DEFAULTS) as (keyof typeof HERO_DEFAULTS)[];
+    if (claves.some((k) => String(b[k] ?? "").trim())) return b;
+    return { ...b, ...HERO_DEFAULTS };
   };
   const slides = value.filter((b) => b.on !== false && b.image && (b !== value[0] || b.on)).map((b) => (b === value[0] ? conDefecto(b) : b));
   const n = slides.length;

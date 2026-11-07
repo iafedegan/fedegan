@@ -651,7 +651,7 @@ export function DesignEditor({ writable, initialPublished, initialDraft, canUndo
 
       <div className="flex flex-col gap-1.5 rounded-lg border border-[#e4e1d6] p-2.5">
         <div className="flex items-center justify-between">
-          <p className="text-xs font-bold text-[#11271d]">Diapositiva 1 <span className="font-normal text-[#5d6e65]">· los campos vacíos usan el texto de siempre</span></p>
+          <p className="text-xs font-bold text-[#11271d]">Diapositiva 1 <span className="font-normal text-[#5d6e65]">· lo que deje vacío no se muestra (si no escribe nada de texto, se usa el de siempre)</span></p>
           <label className="flex items-center gap-1.5 text-xs font-semibold"><input type="checkbox" checked={Boolean(portadaAd.on)} onChange={(e) => patchAd("portada", { on: e.target.checked })} /> Activa</label>
         </div>
         {camposDiapositiva(portadaAd, (p) => patchAd("portada", p), 1)}
