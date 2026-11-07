@@ -1,5 +1,5 @@
-import { Download, Headphones } from "lucide-react";
 import type { LegacyBlock } from "@/content/legacy";
+import { DocCard } from "./DocCard";
 
 // Listas de documentos (Excel, PDF, Word…): se muestran como tarjetas con el tipo de archivo y botones de descarga,
 // en lugar de una lista de enlaces. Si un «nombre — etiqueta» se repite (cuadro de salida e instructivo), van en la misma tarjeta.
@@ -66,25 +66,9 @@ export function tarjetasDeDocumentos(items: LegacyBlock[]): Tarjeta[] | null {
 export function DocList({ tarjetas }: { tarjetas: Tarjeta[] }) {
   return (
     <ul className="doc-grid" role="list">
-      {tarjetas.map((t, k) => {
-        const tipo = t.docs[0].tipo;
-        return (
-          <li key={k} className="doc-card" data-tipo={tipo.clave}>
-            <span className="doc-ico" aria-hidden>{tipo.sigla}</span>
-            <div className="doc-body">
-              <strong className="doc-title">{t.titulo}</strong>
-              <div className="doc-acts">
-                {t.docs.map((d, n) => (
-                  <a key={n} href={d.url} target="_blank" rel="noopener noreferrer" className="doc-btn" data-tipo={d.tipo.clave}>
-                    {d.tipo.clave === "mp3" ? <Headphones size={14} aria-hidden /> : <Download size={14} aria-hidden />}
-                    {d.etiqueta ? `${d.etiqueta} · ${d.tipo.nombre}` : `Descargar ${d.tipo.nombre}`}
-                  </a>
-                ))}
-              </div>
-            </div>
-          </li>
-        );
-      })}
+      {tarjetas.map((t, k) => (
+        <DocCard key={k} titulo={t.titulo} docs={t.docs.map((d) => ({ url: d.url, etiqueta: d.etiqueta, clave: d.tipo.clave, sigla: d.tipo.sigla, nombre: d.tipo.nombre }))} />
+      ))}
     </ul>
   );
 }

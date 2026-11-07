@@ -366,3 +366,57 @@ section.hi-hero[data-region="hero"]:has(.car) { padding-bottom: 2.5rem !importan
 .doc-btn[data-tipo="pdf"] { border-color: #e1a39d; background: #fdf3f2; color: #8f1d14 !important; } .doc-btn[data-tipo="pdf"]:hover { background: #b42318; color: #fff !important; border-color: #b42318; }
 .doc-btn[data-tipo="doc"] { border-color: #9dbbe1; background: #f1f6fd; color: #184a86 !important; } .doc-btn[data-tipo="doc"]:hover { background: #1f5fa8; color: #fff !important; border-color: #1f5fa8; }
 .doc-btn[data-tipo="mp3"] { border-color: #c9a6dc; background: #f8f1fc; color: #5d2a78 !important; } .doc-btn[data-tipo="mp3"]:hover { background: #7a3c9a; color: #fff !important; border-color: #7a3c9a; }
+
+/* ---------- Vista previa de documentos ---------- */
+button.doc-ico { border: 0; cursor: pointer; font-family: inherit; }
+button.doc-ico .doc-ico-eye { position: absolute; bottom: 0.3rem; opacity: 0; transition: opacity 0.2s; }
+.doc-card:hover button.doc-ico .doc-ico-eye, button.doc-ico:focus-visible .doc-ico-eye { opacity: 1; }
+button.doc-ico:focus-visible, button.doc-title:focus-visible, .doc-view:focus-visible, .doc-close:focus-visible, .doc-tab:focus-visible { outline: 3px solid #89114c; outline-offset: 2px; }
+button.doc-title { padding: 0; border: 0; background: none; text-align: left; cursor: pointer; font: 700 1rem/1.3 var(--font-display); color: #10240f; }
+button.doc-title:hover { color: #2c6a14; text-decoration: underline; text-underline-offset: 3px; }
+.doc-view { background: #10240f; border-color: #10240f; color: #fff !important; cursor: pointer; }
+.doc-view:hover, .doc-view:focus-visible { background: #2c6a14; border-color: #2c6a14; color: #fff !important; }
+.doc-ico-sm { width: 2.2rem; height: 2.6rem; font-size: 0.62rem; border-radius: 0.45rem; }
+.doc-ico-sm[data-tipo="xls"] { background: #1d7a46; } .doc-ico-sm[data-tipo="pdf"] { background: #b42318; } .doc-ico-sm[data-tipo="doc"] { background: #1f5fa8; }
+.doc-ico-sm[data-tipo="ppt"] { background: #c4571b; } .doc-ico-sm[data-tipo="zip"] { background: #6b5a26; } .doc-ico-sm[data-tipo="mp3"] { background: #7a3c9a; }
+
+dialog.doc-modal { width: min(76rem, calc(100vw - 2rem)); height: min(52rem, calc(100vh - 2rem)); max-width: none; max-height: none; margin: auto; padding: 0; border: 0; border-radius: 1rem; background: #fff; color: #10240f; box-shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.55); overflow: hidden; }
+dialog.doc-modal::backdrop { background: rgba(8, 24, 8, 0.62); backdrop-filter: blur(3px); }
+dialog.doc-modal[open] { display: block; animation: doc-in 0.22s ease-out; }
+@keyframes doc-in { from { transform: translateY(10px) scale(0.985); } to { transform: none; } }
+.doc-modal-in { display: flex; flex-direction: column; height: 100%; }
+.doc-modal-head { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0.8rem 1rem 0.8rem 1.2rem; border-bottom: 1px solid #e1e6dc; }
+.doc-modal-tit { display: flex; align-items: center; gap: 0.8rem; min-width: 0; }
+.doc-modal-tit strong { font: 700 1.02rem/1.25 var(--font-display); overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.doc-modal-act { display: flex; align-items: center; gap: 0.6rem; flex: none; }
+.doc-close { display: grid; place-items: center; width: 2.4rem; height: 2.4rem; border: 1px solid #dfe5da; border-radius: 50%; background: #fff; color: #10240f; cursor: pointer; }
+.doc-close:hover { background: #10240f; color: #fff; }
+.doc-tabs { display: flex; gap: 0.4rem; padding: 0.6rem 1.2rem 0; border-bottom: 1px solid #e1e6dc; overflow-x: auto; }
+.doc-tab { padding: 0.5rem 0.95rem; border: 1px solid #dfe5da; border-bottom: 0; border-radius: 0.6rem 0.6rem 0 0; background: #f4f6f1; font: 700 0.82rem/1.2 var(--font-body); color: #3a4a38; cursor: pointer; white-space: nowrap; }
+.doc-tab.on { background: #fff; color: #10240f; box-shadow: inset 0 3px 0 #72bf44; }
+.doc-stage { position: relative; flex: 1; min-height: 0; background: #eef1ea; }
+.doc-stage iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: #fff; }
+.doc-cargando { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 0.6rem; font-weight: 600; color: #3a4a38; }
+.doc-audio { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.2rem; color: #7a3c9a; } .doc-audio audio { width: min(34rem, 90%); }
+.doc-nada { height: 100%; display: grid; place-items: center; padding: 2rem; text-align: center; font-size: 1.05rem; color: #3a4a38; }
+.doc-nota { margin: 0; padding: 0.5rem 1.2rem; font-size: 0.78rem; color: #5d6e65; border-top: 1px solid #e1e6dc; }
+@media (max-width: 767px) { dialog.doc-modal { width: 100vw; height: 100dvh; border-radius: 0; } .doc-modal-act .doc-btn { padding-inline: 0.6rem; } }
+
+/* Vista previa de Excel y Word dentro de la ventana */
+.doc-excel { position: absolute; inset: 0; display: flex; flex-direction: column; background: #fff; }
+.doc-sheets { display: flex; gap: 0.3rem; padding: 0.5rem 0.8rem 0; background: #eef1ea; border-bottom: 1px solid #dfe5da; overflow-x: auto; flex: none; }
+.doc-sheets button { padding: 0.4rem 0.9rem; border: 1px solid #dfe5da; border-bottom: 0; border-radius: 0.5rem 0.5rem 0 0; background: #f4f6f1; font: 700 0.78rem/1.2 var(--font-body); color: #3a4a38; cursor: pointer; white-space: nowrap; }
+.doc-sheets button.on { background: #fff; color: #10240f; box-shadow: inset 0 3px 0 #1d7a46; }
+.doc-excel-scroll { flex: 1; min-height: 0; overflow: auto; }
+.doc-excel table { border-collapse: separate; border-spacing: 0; font: 0.8rem/1.35 var(--font-body); color: #10240f; min-width: 100%; width: max-content; }
+.doc-excel td, .doc-excel th { padding: 0.32rem 0.7rem; border-right: 1px solid #e6eadf; border-bottom: 1px solid #e6eadf; vertical-align: top; min-width: 6.5rem; max-width: 26rem; }
+.doc-excel td.num { text-align: right; font-variant-numeric: tabular-nums; }
+.doc-excel th[scope="row"] { position: sticky; left: 0; z-index: 1; min-width: 2.6rem; width: 2.6rem; background: #f4f6f1; color: #7a8a78; font-weight: 600; text-align: center; padding-inline: 0.4rem; }
+.doc-excel tr:first-child td { background: #eaf5e1; font-weight: 700; position: sticky; top: 0; z-index: 2; border-bottom: 2px solid #72bf44; }
+.doc-excel tr:nth-child(even) td { background: #fafcf8; }
+.doc-excel .doc-nota { flex: none; }
+.doc-word { position: absolute; inset: 0; overflow: auto; padding: 1.6rem clamp(1.2rem, 6vw, 4.5rem); background: #fff; font: 0.98rem/1.65 var(--font-body); color: #10240f; }
+.doc-word :is(h1, h2, h3, h4) { font-family: var(--font-display); margin: 1.2em 0 0.5em; line-height: 1.2; }
+.doc-word p { margin: 0 0 0.9em; } .doc-word ul, .doc-word ol { margin: 0 0 1em 1.4rem; } .doc-word li { margin-bottom: 0.3em; }
+.doc-word table { border-collapse: collapse; margin: 1em 0; width: 100%; } .doc-word td, .doc-word th { border: 1px solid #cfd6c9; padding: 0.4rem 0.6rem; vertical-align: top; }
+.doc-word a { color: #2c6a14; text-decoration: underline; } .doc-word img { max-width: 100%; height: auto; }
