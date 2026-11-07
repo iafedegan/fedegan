@@ -129,7 +129,10 @@ export const AD_ZONES = [
   { id: "bottom", label: "Sobre el pie de página", size: "Banner ancho (1200×150 aprox.)" },
 ] as const;
 export type AdZoneId = (typeof AD_ZONES)[number]["id"];
-export type AdConfig = { on?: boolean; image?: string; href?: string; alt?: string; label?: string; /** Texto de la sección del banner (solo «Banner de portada») */ titulo?: string; subtitulo?: string; texto?: string; boton1?: string; enlace1?: string; boton2?: string; enlace2?: string; /** % del ancho (por defecto 100) */ width?: number; /** alto fijo en px (vacío = automático) */ height?: number };
+export type AdConfig = { on?: boolean; image?: string; href?: string; alt?: string; label?: string; /** Texto de la sección del banner (solo «Banner de portada») */ titulo?: string; subtitulo?: string; texto?: string; boton1?: string; enlace1?: string; boton2?: string; enlace2?: string; /** % del ancho (por defecto 100) */ width?: number; /** alto en px en escritorio */ height?: number;
+  /** Solo en el banner de portada, que gobierna el carrusel: alto en celular, oscurecido de la imagen (0–90 %), posición del texto,
+   *  segundos entre diapositivas (0 = sin cambio automático), flechas, puntos y esquinas redondeadas. */
+  heightMobile?: number; oscuro?: number; alinear?: "izquierda" | "centro" | "derecha"; segundos?: number; flechas?: boolean; puntos?: boolean; redondo?: boolean };
 
 // ---- edición de cualquier elemento de cualquier página --------------------------------
 // La clave es «ruta::selector» (la ruta es «*» para todo el sitio). El selector lo calcula el editor al hacer clic en la vista previa.
@@ -286,7 +289,7 @@ export function normalizeDesign(raw: unknown): DesignConfig {
   for (const z of AD_ZONES) {
     const a = obj(ads[z.id]);
     const image = href(a.image);
-    if (a.on === true || image) d.ads[z.id] = { on: a.on === true, image, href: href(a.href), alt: str(a.alt, 120), label: str(a.label, 40), titulo: str(a.titulo, 120), subtitulo: str(a.subtitulo, 160), texto: str(a.texto, 400), boton1: str(a.boton1, 50), enlace1: href(a.enlace1), boton2: str(a.boton2, 50), enlace2: href(a.enlace2), ...(Number(a.width) >= 20 && Number(a.width) < 100 ? { width: Math.round(Number(a.width)) } : {}), ...(Number(a.height) >= 80 ? { height: Math.min(1200, Math.round(Number(a.height))) } : {}) };
+    if (a.on === true || image) d.ads[z.id] = { on: a.on === true, image, href: href(a.href), alt: str(a.alt, 120), label: str(a.label, 40), titulo: str(a.titulo, 120), subtitulo: str(a.subtitulo, 160), texto: str(a.texto, 400), boton1: str(a.boton1, 50), enlace1: href(a.enlace1), boton2: str(a.boton2, 50), enlace2: href(a.enlace2), ...(Number(a.width) >= 20 && Number(a.width) < 100 ? { width: Math.round(Number(a.width)) } : {}), ...(Number(a.height) >= 80 ? { height: Math.min(1200, Math.round(Number(a.height))) } : {}), ...(z.id === "portada" ? carrusel(a) : {}) };
   }
 
   if (Array.isArray(src.banners)) {
@@ -295,7 +298,7 @@ export function normalizeDesign(raw: unknown): DesignConfig {
       const a = obj(raw);
       const image = href(a.image);
       if (!image) continue;
-      lista.push({ on: a.on !== false, image, href: href(a.href), alt: str(a.alt, 120), label: str(a.label, 40) });
+      lista.push({ on: a.on !== false, image, href: href(a.href), alt: str(a.alt, 120), label: str(a.label, 40), titulo: str(a.titulo, 120), subtitulo: str(a.subtitulo, 160), texto: str(a.texto, 400), boton1: str(a.boton1, 50), enlace1: href(a.enlace1), boton2: str(a.boton2, 50), enlace2: href(a.enlace2) });
     }
     if (lista.length) d.banners = lista;
   }
@@ -365,4 +368,21 @@ export function designCss(design: DesignConfig): string {
     if (t.length) rules.push(`${sel} .sw-title{${t.join(";")}}`);
   }
   return rules.join("\n");
+}
+
+/** Ajustes del carrusel de portada (guardados en el banner de portada), validados. */
+function carrusel(a: Record<string, unknown>): Partial<AdConfig> {
+  const out: Partial<AdConfig> = {};
+  const n = (v: unknown, min: number, max: number) => (v === "" || v === null || v === undefined || Number.isNaN(Number(v)) ? undefined : Math.min(max, Math.max(min, Math.round(Number(v)))));
+  const hm = n(a.heightMobile, 160, 1000);
+  if (hm !== undefined) out.heightMobile = hm;
+  const os = n(a.oscuro, 0, 90);
+  if (os !== undefined) out.oscuro = os;
+  if (a.alinear === "izquierda" || a.alinear === "centro" || a.alinear === "derecha") out.alinear = a.alinear;
+  const sg = n(a.segundos, 0, 30);
+  if (sg !== undefined) out.segundos = sg;
+  if (a.flechas === false) out.flechas = false;
+  if (a.puntos === false) out.puntos = false;
+  if (a.redondo === false) out.redondo = false;
+  return out;
 }

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ArrowRight, Bank, CalendarBlank, Clock, DownloadSimple, FileText, GraduationCap, MapPin, Newspaper, Question, Scales, Television, UserCircle, UsersThree, Wallet } from "@phosphor-icons/react/dist/ssr";
 import { Container } from "@/components/ui/Container";
 import { Pic } from "./Pic";
-import { HeroMedia } from "./HeroMedia";
+import { HeroCarousel } from "./HeroCarousel";
 import { HeroText } from "./HeroText";
 import type { AdConfig } from "@/lib/design/regions";
 import { fechaCorta, type HomeData } from "./data";
@@ -27,9 +27,16 @@ export function HomeInstitucional({ d, banners }: { d: HomeData; banners: AdConf
   return (
     <div className="hi">
       <section data-region="hero" className="hi-hero">
-        <Container className="hi-hero-in">
-          <HeroText initial={portada} />
-          <div className="hi-hero-img"><HeroMedia initial={banners} fallback={<Pic src={foto} alt={d.lead?.imageAlt ?? ""} sizes="(min-width: 1024px) 50vw, 100vw" priority />} /></div>
+        <Container>
+          <HeroCarousel
+            initial={banners}
+            fallback={
+              <div className="hi-hero-in">
+                <HeroText initial={portada} />
+                <div className="hi-hero-img"><Pic src={foto} alt={d.lead?.imageAlt ?? ""} sizes="(min-width: 1024px) 50vw, 100vw" priority /></div>
+              </div>
+            }
+          />
         </Container>
       </section>
 

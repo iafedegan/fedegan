@@ -5,7 +5,8 @@ import { ArrowRight } from "lucide-react";
 import type { AdConfig } from "@/lib/design/regions";
 import { useLiveDesign } from "@/components/design/live";
 
-const T = {
+/** Texto por defecto de la sección principal (la diapositiva 1 lo usa en los campos que queden vacíos). */
+export const HERO_DEFAULTS = {
   titulo: "FEDEGÁN–FNG,",
   subtitulo: "el hub del ecosistema digital ganadero de Colombia",
   texto: "Conectamos a los actores del sector, promovemos el desarrollo sostenible y facilitamos el acceso a información, conocimiento y servicios para una ganadería más competitiva y sostenible.",
@@ -26,7 +27,7 @@ function Boton({ href, children, cls }: { href: string; children: React.ReactNod
 // Texto de la sección principal: sale de Admin → Diseño → Publicidad → «Banner de portada» (con valores por defecto).
 export function HeroText({ initial }: { initial?: AdConfig }) {
   const { value } = useLiveDesign<AdConfig | undefined>(initial, (d) => d.ads.portada);
-  const v = (k: keyof typeof T) => (value?.[k] && String(value[k]).trim()) || T[k];
+  const v = (k: keyof typeof HERO_DEFAULTS) => (value?.[k] && String(value[k]).trim()) || HERO_DEFAULTS[k];
   return (
     <div className="hi-hero-text">
       <h1>{v("titulo")}<span>{v("subtitulo")}</span></h1>

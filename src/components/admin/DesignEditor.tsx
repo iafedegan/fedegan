@@ -252,6 +252,13 @@ export function DesignEditor({ writable, initialPublished, initialDraft, canUndo
         e.preventDefault();
         e.stopPropagation();
         if (!t || t === doc.body || t === doc.documentElement) return;
+        // El banner de portada se maneja completo desde Publicidad (no como elemento suelto).
+        if (t.closest?.('[data-editor-panel="publicidad"]')) {
+          setPicked(null);
+          setTab("publicidad");
+          window.setTimeout(() => document.getElementById("pub-carrusel")?.scrollIntoView({ behavior: "smooth", block: "start" }), 120);
+          return;
+        }
         const local = t.closest?.("[data-local]")?.getAttribute("data-local");
         const hit = t.closest?.("[data-region]")?.getAttribute("data-region") as RegionId | null;
         if (local && locals.some((l) => l.id === local)) setLocalId(local);
@@ -549,9 +556,131 @@ export function DesignEditor({ writable, initialPublished, initialDraft, canUndo
                   <p className="text-xs text-[#8a978f]">Se muestra una vez por visita. En la vista previa aparece de inmediato.</p>
     </>
   );
+  const portadaAd = design.ads.portada ?? {};
+  const subirA = async (f: File | undefined, done: (url: string) => void) => {
+    if (!f) return;
+    setMsgAd((m) => ({ ...m, portada: "Subiendo imagen…" }));
+    const fd = new FormData();
+    fd.set("archivo", f);
+    const r = await subirImagenDiseno(fd);
+    if (r.url) {
+      done(r.url);
+      setMsgAd((m) => ({ ...m, portada: "Imagen cargada. Recuerde publicar." }));
+    } else setMsgAd((m) => ({ ...m, portada: r.error ?? "No se pudo subir la imagen." }));
+  };
+  const moverBanner = (k: number, d: -1 | 1) =>
+    update((x) => {
+      const l = [...(x.banners ?? [])];
+      const t = k + d;
+      if (t < 0 || t >= l.length) return x;
+      [l[k], l[t]] = [l[t], l[k]];
+      return { ...x, banners: l };
+    });
+  const camposDiapositiva = (s: AdConfig, patch: (p: Partial<AdConfig>) => void, n: number) => (
+    <>
+      <div className="flex items-start gap-3">
+        {s.image ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={s.image} alt="" className="h-16 w-28 shrink-0 rounded-lg border border-[#e4e1d6] object-cover" />
+        ) : (
+          <span className="flex h-16 w-28 shrink-0 items-center justify-center rounded-lg border border-dashed border-[#d9d6cb] text-[0.65rem] text-[#8a978f]">Sin imagen</span>
+        )}
+        <div className="flex min-w-0 flex-1 flex-col gap-1.5">
+          <input className="ad-input" placeholder="Imagen: /headers/foto.jpg o https://…" value={s.image ?? ""} onChange={(e) => patch({ image: e.target.value })} aria-label={`Imagen de la diapositiva ${n}`} />
+          <label className="ad-btn ad-btn-primary w-fit cursor-pointer !min-h-0 !py-1.5 text-xs">
+            Cargar imagen
+            <input type="file" accept="image/jpeg,image/png,image/webp,image/avif,image/gif" className="sr-only" onChange={(e) => { const f = e.target.files?.[0]; e.target.value = ""; subirA(f, (url) => patch({ image: url, on: true })); }} />
+          </label>
+        </div>
+      </div>
+      <input className="ad-input" placeholder="Título (p. ej. Segundo Ciclo)" maxLength={120} value={s.titulo ?? ""} onChange={(e) => patch({ titulo: e.target.value })} aria-label={`Título de la diapositiva ${n}`} />
+      <input className="ad-input" placeholder="Segunda línea del título, en verde" maxLength={160} value={s.subtitulo ?? ""} onChange={(e) => patch({ subtitulo: e.target.value })} aria-label={`Subtítulo de la diapositiva ${n}`} />
+      <textarea className="ad-input min-h-[4.5rem]" placeholder="Párrafo" maxLength={400} value={s.texto ?? ""} onChange={(e) => patch({ texto: e.target.value })} aria-label={`Párrafo de la diapositiva ${n}`} />
+      <div className="grid grid-cols-2 gap-1.5">
+        <input className="ad-input" placeholder="Botón 1: texto" maxLength={50} value={s.boton1 ?? ""} onChange={(e) => patch({ boton1: e.target.value })} aria-label={`Texto del botón 1, diapositiva ${n}`} />
+        <input className="ad-input" placeholder="Botón 1: enlace" value={s.enlace1 ?? ""} onChange={(e) => patch({ enlace1: e.target.value })} aria-label={`Enlace del botón 1, diapositiva ${n}`} />
+        <input className="ad-input" placeholder="Botón 2: texto" maxLength={50} value={s.boton2 ?? ""} onChange={(e) => patch({ boton2: e.target.value })} aria-label={`Texto del botón 2, diapositiva ${n}`} />
+        <input className="ad-input" placeholder="Botón 2: enlace" value={s.enlace2 ?? ""} onChange={(e) => patch({ enlace2: e.target.value })} aria-label={`Enlace del botón 2, diapositiva ${n}`} />
+      </div>
+      <details className="text-xs text-[#5d6e65]">
+        <summary className="cursor-pointer font-semibold">Solo imagen (sin texto) y accesibilidad</summary>
+        <div className="mt-1.5 flex flex-col gap-1.5">
+          <input className="ad-input" placeholder="Enlace de toda la imagen (si no lleva texto)" value={s.href ?? ""} onChange={(e) => patch({ href: e.target.value })} aria-label={`Enlace de la imagen, diapositiva ${n}`} />
+          <input className="ad-input" placeholder="Texto del botón sobre la imagen (p. ej. Ver más)" maxLength={40} value={s.label ?? ""} onChange={(e) => patch({ label: e.target.value })} aria-label={`Botón sobre la imagen, diapositiva ${n}`} />
+          <input className="ad-input" placeholder="Texto alternativo: qué muestra la imagen" maxLength={120} value={s.alt ?? ""} onChange={(e) => patch({ alt: e.target.value })} aria-label={`Texto alternativo, diapositiva ${n}`} />
+        </div>
+      </details>
+    </>
+  );
+  const nDiapositivas = (portadaAd.on && portadaAd.image ? 1 : 0) + (design.banners ?? []).filter((b) => b.on !== false && b.image).length;
+  const cuerpoCarrusel = (
+    <fieldset id="pub-carrusel" className="flex flex-col gap-3 rounded-xl border-2 border-[#72bf44] p-3">
+      <legend className="px-1 text-sm font-bold">Carrusel de portada</legend>
+      <p className="text-xs text-[#5d6e65]">{nDiapositivas} diapositiva{nDiapositivas === 1 ? "" : "s"} activa{nDiapositivas === 1 ? "" : "s"}. Imágenes anchas (1920×700 aprox.). Todo lo del banner se ajusta aquí; en la vista previa, un clic sobre el banner abre este bloque.</p>
+
+      <div className="flex flex-col gap-2.5 rounded-lg bg-[#f6faf2] p-2.5">
+        <p className="text-xs font-bold text-[#11271d]">Tamaño y apariencia</p>
+        <label className="flex flex-col gap-1 text-xs font-semibold text-[#5d6e65]">Ancho: {portadaAd.width ?? 100} % del contenido
+          <input type="range" min={40} max={100} step={5} value={portadaAd.width ?? 100} onChange={(e) => patchAd("portada", { width: Number(e.target.value) })} />
+        </label>
+        <label className="flex flex-col gap-1 text-xs font-semibold text-[#5d6e65]">Alto en computador: {portadaAd.height ?? 460} px
+          <input type="range" min={240} max={900} step={10} value={portadaAd.height ?? 460} onChange={(e) => patchAd("portada", { height: Number(e.target.value) })} />
+        </label>
+        <label className="flex flex-col gap-1 text-xs font-semibold text-[#5d6e65]">Alto en celular: {portadaAd.heightMobile ?? 420} px
+          <input type="range" min={200} max={800} step={10} value={portadaAd.heightMobile ?? 420} onChange={(e) => patchAd("portada", { heightMobile: Number(e.target.value) })} />
+        </label>
+        <label className="flex flex-col gap-1 text-xs font-semibold text-[#5d6e65]">Oscurecer la imagen detrás del texto: {portadaAd.oscuro ?? 55} %
+          <input type="range" min={0} max={90} step={5} value={portadaAd.oscuro ?? 55} onChange={(e) => patchAd("portada", { oscuro: Number(e.target.value) })} />
+        </label>
+        <label className="flex items-center justify-between gap-2 text-xs font-semibold text-[#5d6e65]">Posición del texto
+          <select className="ad-input !w-auto !py-1 text-xs" value={portadaAd.alinear ?? "izquierda"} onChange={(e) => patchAd("portada", { alinear: e.target.value as AdConfig["alinear"] })}>
+            <option value="izquierda">Izquierda</option>
+            <option value="centro">Centro</option>
+            <option value="derecha">Derecha</option>
+          </select>
+        </label>
+        <label className="flex items-center justify-between gap-2 text-xs font-semibold text-[#5d6e65]">Cambiar de diapositiva cada (segundos; 0 = no cambia sola)
+          <input className="ad-input !w-20 !py-1 text-xs" type="number" min={0} max={30} value={portadaAd.segundos ?? 7} onChange={(e) => patchAd("portada", { segundos: e.target.value === "" ? undefined : Number(e.target.value) })} />
+        </label>
+        <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs font-semibold">
+          <label className="flex items-center gap-1.5"><input type="checkbox" checked={portadaAd.flechas !== false} onChange={(e) => patchAd("portada", { flechas: e.target.checked ? undefined : false })} /> Flechas</label>
+          <label className="flex items-center gap-1.5"><input type="checkbox" checked={portadaAd.puntos !== false} onChange={(e) => patchAd("portada", { puntos: e.target.checked ? undefined : false })} /> Puntos</label>
+          <label className="flex items-center gap-1.5"><input type="checkbox" checked={portadaAd.redondo !== false} onChange={(e) => patchAd("portada", { redondo: e.target.checked ? undefined : false })} /> Esquinas redondeadas</label>
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-1.5 rounded-lg border border-[#e4e1d6] p-2.5">
+        <div className="flex items-center justify-between">
+          <p className="text-xs font-bold text-[#11271d]">Diapositiva 1 <span className="font-normal text-[#5d6e65]">· los campos vacíos usan el texto de siempre</span></p>
+          <label className="flex items-center gap-1.5 text-xs font-semibold"><input type="checkbox" checked={Boolean(portadaAd.on)} onChange={(e) => patchAd("portada", { on: e.target.checked })} /> Activa</label>
+        </div>
+        {camposDiapositiva(portadaAd, (p) => patchAd("portada", p), 1)}
+      </div>
+
+      {(design.banners ?? []).map((b, k) => (
+        <div key={k} className="flex flex-col gap-1.5 rounded-lg border border-[#e4e1d6] p-2.5">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <p className="text-xs font-bold text-[#11271d]">Diapositiva {k + 2}</p>
+            <div className="flex items-center gap-1.5">
+              <label className="flex items-center gap-1.5 text-xs font-semibold"><input type="checkbox" checked={b.on !== false} onChange={(e) => patchBanner(k, { on: e.target.checked })} /> Activa</label>
+              <button type="button" className="ad-btn ad-btn-ghost !min-h-0 !px-2 !py-1 !text-xs" disabled={k === 0} onClick={() => moverBanner(k, -1)} aria-label={`Subir la diapositiva ${k + 2}`}>↑</button>
+              <button type="button" className="ad-btn ad-btn-ghost !min-h-0 !px-2 !py-1 !text-xs" disabled={k === (design.banners ?? []).length - 1} onClick={() => moverBanner(k, 1)} aria-label={`Bajar la diapositiva ${k + 2}`}>↓</button>
+              <button type="button" className="ad-btn ad-btn-ghost !min-h-0 !px-2.5 !py-1 !text-xs" onClick={() => update((d) => ({ ...d, banners: (d.banners ?? []).filter((_, x) => x !== k) }))}>Quitar</button>
+            </div>
+          </div>
+          {camposDiapositiva(b, (p) => patchBanner(k, p), k + 2)}
+        </div>
+      ))}
+      {(design.banners ?? []).length < 8 && (
+        <button type="button" className="ad-btn ad-btn-ghost w-fit" onClick={() => update((d) => ({ ...d, banners: [...(d.banners ?? []), { on: true, image: "", href: "", alt: "", label: "" }] }))}>+ Agregar diapositiva</button>
+      )}
+      {msgAd.portada && <span role="status" className="text-xs font-semibold text-[#165a43]">{msgAd.portada}</span>}
+    </fieldset>
+  );
   const cuerpoPublicidad = (
     <>
-                  {AD_ZONES.map((z) => {
+                  {cuerpoCarrusel}
+                  {AD_ZONES.filter((z) => z.id !== "portada").map((z) => {
                     const a = design.ads[z.id] ?? {};
                     return (
                       <fieldset key={z.id} className="flex flex-col gap-2 rounded-xl border border-[#d9d6cb] p-3">
@@ -579,64 +708,8 @@ export function DesignEditor({ writable, initialPublished, initialDraft, canUndo
                           <span className="text-xs text-[#5d6e65]">JPG, PNG, WebP, AVIF o GIF, máx. 5 MB. También puede pegar una dirección arriba.</span>
                           {msgAd[z.id] && <span role="status" className="text-xs font-semibold text-[#165a43]">{msgAd[z.id]}</span>}
                         </div>
-                        {z.id === "portada" && (
-                          <div className="grid grid-cols-2 gap-2">
-                            <label className="flex flex-col gap-1 text-xs font-semibold text-[#5d6e65]">Ancho: {a.width ?? 100} %
-                              <input type="range" min={20} max={100} step={5} value={a.width ?? 100} onChange={(e) => patchAd(z.id, { width: Number(e.target.value) })} />
-                            </label>
-                            <label className="flex flex-col gap-1 text-xs font-semibold text-[#5d6e65]">Alto (px; vacío = automático)
-                              <input className="ad-input" type="number" min={80} max={1200} placeholder="Automático" value={a.height ?? ""} onChange={(e) => patchAd(z.id, { height: e.target.value ? Number(e.target.value) : undefined })} />
-                            </label>
-                          </div>
-                        )}
-                        {z.id === "portada" && <input className="ad-input" placeholder="Texto del botón (p. ej. Ver más)" maxLength={40} value={a.label ?? ""} onChange={(e) => patchAd(z.id, { label: e.target.value })} aria-label="Texto del botón" />}
                         <input className="ad-input" placeholder="Enlace del anuncio" value={a.href ?? ""} onChange={(e) => patchAd(z.id, { href: e.target.value })} aria-label={`Enlace de ${z.label}`} />
                         <input className="ad-input" placeholder="Texto alternativo" maxLength={120} value={a.alt ?? ""} onChange={(e) => patchAd(z.id, { alt: e.target.value })} aria-label={`Texto alternativo de ${z.label}`} />
-                        {z.id === "portada" && (
-                          <div className="flex flex-col gap-1.5 rounded-lg border border-[#e4e1d6] p-2.5">
-                            <p className="text-xs font-bold text-[#11271d]">Texto de esta sección (vacío = el de siempre)</p>
-                            <input className="ad-input" placeholder="Título (p. ej. FEDEGÁN–FNG,)" maxLength={120} value={a.titulo ?? ""} onChange={(e) => patchAd(z.id, { titulo: e.target.value })} aria-label="Título de la sección" />
-                            <input className="ad-input" placeholder="Subtítulo en verde" maxLength={160} value={a.subtitulo ?? ""} onChange={(e) => patchAd(z.id, { subtitulo: e.target.value })} aria-label="Subtítulo de la sección" />
-                            <textarea className="ad-input min-h-[5rem]" placeholder="Párrafo" maxLength={400} value={a.texto ?? ""} onChange={(e) => patchAd(z.id, { texto: e.target.value })} aria-label="Párrafo de la sección" />
-                            <input className="ad-input" placeholder="Botón 1: texto" maxLength={50} value={a.boton1 ?? ""} onChange={(e) => patchAd(z.id, { boton1: e.target.value })} aria-label="Texto del botón 1" />
-                            <input className="ad-input" placeholder="Botón 1: enlace (/quienes-somos o https://…)" value={a.enlace1 ?? ""} onChange={(e) => patchAd(z.id, { enlace1: e.target.value })} aria-label="Enlace del botón 1" />
-                            <input className="ad-input" placeholder="Botón 2: texto" maxLength={50} value={a.boton2 ?? ""} onChange={(e) => patchAd(z.id, { boton2: e.target.value })} aria-label="Texto del botón 2" />
-                            <input className="ad-input" placeholder="Botón 2: enlace" value={a.enlace2 ?? ""} onChange={(e) => patchAd(z.id, { enlace2: e.target.value })} aria-label="Enlace del botón 2" />
-                          </div>
-                        )}
-                        {z.id === "portada" && (
-                          <div className="mt-2 flex flex-col gap-2 border-t border-[#d9d6cb] pt-3">
-                            <p className="text-xs font-bold text-[#11271d]">Más banners en esta posición ({(design.banners ?? []).length}/8): se alternan solos con puntos para elegir.</p>
-                            {(design.banners ?? []).map((b, k) => (
-                              <div key={k} className="flex flex-col gap-1.5 rounded-lg border border-[#e4e1d6] p-2.5">
-                                <p className="text-xs font-semibold text-[#5d6e65]">Banner {k + 2}</p>
-                                <input className="ad-input" placeholder="Imagen: dirección https://…" value={b.image ?? ""} onChange={(e) => patchBanner(k, { image: e.target.value })} aria-label={`Imagen del banner ${k + 2}`} />
-                                <label className="ad-btn ad-btn-primary w-fit cursor-pointer">Cargar imagen
-                                  <input type="file" accept="image/jpeg,image/png,image/webp,image/avif,image/gif" className="sr-only" onChange={async (e) => {
-                                    const f = e.target.files?.[0];
-                                    e.target.value = "";
-                                    if (!f) return;
-                                    const fd = new FormData();
-                                    fd.set("archivo", f);
-                                    const r = await subirImagenDiseno(fd);
-                                    if (r.url) patchBanner(k, { image: r.url, on: true });
-                                    else setStatus({ kind: "err", text: r.error ?? "No se pudo subir la imagen." });
-                                  }} />
-                                </label>
-                                <input className="ad-input" placeholder="Texto del botón (p. ej. Ver más)" maxLength={40} value={b.label ?? ""} onChange={(e) => patchBanner(k, { label: e.target.value })} aria-label={`Texto del botón ${k + 2}`} />
-                                <input className="ad-input" placeholder="Enlace" value={b.href ?? ""} onChange={(e) => patchBanner(k, { href: e.target.value })} aria-label={`Enlace del banner ${k + 2}`} />
-                                <input className="ad-input" placeholder="Texto alternativo" maxLength={120} value={b.alt ?? ""} onChange={(e) => patchBanner(k, { alt: e.target.value })} aria-label={`Texto alternativo ${k + 2}`} />
-                                <div className="flex items-center justify-between">
-                                  <label className="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" checked={b.on !== false} onChange={(e) => patchBanner(k, { on: e.target.checked })} /> Activo</label>
-                                  <button type="button" className="ad-btn ad-btn-ghost !min-h-0 !px-3 !py-1 !text-xs" onClick={() => update((d) => ({ ...d, banners: (d.banners ?? []).filter((_, x) => x !== k) }))}>Quitar</button>
-                                </div>
-                              </div>
-                            ))}
-                            {(design.banners ?? []).length < 8 && (
-                              <button type="button" className="ad-btn ad-btn-ghost w-fit" onClick={() => update((d) => ({ ...d, banners: [...(d.banners ?? []), { on: true, image: "", href: "", alt: "", label: "" }] }))}>+ Agregar otro banner</button>
-                            )}
-                          </div>
-                        )}
                       </fieldset>
                     );
                   })}

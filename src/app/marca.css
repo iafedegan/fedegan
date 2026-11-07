@@ -307,3 +307,35 @@ section.hi-hero[data-region="hero"], .hi-hero { background: #f3f4f1 !important; 
 /* Cabecera: el buscador y «Equipo» van juntos a la derecha. */
 .mh-main-in .mh-search { flex: 0 1 22rem; margin-left: auto; }
 .mh-main-in > div:last-child, .mh-main-in > a:last-child { margin-left: 0 !important; }
+
+/* ---------- Carrusel de portada (todo se ajusta en Diseño → Publicidad) ---------- */
+.car { position: relative; width: var(--car-w, 100%); margin-inline: auto; overflow: hidden; background: #10240f; isolation: isolate; touch-action: pan-y; }
+.car[data-round="si"] { border-radius: 1.1rem; }
+.car-track { position: relative; height: var(--car-h, 460px); }
+@media (max-width: 767px) { .car-track { height: var(--car-hm, 420px); } }
+.car-slide { position: absolute; inset: 0; opacity: 0; visibility: hidden; transition: opacity 0.7s ease, visibility 0s linear 0.7s; }
+.car-slide[data-on="si"] { opacity: 1; visibility: visible; transition: opacity 0.7s ease, visibility 0s; z-index: 1; }
+.car-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transform: scale(1.04); transition: transform 7s ease-out; }
+.car-slide[data-on="si"] .car-img { transform: scale(1); }
+.car-veil { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(8, 24, 8, var(--car-veil)) 0%, rgba(8, 24, 8, calc(var(--car-veil) * 0.55)) 50%, rgba(8, 24, 8, calc(var(--car-veil) * 0.15)) 100%); }
+.car[data-align="centro"] .car-veil { background: rgba(8, 24, 8, calc(var(--car-veil) * 0.8)); }
+.car[data-align="derecha"] .car-veil { background: linear-gradient(270deg, rgba(8, 24, 8, var(--car-veil)) 0%, rgba(8, 24, 8, calc(var(--car-veil) * 0.55)) 50%, rgba(8, 24, 8, calc(var(--car-veil) * 0.15)) 100%); }
+.car-text { position: absolute; inset: 0; z-index: 2; display: flex; flex-direction: column; justify-content: center; gap: 1rem; max-width: 40rem; padding: 2rem clamp(1.4rem, 5vw, 4.5rem); color: #fff; }
+.car[data-align="centro"] .car-text { margin-inline: auto; align-items: center; text-align: center; }
+.car[data-align="derecha"] .car-text { margin-left: auto; align-items: flex-end; text-align: right; }
+.car-text :is(h1, h2) { margin: 0; font: 800 clamp(1.9rem, 4.2vw, 3.4rem)/1.05 var(--font-display); color: #fff; text-shadow: 0 2px 16px rgba(0, 0, 0, 0.35); }
+.car-text :is(h1, h2) span { display: block; color: #b9f08f; }
+.car-text p { margin: 0; max-width: 34rem; font-size: clamp(0.98rem, 1.3vw, 1.12rem); line-height: 1.6; color: rgba(255, 255, 255, 0.94); text-shadow: 0 1px 10px rgba(0, 0, 0, 0.35); }
+.car-text .hi-btns { margin-top: 0.4rem; }
+.car-link { position: absolute; inset: 0; z-index: 2; }
+.car-link .portada-btn { left: clamp(1rem, 4vw, 3rem); bottom: clamp(3rem, 6vw, 4rem); }
+.car-arrow { position: absolute; top: 50%; z-index: 3; display: grid; place-items: center; width: 2.75rem; height: 2.75rem; margin-top: -1.375rem; border: 1px solid rgba(255, 255, 255, 0.45); border-radius: 50%; background: rgba(16, 36, 15, 0.45); color: #fff; cursor: pointer; backdrop-filter: blur(4px); transition: background-color 0.2s; }
+.car-arrow:hover, .car-arrow:focus-visible { background: #72bf44; color: #10240f; }
+.car-prev { left: 0.9rem; } .car-next { right: 0.9rem; }
+@media (max-width: 767px) { .car-arrow { width: 2.3rem; height: 2.3rem; top: auto; bottom: 0.7rem; margin-top: 0; } .car-prev { left: 0.7rem; } .car-next { right: 0.7rem; } }
+.car-bar { position: absolute; left: 50%; bottom: 1rem; z-index: 3; display: flex; align-items: center; gap: 0.5rem; transform: translateX(-50%); padding: 0.35rem 0.7rem; border-radius: 999px; background: rgba(16, 36, 15, 0.5); backdrop-filter: blur(4px); }
+.car-dot { width: 0.6rem; height: 0.6rem; padding: 0; border: 0; border-radius: 999px; background: rgba(255, 255, 255, 0.65); cursor: pointer; transition: width 0.3s, background-color 0.3s; }
+.car-dot.on { width: 1.6rem; background: #72bf44; }
+.car-play { display: grid; place-items: center; width: 1.5rem; height: 1.5rem; padding: 0; border: 0; border-radius: 50%; background: transparent; color: #fff; cursor: pointer; }
+@media (prefers-reduced-motion: reduce) { .car-slide, .car-img { transition: none; } }
+section.hi-hero[data-region="hero"]:has(.car) { padding-bottom: 2.5rem !important; }
