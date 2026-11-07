@@ -349,3 +349,20 @@ section.hi-hero[data-region="hero"]:has(.car) { padding-bottom: 2.5rem !importan
   html header[data-region="navbar"] nav .py-3 { padding-block: 0.3rem !important; }
   html header[data-region="navbar"] .nv-link { padding-block: 0.3rem; }
 }
+
+/* ---------- Listas de documentos como tarjetas (Excel, PDF, Word, audio) ---------- */
+.doc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 21rem), 1fr)); gap: 0.9rem; margin: 1.4rem 0 2rem; padding: 0; list-style: none; max-width: none; }
+.doc-card { display: flex; gap: 0.95rem; align-items: flex-start; padding: 1rem 1.1rem; background: #fff; border: 1px solid #dfe5da; border-radius: 0.9rem; box-shadow: 0 1px 0 rgba(16, 36, 15, 0.03); transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s; }
+.doc-card:hover { border-color: #72bf44; box-shadow: 0 10px 24px -16px rgba(16, 36, 15, 0.45); transform: translateY(-1px); }
+.doc-ico { flex: none; display: grid; place-items: center; width: 3rem; height: 3.6rem; border-radius: 0.6rem; font: 800 0.72rem/1 var(--font-body); letter-spacing: 0.06em; color: #fff; background: #5d6e65; position: relative; }
+.doc-ico::after { content: ""; position: absolute; top: 0; right: 0; width: 0.9rem; height: 0.9rem; border-radius: 0 0.6rem 0 0.5rem; background: rgba(255, 255, 255, 0.35); }
+.doc-card[data-tipo="xls"] .doc-ico { background: #1d7a46; } .doc-card[data-tipo="pdf"] .doc-ico { background: #b42318; } .doc-card[data-tipo="doc"] .doc-ico { background: #1f5fa8; }
+.doc-card[data-tipo="ppt"] .doc-ico { background: #c4571b; } .doc-card[data-tipo="zip"] .doc-ico { background: #6b5a26; } .doc-card[data-tipo="mp3"] .doc-ico { background: #7a3c9a; }
+.doc-body { min-width: 0; display: flex; flex-direction: column; gap: 0.65rem; }
+.doc-title { font: 700 1rem/1.3 var(--font-display); color: #10240f; }
+.doc-acts { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+.doc-btn { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.38rem 0.8rem; border: 1.5px solid #72bf44; border-radius: 999px; font: 700 0.78rem/1.2 var(--font-body); color: #2c6a14 !important; text-decoration: none !important; background: #f4fbee; transition: background-color 0.2s, color 0.2s; }
+.doc-btn:hover, .doc-btn:focus-visible { background: #72bf44; color: #10240f !important; }
+.doc-btn[data-tipo="pdf"] { border-color: #e1a39d; background: #fdf3f2; color: #8f1d14 !important; } .doc-btn[data-tipo="pdf"]:hover { background: #b42318; color: #fff !important; border-color: #b42318; }
+.doc-btn[data-tipo="doc"] { border-color: #9dbbe1; background: #f1f6fd; color: #184a86 !important; } .doc-btn[data-tipo="doc"]:hover { background: #1f5fa8; color: #fff !important; border-color: #1f5fa8; }
+.doc-btn[data-tipo="mp3"] { border-color: #c9a6dc; background: #f8f1fc; color: #5d2a78 !important; } .doc-btn[data-tipo="mp3"]:hover { background: #7a3c9a; color: #fff !important; border-color: #7a3c9a; }

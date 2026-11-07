@@ -4,6 +4,7 @@ import { ArrowUpRight, ExternalLink, FileText } from "lucide-react";
 import type { LegacyBlock } from "@/content/legacy";
 import { UploadDocs } from "./UploadDocs";
 import { EntryExplorer, type ExplorerEntry } from "./EntryExplorer";
+import { DocList, tarjetasDeDocumentos } from "./DocList";
 
 const TOKEN = /\*\*([^*]+)\*\*|\[([^\]]*)\]\((https?:\/\/[^)\s]+|\/[^)\s]*)\)/g;
 const FILE = /\.(pdf|docx?|xlsx?|pptx?|zip|rar)(\?|$)/i;
@@ -188,6 +189,11 @@ export function LegacyContent({ blocks, lead: allowLead = true, preview = false 
       const items: LegacyBlock[] = [];
       while (i < blocks.length && blocks[i].t === "li") items.push(blocks[i++]);
       i--;
+      const docs = tarjetasDeDocumentos(items);
+      if (docs) {
+        nodes.push(<DocList key={key} tarjetas={docs} />);
+        continue;
+      }
       nodes.push(
         <ul key={key} className="my-5 flex max-w-4xl flex-col gap-2.5 pl-1">
           {items.map((it, n) => (
