@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { ChevronRight, ExternalLink, RotateCcw } from "lucide-react";
 import { PaginaForm } from "@/components/admin/PaginaForm";
 import { getLegacyPage, legacyHref, legacySections } from "@/content/legacy";
+import { docsDePagina } from "@/content/legacy/documentos";
 import { readDb } from "@/lib/cms/client";
 import { restorePagina } from "@/lib/cms/pagina-actions";
 import { blocksToText } from "@/lib/cms/paginas-texto";
@@ -21,6 +22,9 @@ export default async function EditarPaginaPage({ params, searchParams }: { param
   const { writable } = readDb();
   const override = await getPageOverride(key);
   const texto = blocksToText(override?.blocks ?? page.blocks);
+  const docs = docsDePagina(key);
+  // Los faltantes que ya se añadieron al texto (por ejemplo, en una edición anterior) no se vuelven a ofrecer.
+  const faltan = (docs?.faltan ?? []).filter(([, url]) => !texto.includes(url) && !texto.includes(url.replace(/ /g, "%20")));
 
   return (
     <div className="flex flex-col gap-6">
@@ -28,7 +32,7 @@ export default async function EditarPaginaPage({ params, searchParams }: { param
         <nav aria-label="Ruta" className="flex flex-wrap items-center gap-1.5 text-xs text-[#8a978f]">
           <Link href="/admin" className="hover:text-[#165a43]">Panel</Link>
           <ChevronRight size={12} />
-          <Link href="/admin/paginas" className="hover:text-[#165a43]">Páginas migradas</Link>
+          <Link href="/admin/paginas" className="hover:text-[#165a43]">Páginas y documentos</Link>
           <ChevronRight size={12} />
           <span className="font-medium text-[#5d6e65]">{legacySections[slug]?.label}</span>
         </nav>
@@ -41,13 +45,14 @@ export default async function EditarPaginaPage({ params, searchParams }: { param
             Página original <ExternalLink size={13} />
           </a>
           {override && <span className="ad-pill ad-pill-gold">Texto editado</span>}
+          {docs && <span className="ad-pill ad-pill-ok">{docs.total} documentos en el original</span>}
         </p>
         {restaurada && <p className="mt-3 rounded-xl border border-[#b9dcc7] bg-[#e5f3ea] px-4 py-2.5 text-sm text-[#14573a]">Se restauró el texto original.</p>}
       </header>
 
       <div className="grid gap-6 lg:grid-cols-[1fr_20rem] lg:items-start">
         <div className="ad-card p-5 sm:p-7">
-          <PaginaForm pageKey={key} title={override?.title ?? page.title} texto={texto} writable={writable} />
+          <PaginaForm pageKey={key} title={override?.title ?? page.title} texto={texto} writable={writable} faltan={faltan} enTablas={docs?.enTablas ?? 0} />
         </div>
         <aside className="flex flex-col gap-4 lg:sticky lg:top-6">
           <div className="ad-card p-5 text-sm leading-relaxed text-[#5d6e65]">

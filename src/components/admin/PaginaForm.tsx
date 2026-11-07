@@ -1,9 +1,11 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useRef } from "react";
 import { useFormStatus } from "react-dom";
 import { CheckCircle2, Loader2, XCircle } from "lucide-react";
 import { savePagina, type PaginaState } from "@/lib/cms/pagina-actions";
+import type { DocFaltante } from "@/content/legacy/documentos";
+import { DocumentosPanel } from "./DocumentosPanel";
 
 function Guardar({ writable }: { writable: boolean }) {
   const { pending } = useFormStatus();
@@ -14,8 +16,9 @@ function Guardar({ writable }: { writable: boolean }) {
   );
 }
 
-export function PaginaForm({ pageKey, title, texto, writable }: { pageKey: string; title: string; texto: string; writable: boolean }) {
+export function PaginaForm({ pageKey, title, texto, writable, faltan, enTablas }: { pageKey: string; title: string; texto: string; writable: boolean; faltan?: DocFaltante[]; enTablas?: number }) {
   const [state, action] = useActionState<PaginaState, FormData>(savePagina, {});
+  const textoRef = useRef<HTMLTextAreaElement>(null);
   return (
     <form action={action} className="flex flex-col gap-5">
       <input type="hidden" name="key" value={pageKey} />
@@ -23,9 +26,19 @@ export function PaginaForm({ pageKey, title, texto, writable }: { pageKey: strin
         <label htmlFor="title" className="text-sm font-semibold text-[#11271d]">Título</label>
         <input id="title" name="title" defaultValue={title} maxLength={200} required className="ad-input" />
       </div>
+      <DocumentosPanel
+        carpeta={pageKey}
+        faltan={faltan}
+        enTablas={enTablas}
+        leer={() => textoRef.current?.value ?? ""}
+        escribir={(t) => {
+          if (textoRef.current) textoRef.current.value = t;
+        }}
+      />
       <div className="flex flex-col gap-2">
         <label htmlFor="texto" className="text-sm font-semibold text-[#11271d]">Contenido</label>
         <textarea
+          ref={textoRef}
           id="texto"
           name="texto"
           defaultValue={texto}

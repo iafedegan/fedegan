@@ -5,6 +5,7 @@ import { useFormStatus } from "react-dom";
 import { CheckCircle2, Loader2, XCircle } from "lucide-react";
 import { editarNodo, type NodoState } from "@/lib/cms/nodos-actions";
 import { RedactarIA, type OpcionIA } from "./RedactarIA";
+import { DocumentosPanel } from "./DocumentosPanel";
 
 function Guardar({ writable }: { writable: boolean }) {
   const { pending } = useFormStatus();
@@ -54,6 +55,13 @@ export function NodoForm({ id, label, title, href, texto, esEnlace, writable, ia
               }}
             />
           )}
+          <DocumentosPanel
+            carpeta={`arbol-${id}`}
+            leer={() => textoRef.current?.value ?? ""}
+            escribir={(t) => {
+              if (textoRef.current) textoRef.current.value = t;
+            }}
+          />
           <div className="flex flex-col gap-2">
             <label htmlFor="texto" className="text-sm font-semibold text-[#11271d]">Contenido</label>
             <textarea ref={textoRef} id="texto" name="texto" defaultValue={texto} spellCheck rows={24} className="ad-input min-h-[26rem] resize-y font-mono text-[0.85rem] leading-relaxed" />
