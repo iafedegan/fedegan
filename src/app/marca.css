@@ -339,3 +339,13 @@ section.hi-hero[data-region="hero"], .hi-hero { background: #f3f4f1 !important; 
 .car-play { display: grid; place-items: center; width: 1.5rem; height: 1.5rem; padding: 0; border: 0; border-radius: 50%; background: transparent; color: #fff; cursor: pointer; }
 @media (prefers-reduced-motion: reduce) { .car-slide, .car-img { transition: none; } }
 section.hi-hero[data-region="hero"]:has(.car) { padding-bottom: 2.5rem !important; }
+
+/* Cabecera más baja: fila del logo y fila del menú compactas */
+@media (min-width: 768px) {
+  html .mh-main-in { padding-block: 0.4rem; }
+  html .mh-logo-d { height: 2.7rem; }
+  html .mh-search { padding-block: 0.15rem; }
+  html .mh-search button { width: 1.9rem; height: 1.9rem; }
+  html header[data-region="navbar"] nav .py-3 { padding-block: 0.3rem !important; }
+  html header[data-region="navbar"] .nv-link { padding-block: 0.3rem; }
+}
