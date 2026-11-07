@@ -12,7 +12,7 @@ import { ElementEdits } from "@/components/design/ElementEdits";
 import { MobileTabBar } from "@/components/layout/MobileTabBar";
 import { BackToTop } from "@/components/layout/BackToTop";
 import { getPublishedDesign } from "@/lib/design/store";
-import { designCss, TEMPLATE_BY_ID } from "@/lib/design/regions";
+import { designCss, sortNav, TEMPLATE_BY_ID } from "@/lib/design/regions";
 import { Ticker } from "@/components/design/Ticker";
 import { AdSlot } from "@/components/design/AdSlot";
 import { Masthead } from "@/components/layout/Masthead";
@@ -127,7 +127,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
                   Saltar al contenido
                 </a>
                 <Masthead />
-                <Header nav={nav} />
+                <Header nav={sortNav(nav, design.order)} />
                 <Ticker initial={design.ticker} />
                 <AdSlot zone="top" initial={design.ads.top} />
               </>

@@ -169,6 +169,17 @@ export function splitElementKey(key: string): { path: string; selector: string }
 // ---- validación -----------------------------------------------------------------------
 const HEX = /^#[0-9a-f]{6}$/i;
 const ID = /^[a-z0-9-]{1,40}$/;
+
+// Id estable de un elemento del menú principal (para ordenarlo desde Diseño).
+export function navId(label: string): string {
+  return label.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 40) || "item";
+}
+
+// Ordena el menú según el orden guardado en el diseño; lo que no esté en la lista conserva su posición al final.
+export function sortNav<T extends { label: string }>(items: T[], order: string[]): T[] {
+  const rank = (x: T) => { const i = order.indexOf(navId(x.label)); return i === -1 ? 999 : i; };
+  return items.map((x, i) => ({ x, i })).sort((a, b) => rank(a.x) - rank(b.x) || a.i - b.i).map((o) => o.x);
+}
 const obj = (v: unknown): Record<string, unknown> => (v && typeof v === "object" && !Array.isArray(v) ? (v as Record<string, unknown>) : {});
 const num = (v: unknown, min: number, max: number) => {
   const n = typeof v === "number" ? v : typeof v === "string" && v.trim() !== "" ? Number(v) : NaN;
