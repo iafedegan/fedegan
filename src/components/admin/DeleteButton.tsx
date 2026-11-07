@@ -2,7 +2,8 @@
 
 import { Trash2 } from "lucide-react";
 
-export function DeleteButton({ label, disabled }: { label: string; disabled?: boolean }) {
+// Botón de eliminar con confirmación. `menu`: se muestra como un elemento de texto dentro de un menú de acciones.
+export function DeleteButton({ label, disabled, menu = false }: { label: string; disabled?: boolean; menu?: boolean }) {
   return (
     <button
       type="submit"
@@ -12,9 +13,10 @@ export function DeleteButton({ label, disabled }: { label: string; disabled?: bo
       onClick={(e) => {
         if (!confirm(`¿Eliminar «${label}»? Esta acción no se puede deshacer.`)) e.preventDefault();
       }}
-      className="ad-icon-btn hover:!border-[#d64545] hover:!text-[#d64545]"
+      className={menu ? "at-item at-item-danger" : "ad-icon-btn hover:!border-[#d64545] hover:!text-[#d64545]"}
     >
-      <Trash2 size={16} />
+      <Trash2 size={menu ? 15 : 16} aria-hidden />
+      {menu && <span>Eliminar…</span>}
     </button>
   );
 }
