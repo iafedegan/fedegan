@@ -9,6 +9,9 @@ import { adminDb, CMS_TAG, publicDb } from "./client";
 import { EDITOR_ROLES } from "./guard";
 import { removeStoredSecret, saveStoredSecret } from "./integrations";
 import { secretsAvailable } from "./secrets";
+import { credencialIA, PROVEEDORES, probarClaveIA, type Proveedor } from "@/lib/ia";
+
+const esIA = (id: string): id is Proveedor => id === "claude" || id === "gemini";
 
 export type ApiState = { ok?: boolean; message?: string };
 
@@ -60,6 +63,12 @@ export async function testApi(_prev: ApiState, fd: FormData): Promise<ApiState> 
     return pingContexto(base, key);
   }
 
+  if (esIA(id)) {
+    const { key } = await credencialIA(id);
+    if (!key) return { ok: false, message: "No hay ninguna clave configurada." };
+    return probarClaveIA(id, key);
+  }
+
   if (id === "supabase") {
     const pub = publicDb();
     if (!pub) return { ok: false, message: "Falta SUPABASE_URL o la clave pública en el servidor." };
@@ -76,12 +85,22 @@ export async function testApi(_prev: ApiState, fd: FormData): Promise<ApiState> 
 export async function saveApiKey(_prev: ApiState, fd: FormData): Promise<ApiState> {
   const actor = await requireAdmin();
   if (!actor) return { ok: false, message: "Solo los administradores del portal pueden cambiar claves." };
-  if (String(fd.get("id")) !== "contexto") return { ok: false, message: "Conexión desconocida." };
+  const id = String(fd.get("id"));
+  if (id !== "contexto" && !esIA(id)) return { ok: false, message: "Conexión desconocida." };
   if (!adminDb()) return { ok: false, message: "El servidor no tiene la clave de servicio de Supabase." };
   if (!secretsAvailable) return { ok: false, message: "Falta AUTH_SECRET en el servidor para cifrar la clave." };
 
   const key = String(fd.get("key") ?? "").trim();
-  if (key.length < 12 || key.length > 200 || /\s/.test(key)) return { ok: false, message: "La clave no tiene un formato válido." };
+  if (key.length < 12 || key.length > 300 || /\s/.test(key)) return { ok: false, message: "La clave no tiene un formato válido." };
+
+  if (esIA(id)) {
+    const check = await probarClaveIA(id, key);
+    if (!check.ok) return { ok: false, message: "No se guardó. " + check.message };
+    const err = await saveStoredSecret(id, key, actor);
+    if (err) return { ok: false, message: err };
+    await adminDb()!.from("audit_log").insert({ actor, action: "editar", entity: "apis", summary: "Clave de " + PROVEEDORES[id].label + " actualizada" });
+    return { ok: true, message: "Clave guardada y verificada · " + check.message.replace("Conectada · ", "") };
+  }
 
   // Solo se guarda si CONtexto la acepta, para no dejar el sitio sin noticias por una clave equivocada.
   const { base } = await contextoCredentials();
@@ -98,9 +117,10 @@ export async function saveApiKey(_prev: ApiState, fd: FormData): Promise<ApiStat
 
 export async function removeApiKey(fd: FormData) {
   const actor = await requireAdmin();
-  if (!actor || String(fd.get("id")) !== "contexto") redirect("/admin/apis");
-  await removeStoredSecret("contexto");
-  await adminDb()?.from("audit_log").insert({ actor, action: "eliminar", entity: "apis", summary: "Clave de CONtexto quitada del panel" });
+  const id = String(fd.get("id"));
+  if (!actor || (id !== "contexto" && !esIA(id))) redirect("/admin/apis");
+  await removeStoredSecret(id);
+  await adminDb()?.from("audit_log").insert({ actor, action: "eliminar", entity: "apis", summary: "Clave de " + (esIA(id) ? PROVEEDORES[id].label : "CONtexto") + " quitada del panel" });
   updateTag(CMS_TAG);
   revalidatePath("/", "layout");
   redirect("/admin/apis");

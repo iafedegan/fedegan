@@ -51,7 +51,7 @@ function SubmitTest() {
   );
 }
 
-export function ApiKeyForm({ id, disabled, hint }: { id: string; disabled: boolean; hint?: string }) {
+export function ApiKeyForm({ id, disabled, hint, servicio = "CONtexto" }: { id: string; disabled: boolean; hint?: string; servicio?: string }) {
   const [state, action] = useActionState<ApiState, FormData>(saveApiKey, {});
   return (
     <form action={action} className="flex flex-col gap-3">
@@ -74,7 +74,7 @@ export function ApiKeyForm({ id, disabled, hint }: { id: string; disabled: boole
           <Pending label="Verificar y guardar" busy="Verificando…" />
         </button>
       </div>
-      <p className="text-xs text-[#8a978f]">Se prueba contra CONtexto antes de guardarla, se cifra y solo la lee el servidor.</p>
+      <p className="text-xs text-[#8a978f]">Se prueba contra {servicio} antes de guardarla, se cifra y solo la lee el servidor.</p>
       <Notice state={state} />
     </form>
   );

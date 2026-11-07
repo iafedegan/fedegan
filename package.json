@@ -13,6 +13,8 @@
     "inventario": "node scripts/inventario-componentes.mjs"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^1.6.0",
+    "@google/genai": "^3.0.0",
     "@phosphor-icons/react": "^2.1.10",
     "@supabase/supabase-js": "^2.117.3",
     "lucide-react": "^1.48.0",

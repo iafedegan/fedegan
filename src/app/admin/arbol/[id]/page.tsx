@@ -9,8 +9,12 @@ import { readDb } from "@/lib/cms/client";
 import { NODE_COLUMNS, rowToNode } from "@/lib/cms/nodos";
 import { blocksToText } from "@/lib/cms/paginas-texto";
 import { eliminarNodo, publicarNodo } from "@/lib/cms/nodos-actions";
+import { credencialIA, GUIA_ESTILO, PROVEEDORES, type Proveedor } from "@/lib/ia";
 
 export const metadata: Metadata = { title: "Editar nodo · Panel del portal", robots: { index: false } };
+
+// Redactar con IA puede tardar más de un minuto: más tiempo para las acciones de esta página.
+export const maxDuration = 300;
 
 export default async function EditarNodoPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -23,6 +27,8 @@ export default async function EditarNodoPage({ params }: { params: Promise<{ id:
   const seccion = legacySections[nodo.section]?.label ?? (await db.from("site_nodes").select("label").eq("section", nodo.section).eq("is_section", true).maybeSingle()).data?.label ?? nodo.section;
   const url = nodo.href ?? legacyHref(nodo.section, nodo.key);
   const esEnlace = Boolean(nodo.href);
+  const ias = await Promise.all((["claude", "gemini"] as Proveedor[]).map(async (p) => ((await credencialIA(p)).key ? { id: p, label: PROVEEDORES[p].label } : null)));
+  const opciones = ias.filter((o): o is { id: Proveedor; label: string } => o !== null);
 
   return (
     <div className="flex flex-col gap-6">
@@ -47,7 +53,7 @@ export default async function EditarNodoPage({ params }: { params: Promise<{ id:
 
       <div className="grid gap-6 lg:grid-cols-[1fr_20rem] lg:items-start">
         <div className="ad-card p-5 sm:p-7">
-          <NodoForm id={nodo.id} label={nodo.label} title={nodo.title} href={nodo.href ?? ""} texto={blocksToText(nodo.blocks)} esEnlace={esEnlace} writable={writable} />
+          <NodoForm id={nodo.id} label={nodo.label} title={nodo.title} href={nodo.href ?? ""} texto={blocksToText(nodo.blocks)} esEnlace={esEnlace} writable={writable} ia={{ opciones, guia: GUIA_ESTILO, ruta: url, seccion: String(seccion) }} />
         </div>
         <aside className="flex flex-col gap-4 lg:sticky lg:top-6">
           {!esEnlace && (

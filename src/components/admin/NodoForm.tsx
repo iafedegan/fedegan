@@ -1,9 +1,10 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useRef } from "react";
 import { useFormStatus } from "react-dom";
 import { CheckCircle2, Loader2, XCircle } from "lucide-react";
 import { editarNodo, type NodoState } from "@/lib/cms/nodos-actions";
+import { RedactarIA, type OpcionIA } from "./RedactarIA";
 
 function Guardar({ writable }: { writable: boolean }) {
   const { pending } = useFormStatus();
@@ -14,15 +15,20 @@ function Guardar({ writable }: { writable: boolean }) {
   );
 }
 
+export type IAConfig = { opciones: OpcionIA[]; guia: string; ruta: string; seccion: string };
+
 // Edita una página, sección o enlace creado en el árbol del sitio.
-export function NodoForm({ id, label, title, href, texto, esEnlace, writable }: { id: string; label: string; title: string; href: string; texto: string; esEnlace: boolean; writable: boolean }) {
+export function NodoForm({ id, label, title, href, texto, esEnlace, writable, ia }: { id: string; label: string; title: string; href: string; texto: string; esEnlace: boolean; writable: boolean; ia?: IAConfig }) {
   const [state, action] = useActionState<NodoState, FormData>(editarNodo, {});
+  const labelRef = useRef<HTMLInputElement>(null);
+  const titleRef = useRef<HTMLInputElement>(null);
+  const textoRef = useRef<HTMLTextAreaElement>(null);
   return (
     <form action={action} className="flex flex-col gap-5">
       <input type="hidden" name="id" value={id} />
       <div className="flex flex-col gap-2">
         <label htmlFor="label" className="text-sm font-semibold text-[#11271d]">Nombre en el menú</label>
-        <input id="label" name="label" defaultValue={label} maxLength={120} required className="ad-input" />
+        <input ref={labelRef} id="label" name="label" defaultValue={label} maxLength={120} required className="ad-input" />
       </div>
       {esEnlace ? (
         <div className="flex flex-col gap-2">
@@ -33,11 +39,24 @@ export function NodoForm({ id, label, title, href, texto, esEnlace, writable }: 
         <>
           <div className="flex flex-col gap-2">
             <label htmlFor="title" className="text-sm font-semibold text-[#11271d]">Título de la página</label>
-            <input id="title" name="title" defaultValue={title} maxLength={200} required className="ad-input" />
+            <input ref={titleRef} id="title" name="title" defaultValue={title} maxLength={200} required className="ad-input" />
           </div>
+          {ia && (
+            <RedactarIA
+              opciones={ia.opciones}
+              guia={ia.guia}
+              contexto={{ titulo: () => titleRef.current?.value ?? title, nombre: () => labelRef.current?.value ?? label, ruta: ia.ruta, seccion: ia.seccion }}
+              leer={() => textoRef.current?.value ?? ""}
+              escribir={(t) => {
+                if (!textoRef.current) return;
+                textoRef.current.value = t;
+                textoRef.current.focus();
+              }}
+            />
+          )}
           <div className="flex flex-col gap-2">
             <label htmlFor="texto" className="text-sm font-semibold text-[#11271d]">Contenido</label>
-            <textarea id="texto" name="texto" defaultValue={texto} spellCheck rows={24} className="ad-input min-h-[26rem] resize-y font-mono text-[0.85rem] leading-relaxed" />
+            <textarea ref={textoRef} id="texto" name="texto" defaultValue={texto} spellCheck rows={24} className="ad-input min-h-[26rem] resize-y font-mono text-[0.85rem] leading-relaxed" />
           </div>
         </>
       )}

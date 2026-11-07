@@ -5,7 +5,7 @@ import { decryptSecret, encryptSecret, secretsAvailable } from "./secrets";
 // Claves de API gestionadas desde /admin/apis. Se guardan cifradas en site_settings
 // (clave "api_secret:<id>"), una tabla que el público no puede leer: solo la clave de servicio.
 
-export type IntegrationId = "contexto";
+export type IntegrationId = "contexto" | "claude" | "gemini";
 
 const settingKey = (id: IntegrationId) => `api_secret:${id}`;
 const TTL_MS = 60_000;

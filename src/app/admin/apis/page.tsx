@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ChevronRight, Database, ExternalLink, KeyRound, Newspaper, ShieldCheck } from "lucide-react";
+import { ChevronRight, Database, ExternalLink, KeyRound, Newspaper, ShieldCheck, Sparkles } from "lucide-react";
 import { auth, demoEnabled, entraConfigured } from "@/auth";
 import { ROLES, hasAnyRole } from "@/lib/access";
 import { ApiKeyForm, ApiTestButton } from "@/components/admin/ApiForms";
@@ -10,6 +10,7 @@ import { getStoredMeta } from "@/lib/cms/integrations";
 import { secretsAvailable } from "@/lib/cms/secrets";
 import { contextoCredentials } from "@/lib/contexto";
 import { removeApiKey } from "@/lib/cms/api-actions";
+import { credencialIA, PROVEEDORES, type Proveedor } from "@/lib/ia";
 
 export const metadata: Metadata = { title: "Conexiones · Panel del portal", robots: { index: false } };
 
@@ -19,6 +20,12 @@ export default async function ApisPage() {
   const session = await auth();
   const isAdmin = hasAnyRole(session?.user?.roles, [ROLES.portalAdmin]);
   const [creds, meta] = await Promise.all([contextoCredentials(), getStoredMeta("contexto")]);
+  const ias = await Promise.all(
+    (["claude", "gemini"] as Proveedor[]).map(async (id) => {
+      const [c, m] = await Promise.all([credencialIA(id), getStoredMeta(id)]);
+      return { id, ...PROVEEDORES[id], source: c.source, hint: m?.hint ?? (c.source === "env" && c.key ? c.key.slice(-4) : null) };
+    }),
+  );
   const canStore = cmsEnvStatus.serviceKey && secretsAvailable;
   const envHint = creds.source === "env" && creds.key ? creds.key.slice(-4) : null;
   const hint = meta?.hint ?? envHint;
@@ -82,6 +89,46 @@ export default async function ApisPage() {
         <a href="https://contexto-olive.vercel.app/api-docs" target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 self-start text-sm font-semibold text-[#165a43]">
           Documentación de la API <ExternalLink size={14} />
         </a>
+      </section>
+
+      {/* Inteligencia artificial */}
+      <section className="ad-card flex flex-col gap-6 p-6 sm:p-8">
+        <div className="flex items-start gap-4">
+          <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#eef8e6] text-[#3d7a22]"><Sparkles size={22} /></span>
+          <div>
+            <h2 className="text-xl font-bold">Inteligencia artificial</h2>
+            <p className="mt-0.5 text-sm text-[#5d6e65]">Redacta el contenido de las páginas del árbol del sitio a partir de un pedido, con la guía de estilo del portal. Basta con una de las dos.</p>
+          </div>
+        </div>
+        <div className="grid gap-6 lg:grid-cols-2">
+          {ias.map((p) => (
+            <div key={p.id} className="flex flex-col gap-4 rounded-2xl border border-[#eceae0] p-5">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <h3 className="text-lg font-bold">{p.label}</h3>
+                <span className={`ad-pill ${p.source !== "none" ? "ad-pill-ok" : "ad-pill-off"}`}>{p.source !== "none" ? "Con clave" : "Sin clave"}</span>
+              </div>
+              <dl className="grid gap-3 text-sm sm:grid-cols-3">
+                <div><dt className="ad-eyebrow">Modelo</dt><dd className="mt-1 break-all font-mono text-[0.8rem]">{p.modelo}</dd></div>
+                <div><dt className="ad-eyebrow">Clave</dt><dd className="mt-1 font-mono text-[0.8rem]">{p.hint ? `••••${p.hint}` : "—"}</dd></div>
+                <div><dt className="ad-eyebrow">Origen</dt><dd className="mt-1">{p.source === "panel" ? "Panel" : p.source === "env" ? p.env[0] : "—"}</dd></div>
+              </dl>
+              <ApiTestButton id={p.id} />
+              {isAdmin ? (
+                <>
+                  <ApiKeyForm id={p.id} disabled={!canStore} hint={p.hint ?? undefined} servicio={p.label} />
+                  {p.source === "panel" && (
+                    <form action={removeApiKey}>
+                      <input type="hidden" name="id" value={p.id} />
+                      <button type="submit" className="text-sm font-semibold text-[#7a1f1f] underline underline-offset-4">Quitar la clave del panel</button>
+                    </form>
+                  )}
+                </>
+              ) : (
+                <p className="flex items-start gap-2 text-sm text-[#5d6e65]"><KeyRound size={16} className="mt-0.5 shrink-0 text-[#b08f4f]" /> Solo los administradores del portal pueden cambiar la clave.</p>
+              )}
+            </div>
+          ))}
+        </div>
       </section>
 
       <div className="grid gap-6 lg:grid-cols-2">
