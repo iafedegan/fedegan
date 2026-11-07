@@ -1,11 +1,12 @@
 "use client";
 
-import { useId, useRef, useState, type ReactNode } from "react";
-import { ArrowDown, ArrowUp, Bold, FileUp, ImagePlus, Link2, Loader2, Plus, Trash2 } from "lucide-react";
+import { useRef, useState, type ReactNode } from "react";
+import { ArrowDown, ArrowUp, FileUp, ImagePlus, Loader2, Plus, Trash2 } from "lucide-react";
 import {
   EMBED_OK, ENLACE_OK, IMAGEN_OK, normalizarUrl, normalizarVideo, tarjetaVacia,
-  type ElTexto, type Elemento, type Tarjeta,
+  type ElTexto, type Elemento, type ItemLista, type Tarjeta,
 } from "@/lib/cms/bloques";
+import { CampoRico } from "./CampoRico";
 import { subirArchivo } from "./subir";
 
 // Formularios de cada elemento del constructor: se abren al seleccionar el elemento en la página.
@@ -22,7 +23,6 @@ export type Acciones = {
 };
 
 const ctl = "ad-input font-normal";
-const ENLACE_TEXTO = /^(https?:\/\/[^)\s]+|\/[^)\s]*)$/;
 
 // ───────────────────────── piezas comunes
 
@@ -85,73 +85,12 @@ function CampoUrl({ etiqueta, valor, onCambio, placeholder, validar = ENLACE_OK,
   );
 }
 
-// Texto de varias líneas con dos ayudas para el formato: negrita y enlace (se escriben como **texto** y [texto](enlace)).
-function CampoTexto({ etiqueta, valor, onCambio, filas = 4, placeholder, formato = true, max = 20000 }: {
-  etiqueta: string; valor: string; onCambio: (v: string) => void; filas?: number; placeholder?: string; formato?: boolean; max?: number;
-}) {
-  const ref = useRef<HTMLTextAreaElement>(null);
-  const id = useId();
-  const [enlace, setEnlace] = useState<{ url: string; a: number; b: number } | null>(null);
-
-  const poner = (nuevo: string, desde: number, hasta: number) => {
-    onCambio(nuevo);
-    requestAnimationFrame(() => {
-      ref.current?.focus();
-      ref.current?.setSelectionRange(desde, hasta);
-    });
-  };
-  const negrita = () => {
-    const t = ref.current;
-    if (!t) return;
-    const a = t.selectionStart;
-    const sel = valor.slice(a, t.selectionEnd) || "texto";
-    poner(`${valor.slice(0, a)}**${sel}**${valor.slice(t.selectionEnd)}`, a + 2, a + 2 + sel.length);
-  };
-  const aplicar = () => {
-    if (!enlace) return;
-    const url = normalizarUrl(enlace.url);
-    if (!ENLACE_TEXTO.test(url)) return;
-    const sel = valor.slice(enlace.a, enlace.b) || "texto del enlace";
-    const marca = `[${sel}](${url})`;
-    poner(valor.slice(0, enlace.a) + marca + valor.slice(enlace.b), enlace.a, enlace.a + marca.length);
-    setEnlace(null);
-  };
-  const urlMala = enlace !== null && enlace.url.trim() !== "" && !ENLACE_TEXTO.test(normalizarUrl(enlace.url));
-
+// Texto de varias líneas sin formato (los textos cortos de tarjetas y destacados).
+function CampoSimple({ etiqueta, valor, onCambio, filas = 3, max = 700, placeholder }: { etiqueta: string; valor: string; onCambio: (v: string) => void; filas?: number; max?: number; placeholder?: string }) {
   return (
-    <div className="flex flex-col gap-1.5">
-      <label htmlFor={id} className="text-sm font-semibold text-[#11271d]">{etiqueta}</label>
-      {formato && (
-        <div className="flex flex-wrap items-center gap-1.5">
-          <button type="button" onClick={negrita} className="ad-icon-btn !h-8 !w-8" aria-label="Negrita" title="Negrita: seleccione palabras y pulse"><Bold size={15} /></button>
-          <button type="button" onClick={() => ref.current && setEnlace({ url: "", a: ref.current.selectionStart, b: ref.current.selectionEnd })} className="ad-icon-btn !h-8 !w-8" aria-label="Insertar enlace" title="Enlace: seleccione palabras y pulse"><Link2 size={15} /></button>
-          <span className="text-xs text-[#8a978f]">Seleccione palabras y pulse para dar formato.</span>
-        </div>
-      )}
-      {enlace && (
-        <div className="flex flex-wrap items-center gap-2 rounded-xl border border-[#e4e2d6] bg-white p-2">
-          <input
-            autoFocus
-            type="text"
-            inputMode="url"
-            aria-label="Dirección del enlace"
-            placeholder="https://… o /ruta"
-            value={enlace.url}
-            onChange={(e) => setEnlace({ ...enlace, url: e.target.value })}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                e.preventDefault();
-                aplicar();
-              } else if (e.key === "Escape") setEnlace(null);
-            }}
-            className={`${ctl} !w-auto min-w-[12rem] flex-1 !py-1.5 ${urlMala ? "!border-[#e0a0a0]" : ""}`}
-          />
-          <button type="button" onClick={aplicar} disabled={!ENLACE_TEXTO.test(normalizarUrl(enlace.url))} className="ad-btn ad-btn-primary !min-h-9">Aplicar</button>
-          <button type="button" onClick={() => setEnlace(null)} className="ad-btn ad-btn-ghost !min-h-9">Cancelar</button>
-        </div>
-      )}
-      <textarea id={id} ref={ref} rows={filas} maxLength={max} value={valor} placeholder={placeholder} onChange={(e) => onCambio(e.target.value)} spellCheck className={`${ctl} resize-y leading-relaxed`} />
-    </div>
+    <Campo etiqueta={etiqueta}>
+      <textarea rows={filas} maxLength={max} value={valor} placeholder={placeholder} onChange={(e) => onCambio(e.target.value)} spellCheck className={`${ctl} resize-y leading-relaxed`} />
+    </Campo>
   );
 }
 
@@ -247,30 +186,56 @@ function ListaItems<T>({ items, onItems, nombre, nuevo, max = 24, render }: {
 
 function EditorTexto({ el, cambiar }: { el: ElTexto; cambiar: Acciones["cambiar"] }) {
   if (el.tipo === "p") {
-    return <CampoTexto etiqueta="Texto" valor={el.texto} onCambio={(t) => cambiar({ ...el, texto: t })} filas={5} placeholder="Escriba el párrafo…" />;
+    return <CampoRico etiqueta="Texto" valor={el.texto} onCambio={(t) => cambiar({ ...el, texto: t })} multilinea placeholder="Escriba el párrafo…" />;
   }
   return (
     <>
-      <Campo etiqueta="Texto">
-        <input className={ctl} value={el.texto} maxLength={300} placeholder="Escriba el título…" onChange={(e) => cambiar({ ...el, texto: e.target.value })} />
-      </Campo>
+      <CampoRico etiqueta="Texto" valor={el.texto} onCambio={(t) => cambiar({ ...el, texto: t })} placeholder="Escriba el título…" />
       <Segmentos etiqueta="Tamaño" valor={el.tipo} opciones={[{ valor: "h2", nombre: "Título" }, { valor: "h3", nombre: "Subtítulo" }, { valor: "h4", nombre: "Detalle" }]} onCambio={(tipo) => cambiar({ ...el, tipo })} />
     </>
   );
 }
 
+// Lista de viñetas: cada una es un texto o un enlace (nombre y dirección en campos aparte, sin símbolos).
 function EditorLista({ el, cambiar }: { el: De<"lista">; cambiar: Acciones["cambiar"] }) {
+  const items = el.items;
+  const poner = (items: ItemLista[]) => cambiar({ ...el, items });
+  const mover = (i: number, d: -1 | 1) => {
+    const j = i + d;
+    if (j < 0 || j >= items.length) return;
+    const n = [...items];
+    [n[i], n[j]] = [n[j], n[i]];
+    poner(n);
+  };
   return (
-    <Campo etiqueta="Elementos de la lista" ayuda="Escriba uno por línea.">
-      <textarea
-        rows={Math.max(4, el.items.length + 1)}
-        value={el.items.join("\n")}
-        placeholder={"Primer elemento\nSegundo elemento"}
-        onChange={(e) => cambiar({ ...el, items: e.target.value.split("\n") })}
-        spellCheck
-        className={`${ctl} resize-y leading-relaxed`}
-      />
-    </Campo>
+    <div className="flex flex-col gap-2.5">
+      <ul className="flex flex-col gap-2">
+        {items.map((it, i) => (
+          <li key={i} className="flex items-start gap-2 rounded-xl border border-[#e4e2d6] bg-white p-2.5">
+            <span className="mt-2 w-5 shrink-0 text-center text-xs font-bold text-[#8a978f]">{i + 1}</span>
+            <div className="min-w-0 flex-1">
+              {it.url !== undefined ? (
+                <div className="grid gap-2 sm:grid-cols-2">
+                  <input aria-label={`Nombre de la viñeta ${i + 1}`} className={ctl} value={it.texto} maxLength={300} placeholder="Nombre que se ve" onChange={(e) => poner(items.map((x, j) => (j === i ? { ...x, texto: e.target.value } : x)))} />
+                  <CampoUrl etiqueta={`Enlace de la viñeta ${i + 1}`} valor={it.url} onCambio={(url) => poner(items.map((x, j) => (j === i ? { ...x, url } : x)))} placeholder="https://… o /ruta" />
+                </div>
+              ) : (
+                <CampoRico etiqueta={`Viñeta ${i + 1}`} valor={it.texto} onCambio={(texto) => poner(items.map((x, j) => (j === i ? { ...x, texto } : x)))} barra="flotante" placeholder="Escriba el texto…" />
+              )}
+            </div>
+            <span className="flex shrink-0 gap-1">
+              <button type="button" disabled={i === 0} onClick={() => mover(i, -1)} className="ad-icon-btn !h-8 !w-8" aria-label={`Subir la viñeta ${i + 1}`}><ArrowUp size={14} /></button>
+              <button type="button" disabled={i === items.length - 1} onClick={() => mover(i, 1)} className="ad-icon-btn !h-8 !w-8" aria-label={`Bajar la viñeta ${i + 1}`}><ArrowDown size={14} /></button>
+              <button type="button" onClick={() => poner(items.filter((_, j) => j !== i))} className="ad-icon-btn !h-8 !w-8 hover:!border-[#e0a0a0] hover:!text-[#a33a3a]" aria-label={`Quitar la viñeta ${i + 1}`}><Trash2 size={14} /></button>
+            </span>
+          </li>
+        ))}
+      </ul>
+      <div className="flex flex-wrap gap-2">
+        <button type="button" onClick={() => poner([...items, { texto: "" }])} className="ad-btn ad-btn-ghost !min-h-9"><Plus size={15} /> Añadir texto</button>
+        <button type="button" onClick={() => poner([...items, { texto: "", url: "" }])} className="ad-btn ad-btn-ghost !min-h-9"><Plus size={15} /> Añadir enlace</button>
+      </div>
+    </div>
   );
 }
 
@@ -326,7 +291,7 @@ function EditorTarjetas({ el, cambiar, actualizar, carpeta }: { el: De<"cards"> 
             <Campo etiqueta="Título">
               <input className={ctl} value={t.titulo} maxLength={140} onChange={(e) => cambio({ ...t, titulo: e.target.value })} />
             </Campo>
-            <CampoTexto etiqueta="Texto" valor={t.texto} onCambio={(texto) => cambio({ ...t, texto })} filas={3} formato={false} max={700} />
+            <CampoSimple etiqueta="Texto" valor={t.texto} onCambio={(texto) => cambio({ ...t, texto })} />
             <CampoImagen etiqueta="Imagen (opcional)" valor={t.imagen} onCambio={(imagen) => cambio({ ...t, imagen })} onSubida={(url) => actualizar(conTarjeta(i, { imagen: url }))} carpeta={carpeta} />
             <div className="grid gap-3 sm:grid-cols-2">
               <div className="flex flex-col gap-1.5">
@@ -357,7 +322,7 @@ function EditorPreguntas({ el, cambiar }: { el: De<"accordion"> } & Pick<Accione
           <Campo etiqueta="Pregunta">
             <input className={ctl} value={it.titulo} maxLength={200} onChange={(e) => cambio({ ...it, titulo: e.target.value })} />
           </Campo>
-          <CampoTexto etiqueta="Respuesta" valor={it.texto} onCambio={(texto) => cambio({ ...it, texto })} filas={4} max={6000} />
+          <CampoRico etiqueta="Respuesta" valor={it.texto} onCambio={(texto) => cambio({ ...it, texto })} multilinea placeholder="Escriba la respuesta…" />
         </>
       )}
     />
@@ -370,7 +335,7 @@ function EditorDestacado({ el, cambiar }: { el: De<"callout"> } & Pick<Acciones,
       <Campo etiqueta="Título">
         <input className={ctl} value={el.titulo} maxLength={160} placeholder="El mensaje principal" onChange={(e) => cambiar({ ...el, titulo: e.target.value })} />
       </Campo>
-      <CampoTexto etiqueta="Texto (opcional)" valor={el.texto} onCambio={(texto) => cambiar({ ...el, texto })} filas={3} formato={false} max={700} />
+      <CampoSimple etiqueta="Texto (opcional)" valor={el.texto} onCambio={(texto) => cambiar({ ...el, texto })} />
       <div className="grid gap-3 sm:grid-cols-2">
         <Campo etiqueta="Texto del botón">
           <input className={ctl} value={el.boton} maxLength={40} placeholder="Por ejemplo: Inscribirme" onChange={(e) => cambiar({ ...el, boton: e.target.value })} />
@@ -434,7 +399,7 @@ function EditorVideo({ el, cambiar }: { el: De<"embed"> } & Pick<Acciones, "camb
         onCambio={(url) => cambiar({ ...el, url })}
         placeholder="https://www.youtube.com/watch?v=…"
         validar={EMBED_OK}
-        mensaje="La dirección debe empezar con https://."
+        mensaje="La dirección debe empezar con https:// o http://."
         normalizar={normalizarVideo}
       />
       <span className="text-xs text-[#5d6e65]">Un enlace de YouTube se muestra como video. Cualquier otro (documento, presentación, tablero) se muestra como una ficha con enlace.</span>

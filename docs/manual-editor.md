@@ -19,7 +19,7 @@ Para quien publica en el portal desde `/admin` (se ingresa con una cuenta con ro
 4. Guarde. Para retirar algo, bórrelo o ponga una fecha futura.
 
 ## Páginas migradas
-`/admin/paginas` lista las páginas copiadas del portal anterior (busque por título o filtre por sección). Al abrir una, el contenido se edita como texto: una línea en blanco separa párrafos, `## Título` es un encabezado, `- elemento` una lista, `**negrita**` y `[texto](https://…)` para enlaces, `@video https://…` para incrustar un video o documento. Las tablas del original se conservan como `{{tabla 1}}`. Al guardar, el cambio se ve en el sitio; **Restaurar el original** descarta lo editado.
+Las páginas copiadas del portal anterior se editan con el mismo constructor que las páginas nuevas (siguiente sección): desde el lápiz del árbol del sitio (`/admin/arbol`) o desde `/admin/paginas` (busque por título o filtre por sección). Cada título, párrafo, lista, video y documento aparece como un elemento; la negrita y los enlaces se ven como son, sin símbolos que escribir (en un texto, seleccione las palabras y use los botones **B** y de enlace). En una lista, cada enlace tiene su nombre y su dirección en campos aparte. Las tablas del original se conservan: se pueden mover o quitar, pero no se editan. **Vista previa** muestra la página tal como la verá el público. Al pulsar **Publicar cambios** el cambio se ve en el sitio; **Restaurar el original** descarta lo editado.
 
 ## Páginas nuevas: constructor de arrastrar y soltar
 `/admin/arbol` crea secciones, subsecciones y páginas nuevas a cualquier nivel. Al crear una página (**Crear y armar la página**) se abre el constructor:

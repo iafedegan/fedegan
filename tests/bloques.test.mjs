@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import {
-  aBloques, aElementos, elementoNuevo, normalizarUrl, normalizarVideo, problema, sanearBloques, PLANTILLAS,
+  aBloques, aElementos, elementoNuevo, itemDeTexto, normalizarUrl, normalizarVideo, problema, sanearBloques, textoDeItem, PLANTILLAS,
 } from "../src/lib/cms/bloques.ts";
 
 test("las páginas escritas antes (párrafos, títulos, listas) vuelven a guardarse igual", () => {
@@ -49,7 +49,7 @@ test("el servidor rechaza enlaces peligrosos en botones, tarjetas, imágenes y d
     { t: "cards", data: { items: [{ titulo: "A", enlace: "data:text/html,<script>" }] } },
     { t: "image", data: { src: "http://inseguro.example/a.png" } },
     { t: "docs", data: { items: [{ nombre: "Doc", url: "javascript:void(0)" }] } },
-    { t: "embed", text: "http://inseguro.example" },
+    { t: "embed", text: "javascript:alert(1)" },
   ];
   for (const b of malos) assert.equal(sanearBloques([b]).ok, false, JSON.stringify(b));
 });
@@ -98,4 +98,30 @@ test("un bloque copiado que el constructor no edita (tabla) se conserva", () => 
   assert.equal(el.tipo, "otro");
   assert.deepEqual(aBloques([el]), [tabla]);
   assert.deepEqual(sanearBloques([tabla]).bloques, [tabla]);
+});
+
+test("una viñeta que es solo un enlace se edita como nombre y dirección, y se guarda igual", () => {
+  const texto = "[Tasa de Imputación (Excel)](https://storage.googleapis.com/static-fedegan/SIG/a.xlsx)";
+  const it = itemDeTexto(texto);
+  assert.deepEqual(it, { texto: "Tasa de Imputación (Excel)", url: "https://storage.googleapis.com/static-fedegan/SIG/a.xlsx" });
+  assert.equal(textoDeItem(it), texto);
+  // un texto cualquiera (aunque tenga enlaces o negrita) sigue siendo texto
+  assert.deepEqual(itemDeTexto("Ver **todo** en [la web](/pagos)"), { texto: "Ver **todo** en [la web](/pagos)" });
+  assert.equal(textoDeItem({ texto: "Ver **todo**" }), "Ver **todo**");
+});
+
+test("las viñetas de enlace completan la dirección y, sin dirección válida, se guardan sin enlace", () => {
+  assert.equal(textoDeItem({ texto: "FEDEGÁN", url: "fedegan.org.co" }), "[FEDEGÁN](https://fedegan.org.co)");
+  assert.equal(textoDeItem({ texto: "Sin dirección", url: "" }), "Sin dirección");
+  assert.equal(textoDeItem({ texto: "Mala", url: "no es un enlace" }), "Mala");
+  assert.equal(textoDeItem({ texto: "Con paréntesis", url: "https://x.co/a(1).pdf" }), "[Con paréntesis](https://x.co/a(1%29.pdf)");
+  const lista = { ...elementoNuevo("lista"), items: [{ texto: "Uno", url: "https://x.co/a.pdf" }, { texto: "Dos", url: "mal enlace" }] };
+  assert.match(problema(lista), /viñeta 2/);
+  assert.deepEqual(aBloques([lista]).map((b) => b.text), ["[Uno](https://x.co/a.pdf)", "Dos"]);
+});
+
+test("un video con dirección http:// (presentaciones antiguas) se acepta: se muestra como enlace, no se incrusta", () => {
+  const r = sanearBloques([{ t: "embed", text: "http://www.slideshare.net/slideshow/embed_code/26270066" }]);
+  assert.equal(r.ok, true);
+  assert.equal(sanearBloques([{ t: "embed", text: "javascript:alert(1)" }]).ok, false);
 });

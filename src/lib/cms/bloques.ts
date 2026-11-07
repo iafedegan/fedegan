@@ -14,10 +14,12 @@ export type Tono = "verde" | "dorado" | "claro";
 export type Tarjeta = { titulo: string; texto: string; imagen: string; enlace: string; boton: string };
 export type Pregunta = { titulo: string; texto: string };
 export type Documento = { nombre: string; url: string };
+/** Una viñeta: texto, o un enlace (el texto es el nombre y `url` la dirección). */
+export type ItemLista = { texto: string; url?: string };
 
 export type Elemento =
   | { id: string; tipo: "h2" | "h3" | "h4" | "p"; texto: string }
-  | { id: string; tipo: "lista"; items: string[] }
+  | { id: string; tipo: "lista"; items: ItemLista[] }
   | { id: string; tipo: "button"; texto: string; href: string; estilo: Estilo }
   | { id: string; tipo: "image"; src: string; alt: string; pie: string }
   | { id: string; tipo: "cards"; columnas: 2 | 3 | 4; items: Tarjeta[] }
@@ -71,8 +73,27 @@ const SEGURO = String.raw`[^\s"'<>\\]`;
 export const ENLACE_OK = new RegExp(`^(https?://${SEGURO}+|/(?!/)${SEGURO}*|#${SEGURO}*|mailto:${SEGURO}+|tel:\\+?[0-9 ()-]{5,25})$`, "i");
 /** Imágenes: solo https:// o una ruta del portal. */
 export const IMAGEN_OK = new RegExp(`^(https://${SEGURO}+|/(?!/)${SEGURO}*)$`);
-/** Contenido incrustado: solo https://. */
-export const EMBED_OK = new RegExp(`^https://${SEGURO}+$`);
+/** Contenido incrustado: https:// o http://. Solo los videos de YouTube se incrustan (siempre por https); lo demás se muestra como enlace. */
+export const EMBED_OK = new RegExp(`^https?://${SEGURO}+$`, "i");
+
+/** Enlaces que entiende el texto de la página: [palabras](https://…) o [palabras](/ruta). */
+export const ENLACE_TEXTO = /^(https?:\/\/[^)\s]+|\/[^)\s]*)$/;
+const ENLACE_SOLO = /^\[([^\]]*)\]\((https?:\/\/[^)\s]+|\/[^)\s]*)\)$/;
+
+/** «[nombre](enlace)» solo → viñeta de enlace; cualquier otro texto → viñeta de texto. */
+export function itemDeTexto(t: string): ItemLista {
+  const m = ENLACE_SOLO.exec(t.trim());
+  return m ? { texto: m[1], url: m[2] } : { texto: t };
+}
+
+/** La viñeta como se guarda. Una viñeta de enlace sin dirección válida se guarda sin enlace. */
+export function textoDeItem(it: ItemLista): string {
+  if (it.url === undefined) return it.texto;
+  const nombre = it.texto.replace(/[\[\]]/g, "").trim();
+  const url = normalizarUrl(it.url).replace(/ /g, "%20").replace(/\)/g, "%29");
+  if (!ENLACE_TEXTO.test(url)) return nombre;
+  return `[${nombre || url}](${url})`;
+}
 
 /** «fedegan.org.co» → «https://fedegan.org.co»; un correo → «mailto:»; lo demás queda como está. */
 export function normalizarUrl(raw: string): string {
@@ -153,8 +174,8 @@ export function aElementos(blocks: Bloque[]): Elemento[] {
         out.push({ id, tipo: b.t, texto: b.text ?? "" });
         break;
       case "li": {
-        const items = [b.text ?? ""];
-        while (blocks[i + 1]?.t === "li") items.push(blocks[++i].text ?? "");
+        const items = [itemDeTexto(b.text ?? "")];
+        while (blocks[i + 1]?.t === "li") items.push(itemDeTexto(blocks[++i].text ?? ""));
         out.push({ id, tipo: "lista", items });
         break;
       }
@@ -237,7 +258,7 @@ export function canonico(b: Bloque): Bloque | null {
   const d = obj(b.data);
   switch (b.t) {
     case "h1": case "h2": case "h3": case "h4": case "h5": case "h6": {
-      const t = linea(b.text, 300);
+      const t = linea(b.text, 600);
       return t ? { t: b.t, text: t } : null;
     }
     case "p": {
@@ -363,7 +384,7 @@ export function problemaBloque(b: Bloque): string | null {
       return null;
     }
     case "embed":
-      return EMBED_OK.test(b.text ?? "") ? null : "La dirección debe empezar con https://.";
+      return EMBED_OK.test(b.text ?? "") ? null : "La dirección debe empezar con https:// o http://.";
     case "?":
       return "Tipo de elemento no reconocido.";
     default:
@@ -378,7 +399,7 @@ export function aBloques(elementos: Elemento[]): Bloque[] {
 
 function elementoABloques(el: Elemento): Bloque[] {
   if (el.tipo === "otro") return [el.bloque];
-  if (el.tipo === "lista") return el.items.map((t) => canonico({ t: "li", text: t })).filter((b): b is Bloque => b !== null);
+  if (el.tipo === "lista") return el.items.map((it) => canonico({ t: "li", text: textoDeItem(it) })).filter((b): b is Bloque => b !== null);
   const b = canonico(bloqueCrudo(el));
   return b ? [b] : [];
 }
@@ -387,7 +408,11 @@ function elementoABloques(el: Elemento): Bloque[] {
 export function problema(el: Elemento): string | null {
   if (el.tipo === "otro" || el.tipo === "divider") return null;
   const bs = elementoABloques(el);
-  if (el.tipo === "lista") return bs.length ? null : "Escriba al menos un elemento de la lista.";
+  if (el.tipo === "lista") {
+    if (!bs.length) return "Escriba al menos un elemento de la lista.";
+    const mal = el.items.findIndex((it) => it.url !== undefined && it.url.trim() !== "" && !ENLACE_TEXTO.test(normalizarUrl(it.url)));
+    return mal >= 0 ? `El enlace de la viñeta ${mal + 1} no es válido (use https://… o una ruta como /pagos): esa viñeta se publica sin enlace.` : null;
+  }
   if (bs.length === 0) {
     switch (el.tipo) {
       case "h2": case "h3": case "h4": return "Escriba el título.";
@@ -431,7 +456,7 @@ export function elementoNuevo(tipo: TipoNuevo): Elemento {
   const id = nuevoId();
   switch (tipo) {
     case "h2": case "h3": case "p": return { id, tipo, texto: "" };
-    case "lista": return { id, tipo, items: [""] };
+    case "lista": return { id, tipo, items: [{ texto: "" }] };
     case "button": return { id, tipo, texto: "", href: "", estilo: "solido" };
     case "image": return { id, tipo, src: "", alt: "", pie: "" };
     case "cards": return { id, tipo, columnas: 3, items: [tarjetaVacia(), tarjetaVacia(), tarjetaVacia()] };

@@ -1,43 +1,22 @@
 "use client";
 
-import { useActionState, useEffect, useMemo, useState } from "react";
-import { useFormStatus } from "react-dom";
-import { AlertTriangle, CheckCircle2, Loader2, XCircle } from "lucide-react";
+import { useActionState } from "react";
+import { CheckCircle2, XCircle } from "lucide-react";
 import { editarNodo, type NodoState } from "@/lib/cms/nodos-actions";
-import { aBloques, aElementos, problema, type Bloque, type Elemento } from "@/lib/cms/bloques";
+import type { Bloque } from "@/lib/cms/bloques";
+import { BarraPublicar } from "./constructor/BarraPublicar";
 import { Constructor } from "./constructor/Constructor";
-
-function Publicar({ writable, etiqueta }: { writable: boolean; etiqueta: string }) {
-  const { pending } = useFormStatus();
-  return (
-    <button type="submit" disabled={pending || !writable} className="ad-btn ad-btn-primary">
-      {pending ? <Loader2 size={16} className="animate-spin" /> : null} {pending ? "Publicando…" : etiqueta}
-    </button>
-  );
-}
+import { useEditorPagina } from "./constructor/useEditorPagina";
 
 // Edita una página, sección o enlace creado en el árbol del sitio. Una página se arma arrastrando elementos
 // (botones, tarjetas, carruseles…) y no se publica hasta pulsar «Publicar cambios».
 export function NodoForm({ id, label, title, href, bloques, esEnlace, writable }: { id: string; label: string; title: string; href: string; bloques: Bloque[]; esEnlace: boolean; writable: boolean }) {
-  const [elementos, setElementos] = useState<Elemento[]>(() => aElementos(bloques));
-  const publicables = useMemo(() => JSON.stringify(aBloques(elementos)), [elementos]);
-  // Lo último que se publicó: con él se sabe si quedan cambios por publicar.
-  const [publicado, setPublicado] = useState(publicables);
+  const { elementos, setElementos, publicables, sucio, incompletos, marcarPublicado } = useEditorPagina(bloques);
   const [state, action] = useActionState<NodoState, FormData>(async (prev, fd) => {
     const r = await editarNodo(prev, fd);
-    if (r.ok) setPublicado(String(fd.get("bloques") ?? ""));
+    if (r.ok) marcarPublicado(String(fd.get("bloques") ?? ""));
     return r;
   }, {});
-  const sucio = !esEnlace && publicables !== publicado;
-  const incompletos = useMemo(() => elementos.filter((e) => problema(e) !== null).length, [elementos]);
-
-  // Con cambios sin publicar, el navegador avisa antes de cerrar o recargar la página.
-  useEffect(() => {
-    if (!sucio) return;
-    const aviso = (e: BeforeUnloadEvent) => e.preventDefault();
-    window.addEventListener("beforeunload", aviso);
-    return () => window.removeEventListener("beforeunload", aviso);
-  }, [sucio]);
 
   return (
     <form
@@ -86,16 +65,7 @@ export function NodoForm({ id, label, title, href, bloques, esEnlace, writable }
         </p>
       )}
 
-      <div className="sticky bottom-3 z-20 flex flex-wrap items-center gap-3 rounded-2xl border border-[#e4e2d6] bg-white/95 p-3 shadow-[0_12px_30px_-18px_rgba(17,39,29,0.45)] backdrop-blur">
-        <Publicar writable={writable} etiqueta="Publicar cambios" />
-        {sucio && <span className="ad-pill ad-pill-gold">Cambios sin publicar</span>}
-        {!esEnlace && incompletos > 0 && (
-          <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#8a6d1f]">
-            <AlertTriangle size={14} aria-hidden /> {incompletos === 1 ? "1 elemento incompleto no se publicará" : `${incompletos} elementos incompletos no se publicarán`}
-          </span>
-        )}
-        {!writable && <span className="text-xs text-[#8a6d1f]">Solo lectura: falta la clave de servicio para guardar.</span>}
-      </div>
+      <BarraPublicar writable={writable} sucio={!esEnlace && sucio} incompletos={esEnlace ? 0 : incompletos} />
     </form>
   );
 }

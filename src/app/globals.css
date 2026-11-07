@@ -483,6 +483,11 @@ p { text-wrap: pretty; }
 }
 .ad-input::placeholder { color: var(--ad-faint); }
 .ad-input:focus { border-color: var(--ad-gold); box-shadow: 0 0 0 4px rgba(176, 143, 79, 0.2); }
+/* Campo de texto con negrita y enlaces a la vista (constructor de páginas) */
+.rico { white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.6; cursor: text; }
+.rico[data-vacio="true"]::before { content: attr(data-placeholder); color: var(--ad-faint); pointer-events: none; }
+.rico a { color: #89114c; text-decoration: underline; text-underline-offset: 3px; }
+.rico strong, .rico b { font-weight: 700; }
 .ad-btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; min-height: 2.65rem; padding: 0 1.2rem;
   border-radius: 0.8rem; font-weight: 700; font-size: 0.82rem; letter-spacing: 0.03em; cursor: pointer;

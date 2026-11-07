@@ -7,7 +7,6 @@ import { getLegacyPage, legacyHref, legacySections } from "@/content/legacy";
 import { docsDePagina } from "@/content/legacy/documentos";
 import { readDb } from "@/lib/cms/client";
 import { restorePagina } from "@/lib/cms/pagina-actions";
-import { blocksToText } from "@/lib/cms/paginas-texto";
 import { getPageOverride } from "@/lib/cms/paginas";
 
 export const metadata: Metadata = { title: "Editar página · Panel del portal", robots: { index: false } };
@@ -21,10 +20,11 @@ export default async function EditarPaginaPage({ params, searchParams }: { param
   const slug = page.sections[0];
   const { writable } = readDb();
   const override = await getPageOverride(key);
-  const texto = blocksToText(override?.blocks ?? page.blocks);
+  const bloques = override?.blocks ?? page.blocks;
+  const plano = JSON.stringify(bloques);
   const docs = docsDePagina(key);
-  // Los faltantes que ya se añadieron al texto (por ejemplo, en una edición anterior) no se vuelven a ofrecer.
-  const faltan = (docs?.faltan ?? []).filter(([, url]) => !texto.includes(url) && !texto.includes(url.replace(/ /g, "%20")));
+  // Los faltantes que ya están en la página (por ejemplo, de una edición anterior) no se vuelven a ofrecer.
+  const faltan = (docs?.faltan ?? []).filter(([, url]) => !plano.includes(url) && !plano.includes(url.replace(/ /g, "%20")));
 
   return (
     <div className="flex flex-col gap-6">
@@ -50,21 +50,18 @@ export default async function EditarPaginaPage({ params, searchParams }: { param
         {restaurada && <p className="mt-3 rounded-xl border border-[#b9dcc7] bg-[#e5f3ea] px-4 py-2.5 text-sm text-[#14573a]">Se restauró el texto original.</p>}
       </header>
 
-      <div className="grid gap-6 lg:grid-cols-[1fr_20rem] lg:items-start">
-        <div className="ad-card p-5 sm:p-7">
-          <PaginaForm pageKey={key} title={override?.title ?? page.title} texto={texto} writable={writable} faltan={faltan} enTablas={docs?.enTablas ?? 0} />
+      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_16rem] lg:items-start">
+        <div className="ad-card min-w-0 p-5 sm:p-7">
+          <PaginaForm pageKey={key} title={override?.title ?? page.title} bloques={bloques} writable={writable} faltan={faltan} enTablas={docs?.enTablas ?? 0} />
         </div>
         <aside className="flex flex-col gap-4 lg:sticky lg:top-6">
           <div className="ad-card p-5 text-sm leading-relaxed text-[#5d6e65]">
-            <h2 className="mb-3 text-base font-bold text-[#11271d]">Cómo se escribe</h2>
+            <h2 className="mb-3 text-base font-bold text-[#11271d]">Cómo se arma</h2>
             <ul className="flex flex-col gap-2">
-              <li>Una <strong>línea en blanco</strong> separa los párrafos.</li>
-              <li><code className="font-mono text-[0.8rem]">## Título</code> encabezado (<code className="font-mono text-[0.8rem]">###</code> y <code className="font-mono text-[0.8rem]">####</code> más pequeños).</li>
-              <li><code className="font-mono text-[0.8rem]">- elemento</code> lista.</li>
-              <li><code className="font-mono text-[0.8rem]">**negrita**</code> y <code className="font-mono text-[0.8rem]">[texto](https://…)</code> o <code className="font-mono text-[0.8rem]">[texto](/ruta)</code> para enlaces.</li>
-              <li><code className="font-mono text-[0.8rem]">@video https://…</code> video, documento o tablero incrustado.</li>
-              <li><code className="font-mono text-[0.8rem]">{"{{tabla 1}}"}</code> es una tabla del original: se conserva; muévala o bórrela, pero no se edita aquí.</li>
-              <li>Para que una línea no se tome como lista o encabezado, empiece con <code className="font-mono text-[0.8rem]">\</code>.</li>
+              <li>Pulse un elemento para abrir sus opciones.</li>
+              <li>Arrastre elementos desde la paleta, o púlselos para añadirlos.</li>
+              <li>Las tablas del original se conservan: se pueden mover o quitar, pero no se editan aquí.</li>
+              <li>Nada se publica hasta pulsar <strong>Publicar cambios</strong>.</li>
             </ul>
           </div>
           {override && (

@@ -3,7 +3,7 @@
 import { Fragment, memo, useCallback, useEffect, useMemo, useRef, useState, type Dispatch, type DragEvent, type SetStateAction } from "react";
 import {
   AlertTriangle, ArrowDown, ArrowUp, Copy, Eye, GalleryHorizontal, GripVertical, Heading2, Heading3, Image as ImageIcon, LayoutGrid, List, ListCollapse,
-  Megaphone, Minus, MousePointerClick, Paperclip, Pencil, Puzzle, Trash2, Type, Upload, Video, type LucideIcon,
+  Megaphone, Minus, MousePointerClick, Paperclip, Pencil, Puzzle, Table2, Trash2, Type, Upload, Video, type LucideIcon,
 } from "lucide-react";
 import { LegacyContent } from "@/components/legacy/LegacyContent";
 import { CATALOGO, NOMBRE_TIPO, PLANTILLAS, aBloques, elementoNuevo, nuevoId, problema, type Elemento, type Tipo, type TipoNuevo } from "@/lib/cms/bloques";
@@ -94,8 +94,9 @@ type MarcoProps = {
 };
 
 const Marco = memo(function Marco({ el, indice, total, seleccionado, carpeta, onSeleccionar, onActualizar, onMover, onDuplicar, onQuitar, onArrastre, onFin }: MarcoProps) {
-  const Icono = ICONOS[el.tipo];
-  const nombre = NOMBRE_TIPO[el.tipo];
+  // Lo que viene copiado de la página original (una tabla, por ejemplo) se muestra con su nombre y no se edita.
+  const Icono = el.tipo === "otro" && el.bloque.t === "table" ? Table2 : ICONOS[el.tipo];
+  const nombre = el.tipo === "otro" ? (NOMBRE_TIPO[el.bloque.t] ?? NOMBRE_TIPO.otro) : NOMBRE_TIPO[el.tipo];
   const [quitando, setQuitando] = useState(false);
   const aviso = useMemo(() => problema(el), [el]);
   const bloques = useMemo(() => aBloques([el]), [el]);
@@ -200,7 +201,11 @@ function Vacio({ onPlantilla }: { onPlantilla: (id: string) => void }) {
 
 // ───────────────────────── constructor
 
-export function Constructor({ elementos, setElementos, carpeta }: { elementos: Elemento[]; setElementos: Dispatch<SetStateAction<Elemento[]>>; carpeta: string }) {
+/**
+ * `fiel`: la vista previa de la página completa usa las mismas reglas que el sitio para el texto copiado del portal actual
+ * (primer párrafo destacado, fichas por subtítulo, listas de publicaciones). Las páginas nuevas no las usan.
+ */
+export function Constructor({ elementos, setElementos, carpeta, fiel = false }: { elementos: Elemento[]; setElementos: Dispatch<SetStateAction<Elemento[]>>; carpeta: string; fiel?: boolean }) {
   const [sel, setSel] = useState<string | null>(null);
   const [destino, setDestino] = useState<number | null>(null);
   const [modo, setModo] = useState<"editar" | "vista">("editar");
@@ -361,7 +366,7 @@ export function Constructor({ elementos, setElementos, carpeta }: { elementos: E
       {modo === "vista" ? (
         <div className="rounded-2xl border border-[#e4e2d6] bg-white p-5 sm:p-8">
           <div inert className="ed-body">
-            {publicables.length ? <LegacyContent blocks={publicables} preview libre lead={false} /> : <p className="text-sm text-[#5d6e65]">Aún no hay nada que publicar.</p>}
+            {publicables.length ? <LegacyContent blocks={publicables} preview libre={!fiel} lead={fiel} /> : <p className="text-sm text-[#5d6e65]">Aún no hay nada que publicar.</p>}
           </div>
         </div>
       ) : (

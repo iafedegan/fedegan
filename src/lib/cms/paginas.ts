@@ -1,11 +1,11 @@
 import "server-only";
 import { cache } from "react";
 import { publicDb, readDb } from "./client";
-import type { LegacyBlockLite } from "./paginas-texto";
+import type { Bloque } from "./bloques";
 
 // Texto editado desde /admin/paginas para una página migrada. Sin fila (o sin CMS) se usa la copia original.
 
-export type PageOverride = { title: string; blocks: LegacyBlockLite[] };
+export type PageOverride = { title: string; blocks: Bloque[] };
 
 export const getPageOverride = cache(async (key: string): Promise<PageOverride | null> => {
   const db = publicDb();
@@ -13,7 +13,7 @@ export const getPageOverride = cache(async (key: string): Promise<PageOverride |
   try {
     const { data, error } = await db.from("legacy_pages").select("title,blocks").eq("key", key).maybeSingle();
     if (error || !data) return null;
-    return { title: String(data.title), blocks: Array.isArray(data.blocks) ? (data.blocks as LegacyBlockLite[]) : [] };
+    return { title: String(data.title), blocks: Array.isArray(data.blocks) ? (data.blocks as Bloque[]) : [] };
   } catch {
     return null;
   }

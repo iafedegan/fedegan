@@ -5,11 +5,9 @@ import { redirect } from "next/navigation";
 import { getLegacyPage } from "@/content/legacy";
 import { adminDb, CMS_TAG } from "./client";
 import { requireEditorActor } from "./guard";
-import { textToBlocks } from "./paginas-texto";
+import { sanearBloques } from "./bloques";
 
 export type PaginaState = { ok?: boolean; message?: string };
-
-const MAX_TEXTO = 120_000;
 
 export async function savePagina(_prev: PaginaState, fd: FormData): Promise<PaginaState> {
   const actor = await requireEditorActor();
@@ -21,14 +19,18 @@ export async function savePagina(_prev: PaginaState, fd: FormData): Promise<Pagi
   if (!original) return { ok: false, message: "La página no existe." };
 
   const title = String(fd.get("title") ?? "").trim();
-  const texto = String(fd.get("texto") ?? "");
   if (!title || title.length > 200) return { ok: false, message: "El título es obligatorio (máximo 200 caracteres)." };
-  if (texto.length > MAX_TEXTO) return { ok: false, message: "El texto es demasiado largo." };
 
-  const blocks = textToBlocks(texto, original.blocks);
-  if (blocks.length > 1500) return { ok: false, message: "La página tiene demasiados bloques." };
-  const malo = blocks.find((b) => b.t === "embed" && !/^https:\/\/\S+$/.test(b.text ?? ""));
-  if (malo) return { ok: false, message: `El contenido incrustado debe ser una dirección https:// (revise: ${malo.text}).` };
+  const crudo = fd.get("bloques");
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(typeof crudo === "string" ? crudo : "");
+  } catch {
+    return { ok: false, message: "El contenido de la página no es válido. Recargue la página e intente de nuevo." };
+  }
+  const r = sanearBloques(parsed);
+  if (!r.ok) return { ok: false, message: r.message };
+  const blocks = r.bloques;
 
   const { error } = await db.from("legacy_pages").upsert({ key, title, blocks, updated_by: actor });
   if (error) return { ok: false, message: `No se pudo guardar: ${error.message}. ¿Ejecutó docs/migraciones/010-paginas-editables.sql?` };
