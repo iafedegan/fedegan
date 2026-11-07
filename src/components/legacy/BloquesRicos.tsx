@@ -1,38 +1,17 @@
-import Link from "next/link";
-import type { ReactNode } from "react";
 import { ArrowRight, ArrowUpRight, ChevronDown, Download, FileText } from "lucide-react";
 import { ScrollRail } from "@/components/design/ScrollRail";
-import { ENLACE_OK, IMAGEN_OK, elementoDeBloque, type Bloque, type Elemento, type Tarjeta } from "@/lib/cms/bloques";
+import { elementoDeBloque, type Bloque, type Elemento, type Tarjeta } from "@/lib/cms/bloques";
+import { TIPOS_ESQUEMA } from "@/lib/cms/elementos";
+import { tarjetasDeEnlaces } from "@/lib/cms/documentos-tarjetas";
+import { DocList } from "./DocList";
+import { ElementoExtra } from "./ElementosExtra";
 import { Inline } from "./Inline";
+import { botonBase, botonClase, enlaceSeguro, esExterno, imagenSegura, Vinculo } from "./comun";
 
 // Los elementos del constructor de páginas, tal como se ven en el sitio. Los datos se leen con `elementoDeBloque`
 // y los enlaces se vuelven a comprobar al pintar, por si el dato guardado no fuera el esperado.
 
 type De<T extends Elemento["tipo"]> = Extract<Elemento, { tipo: T }>;
-
-const enlaceSeguro = (u: string) => (ENLACE_OK.test(u) ? u : "");
-const imagenSegura = (u: string) => (IMAGEN_OK.test(u) ? u : "");
-
-function Vinculo({ href, className, label, children }: { href: string; className?: string; label?: string; children: ReactNode }) {
-  const h = enlaceSeguro(href);
-  if (!h) return <span className={className}>{children}</span>;
-  if (h.startsWith("/")) return <Link href={h} className={className} aria-label={label}>{children}</Link>;
-  const externo = /^https?:/i.test(h);
-  return (
-    <a href={h} className={className} aria-label={label} {...(externo ? { target: "_blank", rel: "noopener noreferrer" } : {})}>
-      {children}
-    </a>
-  );
-}
-
-const esExterno = (u: string) => /^https?:\/\//i.test(u);
-
-// Los enlaces con fondo propio (`bg-…`) quedan fuera del subrayado que el texto de la página pone a los enlaces.
-const botonClase = {
-  solido: "bg-[var(--fg-green-800)] border-2 border-[var(--fg-green-800)] text-[var(--text-on-brand)] hover:opacity-90",
-  borde: "bg-transparent border-2 border-[var(--fg-green-800)] text-[var(--fg-green-800)] hover:bg-[var(--fg-green-800)] hover:text-[var(--text-on-brand)]",
-};
-const botonBase = "my-3 mr-3 inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-bold no-underline transition-colors";
 
 function Boton({ el }: { el: De<"button"> }) {
   if (!enlaceSeguro(el.href)) return null;
@@ -166,30 +145,36 @@ const extension = (url: string) => /\.([a-z0-9]{2,5})(?:[?#]|$)/i.exec(url)?.[1]
 function Documentos({ el }: { el: De<"docs"> }) {
   const items = el.items.filter((d) => d.nombre && enlaceSeguro(d.url));
   if (!items.length) return null;
+  // Con archivos de documentos (PDF, Excel, Word…) se ven como las tarjetas del resto del portal; con otros enlaces, como lista.
+  const tarjetas = tarjetasDeEnlaces(items);
   return (
     <div className="my-6">
       {el.titulo && <span className="mb-3 block font-[var(--font-display)] text-lg font-bold text-[var(--text)]">{el.titulo}</span>}
-      <ul className="divide-y divide-[var(--border)] overflow-hidden rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface-solid)]">
-        {items.map((d, i) => {
-          const ext = extension(d.url);
-          return (
-            <li key={i}>
-              <Vinculo href={d.url} className="group flex items-center gap-3 bg-transparent px-4 py-3.5 text-[var(--text)] no-underline transition-colors hover:bg-[var(--bg-muted)]">
-                <FileText size={18} aria-hidden className="shrink-0 text-[var(--fg-lime-400)]" />
-                <span className="min-w-0 flex-1 truncate font-semibold">{d.nombre}</span>
-                {ext && <span className="shrink-0 rounded bg-[var(--bg-muted)] px-2 py-0.5 font-mono text-[0.68rem] font-semibold uppercase text-[var(--text-muted)] group-hover:bg-white">{ext}</span>}
-                <Download size={16} aria-hidden className="shrink-0 text-[var(--text-faint)]" />
-              </Vinculo>
-            </li>
-          );
-        })}
-      </ul>
+      {tarjetas ? (
+        <DocList tarjetas={tarjetas} />
+      ) : (
+        <ul className="divide-y divide-[var(--border)] overflow-hidden rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface-solid)]">
+          {items.map((d, i) => {
+            const ext = extension(d.url);
+            return (
+              <li key={i}>
+                <Vinculo href={d.url} className="group flex items-center gap-3 bg-transparent px-4 py-3.5 text-[var(--text)] no-underline transition-colors hover:bg-[var(--bg-muted)]">
+                  <FileText size={18} aria-hidden className="shrink-0 text-[var(--fg-lime-400)]" />
+                  <span className="min-w-0 flex-1 truncate font-semibold">{d.nombre}</span>
+                  {ext && <span className="shrink-0 rounded bg-[var(--bg-muted)] px-2 py-0.5 font-mono text-[0.68rem] font-semibold uppercase text-[var(--text-muted)] group-hover:bg-white">{ext}</span>}
+                  <Download size={16} aria-hidden className="shrink-0 text-[var(--text-faint)]" />
+                </Vinculo>
+              </li>
+            );
+          })}
+        </ul>
+      )}
     </div>
   );
 }
 
 /** Tipos de bloque que se pintan aquí. */
-export const BLOQUES_RICOS = new Set(["button", "image", "cards", "carousel", "accordion", "callout", "docs", "divider"]);
+export const BLOQUES_RICOS = new Set<string>(["button", "image", "cards", "carousel", "accordion", "callout", "docs", "divider", ...TIPOS_ESQUEMA]);
 
 export function BloqueRico({ b, preview = false }: { b: Bloque; preview?: boolean }) {
   const el = elementoDeBloque(b);
@@ -202,6 +187,6 @@ export function BloqueRico({ b, preview = false }: { b: Bloque; preview?: boolea
     case "callout": return <Destacado el={el} />;
     case "docs": return <Documentos el={el} />;
     case "divider": return <hr className="my-8 border-0 border-t border-[var(--border)]" />;
-    default: return null;
+    default: return "datos" in el ? <ElementoExtra tipo={el.tipo} datos={el.datos} /> : null;
   }
 }

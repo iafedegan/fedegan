@@ -11,7 +11,7 @@ import { useEditorPagina } from "./constructor/useEditorPagina";
 // Edita una página, sección o enlace creado en el árbol del sitio. Una página se arma arrastrando elementos
 // (botones, tarjetas, carruseles…) y no se publica hasta pulsar «Publicar cambios».
 export function NodoForm({ id, label, title, href, bloques, esEnlace, writable }: { id: string; label: string; title: string; href: string; bloques: Bloque[]; esEnlace: boolean; writable: boolean }) {
-  const { elementos, setElementos, publicables, sucio, incompletos, marcarPublicado } = useEditorPagina(bloques);
+  const { elementos, setElementos, publicables, sucio, incompletos, marcarPublicado, historial } = useEditorPagina(bloques);
   const [state, action] = useActionState<NodoState, FormData>(async (prev, fd) => {
     const r = await editarNodo(prev, fd);
     if (r.ok) marcarPublicado(String(fd.get("bloques") ?? ""));
@@ -52,7 +52,7 @@ export function NodoForm({ id, label, title, href, bloques, esEnlace, writable }
             </div>
           </div>
           <input type="hidden" name="bloques" value={publicables} />
-          <Constructor elementos={elementos} setElementos={setElementos} carpeta={`arbol-${id}`} />
+          <Constructor elementos={elementos} setElementos={setElementos} carpeta={`arbol-${id}`} historial={historial} />
         </>
       )}
 

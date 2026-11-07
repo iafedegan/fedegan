@@ -7,6 +7,13 @@
 //   Elemento  = lo que se edita en pantalla (con `id`, listas agrupadas, textos sin recortar).
 //   Bloque    = lo que se guarda y se pinta en el sitio.
 
+import { ENLACE_OK, ENLACE_TEXTO, IMAGEN_OK, EMBED_OK, linea, normalizarUrl, normalizarVideo, obj, parrafos, texto } from "./enlaces";
+import { ESQUEMAS, GRUPOS, TIPOS_ESQUEMA, datosIniciales, esquemaDe, leerDatos, limpiarDatos, problemaDatos, type Datos, type Grupo, type TipoEsquema } from "./elementos";
+
+// Los enlaces siguen saliendo de este módulo para quien ya los importaba desde aquí.
+export { ENLACE_OK, ENLACE_TEXTO, IMAGEN_OK, EMBED_OK, normalizarUrl, normalizarVideo } from "./enlaces";
+export { ESQUEMAS, GRUPOS, esquemaDe, type Grupo, type TipoEsquema } from "./elementos";
+
 export type Bloque = { t: string; text?: string; rows?: string[][]; data?: Record<string, unknown> };
 
 export type Estilo = "solido" | "borde";
@@ -30,6 +37,8 @@ export type Elemento =
   | { id: string; tipo: "embed"; url: string }
   | { id: string; tipo: "upload"; texto: string }
   | { id: string; tipo: "divider" }
+  /** Elementos descritos por un esquema (src/lib/cms/elementos.ts): sus datos viajan tal cual. */
+  | { id: string; tipo: TipoEsquema; datos: Datos }
   /** Un bloque que el constructor no sabe editar (por ejemplo, una tabla copiada): se conserva tal cual. */
   | { id: string; tipo: "otro"; bloque: Bloque };
 
@@ -42,42 +51,39 @@ export const MAX_BLOQUES = 400;
 const MAX_ITEMS = 40;
 const MAX_BYTES = 500_000;
 
-/** Lo que se ofrece en la paleta, en el orden en que se muestra. */
-export const CATALOGO: { tipo: TipoNuevo; nombre: string; ayuda: string; grupo: "Texto" | "Acciones" | "Contenido" | "Archivos" }[] = [
+/** Los elementos de siempre (con código propio), con el grupo de la paleta donde van. */
+const BASE: { tipo: TipoNuevo; nombre: string; ayuda: string; grupo: Grupo }[] = [
   { tipo: "h2", nombre: "Título", ayuda: "Encabezado de una sección", grupo: "Texto" },
   { tipo: "h3", nombre: "Subtítulo", ayuda: "Encabezado menor", grupo: "Texto" },
   { tipo: "p", nombre: "Párrafo", ayuda: "Texto corrido", grupo: "Texto" },
   { tipo: "lista", nombre: "Lista", ayuda: "Viñetas, una por línea", grupo: "Texto" },
   { tipo: "button", nombre: "Botón", ayuda: "Enlace con forma de botón", grupo: "Acciones" },
   { tipo: "callout", nombre: "Destacado", ayuda: "Recuadro con mensaje y botón", grupo: "Acciones" },
+  { tipo: "image", nombre: "Imagen", ayuda: "Foto con pie opcional", grupo: "Medios" },
+  { tipo: "embed", nombre: "Video o tablero", ayuda: "YouTube o un enlace incrustado", grupo: "Medios" },
   { tipo: "cards", nombre: "Tarjetas", ayuda: "Cuadrícula de fichas con imagen y enlace", grupo: "Contenido" },
   { tipo: "carousel", nombre: "Carrusel", ayuda: "Fichas que se deslizan", grupo: "Contenido" },
   { tipo: "accordion", nombre: "Preguntas", ayuda: "Acordeón que se despliega", grupo: "Contenido" },
-  { tipo: "image", nombre: "Imagen", ayuda: "Foto con pie opcional", grupo: "Contenido" },
-  { tipo: "embed", nombre: "Video o tablero", ayuda: "YouTube o un enlace incrustado", grupo: "Contenido" },
-  { tipo: "divider", nombre: "Separador", ayuda: "Línea divisoria", grupo: "Contenido" },
-  { tipo: "docs", nombre: "Documentos", ayuda: "Lista de archivos para descargar", grupo: "Archivos" },
+  { tipo: "docs", nombre: "Documentos", ayuda: "Tarjetas de documentos con vista previa y descarga", grupo: "Archivos" },
   { tipo: "upload", nombre: "Recibir archivos", ayuda: "Botón para que el visitante cargue documentos", grupo: "Archivos" },
+  { tipo: "divider", nombre: "Separador", ayuda: "Línea divisoria", grupo: "Diseño" },
 ];
+
+/** Lo que se ofrece en la paleta, por grupos: dentro de cada uno, primero los de siempre y luego los descritos por esquema. */
+export const CATALOGO: { tipo: TipoNuevo; nombre: string; ayuda: string; grupo: Grupo }[] = [
+  ...BASE,
+  ...TIPOS_ESQUEMA.map((tipo) => ({ tipo, nombre: ESQUEMAS[tipo].nombre, ayuda: ESQUEMAS[tipo].ayuda, grupo: ESQUEMAS[tipo].grupo })),
+].sort((x, y) => GRUPOS.indexOf(x.grupo) - GRUPOS.indexOf(y.grupo));
 
 export const NOMBRE_TIPO: Record<string, string> = {
   h2: "Título", h3: "Subtítulo", h4: "Detalle", p: "Párrafo", lista: "Lista", li: "Lista", button: "Botón", callout: "Destacado",
   cards: "Tarjetas", carousel: "Carrusel", accordion: "Preguntas", image: "Imagen", embed: "Video o tablero", divider: "Separador",
   docs: "Documentos", upload: "Recibir archivos", table: "Tabla", otro: "Elemento copiado",
+  ...Object.fromEntries(TIPOS_ESQUEMA.map((t) => [t, ESQUEMAS[t].nombre])),
 };
 
 // ───────────────────────── enlaces y texto
 
-const SEGURO = String.raw`[^\s"'<>\\]`;
-/** Enlaces de botones, tarjetas y documentos: https://, http://, una ruta del portal, un ancla, correo o teléfono. */
-export const ENLACE_OK = new RegExp(`^(https?://${SEGURO}+|/(?!/)${SEGURO}*|#${SEGURO}*|mailto:${SEGURO}+|tel:\\+?[0-9 ()-]{5,25})$`, "i");
-/** Imágenes: solo https:// o una ruta del portal. */
-export const IMAGEN_OK = new RegExp(`^(https://${SEGURO}+|/(?!/)${SEGURO}*)$`);
-/** Contenido incrustado: https:// o http://. Solo los videos de YouTube se incrustan (siempre por https); lo demás se muestra como enlace. */
-export const EMBED_OK = new RegExp(`^https?://${SEGURO}+$`, "i");
-
-/** Enlaces que entiende el texto de la página: [palabras](https://…) o [palabras](/ruta). */
-export const ENLACE_TEXTO = /^(https?:\/\/[^)\s]+|\/[^)\s]*)$/;
 const ENLACE_SOLO = /^\[([^\]]*)\]\((https?:\/\/[^)\s]+|\/[^)\s]*)\)$/;
 
 /** «[nombre](enlace)» solo → viñeta de enlace; cualquier otro texto → viñeta de texto. */
@@ -95,45 +101,6 @@ export function textoDeItem(it: ItemLista): string {
   return `[${nombre || url}](${url})`;
 }
 
-/** «fedegan.org.co» → «https://fedegan.org.co»; un correo → «mailto:»; lo demás queda como está. */
-export function normalizarUrl(raw: string): string {
-  const u = raw.trim();
-  if (!u) return "";
-  if (/^([a-z][a-z0-9+.-]*:|\/|#)/i.test(u)) return u;
-  if (/^[^\s@/]+@[^\s@/]+\.[^\s@/]+$/.test(u)) return `mailto:${u}`;
-  if (/^[\w-]+(\.[\w-]+)+([/?#].*)?$/.test(u)) return `https://${u}`;
-  return u;
-}
-
-/** Enlaces de YouTube (watch, youtu.be, shorts, playlist) → la dirección para incrustar. */
-export function normalizarVideo(raw: string): string {
-  const u = normalizarUrl(raw);
-  try {
-    const x = new URL(u);
-    const host = x.hostname.replace(/^(www|m)\./, "");
-    const embed = (id: string) => `https://www.youtube.com/embed/${encodeURIComponent(id)}`;
-    if (host === "youtu.be") {
-      const id = x.pathname.split("/")[1];
-      if (id) return embed(id);
-    }
-    if (host === "youtube.com" || host === "youtube-nocookie.com") {
-      const v = x.searchParams.get("v");
-      const list = x.searchParams.get("list");
-      if (x.pathname === "/watch" && v) return embed(v);
-      if (x.pathname === "/playlist" && list) return `https://www.youtube.com/embed/videoseries?list=${encodeURIComponent(list)}`;
-      const [, kind, id] = x.pathname.split("/");
-      if ((kind === "shorts" || kind === "live") && id) return embed(id);
-    }
-  } catch {
-    /* no es una dirección completa: se devuelve tal cual */
-  }
-  return u;
-}
-
-const linea = (v: unknown, max: number) => (typeof v === "string" ? v.replace(/\s+/g, " ").trim().slice(0, max) : "");
-const parrafos = (v: unknown, max: number) => (typeof v === "string" ? v.replace(/\r\n?/g, "\n").replace(/[ \t]+\n/g, "\n").trim().slice(0, max) : "");
-const texto = (v: unknown) => (typeof v === "string" ? v : "");
-const obj = (v: unknown): Record<string, unknown> => (v && typeof v === "object" && !Array.isArray(v) ? (v as Record<string, unknown>) : {});
 const lista = (v: unknown): unknown[] => (Array.isArray(v) ? v.slice(0, MAX_ITEMS) : []);
 
 /** Antes el botón guardaba «texto|enlace» en una sola cadena; ahora el enlace va en `data.href`. */
@@ -211,8 +178,10 @@ export function aElementos(blocks: Bloque[]): Elemento[] {
       case "divider":
         out.push({ id, tipo: "divider" });
         break;
-      default:
-        out.push({ id, tipo: "otro", bloque: b });
+      default: {
+        const esq = esquemaDe(b.t);
+        out.push(esq ? { id, tipo: b.t as TipoEsquema, datos: leerDatos(esq, b.data) } : { id, tipo: "otro", bloque: b });
+      }
     }
   }
   return out;
@@ -250,6 +219,8 @@ function bloqueCrudo(el: Exclude<Elemento, { tipo: "lista" | "otro" }>): Bloque 
       return { t: "upload", text: el.texto };
     case "divider":
       return { t: "divider" };
+    default:
+      return { t: el.tipo, data: el.datos };
   }
 }
 
@@ -324,8 +295,12 @@ export function canonico(b: Bloque): Bloque | null {
       const rows = b.rows.slice(0, 200).map((r) => (Array.isArray(r) ? r.slice(0, 20).map((c) => (typeof c === "string" ? c.slice(0, 2000) : "")) : []));
       return rows.length ? { t: "table", rows } : null;
     }
-    default:
-      return { t: "?" };
+    default: {
+      const esq = esquemaDe(b.t);
+      if (!esq) return { t: "?" };
+      const datos = limpiarDatos(esq, b.data);
+      return datos ? { t: b.t, data: datos } : null;
+    }
   }
 }
 
@@ -387,8 +362,10 @@ export function problemaBloque(b: Bloque): string | null {
       return EMBED_OK.test(b.text ?? "") ? null : "La dirección debe empezar con https:// o http://.";
     case "?":
       return "Tipo de elemento no reconocido.";
-    default:
-      return null;
+    default: {
+      const esq = esquemaDe(b.t);
+      return esq ? problemaDatos(esq, d) : null;
+    }
   }
 }
 
@@ -424,7 +401,7 @@ export function problema(el: Elemento): string | null {
       case "callout": return "Escriba un título o un texto.";
       case "docs": return "Añada al menos un documento.";
       case "embed": return "Pegue la dirección del video o documento.";
-      default: return "Complete este elemento.";
+      default: return esquemaDe(el.tipo)?.vacioMensaje || "Complete este elemento.";
     }
   }
   return problemaBloque(bs[0]);
@@ -467,12 +444,16 @@ export function elementoNuevo(tipo: TipoNuevo): Elemento {
     case "embed": return { id, tipo, url: "" };
     case "upload": return { id, tipo, texto: "Cargar documentos" };
     case "divider": return { id, tipo };
+    default: return { id, tipo, datos: datosIniciales(ESQUEMAS[tipo]) };
   }
 }
 
 export type Plantilla = { id: string; nombre: string; ayuda: string; crear: () => Elemento[] };
 
 const tarjeta = (titulo: string, texto: string): Tarjeta => ({ ...tarjetaVacia(), titulo, texto });
+/** Un elemento descrito por esquema, con los datos de siempre y los que se indiquen. */
+const gen = (tipo: TipoEsquema, datos: Datos = {}): Elemento => ({ id: nuevoId(), tipo, datos: { ...datosIniciales(ESQUEMAS[tipo]), ...datos } });
+const parte = (...pares: [string, string][]) => pares.map(([titulo, texto]) => ({ titulo, texto }));
 
 /** Puntos de partida para una página en blanco. El texto de muestra se reemplaza al editar cada elemento. */
 export const PLANTILLAS: Plantilla[] = [
@@ -513,6 +494,78 @@ export const PLANTILLAS: Plantilla[] = [
     crear: () => [
       { id: nuevoId(), tipo: "h2", texto: "Preguntas frecuentes" },
       { id: nuevoId(), tipo: "accordion", items: [{ titulo: "Primera pregunta", texto: "Escriba la respuesta." }, { titulo: "Segunda pregunta", texto: "Escriba la respuesta." }] },
+    ],
+  },
+  {
+    id: "portada",
+    nombre: "Página con portada",
+    ayuda: "Banner, presentación, ventajas y botones",
+    crear: () => [
+      gen("banner", { titulo: "Título de la página", texto: "Una frase que explique de qué trata esta página.", boton: "Más información", enlace: "/", alineacion: "izquierda" }),
+      { id: nuevoId(), tipo: "p", texto: "Presente aquí la página: qué ofrece y a quién va dirigida." },
+      gen("caracteristicas", { items: [{ icono: "check", titulo: "Primera ventaja", texto: "Explíquela en una frase." }, { icono: "personas", titulo: "Segunda ventaja", texto: "Explíquela en una frase." }, { icono: "documento", titulo: "Tercera ventaja", texto: "Explíquela en una frase." }] }),
+      gen("botones", { alineacion: "centro", items: [{ texto: "Quiero participar", enlace: "", estilo: "solido" }, { texto: "Ver los requisitos", enlace: "", estilo: "borde" }] }),
+    ],
+  },
+  {
+    id: "programa",
+    nombre: "Programa o campaña",
+    ayuda: "Qué es, cómo participar, fecha límite, documentos y contacto",
+    crear: () => [
+      { id: nuevoId(), tipo: "h2", texto: "¿De qué se trata?" },
+      { id: nuevoId(), tipo: "p", texto: "Describa el programa o la campaña en un par de párrafos." },
+      { id: nuevoId(), tipo: "h2", texto: "Cómo participar" },
+      gen("pasos", { items: parte(["Inscríbase", "Complete el formulario con los datos de su predio."], ["Reúna los documentos", "Tenga a la mano la cédula y el RUT."], ["Reciba la confirmación", "Le avisaremos por correo."]) }),
+      gen("aviso", { tono: "alerta", titulo: "Fecha límite", texto: "Indique hasta cuándo se puede participar." }),
+      { id: nuevoId(), tipo: "docs", titulo: "Documentos", items: [] },
+      gen("contacto", { titulo: "Área responsable", cargo: "Escriba el cargo o la dependencia" }),
+    ],
+  },
+  {
+    id: "informe",
+    nombre: "Informe con cifras",
+    ayuda: "Resumen, cifras destacadas, tabla y documentos",
+    crear: () => [
+      { id: nuevoId(), tipo: "h2", texto: "Resumen del informe" },
+      { id: nuevoId(), tipo: "p", texto: "Resuma en pocas líneas lo más importante del periodo." },
+      gen("cifras", { items: [{ valor: "0", etiqueta: "Primera cifra", nota: "Fuente" }, { valor: "0", etiqueta: "Segunda cifra", nota: "Fuente" }, { valor: "0", etiqueta: "Tercera cifra", nota: "Fuente" }] }),
+      gen("tabla", { titulo: "Detalle por región", encabezado: true, filas: [["Región", "Valor", "Variación"], ["Caribe", "", ""], ["Andina", "", ""]] }),
+      { id: nuevoId(), tipo: "docs", titulo: "Descargas", items: [] },
+    ],
+  },
+  {
+    id: "convocatoria",
+    nombre: "Convocatoria o comunicado",
+    ayuda: "Aviso importante, fechas clave, botones y contacto",
+    crear: () => [
+      gen("aviso", { tono: "importante", titulo: "Convocatoria abierta", texto: "Resuma en una frase a quién va dirigida y hasta cuándo." }),
+      { id: nuevoId(), tipo: "h2", texto: "Fechas clave" },
+      gen("cronologia", { estilo: "fechas", items: [{ fecha: "Apertura", titulo: "Se abre la convocatoria", texto: "" }, { fecha: "Cierre", titulo: "Último día para postularse", texto: "" }, { fecha: "Resultados", titulo: "Publicación de resultados", texto: "" }] }),
+      gen("botones", { items: [{ texto: "Postularme", enlace: "", estilo: "solido" }, { texto: "Leer los términos", enlace: "", estilo: "borde" }] }),
+      gen("contacto", { titulo: "Dudas e inscripciones" }),
+    ],
+  },
+  {
+    id: "equipo",
+    nombre: "Equipo y contacto",
+    ayuda: "Presentación, personas del equipo y datos de contacto",
+    crear: () => [
+      { id: nuevoId(), tipo: "h2", texto: "Nuestro equipo" },
+      { id: nuevoId(), tipo: "p", texto: "Presente al equipo y a qué se dedica cada persona." },
+      gen("personas", { items: [{ foto: "", nombre: "Nombre y apellido", cargo: "Cargo", correo: "", telefono: "" }, { foto: "", nombre: "Nombre y apellido", cargo: "Cargo", correo: "", telefono: "" }, { foto: "", nombre: "Nombre y apellido", cargo: "Cargo", correo: "", telefono: "" }] }),
+      gen("contacto", { titulo: "Escríbanos o visítenos" }),
+      gen("redes", { titulo: "Síganos", items: [{ red: "facebook", enlace: "" }, { red: "instagram", enlace: "" }, { red: "youtube", enlace: "" }] }),
+    ],
+  },
+  {
+    id: "galeria",
+    nombre: "Galería y aliados",
+    ayuda: "Fotos de un evento y logos de las entidades aliadas",
+    crear: () => [
+      { id: nuevoId(), tipo: "h2", texto: "Así fue el evento" },
+      { id: nuevoId(), tipo: "p", texto: "Cuente en pocas líneas qué pasó y quiénes participaron." },
+      gen("galeria", { columnas: "3" }),
+      gen("logos", { titulo: "Con el apoyo de", columnas: "4" }),
     ],
   },
 ];

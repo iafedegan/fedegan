@@ -2,35 +2,56 @@
 
 import { Fragment, memo, useCallback, useEffect, useMemo, useRef, useState, type Dispatch, type DragEvent, type SetStateAction } from "react";
 import {
-  AlertTriangle, ArrowDown, ArrowUp, Copy, Eye, GalleryHorizontal, GripVertical, Heading2, Heading3, Image as ImageIcon, LayoutGrid, List, ListCollapse,
-  Megaphone, Minus, MousePointerClick, Paperclip, Pencil, Puzzle, Table2, Trash2, Type, Upload, Video, type LucideIcon,
+  AlertTriangle, AppWindow, ArrowDown, ArrowUp, BadgeCheck, Building2, ChartColumn, ChevronRight, Columns3, ContactRound, Copy, Eye, GalleryHorizontal, GripVertical, Headphones,
+  Heading2, Heading3, Image as ImageIcon, Images, Info, LayoutGrid, Link2, List, ListCollapse, ListOrdered, Megaphone, Milestone, Minus, MousePointerClick, MoveVertical, Paperclip,
+  PanelLeft, PanelTop, Pencil, Puzzle, Quote, Redo2, Search, Share2, SquareMousePointer, Table2, Trash2, Type, Undo2, Upload, UsersRound, Video, X, type LucideIcon,
 } from "lucide-react";
 import { LegacyContent } from "@/components/legacy/LegacyContent";
-import { CATALOGO, NOMBRE_TIPO, PLANTILLAS, aBloques, elementoNuevo, nuevoId, problema, type Elemento, type Tipo, type TipoNuevo } from "@/lib/cms/bloques";
+import { CATALOGO, ESQUEMAS, GRUPOS, NOMBRE_TIPO, PLANTILLAS, aBloques, elementoNuevo, nuevoId, problema, type Elemento, type TipoNuevo } from "@/lib/cms/bloques";
+import { TIPOS_ESQUEMA } from "@/lib/cms/elementos";
 import { EditorElemento } from "./Editores";
 
 // Constructor de páginas: a la izquierda los elementos disponibles; a la derecha la página, donde se sueltan,
 // se ordenan y se configuran. Todo queda en el navegador hasta que el editor pulse «Publicar cambios».
 
-const ICONOS: Record<Tipo, LucideIcon> = {
+const ICONO_BASE: Record<string, LucideIcon> = {
   h2: Heading2, h3: Heading3, h4: Heading3, p: Type, lista: List, button: MousePointerClick, callout: Megaphone, cards: LayoutGrid,
   carousel: GalleryHorizontal, accordion: ListCollapse, image: ImageIcon, embed: Video, divider: Minus, docs: Paperclip, upload: Upload, otro: Puzzle,
+};
+// Los iconos que piden los esquemas de src/lib/cms/elementos.ts (por su nombre en lucide-react).
+const ICONO_ESQUEMA: Record<string, LucideIcon> = {
+  Info, Quote, Columns3, SquareMousePointer, PanelTop, Share2, PanelLeft, Images, Headphones, Building2, AppWindow, ChartColumn, ListOrdered, Milestone, BadgeCheck, Link2, Table2,
+  UsersRound, ContactRound, MoveVertical,
+};
+const ICONOS: Record<string, LucideIcon> = {
+  ...ICONO_BASE,
+  ...Object.fromEntries(TIPOS_ESQUEMA.map((t) => [t, ICONO_ESQUEMA[ESQUEMAS[t].icono] ?? Puzzle])),
 };
 
 type Arrastre = { tipo: "nuevo"; elemento: TipoNuevo } | { tipo: "mover"; id: string };
 
-const GRUPOS = ["Texto", "Acciones", "Contenido", "Archivos"] as const;
-
 // ───────────────────────── paleta
+
+const sinAcentos = (t: string) => t.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
 
 function Paleta({ onAnadir, onInicio, onFin }: { onAnadir: (t: TipoNuevo) => void; onInicio: (t: TipoNuevo, e: DragEvent) => void; onFin: () => void }) {
   // En pantallas angostas la paleta se puede plegar para dejar sitio a la página.
   const [abierta, setAbierta] = useState(true);
+  const [busqueda, setBusqueda] = useState("");
+  const [cerrados, setCerrados] = useState<Set<string>>(() => new Set());
+  const q = sinAcentos(busqueda.trim());
+  const visibles = useMemo(() => (q ? CATALOGO.filter((c) => sinAcentos(`${c.nombre} ${c.ayuda}`).includes(q)) : CATALOGO), [q]);
+  const alternar = (g: string) =>
+    setCerrados((prev) => {
+      const n = new Set(prev);
+      if (!n.delete(g)) n.add(g);
+      return n;
+    });
   return (
     <aside aria-label="Elementos disponibles" className="flex flex-col gap-3 rounded-2xl border border-[#e4e2d6] bg-[#faf9f4] p-3 xl:sticky xl:top-4 xl:max-h-[calc(100dvh-2rem)] xl:overflow-y-auto">
       <div className="flex items-start justify-between gap-2">
         <div>
-          <p className="text-sm font-bold text-[#11271d]">Elementos</p>
+          <p className="text-sm font-bold text-[#11271d]">Elementos <span className="font-normal text-[#8a978f]">· {CATALOGO.length}</span></p>
           <p className="mt-0.5 text-xs leading-snug text-[#5d6e65]">Arrástrelos a la página o púlselos para añadirlos.</p>
         </div>
         <button type="button" onClick={() => setAbierta((a) => !a)} aria-expanded={abierta} className="ad-btn ad-btn-ghost !min-h-8 shrink-0 !px-3 !text-xs xl:!hidden">
@@ -38,31 +59,56 @@ function Paleta({ onAnadir, onInicio, onFin }: { onAnadir: (t: TipoNuevo) => voi
         </button>
       </div>
       <div className={`flex flex-col gap-3 ${abierta ? "" : "max-xl:hidden"}`}>
-        {GRUPOS.map((g) => (
-          <div key={g}>
-            <p className="ad-eyebrow mb-1.5">{g}</p>
-            <div className="grid grid-cols-3 gap-1.5 sm:grid-cols-5 xl:grid-cols-2">
-              {CATALOGO.filter((c) => c.grupo === g).map((c) => {
-                const Icono = ICONOS[c.tipo];
-                return (
-                  <button
-                    key={c.tipo}
-                    type="button"
-                    draggable
-                    title={c.ayuda}
-                    onClick={() => onAnadir(c.tipo)}
-                    onDragStart={(e) => onInicio(c.tipo, e)}
-                    onDragEnd={onFin}
-                    className="flex cursor-grab flex-col items-center gap-1.5 rounded-xl border border-[#e4e2d6] bg-white px-1.5 py-2.5 text-center text-[0.72rem] font-semibold leading-tight text-[#11271d] transition-colors hover:border-[#b08f4f] hover:bg-[#fbf6e8] active:cursor-grabbing"
-                  >
-                    <Icono size={20} aria-hidden className="text-[#3d7a22]" />
-                    {c.nombre}
-                  </button>
-                );
-              })}
+        <div className="relative">
+          <Search size={15} aria-hidden className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[#8a978f]" />
+          <input
+            type="search"
+            value={busqueda}
+            onChange={(e) => setBusqueda(e.target.value)}
+            placeholder="Buscar…"
+            aria-label="Buscar un elemento"
+            className="ad-input !rounded-xl !py-2 !pl-9 !pr-8 text-sm [&::-webkit-search-cancel-button]:hidden"
+          />
+          {busqueda && (
+            <button type="button" onClick={() => setBusqueda("")} aria-label="Limpiar la búsqueda" className="absolute right-1.5 top-1/2 grid h-6 w-6 -translate-y-1/2 place-items-center rounded-md text-[#5d6e65] hover:bg-[#eceae0]"><X size={13} aria-hidden /></button>
+          )}
+        </div>
+        {visibles.length === 0 && <p className="rounded-xl border border-dashed border-[#d9d6cb] px-3 py-4 text-center text-xs text-[#5d6e65]">Ningún elemento coincide con «{busqueda.trim()}».</p>}
+        {GRUPOS.map((g) => {
+          const delGrupo = visibles.filter((c) => c.grupo === g);
+          if (!delGrupo.length) return null;
+          const abierto = q !== "" || !cerrados.has(g);
+          return (
+            <div key={g}>
+              <button type="button" onClick={() => alternar(g)} aria-expanded={abierto} disabled={q !== ""} className="ad-eyebrow mb-1.5 flex w-full items-center gap-1 text-left disabled:cursor-default">
+                <ChevronRight size={12} aria-hidden className={`transition-transform ${abierto ? "rotate-90" : ""}`} /> {g}
+                <span className="ml-auto font-medium normal-case tracking-normal">{delGrupo.length}</span>
+              </button>
+              {abierto && (
+                <div className="grid grid-cols-3 gap-1.5 sm:grid-cols-5 xl:grid-cols-2">
+                  {delGrupo.map((c) => {
+                    const Icono = ICONOS[c.tipo] ?? Puzzle;
+                    return (
+                      <button
+                        key={c.tipo}
+                        type="button"
+                        draggable
+                        title={c.ayuda}
+                        onClick={() => onAnadir(c.tipo)}
+                        onDragStart={(e) => onInicio(c.tipo, e)}
+                        onDragEnd={onFin}
+                        className="flex cursor-grab flex-col items-center gap-1.5 rounded-xl border border-[#e4e2d6] bg-white px-1.5 py-2.5 text-center text-[0.72rem] font-semibold leading-tight text-[#11271d] transition-colors hover:border-[#b08f4f] hover:bg-[#fbf6e8] active:cursor-grabbing"
+                      >
+                        <Icono size={20} aria-hidden className="text-[#3d7a22]" />
+                        {c.nombre}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </aside>
   );
@@ -95,7 +141,7 @@ type MarcoProps = {
 
 const Marco = memo(function Marco({ el, indice, total, seleccionado, carpeta, onSeleccionar, onActualizar, onMover, onDuplicar, onQuitar, onArrastre, onFin }: MarcoProps) {
   // Lo que viene copiado de la página original (una tabla, por ejemplo) se muestra con su nombre y no se edita.
-  const Icono = el.tipo === "otro" && el.bloque.t === "table" ? Table2 : ICONOS[el.tipo];
+  const Icono = el.tipo === "otro" && el.bloque.t === "table" ? Table2 : (ICONOS[el.tipo] ?? Puzzle);
   const nombre = el.tipo === "otro" ? (NOMBRE_TIPO[el.bloque.t] ?? NOMBRE_TIPO.otro) : NOMBRE_TIPO[el.tipo];
   const [quitando, setQuitando] = useState(false);
   const aviso = useMemo(() => problema(el), [el]);
@@ -157,7 +203,7 @@ const Marco = memo(function Marco({ el, indice, total, seleccionado, carpeta, on
           {bloques.length ? (
             <LegacyContent blocks={bloques} preview libre lead={false} />
           ) : (
-            <p className="py-3 text-sm italic text-[#8a978f]">{aviso ?? "Elemento vacío."} Púlselo para completarlo.</p>
+            <p className="py-3 text-sm italic text-[#8a978f]">{aviso ?? "Elemento vacío."} {seleccionado ? "Complételo en el formulario de abajo." : "Púlselo para completarlo."}</p>
           )}
         </div>
         <button
@@ -205,7 +251,9 @@ function Vacio({ onPlantilla }: { onPlantilla: (id: string) => void }) {
  * `fiel`: la vista previa de la página completa usa las mismas reglas que el sitio para el texto copiado del portal actual
  * (primer párrafo destacado, fichas por subtítulo, listas de publicaciones). Las páginas nuevas no las usan.
  */
-export function Constructor({ elementos, setElementos, carpeta, fiel = false }: { elementos: Elemento[]; setElementos: Dispatch<SetStateAction<Elemento[]>>; carpeta: string; fiel?: boolean }) {
+export type Historial = { deshacer: () => void; rehacer: () => void; puedeDeshacer: boolean; puedeRehacer: boolean };
+
+export function Constructor({ elementos, setElementos, carpeta, fiel = false, historial }: { elementos: Elemento[]; setElementos: Dispatch<SetStateAction<Elemento[]>>; carpeta: string; fiel?: boolean; historial?: Historial }) {
   const [sel, setSel] = useState<string | null>(null);
   const [destino, setDestino] = useState<number | null>(null);
   const [modo, setModo] = useState<"editar" | "vista">("editar");
@@ -348,12 +396,32 @@ export function Constructor({ elementos, setElementos, carpeta, fiel = false }: 
 
   const publicables = useMemo(() => aBloques(elementos), [elementos]);
 
+  // Ctrl/Cmd+Z deshace y Ctrl/Cmd+Mayús+Z (o Ctrl+Y) rehace los cambios de la página; dentro de un campo de texto se deja el atajo del navegador.
+  const atajos = (e: React.KeyboardEvent) => {
+    if (!historial || !(e.ctrlKey || e.metaKey)) return;
+    const destino = e.target as HTMLElement;
+    if (destino.closest("input, textarea, select, [contenteditable='true']")) return;
+    const k = e.key.toLowerCase();
+    if (k === "z" && !e.shiftKey) historial.deshacer();
+    else if ((k === "z" && e.shiftKey) || k === "y") historial.rehacer();
+    else return;
+    e.preventDefault();
+  };
+
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-3" onKeyDown={atajos}>
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <p className="text-sm font-semibold text-[#11271d]">
-          Página <span className="font-normal text-[#5d6e65]">· {elementos.length} {elementos.length === 1 ? "elemento" : "elementos"}</span>
-        </p>
+        <div className="flex flex-wrap items-center gap-3">
+          <p className="text-sm font-semibold text-[#11271d]">
+            Página <span className="font-normal text-[#5d6e65]">· {elementos.length} {elementos.length === 1 ? "elemento" : "elementos"}</span>
+          </p>
+          {historial && (
+            <div role="group" aria-label="Historial" className="flex gap-1">
+              <button type="button" disabled={!historial.puedeDeshacer} onClick={historial.deshacer} className="ad-btn ad-btn-ghost !min-h-8 !px-2.5 !text-xs" title="Deshacer el último cambio (Ctrl+Z)"><Undo2 size={14} aria-hidden /> Deshacer</button>
+              <button type="button" disabled={!historial.puedeRehacer} onClick={historial.rehacer} className="ad-btn ad-btn-ghost !min-h-8 !px-2.5 !text-xs" title="Rehacer (Ctrl+Mayús+Z)"><Redo2 size={14} aria-hidden /> Rehacer</button>
+            </div>
+          )}
+        </div>
         <div role="group" aria-label="Modo" className="flex overflow-hidden rounded-lg border border-[#d9d6cb] bg-white text-sm">
           {([["editar", "Armar", Pencil], ["vista", "Vista previa", Eye]] as const).map(([m, t, Icono]) => (
             <button key={m} type="button" aria-pressed={modo === m} onClick={() => setModo(m)} className={`inline-flex items-center gap-1.5 px-3 py-1.5 font-semibold transition-colors ${modo === m ? "bg-[#f7edcf] text-[#11271d]" : "text-[#5d6e65] hover:bg-[#faf9f4]"}`}>
@@ -370,7 +438,7 @@ export function Constructor({ elementos, setElementos, carpeta, fiel = false }: 
           </div>
         </div>
       ) : (
-        <div className="grid gap-4 xl:grid-cols-[12.5rem_minmax(0,1fr)] xl:items-start">
+        <div className="grid grid-cols-[minmax(0,1fr)] gap-4 xl:grid-cols-[12.5rem_minmax(0,1fr)] xl:items-start">
           <Paleta onAnadir={(t) => insertar(t)} onInicio={iniciarNuevo} onFin={finArrastre} />
           <div
             ref={lienzo}
