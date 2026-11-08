@@ -34,6 +34,13 @@ const FIJAS: [string, string][] = [
   ["Términos", "/terminos"],
 ];
 
+// Rutas fijas cuyo contenido se maneja desde un editor del panel (antes tenían su propia entrada en el menú lateral).
+const EDITORES: Record<string, string> = {
+  "/publicaciones": "/admin/publicaciones",
+  "/eventos": "/admin/eventos",
+  "/preguntas-frecuentes": "/admin/preguntas",
+};
+
 const externa = (href?: string) => /^https?:\/\//.test(href ?? "");
 const editarLegacy = (key: string) => `/admin/paginas/editar/${key.split("/").map(encodeURIComponent).join("/")}`;
 const sumar = (list: ArbolNodo[]): number => list.reduce((a, n) => a + 1 + n.total, 0);
@@ -200,7 +207,7 @@ export function construirArbol({ nav, nodes, editadas, portales = [] }: { nav: N
   });
 
   const otras = [...todas.values()].filter((s) => !usadas.has(s.slug)).map((s) => nodoSeccion(s, ctx));
-  const fijas: ArbolNodo[] = FIJAS.map(([label, href]) => ({ id: `ruta:${href}`, label, kind: "ruta", href, total: 0, children: [] }));
+  const fijas: ArbolNodo[] = FIJAS.map(([label, href]) => ({ id: `ruta:${href}`, label, kind: "ruta", href, editHref: EDITORES[href], total: 0, children: [] }));
 
   return [
     grupoCabecera(),

@@ -28,7 +28,7 @@ const DESCRIPCION_GRUPO: Record<string, string> = {
   "g:nav": "Lo que se ve en el menú principal del sitio",
   "g:home": "Los bloques de la página de inicio",
   "g:sec": "Secciones que no están en la barra",
-  "g:fijas": "Rutas propias del portal; no se editan aquí",
+  "g:fijas": "Rutas propias del portal; las que tienen lápiz se editan desde su editor",
   "g:pie": "Lo que se ve al final de todas las páginas",
 };
 const UNIDAD_GRUPO: Record<string, string> = { "g:head": "elementos", "g:home": "bloques", "g:pie": "elementos", "g:fijas": "rutas" };
