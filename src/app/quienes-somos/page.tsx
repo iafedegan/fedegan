@@ -91,6 +91,7 @@ export default function QuienesSomosPage() {
         title="Conozca el directorio del portal o escríbanos"
         text="Cada servicio, medio y línea de valor del ecosistema tiene su propio espacio."
         actions={[
+          { label: "Misión, historia y estatutos", href: "/seccion/quienes-somos" },
           { label: "Directorio", href: "/directorio" },
           { label: "Contacto", href: "/contacto" },
         ]}

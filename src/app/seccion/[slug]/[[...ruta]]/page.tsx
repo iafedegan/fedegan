@@ -60,10 +60,10 @@ export default async function SeccionPage({ params }: { params: Promise<Params> 
             <Badge tone="lime">Contenido por migrar</Badge>
             <h2 className="font-[var(--font-display)] text-2xl font-bold text-[var(--text)]">Esta sección está en preparación</h2>
             <p className="leading-relaxed text-[var(--text-muted)]">
-              El contenido de {seccion.nombre} se migrará desde el portal actual de FEDEGÁN dentro de la fase de migración del proyecto. Mientras tanto puede consultarlo en el sitio vigente.
+              Estamos preparando el contenido de {seccion.nombre}. Si necesita algo de esta sección, escríbanos y le ayudamos.
             </p>
             <div className="flex flex-wrap gap-3">
-              <Button href="https://www.fedegan.org.co/">Ver en el portal actual</Button>
+              <Button href="/contacto">Escríbanos</Button>
               <Button href="/directorio" variant="secondary">Volver al directorio</Button>
             </div>
           </div>

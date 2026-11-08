@@ -21,8 +21,8 @@ const MENU_OF: Record<string, string> = {
 
 const menu = menuData as { label: string; href: string; subs: { label: string; href: string }[] }[];
 
-// Opciones de segundo nivel de cada escena: las mismas del menú desplegable del portal actual.
-// Si la página ya se copió se abre dentro del portal; si no, en el sitio original.
+// Opciones de segundo nivel de cada escena: las mismas del menú desplegable del portal anterior.
+// Todas se abren dentro del portal; la que no tenga página copiada no se ofrece (no se enlaza al sitio viejo).
 function subsOf(id: string): JourneySub[] {
   const item = menu.find((m) => m.label === MENU_OF[id]);
   if (!item) return [];
@@ -32,7 +32,8 @@ function subsOf(id: string): JourneySub[] {
     const key = sub.href.replace(/^https?:\/\/(www\.)?fedegan\.org\.co\//, "").replace(/\/$/, "");
     const page = getLegacyPage(key);
     const slug = page?.sections[0];
-    const entry: JourneySub = page && slug ? { label: sub.label, href: legacyHref(slug, key) } : { label: sub.label, href: sub.href.replace(/^http:/, "https:"), external: true };
+    if (!page || !slug) continue;
+    const entry: JourneySub = { label: sub.label, href: legacyHref(slug, key) };
     if (!seen.has(entry.href)) {
       seen.add(entry.href);
       out.push(entry);

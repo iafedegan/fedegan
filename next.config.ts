@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import type { NextConfig } from "next";
 import { buildLegacyRedirects, servedPaths } from "./src/content/legacy/redirects";
 
@@ -71,7 +71,7 @@ const nextConfig: NextConfig = {
     // 301 manuales primero (tienen prioridad) y luego las generadas desde las páginas migradas.
     const legacy = JSON.parse(readFileSync("./src/content/legacy/portal.json", "utf8"));
     const manual = new Set(legacyRedirects.map((r) => r.source));
-    const generated = buildLegacyRedirects(legacy, servedPaths("./src/app")).filter((r) => !manual.has(r.source));
+    const generated = buildLegacyRedirects(legacy, servedPaths("./src/app"), { compactar: true, reservadas: new Set(readdirSync("./src/app")) }).filter((r) => !manual.has(r.source));
     return [...legacyRedirects.map((r) => ({ source: r.source, destination: r.destination, statusCode: 301 as const })), ...generated];
   },
 };

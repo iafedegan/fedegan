@@ -49,6 +49,7 @@ function embedInfo(raw: string): EmbedInfo {
   }
   if (host.includes("slideshare")) return { kind: "link", src: raw, href: raw, title: "Presentación", hint: "Se abre en SlideShare." };
   if (host.includes("heyzine")) return { kind: "link", src: raw, href: raw, title: "Publicación interactiva", hint: "Se abre en una pestaña nueva." };
+  if (host.endsWith("tableau.com")) return { kind: "link", src: raw, href: raw, title: "Tablero interactivo", hint: "Indicadores de seguimiento · se abre en Tableau Public." };
   if (host.startsWith("estadisticas.fedegan")) return { kind: "link", src: raw, href: raw, title: "Tablero interactivo", hint: "Se abre en el sitio de estadísticas de FEDEGÁN." };
   return { kind: "link", src: raw, href: raw, title: "Documento", hint: "Se abre en una pestaña nueva." };
 }

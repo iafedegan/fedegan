@@ -36,3 +36,25 @@ test("un destino de sección usa la página de aterrizaje", () => {
   const r = buildLegacyRedirects(demo, new Set(["/"]));
   assert.deepEqual(r.map((x) => [x.source, x.destination]), [["/viejo", "/seccion/programas"], ["/otra", "/seccion/programas/otra"]]);
 });
+
+test("compactar: las carpetas grandes usan una sola regla y el destino no cambia", () => {
+  const completo = buildLegacyRedirects(data, served);
+  const reservadas = new Set(["noticias", "publicaciones", "seccion"]);
+  const corto = buildLegacyRedirects(data, served, { compactar: true, reservadas });
+  assert.ok(corto.length < completo.length - 100, `${corto.length} reglas contra ${completo.length}`);
+  assert.equal(new Set(corto.map((x) => x.source)).size, corto.length);
+  // Cada página migrada llega al mismo destino con la lista compacta (regla exacta o regla de carpeta `/x/:path+`).
+  const destinoCon = (reglas, ruta) => {
+    for (const r of reglas) {
+      if (r.source === ruta) return r.destination;
+      if (r.source.endsWith("/:path+")) {
+        const base = r.source.slice(0, -"/:path+".length) + "/";
+        if (ruta.startsWith(base)) return r.destination.replace(":path+", ruta.slice(base.length));
+      }
+    }
+    return null;
+  };
+  for (const r of completo) assert.equal(destinoCon(corto, r.source), r.destination, r.source);
+  // no tapa carpetas del portal nuevo
+  for (const x of corto) if (x.source.endsWith("/:path+")) assert.ok(!reservadas.has(x.source.split("/")[1]), x.source);
+});

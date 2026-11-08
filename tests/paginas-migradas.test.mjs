@@ -20,13 +20,15 @@ test("todas las páginas migradas se pueden guardar desde el constructor", () =>
 
 test("abrir y guardar una página migrada no cambia su contenido", () => {
   for (const [key, p] of paginas) {
-    const original = (p.blocks ?? []).filter((b) => b.t === "table" || b.t === "embed" || limpio(b.text));
+    // las imágenes copiadas (bloque «image») llevan sus datos en `data`, no en `text`
+    const original = (p.blocks ?? []).filter((b) => b.t === "table" || b.t === "embed" || b.t === "image" || limpio(b.text));
     const guardado = sanearBloques(p.blocks ?? []).bloques;
     assert.equal(guardado.length, original.length, `${key}: cambió la cantidad de bloques`);
     original.forEach((b, i) => {
       const g = guardado[i];
       assert.equal(g.t, b.t, `${key} #${i}: cambió el tipo`);
       if (b.t === "table") assert.deepEqual(g.rows, b.rows, `${key} #${i}: cambió la tabla`);
+      else if (b.t === "image") assert.deepEqual(g.data, b.data, `${key} #${i}: cambió la imagen`);
       else assert.equal(limpio(g.text), limpio(b.text), `${key} #${i}: cambió el texto`);
     });
     // lo que el editor arma y lo que el servidor guarda es lo mismo

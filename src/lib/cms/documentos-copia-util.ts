@@ -1,4 +1,4 @@
-// Utilidades puras (sin servidor) para copiar los documentos migrados a Supabase y usar la copia en el contenido.
+// Utilidades puras (sin servidor) para copiar los documentos (y las imágenes de contenido) migrados a Supabase y usar la copia en el contenido.
 
 export const MAX_COPIA = 50 * 1024 * 1024; // el depósito «documentos» admite hasta 50 MB por archivo
 
@@ -75,7 +75,10 @@ export function rutaDeCopia(origen: string): string {
   return `migrados/${hash(origen)}-${nombre}.${extensionDe(origen)}`;
 }
 
-type Bloque = { t: string; text?: string; rows?: string[][] };
+type Bloque = { t: string; text?: string; rows?: string[][]; data?: Record<string, unknown> };
+
+/** Dirección copiable de una imagen del contenido (bloque «image»), si es del propio FEDEGÁN. */
+const origenDeImagen = (b: Bloque): string | null => (b.t === "image" && typeof b.data?.src === "string" ? normalizarOrigen(b.data.src) : null);
 
 /** Todas las direcciones de documentos copiables que aparecen en un conjunto de bloques. */
 export function origenesEnBloques(blocks: Bloque[], out: Set<string> = new Set()): Set<string> {
@@ -93,6 +96,8 @@ export function origenesEnBloques(blocks: Bloque[], out: Set<string> = new Set()
       const o = b.text ? normalizarOrigen(b.text) : null;
       if (o) out.add(o);
     }
+    const img = origenDeImagen(b);
+    if (img) out.add(img);
   }
   return out;
 }
@@ -108,6 +113,11 @@ export function aplicarCopias<T extends Bloque>(blocks: T[], copias: ReadonlyMap
     });
   return blocks.map((b) => {
     if (b.t === "embed") return b;
+    if (b.t === "image") {
+      const o = origenDeImagen(b);
+      const nuevo = o ? copias.get(o) : undefined;
+      return nuevo ? ({ ...b, data: { ...b.data, src: nuevo } } as T) : b;
+    }
     const out: T = { ...b };
     if (b.text) out.text = sub(b.text);
     if (b.rows) out.rows = b.rows.map((r) => r.map(sub));
