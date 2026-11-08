@@ -215,7 +215,11 @@ export function Header({ nav: mainNav }: { nav: { label: string; href: string }[
             <MoreMenu items={mainNav} pathname={pathname} />
           </div>
 
-          <div className="flex shrink-0 items-center gap-3">
+          <div className="flex shrink-0 items-center gap-1.5">
+            <Link href="/buscador" aria-label="Buscar" title="Buscar" className="flex h-9 w-9 items-center justify-center rounded-full border border-transparent text-[var(--text-muted)] transition-colors hover:border-[var(--border-strong)] hover:text-[var(--fg-lime-400)]">
+              <Search size={18} strokeWidth={1.8} aria-hidden />
+            </Link>
+            <LoginMenu />
             <ThemeToggle className="!h-9 !w-9 !border-transparent hover:!border-[var(--border-strong)]" />
           </div>
         </Container>

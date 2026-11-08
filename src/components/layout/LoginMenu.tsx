@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
-import { ChevronDown, GraduationCap, LogIn, LogOut, Newspaper, ShieldCheck, UserCircle2 } from "lucide-react";
+import { ChevronDown, GraduationCap, LogOut, Newspaper, ShieldCheck, UserCircle2, UserRound } from "lucide-react";
 import { appsForRoles } from "@/lib/access";
 
 const appIcons = { shield: ShieldCheck, newspaper: Newspaper };
@@ -39,7 +39,7 @@ export function LoginMenu() {
         title="Ingresar"
         className="ml-auto hidden h-9 w-9 shrink-0 items-center justify-center rounded-full border border-transparent text-[var(--text-muted)] transition-colors hover:border-[var(--border-strong)] hover:text-[var(--fg-lime-400)] md:flex"
       >
-        <LogIn size={17} strokeWidth={1.6} aria-hidden />
+        <UserRound size={19} strokeWidth={1.8} aria-hidden />
       </Link>
     );
   }

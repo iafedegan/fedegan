@@ -423,3 +423,12 @@ dialog.doc-modal[open] { display: block; animation: doc-in 0.22s ease-out; }
 .doc-word p { margin: 0 0 0.9em; } .doc-word ul, .doc-word ol { margin: 0 0 1em 1.4rem; } .doc-word li { margin-bottom: 0.3em; }
 .doc-word table { border-collapse: collapse; margin: 1em 0; width: 100%; } .doc-word td, .doc-word th { border: 1px solid #cfd6c9; padding: 0.4rem 0.6rem; vertical-align: top; }
 .doc-word a { color: #2c6a14; text-decoration: underline; } .doc-word img { max-width: 100%; height: auto; }
+
+/* Cabecera: solo el emblema y FEDEGAN al lado */
+.mh-brand { display: inline-flex; align-items: center; gap: 0.75rem; color: #fff; text-decoration: none; }
+.mh-emblem { width: auto; height: 3.4rem; flex: none; }
+.mh-name { font: 300 2.2rem/1 var(--font-display); letter-spacing: -0.01em; color: #fff; }
+.mh-name b { font-weight: 800; }
+.mh-brand.mh-title { justify-content: center; }
+.mh-brand.mh-title .mh-emblem { height: 3rem; }
+.mh-brand.mh-title .mh-name { font-size: 1.9rem; }
