@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ChevronDown, UserCircle2 } from "lucide-react";
 import { useSession } from "next-auth/react";
-import { ThemeToggle } from "./ThemeToggle";
 
 // Accesos pequeños de la cabecera en móvil: tono claro/oscuro y cuenta.
 export function MastheadTools() {
@@ -24,16 +23,12 @@ export function MastheadTools() {
   return (
     <div className="mh-tools">
       <button type="button" onClick={() => setOpen(!open)} aria-expanded={open} aria-controls="mh-opciones" aria-label={open ? "Cerrar opciones" : "Abrir opciones"} className="mh-tools-toggle">
-        <ChevronDown size={16} className={`transition-transform duration-300 ${open ? "rotate-180" : ""}`} />
+        <ChevronDown size={20} className={`transition-transform duration-300 ${open ? "rotate-180" : ""}`} />
       </button>
       {open && (
         <div id="mh-opciones" className="mh-tools-panel">
-          <div className="flex items-center gap-2"><ThemeToggle className="!h-9 !w-9" /><span>Tono claro / oscuro</span></div>
-          <Link
-            href={session?.user ? "/mi-fedegan" : "/ingresar"}
-            className="flex items-center gap-2"
-          >
-            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[var(--border-strong)] text-[var(--fg-lime-400)]"><UserCircle2 size={18} /></span>
+          <Link href={session?.user ? "/mi-fedegan" : "/ingresar"} className="mh-cuenta">
+            <UserCircle2 size={20} aria-hidden />
             <span>{session?.user ? "Mi FEDEGÁN" : "Iniciar sesión"}</span>
           </Link>
         </div>
