@@ -6,7 +6,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
 import {
-  CalendarDays, FileStack, ListTree, FileText, GraduationCap, Users, Globe, HelpCircle, History, LayoutDashboard, Link2, LogOut, Menu, Newspaper, Store, BarChart3, Palette, PanelLeftClose, PanelLeftOpen, Plug, X, ChevronDown,
+  CalendarDays, FileStack, ListTree, FileText, GraduationCap, Users, Globe, HelpCircle, History, LayoutDashboard, Link2, LogOut, Menu, Newspaper, Store, BarChart3, Palette, PanelLeftClose, PanelLeftOpen, Plug, Settings, X, ChevronDown,
   type LucideIcon,
 } from "lucide-react";
 import type { AdminNavGroup } from "@/lib/cms/nav";
@@ -22,6 +22,8 @@ function isActive(pathname: string, href: string) {
 
 export function AdminSidebar({ user, groups }: { user: { name: string; email: string; role: string }; groups: AdminNavGroup[] }) {
   const pathname = usePathname();
+  // «Configuración» queda resaltada también dentro de sus páginas (Conexiones y APIs).
+  const configActiva = pathname.startsWith("/admin/configuracion") || pathname.startsWith("/admin/apis");
   const [openAt, setOpenAt] = useState<string | null>(null);
   const open = openAt === pathname;
   const [pinned, setPinned] = useState(false);
@@ -125,12 +127,23 @@ export function AdminSidebar({ user, groups }: { user: { name: string; email: st
         })}
       </nav>
 
+      <Link
+        href="/admin/configuracion"
+        aria-current={configActiva ? "page" : undefined}
+        aria-label="Configuración"
+        title={rail ? "Configuración" : undefined}
+        onClick={() => setOpenAt(null)}
+        className="ad-navlink mt-4 w-full border-t border-white/10 pt-0"
+      >
+        <Settings size={18} strokeWidth={1.8} className="shrink-0" /> <span className={lbl(rail)}>Configuración</span>
+      </Link>
+
       <button
         type="button"
         onClick={() => signOut({ redirectTo: "/" })}
         aria-label="Salir"
         title={rail ? "Salir" : undefined}
-        className="ad-navlink mt-4 w-full border-t border-white/10 pt-0 text-left"
+        className="ad-navlink mt-1 w-full text-left"
       >
         <LogOut size={18} strokeWidth={1.8} className="shrink-0" /> <span className={lbl(rail)}>Salir</span>
       </button>

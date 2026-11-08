@@ -42,7 +42,9 @@ export default async function ApisPage() {
         <nav aria-label="Ruta" className="flex items-center gap-1.5 text-xs text-[#8a978f]">
           <Link href="/admin" className="hover:text-[#165a43]">Panel</Link>
           <ChevronRight size={12} />
-          <span className="font-medium text-[#5d6e65]">Conexiones (APIs)</span>
+          <Link href="/admin/configuracion" className="hover:text-[#165a43]">Configuración</Link>
+          <ChevronRight size={12} />
+          <span className="font-medium text-[#5d6e65]">Conexiones y APIs</span>
         </nav>
         <h1 className="mt-2 text-3xl font-bold sm:text-4xl">Conexiones y APIs</h1>
         <p className="mt-1.5 max-w-2xl text-[#5d6e65]">Las fuentes externas de las que se alimenta el portal: estado, prueba de conexión y cambio de claves.</p>
@@ -97,7 +99,7 @@ export default async function ApisPage() {
       </section>
 
       {/* Inteligencia artificial */}
-      <section className="ad-card flex flex-col gap-6 p-6 sm:p-8">
+      <section id="ia" className="ad-card scroll-mt-6 flex flex-col gap-6 p-6 sm:p-8">
         <div className="flex items-start gap-4">
           <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#eef8e6] text-[#3d7a22]"><Sparkles size={22} /></span>
           <div>
@@ -137,7 +139,7 @@ export default async function ApisPage() {
       </section>
 
       {/* Documentos migrados */}
-      <section className="ad-card flex flex-col gap-5 p-6 sm:p-8">
+      <section id="documentos" className="ad-card scroll-mt-6 flex flex-col gap-5 p-6 sm:p-8">
         <div className="flex items-start gap-4">
           <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#eef8e6] text-[#3d7a22]"><FolderArchive size={22} /></span>
           <div>
