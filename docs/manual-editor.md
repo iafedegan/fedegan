@@ -26,11 +26,11 @@ Las páginas copiadas del portal anterior se editan con el mismo constructor que
 
 Una página en blanco ofrece diez plantillas de arranque (informativa, servicios con tarjetas, documentos y descargas, preguntas frecuentes, con portada, programa o campaña, informe con cifras, convocatoria o comunicado, equipo y contacto, galería y aliados); después se puede cambiar todo.
 
-- **Elementos** (a la izquierda, 35 en siete grupos que se pliegan):
+- **Elementos** (a la izquierda, 36 en siete grupos que se pliegan):
   - *Texto*: título, subtítulo, párrafo, lista, aviso (información, éxito, advertencia o importante), cita y columnas de texto.
   - *Acciones*: botón, destacado, botones (varios en una fila), banner con imagen de fondo y redes sociales.
   - *Medios*: imagen, video o tablero, imagen y texto, galería de fotos, audio y logos de aliados.
-  - *Contenido*: tarjetas, carrusel, preguntas (acordeón), pestañas, cifras, pasos, línea de tiempo, características (con iconos), lista de enlaces, tabla y ficha de tema (una ficha más en la cuadrícula de temas de una sección o de una página con subpáginas; lleva título, descripción y enlace).
+  - *Contenido*: tarjetas, carrusel, preguntas (acordeón), pestañas, cifras, pasos, línea de tiempo, características (con iconos), lista de enlaces, tabla formulario (ver abajo) y ficha de tema (una ficha más en la cuadrícula de temas de una sección o de una página con subpáginas; lleva título, descripción y enlace).
   - *Personas*: personas (foto, cargo, correo y teléfono) y contacto (teléfono, correo, dirección con «Cómo llegar» y horario).
   - *Archivos*: documentos y recibir archivos.
   - *Diseño*: separador y espacio.
@@ -46,6 +46,15 @@ Una página en blanco ofrece diez plantillas de arranque (informativa, servicios
 - **Publicar**: nada llega al sitio hasta pulsar **Publicar cambios**. Un elemento incompleto (un botón sin enlace, una galería sin fotos…) queda marcado y no se publica; la barra de abajo cuenta cuántos hay. Las partes vacías de una lista (una foto o una pestaña sin llenar) se ignoran. Si cierra la página con cambios sin publicar, el navegador avisa.
 
 Para agregar un elemento nuevo al catálogo basta describir sus campos en `src/lib/cms/elementos.ts` (el editor, la validación del servidor y los datos guardados salen de esa descripción) y dibujarlo en `src/components/legacy/ElementosExtra.tsx`.
+
+## Formularios
+El elemento **Formulario** (grupo *Contenido*) recoge datos de los visitantes: inscripciones, solicitudes, consultas. Se configura en el propio editor:
+- **Preguntas**: texto corto o largo, correo, teléfono, número, fecha, lista desplegable, casillas (varias respuestas) y archivo adjunto (PDF, Word, Excel, JPG o PNG, hasta 10 MB). Cada una puede ser obligatoria y llevar una ayuda. En lista y casillas, las opciones van una por línea.
+- **Nombre interno**: identifica el formulario en el panel (por ejemplo `inscripcion-seminario`); no debe repetirse en otro formulario.
+- **Enviar a una API (opcional)**: cada respuesta se envía además, por POST en JSON, a una dirección `https://…`. La dirección no se muestra a los visitantes; si la API falla, la respuesta queda guardada igual.
+- **Respuestas**: menú *Formularios* del panel. Se ven en una tabla, se buscan y se descargan en CSV.
+
+Antes de usarlo por primera vez hay que ejecutar `docs/migraciones/016-formularios.sql` en Supabase (crea la tabla `form_responses`). La vista previa del editor no envía nada.
 
 ## Diseño de la portada
 `/admin/diseno` trabaja en **borrador**: cambie, use *Vista previa*, y solo al pulsar **Publicar** lo ve el público. *Deshacer* vuelve a la versión anterior.

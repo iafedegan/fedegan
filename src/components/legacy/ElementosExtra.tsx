@@ -4,6 +4,7 @@ import {
 } from "lucide-react";
 import type { Datos, TipoEsquema } from "@/lib/cms/elementos";
 import { FacebookIcon, InstagramIcon, LinkedinIcon, XIcon, YoutubeIcon } from "@/components/ui/SocialIcons";
+import { Formulario } from "./Formulario";
 import { Galeria } from "./Galeria";
 import { ICONOS_CARACT } from "./iconos-caracteristicas";
 import { Inline } from "./Inline";
@@ -522,8 +523,10 @@ function Espacio({ d }: { d: Datos }) {
   return <div aria-hidden className={ESPACIOS[t(d.alto) as keyof typeof ESPACIOS] ?? ESPACIOS.medio} />;
 }
 
-export function ElementoExtra({ tipo, datos }: { tipo: TipoEsquema; datos: Datos }) {
+export function ElementoExtra({ tipo, datos, preview = false }: { tipo: TipoEsquema; datos: Datos; preview?: boolean }) {
   switch (tipo) {
+    // La dirección de la API del formulario no sale al navegador: el servidor la lee de lo publicado.
+    case "formulario": return <Formulario d={{ ...datos, webhook: "" }} preview={preview} />;
     case "aviso": return <Aviso d={datos} />;
     case "cita": return <Cita d={datos} />;
     case "columnas": return <Columnas d={datos} />;

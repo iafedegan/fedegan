@@ -214,6 +214,20 @@ export const ICONOS_CARACTERISTICAS = op(
   ["edificio", "Institución"], ["alianza", "Alianza"], ["capacitacion", "Capacitación"], ["dinero", "Dinero"], ["tramite", "Trámite"], ["libro", "Libro"], ["idea", "Idea"],
 );
 
+
+/** Tipos de respuesta de una pregunta de «Formulario». */
+export const TIPOS_CAMPO = [
+  { valor: "texto", nombre: "Texto corto" }, { valor: "parrafo", nombre: "Texto largo" }, { valor: "correo", nombre: "Correo" },
+  { valor: "telefono", nombre: "Teléfono" }, { valor: "numero", nombre: "Número" }, { valor: "fecha", nombre: "Fecha" },
+  { valor: "lista", nombre: "Lista desplegable" }, { valor: "casillas", nombre: "Casillas (varias)" }, { valor: "archivo", nombre: "Archivo adjunto" },
+];
+export const CLAVE_FORMULARIO: Patron = { re: /^[a-z0-9][a-z0-9-]{2,49}$/, mensaje: "El nombre interno usa minúsculas, números y guiones, entre 3 y 50 caracteres (por ejemplo: inscripcion-seminario)." };
+
+/** Las opciones escritas una por línea (o separadas por «;»): sin vacías ni repetidas. */
+export function opcionesDe(texto: string): string[] {
+  return [...new Set(texto.split(/[\n;]/).map((x) => x.trim().slice(0, 100)).filter(Boolean))].slice(0, 30);
+}
+
 export const ESQUEMAS = {
   // ── Texto
   aviso: {
@@ -514,6 +528,47 @@ export const ESQUEMAS = {
     ],
     principales: ["titulo", "enlace"],
     vacioMensaje: "Escriba el título de la ficha y a dónde lleva.",
+  },
+  formulario: {
+    nombre: "Formulario",
+    ayuda: "Recoge datos de los visitantes (inscripciones, solicitudes, consultas) y los envía a una API si lo desea",
+    grupo: "Contenido",
+    icono: "ClipboardList",
+    campos: [
+      { k: "titulo", tipo: "texto", etiqueta: "Título del formulario", max: 120, obligatorio: true, placeholder: "Por ejemplo: Inscripción al seminario" },
+      { k: "texto", tipo: "parrafo", etiqueta: "Descripción (opcional)", max: 500, filas: 2, formato: true },
+      {
+        k: "clave", tipo: "texto", etiqueta: "Nombre interno", max: 50, obligatorio: true, placeholder: "inscripcion-seminario",
+        ayuda: "Sirve para reconocer las respuestas en el panel (Formularios). Solo minúsculas, números y guiones; no puede repetirse en otro formulario.",
+        patron: CLAVE_FORMULARIO,
+      },
+      {
+        k: "campos", tipo: "lista", etiqueta: "Preguntas", nombreItem: "Pregunta", max: 25, minimo: 1, inicial: 3,
+        campos: [
+          { k: "etiqueta", tipo: "texto", etiqueta: "Pregunta", max: 120, obligatorio: true, placeholder: "Por ejemplo: Nombre completo" },
+          { k: "tipo", tipo: "opcion", etiqueta: "Tipo de respuesta", opciones: TIPOS_CAMPO, defecto: "texto" },
+          { k: "opciones", tipo: "parrafo", etiqueta: "Opciones (solo para lista o casillas)", max: 600, filas: 3, placeholder: "Una opción por línea" },
+          { k: "ayuda", tipo: "texto", etiqueta: "Ayuda bajo la pregunta (opcional)", max: 160 },
+          { k: "requerido", tipo: "sino", etiqueta: "Es obligatoria", defecto: false },
+        ],
+      },
+      { k: "boton", tipo: "texto", etiqueta: "Texto del botón", max: 40, placeholder: "Enviar" },
+      { k: "gracias", tipo: "parrafo", etiqueta: "Mensaje al enviar", max: 300, filas: 2, placeholder: "¡Gracias! Recibimos su respuesta." },
+      {
+        k: "webhook", tipo: "texto", etiqueta: "Enviar también a una API (opcional)", max: 400, placeholder: "https://…",
+        ayuda: "Cada respuesta se envía además por POST (JSON) a esta dirección. No se muestra a los visitantes.",
+        patron: { re: /^https:\/\/[^\s]+$/, mensaje: "La dirección de la API debe empezar con https://." },
+      },
+    ],
+    principales: ["titulo", "campos"],
+    vacioMensaje: "Escriba el título y al menos una pregunta.",
+    regla: (d) => {
+      const lista = Array.isArray(d.campos) ? (d.campos as Datos[]) : [];
+      for (let i = 0; i < lista.length; i++) {
+        if ((s(lista[i].tipo) === "lista" || s(lista[i].tipo) === "casillas") && opcionesDe(s(lista[i].opciones)).length < 2) return `Pregunta ${i + 1}: escriba al menos dos opciones (una por línea).`;
+      }
+      return null;
+    },
   },
   tabla: {
     nombre: "Tabla",

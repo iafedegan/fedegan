@@ -6,14 +6,14 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
 import {
-  CalendarDays, FileStack, ListTree, FileText, GraduationCap, Users, Globe, HelpCircle, History, LayoutDashboard, Link2, LogOut, Menu, Newspaper, Store, BarChart3, Palette, PanelLeftClose, PanelLeftOpen, Plug, Settings, X, ChevronDown,
+  CalendarDays, ClipboardList, FileStack, ListTree, FileText, GraduationCap, Users, Globe, HelpCircle, History, LayoutDashboard, Link2, LogOut, Menu, Newspaper, Store, BarChart3, Palette, PanelLeftClose, PanelLeftOpen, Plug, Settings, X, ChevronDown,
   type LucideIcon,
 } from "lucide-react";
 import type { AdminNavGroup } from "@/lib/cms/nav";
 
 const icons: Record<string, LucideIcon> = {
   layout: LayoutDashboard, store: Store, chart: BarChart3, link: Link2, file: FileText, calendar: CalendarDays,
-  help: HelpCircle, tree: ListTree, pages: FileStack, plug: Plug, palette: Palette, menu: Menu, history: History, globe: Globe, newspaper: Newspaper, graduation: GraduationCap, users: Users,
+  help: HelpCircle, tree: ListTree, pages: FileStack, plug: Plug, palette: Palette, menu: Menu, history: History, globe: Globe, newspaper: Newspaper, graduation: GraduationCap, users: Users, forms: ClipboardList,
 };
 
 function isActive(pathname: string, href: string) {

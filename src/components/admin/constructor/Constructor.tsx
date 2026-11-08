@@ -2,7 +2,7 @@
 
 import { Fragment, memo, useCallback, useEffect, useMemo, useRef, useState, type Dispatch, type DragEvent, type ReactNode, type SetStateAction } from "react";
 import {
-  AlertTriangle, AppWindow, ArrowDown, ArrowUp, BadgeCheck, Building2, ChartColumn, ChevronRight, Columns3, ContactRound, Copy, Eye, GalleryHorizontal, GripVertical, Headphones,
+  AlertTriangle, AppWindow, ArrowDown, ArrowUp, BadgeCheck, Building2, ChartColumn, ClipboardList, ChevronRight, Columns3, ContactRound, Copy, Eye, GalleryHorizontal, GripVertical, Headphones,
   Heading2, Heading3, Image as ImageIcon, Images, Info, LayoutGrid, Link2, List, ListCollapse, ListOrdered, Megaphone, Milestone, Minus, MousePointerClick, MoveVertical, Paperclip,
   PanelLeft, PanelTop, Pencil, Puzzle, Quote, Redo2, Search, Share2, SquareMousePointer, Table2, Trash2, Type, Undo2, Upload, UsersRound, Video, X, type LucideIcon,
 } from "lucide-react";
@@ -21,7 +21,7 @@ const ICONO_BASE: Record<string, LucideIcon> = {
 // Los iconos que piden los esquemas de src/lib/cms/elementos.ts (por su nombre en lucide-react).
 const ICONO_ESQUEMA: Record<string, LucideIcon> = {
   Info, Quote, Columns3, SquareMousePointer, PanelTop, Share2, PanelLeft, Images, Headphones, Building2, AppWindow, ChartColumn, ListOrdered, Milestone, BadgeCheck, Link2, Table2,
-  UsersRound, ContactRound, MoveVertical, LayoutGrid,
+  UsersRound, ContactRound, MoveVertical, LayoutGrid, ClipboardList,
 };
 const ICONOS: Record<string, LucideIcon> = {
   ...ICONO_BASE,
