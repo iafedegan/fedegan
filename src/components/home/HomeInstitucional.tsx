@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, Bank, CalendarBlank, Clock, DownloadSimple, FileText, GraduationCap, MapPin, Newspaper, Question, Scales, Television, UserCircle, UsersThree, Wallet } from "@phosphor-icons/react/dist/ssr";
+import { ArrowRight, CalendarBlank, Clock, DownloadSimple, FileText, GraduationCap, MapPin, Newspaper, Question, Scales, Television, UsersThree, Wallet } from "@phosphor-icons/react/dist/ssr";
 import { Container } from "@/components/ui/Container";
 import { Pic } from "./Pic";
 import { HeroCarousel } from "./HeroCarousel";
@@ -73,8 +73,15 @@ export function HomeInstitucional({ d, banners }: { d: HomeData; banners: AdConf
           <div className="hi-grid3">
             {d.pubs.slice(0, 3).map((p) => (
               <Link key={p.slug} href={`/publicaciones/${p.slug}`} className="hi-pub">
-                <span className="hi-cover">{p.coverImage ? <Pic src={p.coverImage} sizes="140px" /> : <FileText size={36} weight="duotone" aria-hidden />}</span>
-                <span><small>{p.type}</small><strong>{p.title}</strong><span className="hi-dek">{p.dek}</span><b>{p.fileUrl ? "Descargar PDF" : "Ver publicación"} <DownloadSimple size={15} weight="bold" aria-hidden /></b></span>
+                <span className="hi-cover">
+                  {p.coverImage ? <Pic src={p.coverImage} sizes="(min-width: 900px) 33vw, 100vw" /> : <FileText size={54} weight="duotone" aria-hidden />}
+                  <em className="hi-chip">{p.type}</em>
+                </span>
+                <span className="hi-pub-body">
+                  <strong>{p.title}</strong>
+                  <span className="hi-dek">{p.dek}</span>
+                  <b>{p.fileUrl ? "Descargar PDF" : "Ver publicación"} <span className="hi-pub-go"><DownloadSimple size={16} weight="bold" aria-hidden /></span></b>
+                </span>
               </Link>
             ))}
           </div>
@@ -100,16 +107,6 @@ export function HomeInstitucional({ d, banners }: { d: HomeData; banners: AdConf
             <li key={t.t}><Link href={t.href}><t.icon size={38} weight="duotone" aria-hidden /><span><strong>{t.t}</strong>{t.x}<b>{t.c} <ArrowRight size={14} weight="bold" aria-hidden /></b></span></Link></li>
           ))}
         </ul>
-
-        <section className="hi-mi">
-          <div>
-            <p><Bank size={15} weight="duotone" aria-hidden /> Próximamente</p>
-            <h2>Mi FEDEGÁN, su espacio personalizado</h2>
-            <span>Un área exclusiva para nuestros afiliados y usuarios registrados, con acceso a información, herramientas y beneficios del ecosistema FEDEGÁN–FNG.</span>
-            <ul><li>Gestione sus trámites en línea</li><li>Reciba comunicaciones y alertas</li><li>Acceda a información personalizada</li></ul>
-            <Link href="/mi-fedegan" className="hi-btn hi-dark"><UserCircle size={18} weight="duotone" aria-hidden /> Conozca más <ArrowRight size={16} weight="bold" aria-hidden /></Link>
-          </div>
-        </section>
       </Container>
     </div>
   );
