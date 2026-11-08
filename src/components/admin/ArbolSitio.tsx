@@ -41,7 +41,6 @@ const ZONAS: { id: string; titulo: string; corto: string; Icono: LucideIcon; gru
   { id: "secciones", titulo: "Secciones y páginas", corto: "Todo lo que no está en el menú", Icono: LayoutPanelTop, grupos: ["g:sec", "g:fijas"] },
   { id: "pie", titulo: "Pie de página", corto: "Portales aliados, enlaces y contacto", Icono: PanelBottom, grupos: ["g:pie"] },
 ];
-const GRUPOS_ABIERTOS = ["g:head", "g:nav", "g:home", "g:sec", "g:fijas", "g:pie"];
 // Solo se rotulan los tipos que no se reconocen por su icono.
 const ETIQUETA: Partial<Record<ArbolKind, string>> = { grupo: "Grupo", enlace: "Enlace", ruta: "Ruta fija" };
 
@@ -505,7 +504,7 @@ function Fila({ n, c }: { n: ArbolNodo; c: Ctx }) {
 }
 
 export function ArbolSitio({ raiz, writable }: { raiz: ArbolNodo[]; writable: boolean }) {
-  const [abiertos, setAbiertos] = useState<Set<string>>(() => new Set(GRUPOS_ABIERTOS));
+  const [abiertos, setAbiertos] = useState<Set<string>>(() => new Set()); // todo empieza cerrado
   const [zonaId, setZonaId] = useState("navegacion");
   const [busqueda, setBusqueda] = useState("");
   const [agregando, setAgregando] = useState<string | null>(null);
@@ -538,7 +537,7 @@ export function ArbolSitio({ raiz, writable }: { raiz: ArbolNodo[]; writable: bo
               <li key={z.id}>
                 <button
                   type="button"
-                  onClick={() => { setZonaId(z.id); setBusqueda(""); }}
+                  onClick={() => { setZonaId(z.id); setBusqueda(""); setAbiertos(new Set()); }}
                   aria-current={activa ? "true" : undefined}
                   className={`flex h-full w-full flex-col gap-1.5 rounded-2xl border p-3 text-left transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#89114c] ${activa ? "border-[#72bf44] bg-[#f1f9ea] shadow-[inset_0_-3px_0_#72bf44]" : "border-[#e4e2d6] bg-white hover:border-[#b8cfa6]"} ${q ? "opacity-60" : ""}`}
                 >
@@ -578,7 +577,7 @@ export function ArbolSitio({ raiz, writable }: { raiz: ArbolNodo[]; writable: bo
           <button type="button" onClick={() => setAbiertos(new Set(todos))} title="Expandir todo" className="at-btn">
             <ChevronsUpDown size={15} aria-hidden /> <span className="hidden sm:inline">Expandir todo</span>
           </button>
-          <button type="button" onClick={() => setAbiertos(new Set(GRUPOS_ABIERTOS))} title="Contraer" className="at-btn">
+          <button type="button" onClick={() => setAbiertos(new Set())} title="Contraer" className="at-btn">
             <ChevronsDownUp size={15} aria-hidden /> <span className="hidden sm:inline">Contraer</span>
           </button>
         </div>
