@@ -2,12 +2,20 @@ import { splitElementKey, type ElementEdit } from "@/lib/design/regions";
 
 const STYLE_ID = "design-elements";
 
+// Sombras de menos a más marcada (nivel 1 a 4).
+const SOMBRAS = ["", "0 2px 6px rgba(16,36,15,0.16)", "0 8px 20px -6px rgba(16,36,15,0.26)", "0 16px 36px -10px rgba(16,36,15,0.36)", "0 26px 56px -14px rgba(16,36,15,0.46)"];
+
 function cssFor(selector: string, e: ElementEdit): string {
   if (e.hidden) return `${selector}{display:none !important}`;
   const d: string[] = [];
   if (e.bg) d.push(`background-color:${e.bg} !important`);
   if (e.color) d.push(`color:${e.color} !important`);
   if (e.scale) d.push(`zoom:${e.scale / 100}`);
+  // Degradado: del color de fondo (o blanco) al segundo color. Una imagen de fondo, si hay, va por encima.
+  if (e.bg2 && !e.image) d.push(`background-image:linear-gradient(${e.angle ?? 135}deg,${e.bg ?? "#ffffff"},${e.bg2}) !important`);
+  if (e.radius) d.push(`border-radius:${e.radius}px !important`, "overflow:hidden");
+  if (e.borderW) d.push(`border:${e.borderW}px solid ${e.borderColor ?? "currentColor"} !important`);
+  if (e.shadow && SOMBRAS[e.shadow]) d.push(`box-shadow:${SOMBRAS[e.shadow]} !important`);
   if (e.image) d.push(`background-image:url("${e.image}") !important`, "background-size:cover !important", "background-position:center !important");
   return d.length ? `${selector}{${d.join(";")}}` : "";
 }

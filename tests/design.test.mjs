@@ -27,3 +27,12 @@ test("limita y depura la lista de orden", () => {
   assert.ok(!d.order.includes("mal id!"));
   assert.ok(d.order.length <= 24);
 });
+
+test("estilo de elemento: degradado, esquinas, borde y sombra se guardan acotados y sin valores peligrosos", () => {
+  const d = normalizeDesign({ elements: { "*::.a": { bg: "#ffffff", bg2: "#72bf44", angle: 90, radius: 500, borderW: 3, borderColor: "red;}x{", shadow: 9 } } });
+  assert.deepEqual(d.elements["*::.a"], { bg: "#ffffff", bg2: "#72bf44", angle: 90, radius: 80, borderW: 3, shadow: 4 });
+  // sin segundo color no hay dirección; sin grosor no hay color de borde; los ceros se descartan
+  const e = normalizeDesign({ elements: { "*::.b": { angle: 45, borderColor: "#112233", radius: 0, shadow: 0 } } });
+  assert.deepEqual(e.elements["*::.b"], undefined);
+  assert.ok(!designCss(d).includes("x{"));
+});

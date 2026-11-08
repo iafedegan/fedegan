@@ -136,7 +136,13 @@ export type AdConfig = { on?: boolean; image?: string; href?: string; alt?: stri
 
 // ---- edición de cualquier elemento de cualquier página --------------------------------
 // La clave es «ruta::selector» (la ruta es «*» para todo el sitio). El selector lo calcula el editor al hacer clic en la vista previa.
-export type ElementEdit = { text?: string; image?: string; href?: string; bg?: string; color?: string; scale?: number; hidden?: boolean };
+export type ElementEdit = {
+  text?: string; image?: string; href?: string; bg?: string; color?: string; scale?: number; hidden?: boolean;
+  /** Segundo color: con `bg` forma un degradado en la dirección `angle` (grados, 135 por defecto). */
+  bg2?: string; angle?: number;
+  /** Esquinas redondeadas (px), borde (grosor en px y color) y sombra (0 a 4). */
+  radius?: number; borderW?: number; borderColor?: string; shadow?: number;
+};
 
 export type DesignConfig = {
   v: 1;
@@ -320,6 +326,22 @@ export function normalizeDesign(raw: unknown): DesignConfig {
     if (color) out.color = color;
     const sc = num(e.scale, 40, 250);
     if (sc !== undefined && sc !== 100) out.scale = sc;
+    const bg2 = hex(e.bg2);
+    if (bg2) {
+      out.bg2 = bg2;
+      const ang = num(e.angle, 0, 360);
+      if (ang !== undefined && ang !== 135) out.angle = ang;
+    }
+    const radius = num(e.radius, 0, 80);
+    if (radius) out.radius = radius;
+    const borderW = num(e.borderW, 0, 12);
+    if (borderW) {
+      out.borderW = borderW;
+      const bc = hex(e.borderColor);
+      if (bc) out.borderColor = bc;
+    }
+    const shadow = num(e.shadow, 0, 4);
+    if (shadow) out.shadow = Math.round(shadow);
     if (e.hidden === true) out.hidden = true;
     if (Object.keys(out).length) d.elements[k] = out;
   }

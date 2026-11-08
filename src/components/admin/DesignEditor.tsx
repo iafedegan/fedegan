@@ -761,7 +761,13 @@ export function DesignEditor({ writable, initialPublished, initialDraft, canUndo
         <input className="ad-input" placeholder="/imagenes/foto.jpg o https://…" value={es.image ?? (picked.isImg ? picked.src : "")} onChange={(e) => patchEl({ image: e.target.value })} />
       </label>
       <ColorField label="Color de fondo" value={es.bg} fallback="#0a2a20" onChange={(v) => patchEl({ bg: v })} />
+      <ColorField label="Degradado: color final" value={es.bg2} fallback="#72bf44" onChange={(v) => patchEl({ bg2: v, angle: v ? es.angle : undefined })} />
+      {es.bg2 && <Slider label="Dirección del degradado" value={es.angle ?? 135} min={0} max={360} step={15} unit="°" onChange={(n) => patchEl({ angle: n })} />}
       <ColorField label="Color del texto" value={es.color} fallback="#f4f2e9" onChange={(v) => patchEl({ color: v })} />
+      <Slider label="Bordes redondeados" value={es.radius ?? 0} min={0} max={80} unit=" px" onChange={(n) => patchEl({ radius: n })} />
+      <Slider label="Grosor del borde" value={es.borderW ?? 0} min={0} max={12} unit=" px" onChange={(n) => patchEl({ borderW: n })} />
+      {es.borderW ? <ColorField label="Color del borde" value={es.borderColor} fallback="#72bf44" onChange={(v) => patchEl({ borderColor: v })} /> : null}
+      <Slider label="Sombra" value={es.shadow ?? 0} min={0} max={4} unit="" onChange={(n) => patchEl({ shadow: n })} />
       <Slider label="Tamaño" value={es.scale ?? 100} min={40} max={250} unit="%" onChange={(n) => patchEl({ scale: n })} />
       <label className="flex items-center gap-2 font-semibold">
         <input type="checkbox" checked={Boolean(es.hidden)} onChange={(e) => patchEl({ hidden: e.target.checked || undefined })} /> Ocultar este elemento
