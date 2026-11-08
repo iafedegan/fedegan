@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ListTree, AlertCircle, ArrowDown, ArrowUp, CheckCircle2, ChevronRight, Eye, EyeOff, ImageOff, Pencil, Plus, Search } from "lucide-react";
+import { ListTree, AlertCircle, ArrowDown, ArrowUp, CheckCircle2, ChevronRight, Eye, EyeOff, ImageOff, Pencil, Plus, Search, Users } from "lucide-react";
 import { ConfigNotice } from "@/components/admin/ConfigNotice";
 import { RowMenu } from "@/components/admin/RowMenu";
 import { DeleteButton } from "@/components/admin/DeleteButton";
@@ -138,6 +138,9 @@ export default async function EntityListPage({
                   <div className="flex items-center gap-2">
                     {entity.key === "cursos" && (
                       <Link href={`/admin/cursos/${id}/curriculo`} className="inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium !text-[#5d6e65] hover:bg-[#f1f0e8]"><ListTree size={15} /> Currículo</Link>
+                    )}
+                    {entity.key === "eventos" && (
+                      <Link href={`/admin/eventos/${id}/inscritos`} className="inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium !text-[#5d6e65] hover:bg-[#f1f0e8]"><Users size={15} /> Inscritos</Link>
                     )}
                     <Link href={`/admin/${entity.key}/${id}`} className="inline-flex items-center gap-1.5 rounded-lg border border-[#dcdcd6] px-3 py-2 text-sm font-medium !text-[#165a43] hover:bg-[#eef6f1]"><Pencil size={15} /> Editar</Link>
                     <RowMenu label={title}>

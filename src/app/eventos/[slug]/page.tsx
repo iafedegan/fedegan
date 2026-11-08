@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
 import { eventAccents } from "@/content/site";
 import { getEvent, getEvents } from "@/lib/cms/content";
+import { FormInscripcion } from "@/components/eventos/FormInscripcion";
 
 export async function generateStaticParams() {
   return (await getEvents()).map((e) => ({ slug: e.slug }));
@@ -56,6 +57,11 @@ export default async function EventoDetailPage({ params }: { params: Promise<{ s
         <Button className="mt-8">
           <CalendarPlus size={16} /> Agregar a mi calendario
         </Button>
+        <section id="inscripcion" aria-labelledby="insc-t" className="mt-10 rounded-3xl border border-[#dcdcd6] bg-white p-6 sm:p-8">
+          <h2 id="insc-t" className="text-2xl font-bold text-[#10240f]">Inscríbase al evento</h2>
+          <p className="mb-5 mt-1 text-[var(--text-muted)]">Complete sus datos y reciba su código QR.</p>
+          <FormInscripcion slug={event.slug} />
+        </section>
         </div>
         <aside>
           <div className="sticky top-36"><QuickRail /></div>
