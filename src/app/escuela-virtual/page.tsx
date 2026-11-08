@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
-import { PageHeader } from "@/components/ui/PageHeader";
 import Image from "next/image";
-import { Button } from "@/components/ui/Button";
+import Link from "next/link";
+import { ArrowDown, ArrowRight, Award, BadgeCheck, BookOpen, Clock, GraduationCap, PlayCircle, Smartphone } from "lucide-react";
 import { CatalogExplorer, type CatalogCourse } from "@/components/lms/CatalogExplorer";
 import { LEVELS, getCourses, getLearner, getMyCourses } from "@/lib/lms/queries";
-import Link from "next/link";
 import { Container } from "@/components/ui/Container";
-import { CtaBand, Section } from "@/components/ui/Editorial";
+import { CtaBand } from "@/components/ui/Editorial";
 
 export const metadata: Metadata = { title: "Cursos" };
 
@@ -19,6 +18,12 @@ const AREAS: Record<string, string> = {
 };
 const ACCENTS = ["92,205,134", "216,181,88", "230,160,108", "112,214,196"];
 
+const PASOS = [
+  { Icono: BookOpen, titulo: "Elija un curso", texto: "Explore el catálogo por tema y nivel. Todos son gratuitos y se pueden ver sin registrarse." },
+  { Icono: Smartphone, titulo: "Estudie a su ritmo", texto: "Videos y lecciones cortas en lenguaje sencillo, desde el celular y sin horarios." },
+  { Icono: Award, titulo: "Evalúese y certifíquese", texto: "Presente la evaluación, descargue su certificado y obtenga su carnet de estudiante." },
+];
+
 export default async function EscuelaVirtualPage() {
   const all = await getCourses();
   const learner = await getLearner();
@@ -30,56 +35,134 @@ export default async function EscuelaVirtualPage() {
   }));
   const videos = all.reduce((a, c) => a + (c.videos || c.externalVideos), 0);
   const hours = Math.round(all.reduce((a, c) => a + c.minutes, 0) / 60);
+  // «Continúe donde quedó»: los cursos empezados y sin terminar, el más reciente primero.
+  const enCurso = mine.filter((m) => m.percent < 100).slice(0, 3);
+  const entrar = learner ? "/escuela-virtual/perfil" : `/escuela-virtual/ingresar?callbackUrl=${encodeURIComponent("/escuela-virtual/perfil")}`;
+  const cifras = [
+    { Icono: GraduationCap, valor: String(courses.length), texto: "cursos para elegir" },
+    { Icono: PlayCircle, valor: String(videos), texto: "videos explicados" },
+    { Icono: Clock, valor: `${hours} h`, texto: "de contenido" },
+    { Icono: BadgeCheck, valor: "Gratis", texto: "con certificado" },
+  ];
+
   return (
     <>
-      <PageHeader
-        eyebrow="Formación"
-        title="Escuela Virtual UCG"
-        image="/headers/ia-escuela.jpg"
-        imagePos="50% 50%"
-        meta={`${courses.length} cursos${videos ? ` · ${videos} videos` : ""}`}
-        root={{ label: "UCG", href: "/escuela-virtual" }}
-        breadcrumbs={[{ label: "Cursos" }]}
-      />
-
-      <section aria-labelledby="intro" className="relative overflow-hidden">
-        <span aria-hidden className="pointer-events-none absolute -right-24 top-1/2 h-[34rem] w-[34rem] -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,rgba(216,181,88,0.16),transparent)]" />
-        <Container className="relative grid items-center gap-8 py-10 sm:py-14 lg:grid-cols-[1.15fr_0.85fr] lg:gap-10">
-          <div className="flex flex-col items-start gap-6">
-            <Image src="/brand/ucg-escudo.svg" alt="Escudo de la UCG" width={1893} height={2385} unoptimized className="h-20 w-auto drop-shadow-[0_10px_24px_rgba(0,0,0,0.5)] sm:h-24" />
+      {/* Portada */}
+      <section aria-labelledby="intro" className="ev-hero relative overflow-hidden">
+        <span aria-hidden className="ev-blob ev-blob-a" />
+        <span aria-hidden className="ev-blob ev-blob-b" />
+        <Container className="relative grid items-center gap-10 py-12 sm:py-16 lg:grid-cols-[1.1fr_0.9fr] lg:gap-6 lg:py-20">
+          <div className="flex flex-col items-start gap-7">
+            <span className="ev-pill">
+              <Image src="/brand/ucg-escudo.svg" alt="" width={1893} height={2385} unoptimized className="h-6 w-auto" />
+              Universidad Ganadera · Escuela Virtual
+            </span>
             <div>
-              <h2 id="intro" className="font-[var(--font-display)] text-3xl font-bold leading-tight text-[var(--text)] sm:text-5xl">Aprenda a su ritmo, desde la finca</h2>
-              <p className="mt-4 max-w-xl text-lg leading-relaxed text-[var(--text-muted)]">
+              <h1 id="intro" className="ev-title">
+                Aprenda <span>a su ritmo,</span> desde la finca
+              </h1>
+              <p className="mt-5 max-w-xl text-lg leading-relaxed text-[#3a4a38]">
                 Los cursos del Manual Práctico Ganadero, en lenguaje sencillo y con total rigurosidad técnica: estudie desde el celular, evalúe lo aprendido, obtenga su certificado y su carnet de estudiante.
               </p>
             </div>
-            <ul className="flex flex-wrap gap-x-8 gap-y-3" aria-label="El programa en cifras">
-              {[[courses.length, "cursos"], [videos, "videos"], [`${hours} h`, "de contenido"], ["Gratis", "con certificado"]].map(([n, l]) => (
-                <li key={String(l)} className="flex items-baseline gap-2"><b className="font-[var(--font-display)] text-3xl font-bold text-[var(--fg-lime-400)]">{n}</b><span className="text-sm text-[var(--text-muted)]">{l}</span></li>
+            <div className="flex flex-wrap items-center gap-3">
+              <Link href={entrar} className="ev-btn ev-btn-main">
+                {learner ? "Ir a mi perfil" : "Entrar a la plataforma"} <ArrowRight size={18} aria-hidden />
+              </Link>
+              <a href="#catalogo" className="ev-btn ev-btn-ghost">
+                Ver los cursos <ArrowDown size={18} aria-hidden />
+              </a>
+            </div>
+            <ul className="flex flex-wrap gap-x-6 gap-y-2 text-sm font-semibold text-[#2c3a2a]" aria-label="Lo que incluye">
+              {["Sin costo", "Certificado al aprobar", "Carnet de estudiante", "Desde el celular"].map((t) => (
+                <li key={t} className="inline-flex items-center gap-1.5"><BadgeCheck size={16} className="text-[#3d7a22]" aria-hidden /> {t}</li>
               ))}
             </ul>
-            <div className="flex flex-wrap items-center gap-3">
-              <Button variant="lime" href={learner ? "/escuela-virtual/perfil" : `/escuela-virtual/ingresar?callbackUrl=${encodeURIComponent("/escuela-virtual/perfil")}`}>
-                Entrar a la plataforma →
-              </Button>
-              <a href="#catalogo" className="inline-flex min-h-11 items-center px-3 text-[0.8rem] font-bold uppercase tracking-[0.1em] text-[var(--text-muted)] hover:text-[var(--fg-lime-400)]">Ver los cursos ↓</a>
-            </div>
           </div>
-          <div className="flex justify-center lg:justify-end">
-            <Image src="/brand/mascota-beto.svg" alt="Beto, la mascota de la UCG, saluda con un diploma bajo el brazo" width={1080} height={1455} unoptimized priority className="h-64 w-auto drop-shadow-[0_18px_30px_rgba(0,0,0,0.55)] sm:h-80 lg:h-[26rem]" />
+
+          <div className="ev-mascota">
+            <span aria-hidden className="ev-mascota-fondo" />
+            <Image src="/brand/mascota-beto.svg" alt="Beto, la mascota de la UCG, saluda con un diploma bajo el brazo" width={1080} height={1455} unoptimized priority className="relative h-72 w-auto drop-shadow-[0_22px_30px_rgba(10,25,60,0.35)] sm:h-96 lg:h-[27rem]" />
+            <span className="ev-flota ev-flota-a"><PlayCircle size={18} aria-hidden /> {videos} videos</span>
+            <span className="ev-flota ev-flota-b"><Award size={18} aria-hidden /> Certificado</span>
           </div>
+        </Container>
+
+        <Container className="relative pb-10 sm:pb-12">
+          <ul className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4" aria-label="El programa en cifras">
+            {cifras.map(({ Icono, valor, texto }) => (
+              <li key={texto} className="ev-cifra">
+                <span className="ev-cifra-ico"><Icono size={20} aria-hidden /></span>
+                <span><b>{valor}</b><small>{texto}</small></span>
+              </li>
+            ))}
+          </ul>
         </Container>
       </section>
 
-      <Section id="catalogo" eyebrow="Catálogo" title={`Los ${courses.length} cursos`} tinted>
-        {!learner && (
-          <p className="mb-6 flex flex-wrap items-center gap-x-4 gap-y-2 rounded-[var(--radius-md)] border border-[var(--border-strong)] bg-[var(--surface-solid)] px-5 py-4 text-sm text-[var(--text-muted)]">
-            <span>Puede explorar todos los cursos. Para estudiar, evaluarse y obtener su certificado, ingrese con su cuenta: es gratis.</span>
-            <Link href={`/escuela-virtual/ingresar?callbackUrl=${encodeURIComponent("/escuela-virtual/perfil")}`} className="font-bold uppercase tracking-[0.1em] text-[var(--fg-lime-400)] hover:underline">Ingresar →</Link>
-          </p>
-        )}
-        <CatalogExplorer courses={courses} loggedIn={Boolean(learner)} />
-      </Section>
+      {enCurso.length > 0 && (
+        <section aria-labelledby="continuar" className="bg-white pb-2 pt-10 sm:pt-12">
+          <Container>
+            <h2 id="continuar" className="font-[var(--font-display)] text-2xl font-bold text-[#10240f] sm:text-3xl">Continúe donde quedó</h2>
+            <ul className="mt-5 grid gap-4 md:grid-cols-3">
+              {enCurso.map((m) => (
+                <li key={m.course.id}>
+                  <Link href={`/escuela-virtual/${m.course.slug}`} className="ev-sigue">
+                    <span className="ev-sigue-ico"><PlayCircle size={22} aria-hidden /></span>
+                    <span className="min-w-0 flex-1">
+                      <strong className="block truncate font-[var(--font-display)] text-base font-bold text-[#10240f]">{m.course.title}</strong>
+                      <span className="mt-2 flex items-center gap-3">
+                        <span className="ev-sigue-barra" role="progressbar" aria-valuenow={m.percent} aria-valuemin={0} aria-valuemax={100} aria-label={`Avance de ${m.course.title}`}><i style={{ width: `${Math.max(4, m.percent)}%` }} /></span>
+                        <small className="text-xs font-bold text-[#3d7a22]">{m.percent} %</small>
+                      </span>
+                    </span>
+                    <ArrowRight size={18} aria-hidden className="shrink-0 text-[#3d7a22]" />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </Container>
+        </section>
+      )}
+
+      {/* Cómo funciona */}
+      <section aria-labelledby="como" className="bg-white py-12 sm:py-16">
+        <Container>
+          <header className="mx-auto mb-9 max-w-2xl text-center">
+            <span className="ev-eyebrow">Cómo funciona</span>
+            <h2 id="como" className="mt-2 font-[var(--font-display)] text-3xl font-bold leading-tight text-[#10240f] sm:text-4xl">Tres pasos para aprender y certificarse</h2>
+          </header>
+          <ol className="grid gap-5 md:grid-cols-3">
+            {PASOS.map(({ Icono, titulo, texto }, i) => (
+              <li key={titulo} className="ev-paso">
+                <span className="ev-paso-num" aria-hidden>{i + 1}</span>
+                <span className="ev-paso-ico"><Icono size={24} aria-hidden /></span>
+                <h3 className="mt-4 font-[var(--font-display)] text-xl font-bold text-[#10240f]">{titulo}</h3>
+                <p className="mt-2 leading-relaxed text-[#4a5a48]">{texto}</p>
+              </li>
+            ))}
+          </ol>
+        </Container>
+      </section>
+
+      {/* Catálogo */}
+      <section id="catalogo" className="ev-catalogo py-12 sm:py-16">
+        <Container>
+          <header className="mb-8 flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <span className="ev-eyebrow">Catálogo</span>
+              <h2 className="mt-2 font-[var(--font-display)] text-3xl font-bold leading-tight text-[#10240f] sm:text-4xl">Los {courses.length} cursos</h2>
+            </div>
+            {!learner && (
+              <p className="max-w-md text-sm leading-relaxed text-[#4a5a48]">
+                Puede explorar todos los cursos. Para estudiar y obtener su certificado,{" "}
+                <Link href={entrar} className="font-bold text-[#2c6a14] underline underline-offset-4">ingrese con su cuenta</Link>: es gratis.
+              </p>
+            )}
+          </header>
+          <CatalogExplorer courses={courses} loggedIn={Boolean(learner)} />
+        </Container>
+      </section>
 
       <CtaBand
         eyebrow="Acompañamiento"

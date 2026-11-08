@@ -14,7 +14,7 @@ export function UniversityShell({ children }: { children: ReactNode }) {
   const { data: session, status } = useSession();
   const user = session?.user;
   const link = (href: string, exact = false) =>
-    `flex min-h-10 items-center gap-2 rounded-full px-3.5 text-[0.78rem] font-bold uppercase tracking-[0.1em] transition-colors ${
+    `flex min-h-10 shrink-0 items-center gap-2 whitespace-nowrap rounded-full px-3.5 text-[0.78rem] font-bold uppercase tracking-[0.1em] transition-colors ${
       (exact ? pathname === href : pathname.startsWith(href)) ? "bg-[rgba(216,181,88,0.14)] text-[var(--fg-lime-400)]" : "text-[var(--text-muted)] hover:text-[var(--text)]"
     }`;
 
