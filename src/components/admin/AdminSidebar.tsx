@@ -65,7 +65,7 @@ export function AdminSidebar({ user, groups }: { user: { name: string; email: st
 
   const brand = (rail: boolean) => (
     <Link href="/admin" className="flex items-center gap-3 pl-1">
-      <Image src="/brand/fedegan-icon-round.png" alt="" width={40} height={40} className="h-10 w-10 shrink-0 rounded-full" />
+      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#1f4a12]"><Image src="/brand/fedegan-emblema-blanco.png" alt="" width={410} height={404} unoptimized className="h-7 w-7 object-contain" /></span>
       <span className={`font-[var(--font-display)] text-lg font-semibold leading-tight text-white ${lbl(rail)}`}>Panel del portal</span>
     </Link>
   );
