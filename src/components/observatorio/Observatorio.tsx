@@ -7,6 +7,8 @@ import { ObservatorioNav } from "./ObservatorioNav";
 import { IndicatorTabs } from "./IndicatorTabs";
 import { TerritorialExplorer } from "./TerritorialExplorer";
 import { nf, signo, variacion } from "./format";
+import { CifrasFedegan } from "./CifrasFedegan";
+import { getConjuntos } from "@/lib/cms/estadisticas";
 
 function Spark({ valores }: { valores: number[] }) {
   const v = valores.slice(-24).filter(Number.isFinite);
@@ -61,7 +63,7 @@ function Seccion({ id, n, titulo, texto, children }: { id: string; n: string; ti
 
 /** Observatorio ganadero: cifras oficiales de FEDEGÁN que publica CONtexto, con el diseño del portal. */
 export async function Observatorio() {
-  const obs = await getObservatorio();
+  const [obs, conjuntos] = await Promise.all([getObservatorio(), getConjuntos().catch(() => [])]);
   if (!obs) {
     return (
       <Container className="py-14">
@@ -149,7 +151,7 @@ export async function Observatorio() {
       </section>
 
       <Container className="lg:grid lg:grid-cols-[15rem_minmax(0,1fr)] lg:gap-12">
-        <ObservatorioNav items={[...secciones.map((x) => ({ id: x.id, n: x.n, t: x.t })), { id: "documentos", n: "07", t: "Documentos" }]} />
+        <ObservatorioNav items={[...secciones.map((x) => ({ id: x.id, n: x.n, t: x.t })), ...(conjuntos.length ? [{ id: "cifras-fedegan", n: "07", t: "Todas las cifras" }] : []), { id: "documentos", n: conjuntos.length ? "08" : "07", t: "Documentos" }]} />
         <div className="min-w-0">
         {secciones.map((s) => (
           <Seccion key={s.id} id={s.id} n={s.n} titulo={s.t} texto={s.d}>
@@ -157,7 +159,13 @@ export async function Observatorio() {
           </Seccion>
         ))}
 
-        <Seccion id="documentos" n="07" titulo="Documentos" texto="Publicaciones y documentos de estadística del sector.">
+        {conjuntos.length > 0 && (
+          <Seccion id="cifras-fedegan" n="07" titulo="Todas las cifras" texto="Todos los indicadores del sistema de estadísticas de FEDEGÁN: elija un tema, busque el indicador y vea su gráfica, su tabla y su fuente.">
+            <CifrasFedegan conjuntos={conjuntos.map((c) => ({ id: c.id, titulo: c.titulo, indicadores: c.indicadores }))} />
+          </Seccion>
+        )}
+
+        <Seccion id="documentos" n={conjuntos.length ? "08" : "07"} titulo="Documentos" texto="Publicaciones y documentos de estadística del sector.">
           <div className="flex flex-wrap gap-x-8 gap-y-3 text-sm font-bold uppercase tracking-[0.1em]">
             <Link href="/seccion/cifras-del-sector/estadisticas/documentos-de-estadistica" className="text-[var(--fg-lime-400)] hover:text-[var(--text)]">Documentos de estadística →</Link>
             <Link href="/seccion/cifras-del-sector/coyuntura-ganadera" className="text-[var(--fg-lime-400)] hover:text-[var(--text)]">Coyuntura ganadera →</Link>

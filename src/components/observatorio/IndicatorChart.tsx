@@ -8,7 +8,7 @@ import { PALETTE, etiqueta, fmtValor, nf, ticks, unidadLimpia } from "./format";
 type Forma = "linea" | "area" | "barras";
 const W = 880;
 const H = 340;
-const M = { l: 62, r: 14, t: 14, b: 34 };
+const M = { l: 80, r: 14, t: 14, b: 34 };
 
 // Gráfica interactiva de un indicador: periodo, tipo de gráfica, series, tabla y exportación a CSV.
 export function IndicatorChart({ ind }: { ind: Indicador }) {
