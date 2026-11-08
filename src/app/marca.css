@@ -531,3 +531,16 @@ section.hi-hero[data-region="hero"]:has(.hi-banner) > * { max-width: none !impor
 /* Carrusel de portada: siempre a todo el ancho de la pantalla, sin márgenes ni esquinas redondeadas */
 section.hi-hero[data-region="hero"]:has(.car) { padding-top: 0 !important; }
 section.hi-hero[data-region="hero"] > .car { width: 100% !important; max-width: none; margin-inline: 0; border-radius: 0 !important; }
+
+/* Las tarjetas de acceso suben y montan la parte baja del banner; los controles del carrusel y su texto se suben para no quedar tapados */
+section.hi-hero[data-region="hero"]:has(.car) { padding-bottom: 0 !important; }
+.hi-quick { margin-top: -2.75rem; }
+.car-bar { bottom: 3.9rem; }
+@media (min-width: 900px) {
+  .hi-quick { margin-top: -4.75rem; }
+  .car-bar { bottom: 5.9rem; }
+  .car-arrow { margin-top: -3.4rem; }
+  .car-text { padding-bottom: 5.5rem; }
+  .car-link .portada-btn { bottom: 6.4rem; }
+}
+@media (max-width: 899px) { .car-arrow { bottom: 3.7rem; } .car-text { padding-bottom: 3.5rem; } }
