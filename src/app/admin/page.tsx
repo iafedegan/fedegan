@@ -69,6 +69,7 @@ export default async function AdminDashboard() {
   const changes = audit.length;
 
   const niceDate = (iso: string) => new Date(`${iso}T12:00:00`).toLocaleDateString("es-CO", { day: "numeric", month: "short" });
+  const entidad = (k: string) => (k === "apis" ? "Conexiones (APIs)" : k === "documentos" ? "Documentos" : k === "ia" ? "Redacción con IA" : entities.find((e) => e.key === k)?.plural ?? k);
   const pct = (a: number, b: number) => (b ? Math.round((a / b) * 100) : 0);
 
   return (
@@ -152,7 +153,7 @@ export default async function AdminDashboard() {
         </div>
       </section>
 
-      <section className="grid gap-4 lg:grid-cols-3">
+      <section className="grid gap-4 lg:grid-cols-2">
         <div className="ad-card flex flex-col p-6">
           <p className="ad-eyebrow">Desde CONtexto</p>
           <h2 className="mt-1 text-xl font-bold">Noticias de portada</h2>
@@ -191,20 +192,33 @@ export default async function AdminDashboard() {
           <Link href="/admin/eventos" className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-[#165a43]">Administrar eventos <ArrowUpRight size={15} /></Link>
         </div>
 
-        <div className="ad-card flex flex-col p-6">
-          <p className="ad-eyebrow">Auditoría</p>
-          <h2 className="mt-1 text-xl font-bold">Actividad reciente</h2>
-          <ul className="mt-4 flex flex-1 flex-col divide-y divide-[#eceae0]">
-            {(!writable || audit.length === 0) && <li className="py-6 text-sm text-[#8a978f]">{writable ? "Todavía no hay cambios registrados." : "Disponible con la clave de servicio."}</li>}
-            {audit.slice(0, 5).map((a, i) => (
-              <li key={i} className="py-3 text-sm">
-                <p><strong className="font-semibold capitalize">{a.action}</strong> · {a.entity}{a.summary ? ` · ${a.summary}` : ""}</p>
-                <p className="mt-0.5 text-xs text-[#8a978f]">{a.actor} · {new Date(a.at).toLocaleString("es-CO", { timeZone: TZ, dateStyle: "medium", timeStyle: "short" })}</p>
+      </section>
+
+      <section id="actividad" className="ad-card scroll-mt-6 overflow-hidden">
+        <div className="flex flex-wrap items-end justify-between gap-3 border-b border-[#eceae0] px-6 py-5">
+          <div>
+            <p className="ad-eyebrow">Equipo</p>
+            <h2 className="mt-1 text-xl font-bold">Actividad reciente</h2>
+            <p className="mt-0.5 text-sm text-[#5d6e65]">Quién cambió qué en el portal, lo más nuevo primero.</p>
+          </div>
+          <Link href="/admin/actividad" className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#165a43]">Ver todo el historial <ArrowUpRight size={15} /></Link>
+        </div>
+        {!writable || audit.length === 0 ? (
+          <p className="px-6 py-10 text-center text-sm text-[#8a978f]">{writable ? "Todavía no hay cambios registrados." : "Disponible con la clave de servicio."}</p>
+        ) : (
+          <ul className="divide-y divide-[#eceae0]">
+            {audit.slice(0, 10).map((a, i) => (
+              <li key={i} className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 px-6 py-3.5">
+                <p className="min-w-0 text-sm">
+                  <span className="ad-pill ad-pill-gold mr-2 capitalize">{a.action}</span>
+                  <strong className="font-semibold">{entidad(a.entity)}</strong>
+                  {a.summary ? <span className="text-[#5d6e65]"> · {a.summary}</span> : null}
+                </p>
+                <p className="text-xs text-[#8a978f]">{a.actor} · {new Date(a.at).toLocaleString("es-CO", { timeZone: TZ, dateStyle: "medium", timeStyle: "short" })}</p>
               </li>
             ))}
           </ul>
-          <Link href="/admin/actividad" className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-[#165a43]">Ver todo <ArrowUpRight size={15} /></Link>
-        </div>
+        )}
       </section>
 
       <section>
