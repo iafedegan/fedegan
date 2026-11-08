@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ExternalLink } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { LegacyContent } from "@/components/legacy/LegacyContent";
@@ -89,15 +88,6 @@ export async function LegacySectionPage({ slug, ruta }: { slug: string; ruta: st
       Esta página reúne documentos y tableros del portal actual. Puede consultarla directamente allí.
     </p>
   );
-  const source = page.source ? (
-    <p className="art-source">
-      Contenido copiado del portal actual de FEDEGÁN.{" "}
-      <a href={page.source} target="_blank" rel="noopener noreferrer">
-        Ver página original <ExternalLink size={12} aria-hidden className="inline -translate-y-px" />
-      </a>
-    </p>
-  ) : null;
-
   /* ───────────── Portada de la sección ───────────── */
   if (isLanding) {
     const branches = section.tree.filter((n) => n.key !== key);
@@ -143,7 +133,6 @@ export async function LegacySectionPage({ slug, ruta }: { slug: string; ruta: st
                 </>
               )}
               {page.blocks.length === 0 && branches.length === 0 && fichas.length === 0 && empty}
-              {source}
             </article>
             <aside className="min-w-0">
               <QuickRail />
@@ -204,7 +193,6 @@ export async function LegacySectionPage({ slug, ruta }: { slug: string; ruta: st
 
           <PrevNext prev={prev} next={next} />
           <ArticleTools />
-          {source}
         </article>
       </Container>
     </>
