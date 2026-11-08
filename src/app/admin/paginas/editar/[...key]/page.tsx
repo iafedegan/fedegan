@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ChevronRight, ExternalLink, RotateCcw } from "lucide-react";
+import { marcoDePagina } from "@/components/admin/MarcoPagina";
 import { PaginaForm } from "@/components/admin/PaginaForm";
 import { getLegacyPage, legacyHref, legacySections } from "@/content/legacy";
 import { docsDePagina } from "@/content/legacy/documentos";
@@ -22,6 +23,7 @@ export default async function EditarPaginaPage({ params, searchParams }: { param
   const override = await getPageOverride(key);
   const bloques = override?.blocks ?? page.blocks;
   const plano = JSON.stringify(bloques);
+  const marco = await marcoDePagina(slug, key);
   const docs = docsDePagina(key);
   // Los faltantes que ya están en la página (por ejemplo, de una edición anterior) no se vuelven a ofrecer.
   const faltan = (docs?.faltan ?? []).filter(([, url]) => !plano.includes(url) && !plano.includes(url.replace(/ /g, "%20")));
@@ -52,7 +54,7 @@ export default async function EditarPaginaPage({ params, searchParams }: { param
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_16rem] lg:items-start">
         <div className="ad-card min-w-0 p-5 sm:p-7">
-          <PaginaForm pageKey={key} title={override?.title ?? page.title} bloques={bloques} writable={writable} faltan={faltan} enTablas={docs?.enTablas ?? 0} />
+          <PaginaForm pageKey={key} title={override?.title ?? page.title} bloques={bloques} writable={writable} faltan={faltan} enTablas={docs?.enTablas ?? 0} marco={marco} />
         </div>
         <aside className="flex flex-col gap-4 lg:sticky lg:top-6">
           <div className="ad-card p-5 text-sm leading-relaxed text-[#5d6e65]">

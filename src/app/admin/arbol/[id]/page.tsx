@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ChevronRight, ExternalLink } from "lucide-react";
+import { marcoDePagina } from "@/components/admin/MarcoPagina";
 import { NodoForm } from "@/components/admin/NodoForm";
 import { DeleteButton } from "@/components/admin/DeleteButton";
 import { legacyHref, legacySections } from "@/content/legacy";
@@ -22,6 +23,7 @@ export default async function EditarNodoPage({ params }: { params: Promise<{ id:
   const seccion = legacySections[nodo.section]?.label ?? (await db.from("site_nodes").select("label").eq("section", nodo.section).eq("is_section", true).maybeSingle()).data?.label ?? nodo.section;
   const url = nodo.href ?? legacyHref(nodo.section, nodo.key);
   const esEnlace = Boolean(nodo.href);
+  const marco = esEnlace ? null : await marcoDePagina(nodo.section, nodo.key);
 
   return (
     <div className="flex flex-col gap-6">
@@ -46,7 +48,7 @@ export default async function EditarNodoPage({ params }: { params: Promise<{ id:
 
       <div className={esEnlace ? "grid max-w-4xl gap-6 lg:grid-cols-[1fr_16rem] lg:items-start" : "grid gap-6 lg:grid-cols-[minmax(0,1fr)_16rem] lg:items-start"}>
         <div className="ad-card min-w-0 p-5 sm:p-7">
-          <NodoForm id={nodo.id} label={nodo.label} title={nodo.title} href={nodo.href ?? ""} bloques={nodo.blocks} esEnlace={esEnlace} writable={writable} />
+          <NodoForm id={nodo.id} label={nodo.label} title={nodo.title} href={nodo.href ?? ""} bloques={nodo.blocks} esEnlace={esEnlace} writable={writable} marco={marco} />
         </div>
         <aside className="flex flex-col gap-4 lg:sticky lg:top-6">
           <div className="ad-card flex flex-col gap-3 p-5 text-sm text-[#5d6e65]">

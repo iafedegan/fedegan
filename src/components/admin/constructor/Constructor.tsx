@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, memo, useCallback, useEffect, useMemo, useRef, useState, type Dispatch, type DragEvent, type SetStateAction } from "react";
+import { Fragment, memo, useCallback, useEffect, useMemo, useRef, useState, type Dispatch, type DragEvent, type ReactNode, type SetStateAction } from "react";
 import {
   AlertTriangle, AppWindow, ArrowDown, ArrowUp, BadgeCheck, Building2, ChartColumn, ChevronRight, Columns3, ContactRound, Copy, Eye, GalleryHorizontal, GripVertical, Headphones,
   Heading2, Heading3, Image as ImageIcon, Images, Info, LayoutGrid, Link2, List, ListCollapse, ListOrdered, Megaphone, Milestone, Minus, MousePointerClick, MoveVertical, Paperclip,
@@ -253,7 +253,7 @@ function Vacio({ onPlantilla }: { onPlantilla: (id: string) => void }) {
  */
 export type Historial = { deshacer: () => void; rehacer: () => void; puedeDeshacer: boolean; puedeRehacer: boolean };
 
-export function Constructor({ elementos, setElementos, carpeta, fiel = false, historial }: { elementos: Elemento[]; setElementos: Dispatch<SetStateAction<Elemento[]>>; carpeta: string; fiel?: boolean; historial?: Historial }) {
+export function Constructor({ elementos, setElementos, carpeta, fiel = false, historial, marco }: { elementos: Elemento[]; setElementos: Dispatch<SetStateAction<Elemento[]>>; carpeta: string; fiel?: boolean; historial?: Historial; marco?: { antes: ReactNode; despues: ReactNode } }) {
   const [sel, setSel] = useState<string | null>(null);
   const [destino, setDestino] = useState<number | null>(null);
   const [modo, setModo] = useState<"editar" | "vista">("editar");
@@ -432,14 +432,18 @@ export function Constructor({ elementos, setElementos, carpeta, fiel = false, hi
       </div>
 
       {modo === "vista" ? (
-        <div className="rounded-2xl border border-[#e4e2d6] bg-white p-5 sm:p-8">
+        <div className="flex flex-col gap-3 rounded-2xl border border-[#e4e2d6] bg-white p-5 sm:p-8">
+          {marco?.antes}
           <div inert className="ed-body">
             {publicables.length ? <LegacyContent blocks={publicables} preview libre={!fiel} lead={fiel} /> : <p className="text-sm text-[#5d6e65]">Aún no hay nada que publicar.</p>}
           </div>
+          {marco?.despues}
         </div>
       ) : (
         <div className="grid grid-cols-[minmax(0,1fr)] gap-4 xl:grid-cols-[12.5rem_minmax(0,1fr)] xl:items-start">
           <Paleta onAnadir={(t) => insertar(t)} onInicio={iniciarNuevo} onFin={finArrastre} />
+          <div className="flex min-w-0 flex-col gap-3">
+          {marco?.antes}
           <div
             ref={lienzo}
             onDragOver={sobre}
@@ -479,6 +483,8 @@ export function Constructor({ elementos, setElementos, carpeta, fiel = false, hi
                 <Hueco activo={destino === elementos.length} />
               </>
             )}
+          </div>
+          {marco?.despues}
           </div>
         </div>
       )}

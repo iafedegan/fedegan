@@ -5,12 +5,13 @@ import { CheckCircle2, XCircle } from "lucide-react";
 import { editarNodo, type NodoState } from "@/lib/cms/nodos-actions";
 import type { Bloque } from "@/lib/cms/bloques";
 import { BarraPublicar } from "./constructor/BarraPublicar";
+import type { MarcoPagina } from "./MarcoPagina";
 import { Constructor } from "./constructor/Constructor";
 import { useEditorPagina } from "./constructor/useEditorPagina";
 
 // Edita una página, sección o enlace creado en el árbol del sitio. Una página se arma arrastrando elementos
 // (botones, tarjetas, carruseles…) y no se publica hasta pulsar «Publicar cambios».
-export function NodoForm({ id, label, title, href, bloques, esEnlace, writable }: { id: string; label: string; title: string; href: string; bloques: Bloque[]; esEnlace: boolean; writable: boolean }) {
+export function NodoForm({ id, label, title, href, bloques, esEnlace, writable, marco }: { id: string; label: string; title: string; href: string; bloques: Bloque[]; esEnlace: boolean; writable: boolean; marco?: MarcoPagina | null }) {
   const { elementos, setElementos, publicables, sucio, incompletos, marcarPublicado, historial } = useEditorPagina(bloques);
   const [state, action] = useActionState<NodoState, FormData>(async (prev, fd) => {
     const r = await editarNodo(prev, fd);
@@ -52,7 +53,7 @@ export function NodoForm({ id, label, title, href, bloques, esEnlace, writable }
             </div>
           </div>
           <input type="hidden" name="bloques" value={publicables} />
-          <Constructor elementos={elementos} setElementos={setElementos} carpeta={`arbol-${id}`} historial={historial} />
+          <Constructor elementos={elementos} setElementos={setElementos} carpeta={`arbol-${id}`} historial={historial} marco={marco ?? undefined} />
         </>
       )}
 

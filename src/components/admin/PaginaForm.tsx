@@ -6,6 +6,7 @@ import { savePagina, type PaginaState } from "@/lib/cms/pagina-actions";
 import { nuevoId, type Bloque } from "@/lib/cms/bloques";
 import type { DocFaltante } from "@/content/legacy/documentos";
 import { BarraPublicar } from "./constructor/BarraPublicar";
+import type { MarcoPagina } from "./MarcoPagina";
 import { Constructor } from "./constructor/Constructor";
 import { useEditorPagina } from "./constructor/useEditorPagina";
 
@@ -53,7 +54,7 @@ function Documentos({ faltan, enTablas, onAnadir }: { faltan: DocFaltante[]; enT
 
 // Edita una página copiada del portal actual. Se ve y se arma con los mismos elementos que una página nueva; el texto
 // original se conserva y se puede restaurar. Nada se publica hasta pulsar «Publicar cambios».
-export function PaginaForm({ pageKey, title, bloques, writable, faltan, enTablas }: { pageKey: string; title: string; bloques: Bloque[]; writable: boolean; faltan?: DocFaltante[]; enTablas?: number }) {
+export function PaginaForm({ pageKey, title, bloques, writable, faltan, enTablas, marco }: { pageKey: string; title: string; bloques: Bloque[]; writable: boolean; faltan?: DocFaltante[]; enTablas?: number; marco?: MarcoPagina | null }) {
   const { elementos, setElementos, publicables, sucio, incompletos, marcarPublicado, historial } = useEditorPagina(bloques);
   const [state, action] = useActionState<PaginaState, FormData>(async (prev, fd) => {
     const r = await savePagina(prev, fd);
@@ -84,7 +85,7 @@ export function PaginaForm({ pageKey, title, bloques, writable, faltan, enTablas
         <input id="title" name="title" defaultValue={title} maxLength={200} required className="ad-input" />
       </div>
       <Documentos faltan={faltan ?? []} enTablas={enTablas ?? 0} onAnadir={anadirFaltantes} />
-      <Constructor elementos={elementos} setElementos={setElementos} carpeta={pageKey} fiel historial={historial} />
+      <Constructor elementos={elementos} setElementos={setElementos} carpeta={pageKey} fiel historial={historial} marco={marco ?? undefined} />
 
       {state.message && (
         <p
