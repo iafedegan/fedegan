@@ -32,7 +32,7 @@ export function isYouTube(url: string | null) {
 }
 
 export type Turno = { role: "user" | "model"; text: string };
-export type Pedido = { text: string; history?: Turno[]; video?: string | null; json?: boolean; tokens?: number; system?: string; timeoutMs?: number; /** Si el proveedor rechaza el pedido, lanza un error con su motivo en vez de devolver null (lo usa el Studio para decir por qué falló). */ detalle?: boolean };
+export type Pedido = { text: string; history?: Turno[]; video?: string | null; json?: boolean; tokens?: number; system?: string; timeoutMs?: number; /** Si el proveedor rechaza el pedido, lanza un error con su motivo en vez de devolver null (lo usa el Studio para decir por qué falló). */ detalle?: boolean; /** Video a baja resolución (Gemini): unas 4 veces menos fotogramas procesados; basta para clases con voz y diapositivas y es mucho más rápido. */ videoBaja?: boolean };
 
 /** Respuesta del modelo (null si el proveedor no pudo responder). El video de la lección solo lo lee Gemini; Claude trabaja con los textos. */
 export async function generar(prov: Prov, q: Pedido): Promise<string | null> {
@@ -54,7 +54,7 @@ export async function generar(prov: Prov, q: Pedido): Promise<string | null> {
   const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${PROVEEDORES.gemini.modelo}:generateContent`, {
     method: "POST",
     headers: { "Content-Type": "application/json", "x-goog-api-key": prov.key },
-    body: JSON.stringify({ systemInstruction: { parts: [{ text: system }] }, contents: [...history, { role: "user", parts }], generationConfig: { temperature: 0.3, maxOutputTokens: q.tokens ?? 1500, ...(q.json ? { responseMimeType: "application/json" } : {}) } }),
+    body: JSON.stringify({ systemInstruction: { parts: [{ text: system }] }, contents: [...history, { role: "user", parts }], generationConfig: { temperature: 0.3, maxOutputTokens: q.tokens ?? 1500, ...(q.json ? { responseMimeType: "application/json" } : {}), ...(q.video && q.videoBaja ? { mediaResolution: "MEDIA_RESOLUTION_LOW" } : {}) } }),
     signal: AbortSignal.timeout(timeout),
   });
   const data = await res.json().catch(() => ({}));

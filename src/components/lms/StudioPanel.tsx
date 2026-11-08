@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useTransition, type ReactNode } from "react";
+import { useEffect, useState, useTransition, type ReactNode } from "react";
 import { BookMarked, BrainCircuit, CalendarRange, ChevronRight, FileText, HelpCircle, Layers, ListChecks, Loader2, MessageCircleQuestion, ScrollText, Sparkles } from "lucide-react";
 import { prepararMateriales } from "@/lib/lms/studio-actions";
 import { contarNodos, TITULO_KIND, type Contenido, type StudioKind } from "@/lib/lms/studio-tipos";
-import { Visor, VistaCuestionario, VistaFaq, VistaGlosario, VistaGuia, VistaInforme, VistaLinea, VistaMapa, VistaResumen, VistaTarjetas } from "@/components/lms/StudioVistas";
+import { avanceDe, Visor, VistaCuestionario, VistaFaq, VistaGlosario, VistaGuia, VistaInforme, VistaLinea, VistaMapa, VistaResumen, VistaTarjetas } from "@/components/lms/StudioVistas";
 
 type Meta = { Icon: typeof FileText; color: string; que: (c: Contenido) => string; interactivo?: boolean };
 
@@ -21,15 +21,15 @@ const META: Record<StudioKind, Meta> = {
 };
 const ORDEN: StudioKind[] = ["resumen", "guia", "mapa", "tarjetas", "cuestionario", "faq", "linea", "glosario", "informe"];
 
-function vista(kind: StudioKind, c: Contenido): ReactNode {
+function vista(kind: StudioKind, c: Contenido, clave: string): ReactNode {
   switch (kind) {
-    case "resumen": return c.resumen && <VistaResumen d={c.resumen} />;
-    case "guia": return c.guia && <VistaGuia d={c.guia} />;
+    case "resumen": return c.resumen && <VistaResumen d={c.resumen} clave={clave} />;
+    case "guia": return c.guia && <VistaGuia d={c.guia} clave={clave} />;
     case "mapa": return c.mapa && <VistaMapa d={c.mapa} />;
-    case "tarjetas": return c.tarjetas && <VistaTarjetas d={c.tarjetas} />;
-    case "cuestionario": return c.cuestionario && <VistaCuestionario d={c.cuestionario} />;
+    case "tarjetas": return c.tarjetas && <VistaTarjetas d={c.tarjetas} clave={clave} />;
+    case "cuestionario": return c.cuestionario && <VistaCuestionario d={c.cuestionario} clave={clave} />;
     case "faq": return c.faq && <VistaFaq d={c.faq} />;
-    case "linea": return c.linea && <VistaLinea d={c.linea} />;
+    case "linea": return c.linea && <VistaLinea d={c.linea} clave={clave} />;
     case "glosario": return c.glosario && <VistaGlosario d={c.glosario} />;
     case "informe": return c.informe && <VistaInforme d={c.informe} />;
   }
@@ -44,6 +44,14 @@ export function StudioPanel({ courseId, lessonId, slug, enabled, lessonTitle, co
   const [ocupado, start] = useTransition();
   const actual = scope === "leccion" ? datos.leccion : datos.curso;
   const disponibles = actual ? ORDEN.filter((k) => actual[k] !== undefined) : [];
+  const clave = `${scope}:${scope === "leccion" ? lessonId : courseId}`;
+  // El avance se guarda en este navegador: se lee después de pintar (en el servidor no existe) y al cerrar un material.
+  const [avances, setAvances] = useState<Record<string, string | null>>({});
+  useEffect(() => {
+    if (!actual) return;
+    setAvances(Object.fromEntries(disponibles.map((k) => [k, avanceDe(clave, k, actual)])));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [actual, clave, abierto]);
 
   function preparar() {
     setError("");
@@ -80,6 +88,7 @@ export function StudioPanel({ courseId, lessonId, slug, enabled, lessonTitle, co
                   <span className="min-w-0 flex-1 text-left">
                     <span className="flex items-center gap-2 text-[0.9rem] font-bold leading-tight text-[var(--text)]">{TITULO_KIND[k]}{m.interactivo && <span className="st-chip">Interactivo</span>}</span>
                     <span className="mt-0.5 block text-xs text-[var(--text-faint)]">{m.que(actual)}</span>
+                    {avances[k] && <span className="mt-1 block text-xs font-bold text-[#3d7a22]">{avances[k]}</span>}
                   </span>
                   <ChevronRight size={18} className="shrink-0 text-[var(--text-faint)]" aria-hidden />
                 </button>
@@ -113,17 +122,26 @@ export function StudioPanel({ courseId, lessonId, slug, enabled, lessonTitle, co
       )}
       {error && <p role="alert" className="text-sm text-[#a33]">{error}</p>}
 
-      {abierto && actual && (
-        <Visor
-          titulo={TITULO_KIND[abierto]}
-          subtitulo={scope === "leccion" ? lessonTitle : courseTitle}
-          icono={(() => { const I = META[abierto].Icon; return <I size={22} aria-hidden />; })()}
-          color={META[abierto].color}
-          onClose={() => setAbierto(null)}
-        >
-          {vista(abierto, actual)}
-        </Visor>
-      )}
+      {abierto && actual && (() => {
+        const pos = disponibles.indexOf(abierto);
+        const ant = pos > 0 ? disponibles[pos - 1] : null;
+        const sig = pos >= 0 && pos < disponibles.length - 1 ? disponibles[pos + 1] : null;
+        const I = META[abierto].Icon;
+        return (
+          <Visor
+            titulo={TITULO_KIND[abierto]}
+            subtitulo={scope === "leccion" ? lessonTitle : courseTitle}
+            icono={<I size={22} aria-hidden />}
+            color={META[abierto].color}
+            onClose={() => setAbierto(null)}
+            anterior={ant ? { titulo: TITULO_KIND[ant], ir: () => setAbierto(ant) } : undefined}
+            siguiente={sig ? { titulo: TITULO_KIND[sig], ir: () => setAbierto(sig) } : undefined}
+            posicion={`Material ${pos + 1} de ${disponibles.length}`}
+          >
+            {vista(abierto, actual, clave)}
+          </Visor>
+        );
+      })()}
     </div>
   );
 }

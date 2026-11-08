@@ -5,7 +5,7 @@ import { AlertTriangle, CheckCircle2, Loader2, Sparkles, Square } from "lucide-r
 import { generarFaltantes } from "@/lib/lms/studio-actions";
 import type { EstadoStudio } from "@/lib/lms/studio";
 
-// Genera los materiales del Studio (resumen, mapa mental, tarjetas…) de todas las lecciones y cursos, de a dos, y los guarda en Supabase.
+// Genera los materiales del Studio (resumen, mapa mental, tarjetas…) de todas las lecciones y cursos, de a tres, y los guarda en Supabase.
 // Se puede cerrar y retomar: lo ya generado queda guardado y solo se piden los que faltan.
 export function StudioAdmin({ inicial, puede }: { inicial: EstadoStudio; puede: boolean }) {
   const [estado, setEstado] = useState(inicial);
@@ -117,7 +117,7 @@ export function StudioAdmin({ inicial, puede }: { inicial: EstadoStudio; puede: 
           </ul>
         </details>
       )}
-      <p className="text-xs text-[#8a978f]">Cada lección se arma una sola vez a partir de su video y queda guardada: los estudiantes la abren al instante. Se generan de dos en dos; mantenga esta pestaña abierta mientras trabaja.</p>
+      <p className="text-xs text-[#8a978f]">Cada lección se arma una sola vez a partir de su video y queda guardada: los estudiantes la abren al instante. Se generan de tres en tres (unos 40 minutos en total); mantenga esta pestaña abierta mientras trabaja.</p>
     </div>
   );
 }

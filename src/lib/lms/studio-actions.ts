@@ -53,13 +53,13 @@ export async function avanceStudio(): Promise<EstadoStudio | null> {
 
 export type ResultadoStudio = { ok: boolean; message?: string; hechos: string[]; errores: { clave: string; titulo: string; error: string }[]; estado?: EstadoStudio };
 
-/** Genera los materiales que faltan, de dos en dos (cada uno son tres llamadas al modelo en paralelo). El panel la repite hasta que no quede nada. */
+/** Genera los materiales que faltan, de tres en tres (cada uno son tres llamadas al modelo en paralelo). El panel la repite hasta que no quede nada. */
 export async function generarFaltantes(omitir: string[] = []): Promise<ResultadoStudio> {
   if (!(await admin())) return { ok: false, message: "Solo los administradores del portal pueden generar los materiales.", hechos: [], errores: [] };
   const { estado, pendientes } = await colaStudio(omitir.slice(0, 400));
   if (!estado.iaLista) return { ok: false, message: "Falta cargar una clave de Gemini en Conexiones.", hechos: [], errores: [], estado };
   if (!estado.tablaLista) return { ok: false, message: "Falta crear la tabla de materiales: ejecute docs/migraciones/014-studio.sql en Supabase.", hechos: [], errores: [], estado };
-  const lote = pendientes.slice(0, 2);
+  const lote = pendientes.slice(0, 3);
   const hechos: string[] = [];
   const errores: ResultadoStudio["errores"] = [];
   await Promise.all(

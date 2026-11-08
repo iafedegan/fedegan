@@ -79,7 +79,7 @@ async function completar(p: Prov, base: string, video: string | null, previo: Co
     grupos.map(async (g) => {
       const esquema = `{\n${g.map((k) => `  "${k}": ${ESQ[k]}`).join(",\n")}\n}`;
       try {
-        const bruto = await generar(p, { text: `${base}\n\nResponde SOLO con este JSON (mismas claves):\n${esquema}`, video, json: true, tokens: 7000, system: SYSTEM_STUDIO, timeoutMs: MAX_LLAMADA_MS, detalle: true });
+        const bruto = await generar(p, { text: `${base}\n\nResponde SOLO con este JSON (mismas claves):\n${esquema}`, video, json: true, tokens: 7000, system: SYSTEM_STUDIO, timeoutMs: MAX_LLAMADA_MS, detalle: true, videoBaja: true });
         return bruto ? { c: normalizarContenido(leerJson(bruto)), e: "" } : { c: {} as Contenido, e: video ? "el modelo no pudo leer el video (puede ser privado o no estar disponible)" : "el modelo no respondió" };
       } catch (e) {
         const tiempo = e instanceof Error && (e.name === "TimeoutError" || e.name === "AbortError");
