@@ -131,8 +131,10 @@ export const entities: Entity[] = [
     ordered: false,
     orderBy: { column: "starts_on", ascending: true },
     slugFrom: "title",
+    thumbField: "cover_image",
     fields: [
       { name: "title", label: "Título", type: "text", required: true, max: 140 },
+      { name: "cover_image", label: "Imagen del evento", type: "image", help: "Opcional. Horizontal, mínimo 1200 px de ancho; se muestra en la página del evento." },
       { name: "slug", label: "Identificador", type: "slug", help: "Forma la dirección web del evento; no cambia después de creado." },
       { name: "kind", label: "Tipo", type: "select", options: [{ value: "Webinar", label: "Webinar" }, { value: "Seminario", label: "Seminario" }, { value: "Foro", label: "Foro" }] },
       { name: "starts_on", label: "Fecha", type: "date", required: true },

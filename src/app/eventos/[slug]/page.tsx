@@ -35,6 +35,10 @@ export default async function EventoDetailPage({ params }: { params: Promise<{ s
       />
       <Container className="grid gap-8 py-5 sm:py-8 lg:grid-cols-[minmax(0,1fr)_19rem] lg:gap-12">
         <div className="min-w-0">
+        {event.coverImage && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={event.coverImage} alt="" className="mb-6 aspect-[16/7] w-full rounded-[var(--radius-lg)] object-cover" />
+        )}
         <Card accent={accent} hover={false}>
           <div className="flex flex-col gap-6 p-7 sm:flex-row sm:items-center sm:p-9">
             <div className="flex h-28 w-28 shrink-0 flex-col items-center justify-center rounded-[var(--radius-lg)] border border-[rgba(var(--acc-rgb),0.45)] bg-[rgba(var(--acc-rgb),0.12)] text-[rgb(var(--acc-rgb))]">

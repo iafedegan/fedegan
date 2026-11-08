@@ -99,7 +99,7 @@ export async function getPublication(slug: string) {
 }
 
 // ---------- Eventos ----------
-export type Evento = { slug: string; kind: string; title: string; month: string; day: string; startsOn: string; time: string; place: string; description: string };
+export type Evento = { slug: string; kind: string; title: string; month: string; day: string; startsOn: string; time: string; place: string; description: string; coverImage?: string };
 const eventDescription =
   "Espacio organizado por FEDEGÁN–FNG dirigido a productores, técnicos y aliados del sector ganadero. Cupos limitados; se recomienda inscripción previa.";
 export const getEvents = cache(async (): Promise<Evento[]> => {
@@ -120,6 +120,7 @@ export const getEvents = cache(async (): Promise<Evento[]> => {
       time: str(r.time_text),
       place: str(r.place),
       description: str(r.description) || eventDescription,
+      coverImage: typeof r.cover_image === "string" && r.cover_image ? r.cover_image : undefined,
     };
   });
 });
