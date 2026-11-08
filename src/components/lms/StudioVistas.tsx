@@ -4,6 +4,9 @@ import { useEffect, useMemo, useRef, useState, type KeyboardEvent, type PointerE
 import { createPortal } from "react-dom";
 import { Check, ChevronDown, ChevronLeft, ChevronRight, Clipboard, Clock, Lightbulb, Maximize2, Minus, Pause, PenLine, Play, Plus, Route, RotateCcw, Search, Shuffle, Sparkles, Target, Timer, Trophy, Volume2, VolumeX, X } from "lucide-react";
 import type { Contenido, Nodo } from "@/lib/lms/studio-tipos";
+import { contar, dar, sonar } from "@/lib/lms/studio-juego";
+import { elegirPorVoz } from "@/lib/lms/studio-juegos-datos";
+import { Dictar, Leer } from "@/components/lms/StudioVoz";
 
 // Vistas de cada material del Studio. Reciben el contenido ya guardado (nada se genera aquí) y lo hacen interactivo:
 // mapa mental que se explora (arrastrar, zoom, buscar, recorrido guiado), tarjetas que se voltean y se deslizan, cuestionario en modo práctica
@@ -218,7 +221,15 @@ export function VistaResumen({ d, clave }: { d: NonNullable<Contenido["resumen"]
   const [leidas, setLeidas] = usePersist<number[]>(clave, "resumen", []);
   const set = new Set(leidas);
   const todo = [d.idea, ...d.puntos.map((p) => `${p.titulo}. ${p.texto}`), d.cierre].filter(Boolean).join("\n");
-  const alternar = (i: number) => setLeidas((l) => (l.includes(i) ? l.filter((x) => x !== i) : [...l, i]));
+  const alternar = (i: number) => {
+    const nueva = !leidas.includes(i);
+    setLeidas((l) => (l.includes(i) ? l.filter((x) => x !== i) : [...l, i]));
+    if (nueva) {
+      sonar("clic");
+      dar(2, "Idea leída");
+      if (leidas.length + 1 === d.puntos.length) dar(10, "Resumen completo");
+    }
+  };
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-wrap items-center gap-2">
@@ -265,7 +276,13 @@ export function VistaGuia({ d, clave }: { d: NonNullable<Contenido["guia"]>; cla
   const [repasadas, setRepasadas] = usePersist<number[]>(clave, "guia", []);
   const [abierta, setAbierta] = useState<number | null>(null);
   const marca = (i: number) => setHechas((l) => (l.includes(i) ? l.filter((x) => x !== i) : [...l, i]));
-  const sabe = (i: number, ok: boolean) => setRepasadas((l) => (ok ? (l.includes(i) ? l : [...l, i]) : l.filter((x) => x !== i)));
+  const sabe = (i: number, ok: boolean) => {
+    if (ok && !repasadas.includes(i)) {
+      sonar("ok");
+      dar(3, "Pregunta dominada");
+    }
+    setRepasadas((l) => (ok ? (l.includes(i) ? l : [...l, i]) : l.filter((x) => x !== i)));
+  };
   return (
     <div className="flex flex-col gap-9">
       {d.objetivos.length > 0 && (
@@ -495,8 +512,13 @@ export function VistaMapa({ d }: { d: Nodo }) {
   }, [tour, g, zoom]);
 
   const alternar = (id: string) => setAbiertos((s) => { const n = new Set(s); if (n.has(id)) n.delete(id); else n.add(id); return n; });
+  const premio = useRef(false);
   const irRama = (i: number) => {
     const k = ((i % ramas) + ramas) % ramas;
+    if (k === ramas - 1 && !premio.current) {
+      premio.current = true;
+      dar(8, "Recorrido del mapa");
+    }
     setTour(k);
     setSel(`0.${k}`);
     setAbiertos(new Set(["0", `0.${k}`]));
@@ -603,6 +625,12 @@ export function VistaTarjetas({ d, clave }: { d: NonNullable<Contenido["tarjetas
   const ir = (n: number) => { setI(Math.max(0, Math.min(total - 1, n))); setVoltea(false); setMia(""); };
   const marcar = (sabe: boolean) => {
     const k = orden[i];
+    if (sabe && !conocidas.has(k)) {
+      sonar("ok");
+      dar(4, "Tarjeta dominada");
+      contar("tarjetas", 1);
+    } else sonar("clic");
+    if (i >= total - 1 && vistas.size + 1 >= total) dar(10, "Tarjetas repasadas");
     setSabidas((s) => (sabe ? (s.includes(k) ? s : [...s, k]) : s.filter((x) => x !== k)));
     setVistas((s) => new Set(s).add(k));
     if (i < total - 1) ir(i + 1);
@@ -674,10 +702,14 @@ export function VistaTarjetas({ d, clave }: { d: NonNullable<Contenido["tarjetas
       {escribe && !voltea && (
         <div className="flex gap-2">
           <textarea value={mia} onChange={(e) => setMia(e.target.value)} rows={2} placeholder="Escriba aquí lo que recuerda…" className="st-escribir" aria-label="Mi respuesta" />
-          <button type="button" className="st-btn st-btn-fuerte self-end" onClick={() => setVoltea(true)}>Comprobar</button>
+          <div className="flex flex-col gap-2 self-end sm:flex-row">
+            <Dictar etiqueta="Dictar" alTexto={(t) => setMia(t)} />
+            <button type="button" className="st-btn st-btn-fuerte" onClick={() => setVoltea(true)}>Comprobar</button>
+          </div>
         </div>
       )}
       <div className="flex flex-wrap items-center justify-center gap-3">
+        <Leer texto={voltea ? c.a : c.q} etiqueta={voltea ? "Escuchar la respuesta" : "Escuchar la pregunta"} />
         <button type="button" className="st-btn" onClick={() => ir(i - 1)} disabled={i === 0}>Anterior</button>
         <button type="button" className="st-btn st-btn-no" onClick={() => marcar(false)}>Repasar</button>
         <button type="button" className="st-btn st-btn-fuerte" onClick={() => marcar(true)}><Check size={16} /> La sé</button>
@@ -719,6 +751,9 @@ export function VistaCuestionario({ d, clave }: { d: NonNullable<Contenido["cues
   };
   const terminar = (r: (number | null)[]) => {
     const a = r.filter((x, i) => x === preg[i].correct).length;
+    const perfecto = a === preg.length;
+    dar(a * 5 + (perfecto ? 15 : 0), perfecto ? "Cuestionario perfecto" : "Cuestionario terminado", perfecto ? (e) => ({ ...e, contadores: { ...e.contadores, perfecto: (e.contadores.perfecto ?? 0) + 1 } }) : undefined);
+    sonar(perfecto ? "nivel" : a >= preg.length / 2 ? "ok" : "mal");
     setMejor((m) => (m === null || a > m ? a : m));
     setSeg(Math.floor((Date.now() - t0) / 1000));
     setFin(true);
@@ -744,6 +779,12 @@ export function VistaCuestionario({ d, clave }: { d: NonNullable<Contenido["cues
   const q = preg[paso];
   const elegida = resp[paso];
   const aciertos = resp.filter((r, i) => r === preg[i]?.correct).length;
+  const elegir = (k: number) => {
+    if (resp[paso] !== null) return;
+    if (modo === "practica") sonar(k === q.correct ? "ok" : "mal");
+    else sonar("clic");
+    setResp((r) => r.map((x, i) => (i === paso ? k : x)));
+  };
 
   if (fin) {
     const pct = Math.round((aciertos / preg.length) * 100);
@@ -791,6 +832,10 @@ export function VistaCuestionario({ d, clave }: { d: NonNullable<Contenido["cues
         <span>Pregunta {paso + 1} de {preg.length} · {modo === "examen" ? "Examen" : "Práctica"}</span>
         <span className="inline-flex items-center gap-1 tabular-nums"><Timer size={13} aria-hidden /> {mmss(seg)}</span>
       </div>
+      <div className="flex flex-wrap items-center gap-2">
+        <Leer texto={`${q.q}. ${q.options.map((o, k) => `Opción ${String.fromCharCode(65 + k)}: ${o}`).join(". ")}`} etiqueta="Escuchar la pregunta y las opciones" />
+        {elegida === null && <Dictar etiqueta="Responder con la voz" alTexto={(t, final) => { if (!final) return; const k = elegirPorVoz(t, q.options); if (k >= 0) elegir(k); }} />}
+      </div>
       <h3 className="font-[var(--font-display)] text-xl font-bold leading-snug text-[var(--text)] sm:text-2xl">{q.q}</h3>
       <div className="flex flex-col gap-2.5">
         {q.options.map((o, k) => {
@@ -799,7 +844,7 @@ export function VistaCuestionario({ d, clave }: { d: NonNullable<Contenido["cues
           const correcta = mostrar && k === q.correct;
           const mala = mostrar && elegido && k !== q.correct;
           return (
-            <button key={k} type="button" disabled={mostrar} onClick={() => setResp((r) => r.map((x, i) => (i === paso ? k : x)))} className={`st-opcion ${correcta ? "st-opcion-ok" : mala ? "st-opcion-mal" : modo === "examen" && elegido ? "st-opcion-sel" : ""}`}>
+            <button key={k} type="button" disabled={mostrar} onClick={() => elegir(k)} className={`st-opcion ${correcta ? "st-opcion-ok" : mala ? "st-opcion-mal" : modo === "examen" && elegido ? "st-opcion-sel" : ""}`}>
               <span className="st-letra">{correcta ? <Check size={15} /> : mala ? <X size={15} /> : String.fromCharCode(65 + k)}</span>
               <span className="flex-1 text-left">{o}</span>
             </button>
@@ -866,7 +911,13 @@ export function VistaLinea({ d, clave }: { d: NonNullable<Contenido["linea"]>; c
     refs.current[activo]?.scrollIntoView({ behavior: "smooth", block: "center" });
   }, [activo]);
 
-  const marca = (i: number) => setHechos((l) => (l.includes(i) ? l.filter((x) => x !== i) : [...l, i]));
+  const marca = (i: number) => {
+    if (!hechos.includes(i)) {
+      sonar("ok");
+      dar(3, "Paso entendido");
+    }
+    setHechos((l) => (l.includes(i) ? l.filter((x) => x !== i) : [...l, i]));
+  };
   const tecla = (e: KeyboardEvent) => {
     if (e.key === "ArrowDown" || e.key === "ArrowRight") { e.preventDefault(); setActivo((a) => Math.min(d.length - 1, a + 1)); }
     if (e.key === "ArrowUp" || e.key === "ArrowLeft") { e.preventDefault(); setActivo((a) => Math.max(0, a - 1)); }
@@ -968,7 +1019,7 @@ export function VistaGlosario({ d }: { d: NonNullable<Contenido["glosario"]> }) 
               const ok = pick !== null && o === rondas[r].correcta;
               const mal = pick === o && o !== rondas[r].correcta;
               return (
-                <button key={o} type="button" disabled={pick !== null} onClick={() => { setPick(o); if (o === rondas[r].correcta) setPuntos((p) => p + 1); }} className={`st-opcion ${ok ? "st-opcion-ok" : mal ? "st-opcion-mal" : ""}`}>
+                <button key={o} type="button" disabled={pick !== null} onClick={() => { setPick(o); if (o === rondas[r].correcta) { setPuntos((p) => p + 1); sonar("ok"); dar(3, "Término acertado"); } else sonar("mal"); }} className={`st-opcion ${ok ? "st-opcion-ok" : mal ? "st-opcion-mal" : ""}`}>
                   <span className="st-letra">{ok ? <Check size={15} /> : mal ? <X size={15} /> : "·"}</span><span className="flex-1 text-left">{o}</span>
                 </button>
               );

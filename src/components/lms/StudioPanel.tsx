@@ -1,10 +1,16 @@
 "use client";
 
 import { useEffect, useState, useTransition, type ReactNode } from "react";
-import { BookMarked, BrainCircuit, CalendarRange, ChevronRight, FileText, HelpCircle, Layers, ListChecks, Loader2, MessageCircleQuestion, ScrollText, Sparkles } from "lucide-react";
+import { BookMarked, BrainCircuit, CalendarRange, ChevronRight, FileText, Gamepad2, Headphones, HelpCircle, Layers, ListChecks, Loader2, MessageCircleQuestion, ScrollText, Sparkles } from "lucide-react";
 import { prepararMateriales } from "@/lib/lms/studio-actions";
+import { abrirMaterial, leerEstado } from "@/lib/lms/studio-juego";
+import { juegosDisponibles, type JuegoId } from "@/lib/lms/studio-juegos-datos";
 import { contarNodos, TITULO_KIND, type Contenido, type StudioKind } from "@/lib/lms/studio-tipos";
 import { avanceDe, Visor, VistaCuestionario, VistaFaq, VistaGlosario, VistaGuia, VistaInforme, VistaLinea, VistaMapa, VistaResumen, VistaTarjetas } from "@/components/lms/StudioVistas";
+import { JUEGOS, VistaJuego } from "@/components/lms/StudioJuegos";
+import { JuegoHud } from "@/components/lms/StudioHud";
+import { Estrellas } from "@/components/lms/StudioEfectos";
+import { AudioLeccion } from "@/components/lms/StudioVoz";
 
 type Meta = { Icon: typeof FileText; color: string; que: (c: Contenido) => string; interactivo?: boolean };
 
@@ -20,6 +26,8 @@ const META: Record<StudioKind, Meta> = {
   informe: { Icon: FileText, color: "#1B7F73", que: (c) => `${c.informe?.secciones.length ?? 0} secciones` },
 };
 const ORDEN: StudioKind[] = ["resumen", "guia", "mapa", "tarjetas", "cuestionario", "faq", "linea", "glosario", "informe"];
+const ORDEN_JUEGOS: JuegoId[] = ["memoria", "relampago", "vf", "ordena", "clasifica"];
+const COLOR_JUEGO: Record<JuegoId, string> = { memoria: "#72BF44", relampago: "#D9772E", vf: "#3C6DB0", ordena: "#C9992B", clasifica: "#89114C" };
 
 function vista(kind: StudioKind, c: Contenido, clave: string): ReactNode {
   switch (kind) {
@@ -35,23 +43,34 @@ function vista(kind: StudioKind, c: Contenido, clave: string): ReactNode {
   }
 }
 
-/** Panel Studio del cuaderno: materiales de estudio ya preparados para la lección y para todo el curso, con vistas interactivas. */
+/** Panel Studio del cuaderno: materiales de estudio ya preparados para la lección y para todo el curso, con vistas interactivas, voz y juegos. */
 export function StudioPanel({ courseId, lessonId, slug, enabled, lessonTitle, courseTitle, initial }: { courseId: string; lessonId: string; slug: string; enabled: boolean; lessonTitle: string; courseTitle: string; initial: { leccion: Contenido | null; curso: Contenido | null } }) {
   const [scope, setScope] = useState<"leccion" | "curso">("leccion");
   const [datos, setDatos] = useState(initial);
   const [abierto, setAbierto] = useState<StudioKind | null>(null);
+  const [juego, setJuego] = useState<JuegoId | null>(null);
+  const [audio, setAudio] = useState(false);
   const [error, setError] = useState("");
   const [ocupado, start] = useTransition();
   const actual = scope === "leccion" ? datos.leccion : datos.curso;
   const disponibles = actual ? ORDEN.filter((k) => actual[k] !== undefined) : [];
+  const jugables = actual ? juegosDisponibles(actual) : null;
   const clave = `${scope}:${scope === "leccion" ? lessonId : courseId}`;
-  // El avance se guarda en este navegador: se lee después de pintar (en el servidor no existe) y al cerrar un material.
+  const tema = scope === "leccion" ? lessonTitle : courseTitle;
+
+  // El avance se guarda en este navegador: se lee después de pintar (en el servidor no existe) y al cerrar un material o un juego.
   const [avances, setAvances] = useState<Record<string, string | null>>({});
+  const [estrellasJ, setEstrellasJ] = useState<Record<string, number>>({});
   useEffect(() => {
     if (!actual) return;
     setAvances(Object.fromEntries(disponibles.map((k) => [k, avanceDe(clave, k, actual)])));
+    const e = leerEstado().estrellas;
+    setEstrellasJ(Object.fromEntries(ORDEN_JUEGOS.map((j) => [j, e[`${j}:${clave}`] ?? 0])));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [actual, clave, abierto]);
+  }, [actual, clave, abierto, juego, audio]);
+  useEffect(() => {
+    if (abierto) abrirMaterial(clave, abierto);
+  }, [abierto, clave]);
 
   function preparar() {
     setError("");
@@ -73,29 +92,62 @@ export function StudioPanel({ courseId, lessonId, slug, enabled, lessonTitle, co
         </div>
       </div>
 
+      <JuegoHud />
+
       <p className="-mt-1 text-[0.78rem] leading-snug text-[var(--text-faint)]">
         {scope === "leccion" ? <>Material de <b className="font-semibold text-[var(--text-muted)]">{lessonTitle}</b>, armado a partir del video.</> : <>Visión general de <b className="font-semibold text-[var(--text-muted)]">{courseTitle}</b>.</>}
       </p>
 
       {actual && (
-        <ul className="flex flex-col gap-2">
-          {disponibles.map((k) => {
-            const m = META[k];
-            return (
-              <li key={k}>
-                <button type="button" onClick={() => setAbierto(k)} className="st-fila" style={{ ["--st-color" as string]: m.color }}>
-                  <span className="st-fila-icono"><m.Icon size={19} aria-hidden /></span>
-                  <span className="min-w-0 flex-1 text-left">
-                    <span className="flex items-center gap-2 text-[0.9rem] font-bold leading-tight text-[var(--text)]">{TITULO_KIND[k]}{m.interactivo && <span className="st-chip">Interactivo</span>}</span>
-                    <span className="mt-0.5 block text-xs text-[var(--text-faint)]">{m.que(actual)}</span>
-                    {avances[k] && <span className="mt-1 block text-xs font-bold text-[#3d7a22]">{avances[k]}</span>}
-                  </span>
-                  <ChevronRight size={18} className="shrink-0 text-[var(--text-faint)]" aria-hidden />
-                </button>
-              </li>
-            );
-          })}
-        </ul>
+        <>
+          {(actual.resumen || actual.guia) && (
+            <button type="button" onClick={() => setAudio(true)} className="st-audio-tarjeta">
+              <span className="st-audio-ico"><Headphones size={22} aria-hidden /></span>
+              <span className="min-w-0 flex-1 text-left"><b className="block text-[0.95rem]">Audio-lección</b><span className="block text-xs opacity-85">Escúchela narrada, con repaso hablado</span></span>
+              <ChevronRight size={18} aria-hidden />
+            </button>
+          )}
+
+          <ul className="flex flex-col gap-2">
+            {disponibles.map((k) => {
+              const m = META[k];
+              return (
+                <li key={k}>
+                  <button type="button" onClick={() => setAbierto(k)} className="st-fila" style={{ ["--st-color" as string]: m.color }}>
+                    <span className="st-fila-icono"><m.Icon size={19} aria-hidden /></span>
+                    <span className="min-w-0 flex-1 text-left">
+                      <span className="flex items-center gap-2 text-[0.9rem] font-bold leading-tight text-[var(--text)]">{TITULO_KIND[k]}{m.interactivo && <span className="st-chip">Interactivo</span>}</span>
+                      <span className="mt-0.5 block text-xs text-[var(--text-faint)]">{m.que(actual)}</span>
+                      {avances[k] && <span className="mt-1 block text-xs font-bold text-[#3d7a22]">{avances[k]}</span>}
+                    </span>
+                    <ChevronRight size={18} className="shrink-0 text-[var(--text-faint)]" aria-hidden />
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+
+          {jugables && ORDEN_JUEGOS.some((j) => jugables[j]) && (
+            <section aria-label="Juegos">
+              <h3 className="mb-2.5 mt-1 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-[var(--text-faint)]"><Gamepad2 size={15} aria-hidden /> Jugar para aprender</h3>
+              <ul className="grid grid-cols-2 gap-2.5">
+                {ORDEN_JUEGOS.filter((j) => jugables[j]).map((j) => {
+                  const g = JUEGOS[j];
+                  return (
+                    <li key={j}>
+                      <button type="button" onClick={() => setJuego(j)} className="st-juego" style={{ background: g.fondo }}>
+                        <g.Icon size={26} aria-hidden />
+                        <b>{g.titulo}</b>
+                        <small>{g.sub}</small>
+                        <Estrellas n={estrellasJ[j] ?? 0} />
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            </section>
+          )}
+        </>
       )}
 
       {!actual && (
@@ -130,7 +182,7 @@ export function StudioPanel({ courseId, lessonId, slug, enabled, lessonTitle, co
         return (
           <Visor
             titulo={TITULO_KIND[abierto]}
-            subtitulo={scope === "leccion" ? lessonTitle : courseTitle}
+            subtitulo={tema}
             icono={<I size={22} aria-hidden />}
             color={META[abierto].color}
             onClose={() => setAbierto(null)}
@@ -142,6 +194,21 @@ export function StudioPanel({ courseId, lessonId, slug, enabled, lessonTitle, co
           </Visor>
         );
       })()}
+
+      {juego && actual && (() => {
+        const g = JUEGOS[juego];
+        return (
+          <Visor titulo={g.titulo} subtitulo={tema} icono={<g.Icon size={22} aria-hidden />} color={COLOR_JUEGO[juego]} onClose={() => setJuego(null)}>
+            <VistaJuego id={juego} contenido={actual} clave={clave} />
+          </Visor>
+        );
+      })()}
+
+      {audio && actual && (
+        <Visor titulo="Audio-lección" subtitulo={tema} icono={<Headphones size={22} aria-hidden />} color="#72BF44" onClose={() => setAudio(false)}>
+          <AudioLeccion contenido={actual} titulo={tema} />
+        </Visor>
+      )}
     </div>
   );
 }
