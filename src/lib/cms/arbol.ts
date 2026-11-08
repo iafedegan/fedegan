@@ -9,6 +9,7 @@ import { mergeTree, type SiteNode } from "./nodos";
 
 export type NavRow = { id: string; label: string; href: string; published: boolean };
 export type PortalRow = { id?: string; nombre: string; href: string };
+export type PreguntaRow = { id: string; texto: string };
 
 const SECCION_RE = /^\/seccion\/([^/?#]+)\/?$/;
 const PENDIENTES: Record<string, string> = { "seguridad-ganadera": "Sección en preparación" };
@@ -114,6 +115,21 @@ function nodoSeccion(s: Seccion, ctx: Ctx): ArbolNodo {
 const ficha = (id: string, label: string, href: string | undefined, extra: Partial<ArbolNodo> = {}): ArbolNodo => ({ id: `x:${id}`, label, kind: "elemento", href, total: 0, children: [], ...extra });
 const FIJO = "Fijo en el diseño";
 
+// Las preguntas frecuentes llegan hasta cada pregunta: bajo la ruta «/preguntas-frecuentes» (en la barra, en la portada y en las rutas fijas)
+// se listan todas, cada una con su lápiz, y un acceso para agregar una nueva.
+const RUTA_FAQ = "/preguntas-frecuentes";
+function hijosFaq(prefijo: string, preguntas: PreguntaRow[]): ArbolNodo[] {
+  return [
+    ficha(`${prefijo}-faq-nueva`, "Agregar una pregunta", RUTA_FAQ, { editHref: "/admin/preguntas/nuevo" }),
+    ...preguntas.map((p) => ficha(`${prefijo}-faq-${p.id}`, p.texto, RUTA_FAQ, { editHref: `/admin/preguntas/${p.id}` })),
+  ];
+}
+function conFaq(n: ArbolNodo, prefijo: string, preguntas: PreguntaRow[]): ArbolNodo {
+  if (n.href !== RUTA_FAQ) return n;
+  const extra = hijosFaq(prefijo, preguntas);
+  return { ...n, children: [...n.children, ...extra], total: n.total + sumar(extra) };
+}
+
 function grupoCabecera(): ArbolNodo {
   const kids = [
     ficha("head-mercado", "Cintillo de mercado", undefined, { nota: "Automático: dólar, petróleo, bolsas, oro y ganado" }),
@@ -128,14 +144,14 @@ function grupoCabecera(): ArbolNodo {
   return { id: "g:head", label: "Cabecera", kind: "grupo-raiz", total: sumar(kids), children: kids };
 }
 
-function grupoPortada(): ArbolNodo {
+function grupoPortada(preguntas: PreguntaRow[]): ArbolNodo {
   const kids = [
     ficha("home-carrusel", "Carrusel de portada (banners)", "/", { editHref: "/admin/diseno", nota: "Diseño → Publicidad" }),
     ficha("home-accesos", "Accesos rápidos y tarjetas de inicio", "/", { nota: FIJO }),
     ficha("home-noticias", "Noticias destacadas (CONtexto)", "/noticias", { editHref: "/admin/apis", nota: "Vienen de CONtexto" }),
     ficha("home-publicaciones", "Publicaciones", "/publicaciones", { editHref: "/admin/publicaciones" }),
     ficha("home-eventos", "Eventos y agenda", "/eventos", { editHref: "/admin/eventos" }),
-    ficha("home-preguntas", "Preguntas frecuentes", "/preguntas-frecuentes", { editHref: "/admin/preguntas" }),
+    conFaq(ficha("home-preguntas", "Preguntas frecuentes", RUTA_FAQ, { editHref: "/admin/preguntas" }), "home", preguntas),
     ficha("home-locales", "Locales del gremio", "/", { editHref: "/admin/locales" }),
     ficha("home-cifras", "Cifras del sector (inicio)", "/", { editHref: "/admin/cifras" }),
   ];
@@ -174,7 +190,7 @@ function grupoPie(portales: PortalRow[]): ArbolNodo {
   return { id: "g:pie", label: "Pie de página (footer)", kind: "grupo-raiz", total: sumar(kids), children: kids };
 }
 
-export function construirArbol({ nav, nodes, editadas, portales = [] }: { nav: NavRow[]; nodes: SiteNode[]; editadas: Set<string>; portales?: PortalRow[] }): ArbolNodo[] {
+export function construirArbol({ nav, nodes, editadas, portales = [], preguntas = [] }: { nav: NavRow[]; nodes: SiteNode[]; editadas: Set<string>; portales?: PortalRow[]; preguntas?: PreguntaRow[] }): ArbolNodo[] {
   const ctx: Ctx = { porId: new Map(nodes.map((n) => [n.id, n])), editadas };
   const todas = secciones(nodes);
   const usadas = new Set<string>();
@@ -204,15 +220,15 @@ export function construirArbol({ nav, nodes, editadas, portales = [] }: { nav: N
       : [];
     const hijos = [...portada, ...sec.children];
     return { ...base, add: sec.add, nodeId: undefined, origen: undefined, children: hijos, total: sumar(hijos) };
-  });
+  }).map((n) => conFaq(n, "nav", preguntas));
 
   const otras = [...todas.values()].filter((s) => !usadas.has(s.slug)).map((s) => nodoSeccion(s, ctx));
-  const fijas: ArbolNodo[] = FIJAS.map(([label, href]) => ({ id: `ruta:${href}`, label, kind: "ruta", href, editHref: EDITORES[href], total: 0, children: [] }));
+  const fijas: ArbolNodo[] = FIJAS.map(([label, href]) => conFaq({ id: `ruta:${href}`, label, kind: "ruta", href, editHref: EDITORES[href], total: 0, children: [] }, "fija", preguntas));
 
   return [
     grupoCabecera(),
     { id: "g:nav", label: "Barra de navegación", kind: "grupo-raiz", total: sumar(barra), children: barra },
-    grupoPortada(),
+    grupoPortada(preguntas),
     grupoPie(portales),
     { id: "g:sec", label: "Otras secciones del portal", kind: "grupo-raiz", total: sumar(otras), children: otras },
     { id: "g:fijas", label: "Páginas fijas del portal", kind: "grupo-raiz", total: fijas.length, children: fijas },
