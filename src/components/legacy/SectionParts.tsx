@@ -2,7 +2,8 @@ import Link from "next/link";
 import type { CSSProperties } from "react";
 import { ArrowLeft, ArrowRight, ArrowUpRight, Search } from "lucide-react";
 import { HubExpand, type HubLink } from "@/components/legacy/HubExpand";
-import { excerptOf, getLegacyPage, legacyHref, type LegacyPage, type NavNode } from "@/content/legacy";
+import { excerptOf, getLegacyPage, legacyHref, type LegacyBlock, type LegacyPage, type NavNode } from "@/content/legacy";
+import { enlaceSeguro, esExterno } from "@/components/legacy/comun";
 
 export const countBelow = (n: NavNode): number => (n.children ?? []).reduce((a, c) => a + 1 + countBelow(c), 0);
 
@@ -26,7 +27,50 @@ const toLinks = (nodes: NavNode[], slug: string): HubLink[] =>
   }));
 
 // Entrada de la sección: celda de texto con número, título, extracto y cuántas páginas trae. Sin fotos repetidas: se escanea rápido.
-export function SectionTiles({ nodes, slug, custom = {} }: { nodes: NavNode[]; slug: string; custom?: Record<string, LegacyPage> }) {
+export type Ficha = { titulo: string; texto: string; enlace: string };
+
+/** Separa las fichas de tema que se armaron en el constructor del resto del contenido de la página. */
+export function sacarFichas(blocks: LegacyBlock[]): { fichas: Ficha[]; resto: LegacyBlock[] } {
+  const fichas: Ficha[] = [];
+  const resto: LegacyBlock[] = [];
+  for (const b of blocks) {
+    const d = b.t === "ficha" ? b.data : undefined;
+    const titulo = typeof d?.titulo === "string" ? d.titulo.trim() : "";
+    const enlace = typeof d?.enlace === "string" ? d.enlace : "";
+    if (b.t === "ficha") {
+      if (titulo && enlaceSeguro(enlace)) fichas.push({ titulo, texto: typeof d?.texto === "string" ? d.texto : "", enlace });
+    } else resto.push(b);
+  }
+  return { fichas, resto };
+}
+
+// Una ficha armada a mano: igual que las automáticas, con su título, descripción y enlace.
+export function FichaExtra({ ficha, numero }: { ficha: Ficha; numero: number }) {
+  const externo = esExterno(ficha.enlace);
+  const cuerpo = (
+    <>
+      <span className="hub-no" aria-hidden>{String(numero).padStart(2, "0")}</span>
+      <h3 className="hub-name">{ficha.titulo}</h3>
+      {ficha.texto && <span className="hub-text">{ficha.texto}</span>}
+      <span className="hub-foot">
+        {externo ? "Sitio externo" : "Abrir"}
+        {externo ? <ArrowUpRight size={16} aria-hidden /> : <ArrowRight size={16} aria-hidden />}
+      </span>
+    </>
+  );
+  const style = { ["--i" as string]: (numero - 1) % 8 } as CSSProperties;
+  return (
+    <li style={style}>
+      {externo ? (
+        <a href={ficha.enlace} target="_blank" rel="noopener noreferrer" className="hub-cell">{cuerpo}</a>
+      ) : (
+        <Link href={ficha.enlace} className="hub-cell">{cuerpo}</Link>
+      )}
+    </li>
+  );
+}
+
+export function SectionTiles({ nodes, slug, custom = {}, extras = [] }: { nodes: NavNode[]; slug: string; custom?: Record<string, LegacyPage>; extras?: Ficha[] }) {
   return (
     <ol className="hub-grid">
       {nodes.map((n, i) => {
@@ -87,6 +131,9 @@ export function SectionTiles({ nodes, slug, custom = {} }: { nodes: NavNode[]; s
           </li>
         );
       })}
+      {extras.map((f, j) => (
+        <FichaExtra key={`extra-${j}`} ficha={f} numero={nodes.length + j + 1} />
+      ))}
     </ol>
   );
 }

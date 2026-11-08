@@ -21,7 +21,7 @@ const ICONO_BASE: Record<string, LucideIcon> = {
 // Los iconos que piden los esquemas de src/lib/cms/elementos.ts (por su nombre en lucide-react).
 const ICONO_ESQUEMA: Record<string, LucideIcon> = {
   Info, Quote, Columns3, SquareMousePointer, PanelTop, Share2, PanelLeft, Images, Headphones, Building2, AppWindow, ChartColumn, ListOrdered, Milestone, BadgeCheck, Link2, Table2,
-  UsersRound, ContactRound, MoveVertical,
+  UsersRound, ContactRound, MoveVertical, LayoutGrid,
 };
 const ICONOS: Record<string, LucideIcon> = {
   ...ICONO_BASE,

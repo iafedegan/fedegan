@@ -9,7 +9,7 @@ import { NavTree, type NavItem } from "@/components/legacy/NavTree";
 import { TocRail, type TocItem } from "@/components/legacy/TocRail";
 import { SectionMenu } from "@/components/legacy/SectionMenu";
 import { ArticleTools } from "@/components/legacy/ArticleTools";
-import { PrevNext, SectionSearch, SectionTiles, countBelow, flattenTree } from "@/components/legacy/SectionParts";
+import { PrevNext, SectionSearch, SectionTiles, countBelow, flattenTree, sacarFichas } from "@/components/legacy/SectionParts";
 import { journeyPhotos } from "@/content/scroll-world";
 import { getPageOverride } from "@/lib/cms/paginas";
 import { getCopias } from "@/lib/cms/documentos-copia";
@@ -47,7 +47,9 @@ export async function LegacySectionPage({ slug, ruta }: { slug: string; ruta: st
   const copias = await getCopias();
   const pagina = override ? { ...base, title: override.title, blocks: override.blocks } : base;
   // Los documentos que ya se copiaron a Supabase se enlazan desde ahí; el resto sigue apuntando al original.
-  const page = { ...pagina, blocks: aplicarCopias(pagina.blocks, copias) };
+  // Las «fichas de tema» armadas en el constructor se suman a la cuadrícula de temas en vez de ir en el texto.
+  const { fichas, resto } = sacarFichas(pagina.blocks);
+  const page = { ...pagina, blocks: aplicarCopias(resto, copias) };
 
   const sectionPhoto = journeyPhotos[PHOTO_ID[slug] ?? slug] ?? (slug === "cartas-de-presidencia" ? { src: "/headers/ia-cartas.jpg", pos: "50% 50%", alt: "" } : undefined);
   const trail = findTrail(section.tree, key) ?? [];
@@ -122,13 +124,13 @@ export async function LegacySectionPage({ slug, ruta }: { slug: string; ruta: st
           }
         />
         <Container className="hub-body">
-          {branches.length > 0 && (
+          {(branches.length > 0 || fichas.length > 0) && (
             <section aria-labelledby="hub-explorar">
               <div className="hub-head">
                 <h2 id="hub-explorar">Explore {section.label}</h2>
                 <p>Elija un tema. Cada ficha muestra lo que encontrará dentro.</p>
               </div>
-              <SectionTiles nodes={branches} slug={slug} custom={custom} />
+              <SectionTiles nodes={branches} slug={slug} custom={custom} extras={fichas} />
             </section>
           )}
 
@@ -140,7 +142,7 @@ export async function LegacySectionPage({ slug, ruta }: { slug: string; ruta: st
                   <LegacyContent blocks={page.blocks} libre={page.libre} />
                 </>
               )}
-              {page.blocks.length === 0 && branches.length === 0 && empty}
+              {page.blocks.length === 0 && branches.length === 0 && fichas.length === 0 && empty}
               {source}
             </article>
             <aside className="min-w-0">
@@ -193,10 +195,10 @@ export async function LegacySectionPage({ slug, ruta }: { slug: string; ruta: st
 
           {page.blocks.length > 0 ? <LegacyContent blocks={page.blocks} libre={page.libre} /> : empty}
 
-          {kids.length > 0 && (
+          {(kids.length > 0 || fichas.length > 0) && (
             <section className="art-kids" aria-labelledby="art-kids-h">
               <h2 id="art-kids-h">Dentro de {here?.label}</h2>
-              <SectionTiles nodes={kids} slug={slug} custom={custom} />
+              <SectionTiles nodes={kids} slug={slug} custom={custom} extras={fichas} />
             </section>
           )}
 

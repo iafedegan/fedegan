@@ -55,6 +55,7 @@ test("los datos válidos se publican, pasan por el servidor y vuelven iguales al
     con("tabla", { titulo: "Cuota", encabezado: true, filas: [["Producto", "Valor"], ["Leche", "0,5 %"]] }),
     con("personas", { items: [{ foto: "", nombre: "Ana Pérez", cargo: "Directora", correo: "ana@fedegan.org.co", telefono: "(601) 578 2020" }] }),
     con("contacto", { titulo: "Atención al ganadero", telefono: "+57 601 578 2020", correo: "pqrsd@fedegan.org.co", direccion: "Calle 37 N.º 14-31, Bogotá", horario: "Lunes a viernes" }),
+    con("ficha", { titulo: "Normatividad", texto: "Leyes y resoluciones", enlace: "/seccion/normatividad" }),
     elementoNuevo("espaciador"),
   ];
   for (const el of casos) {
@@ -79,6 +80,7 @@ test("el servidor rechaza enlaces, imágenes, correos y teléfonos que no son v�
     con("banner", { titulo: "Hola", imagen: "http://inseguro.example/a.jpg" }),
     con("galeria", { items: [{ imagen: "data:image/png;base64,AAAA", pie: "" }] }),
     con("audio", { titulo: "x", url: "javascript:void(0)" }),
+    con("ficha", { titulo: "Hola", texto: "", enlace: "javascript:alert(1)" }),
     con("enlaces", { items: [{ titulo: "x", texto: "", enlace: "vbscript:x" }] }),
     con("contacto", { titulo: "Oficina", correo: "no es un correo" }),
     con("personas", { items: [{ foto: "", nombre: "Ana", cargo: "", correo: "", telefono: "<script>" }] }),

@@ -502,6 +502,19 @@ export const ESQUEMAS = {
     principales: ["items"],
     vacioMensaje: "Añada al menos un enlace con su título.",
   },
+  ficha: {
+    nombre: "Ficha de tema",
+    ayuda: "Una ficha más en la cuadrícula de temas de la página",
+    grupo: "Contenido",
+    icono: "LayoutGrid",
+    campos: [
+      { k: "titulo", tipo: "texto", etiqueta: "Título", max: 120, obligatorio: true },
+      { k: "texto", tipo: "texto", etiqueta: "Descripción (opcional)", max: 160 },
+      { k: "enlace", tipo: "enlace", etiqueta: "Enlace", obligatorio: true, placeholder: "https://… o /ruta" },
+    ],
+    principales: ["titulo", "enlace"],
+    vacioMensaje: "Escriba el título de la ficha y a dónde lleva.",
+  },
   tabla: {
     nombre: "Tabla",
     ayuda: "Filas y columnas que se editan como una hoja de cálculo",

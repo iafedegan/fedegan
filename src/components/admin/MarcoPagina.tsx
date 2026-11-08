@@ -54,7 +54,7 @@ export async function marcoDePagina(slug: string, key: string): Promise<MarcoPag
             </div>
           </Zona>
           {ramas.length > 0 && (
-            <Zona titulo="Fichas de los temas" nota="una por cada página de primer nivel; se crean o se quitan desde el árbol del sitio">
+            <Zona titulo="Fichas de los temas" nota="una por cada página de primer nivel (se crean o se quitan desde el árbol del sitio); para sumar otra, use «Ficha de tema»">
               <div className="hub-head"><span className="font-[var(--font-display)] text-2xl font-bold">Explore {section.label}</span></div>
               <SectionTiles nodes={ramas} slug={slug} custom={custom} />
             </Zona>
@@ -90,7 +90,7 @@ export async function marcoDePagina(slug: string, key: string): Promise<MarcoPag
       hijas.length > 0 || prev || next ? (
         <div className="flex flex-col gap-3">
           {hijas.length > 0 && (
-            <Zona titulo="Páginas de este tema" nota="una ficha por cada página que cuelga de ésta">
+            <Zona titulo="Páginas de este tema" nota="una ficha por cada página que cuelga de ésta; para sumar otra, use «Ficha de tema»">
               <SectionTiles nodes={hijas} slug={slug} custom={custom} />
             </Zona>
           )}

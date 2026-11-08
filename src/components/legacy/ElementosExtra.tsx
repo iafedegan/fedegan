@@ -8,6 +8,7 @@ import { Galeria } from "./Galeria";
 import { ICONOS_CARACT } from "./iconos-caracteristicas";
 import { Inline } from "./Inline";
 import { Pestanas } from "./Pestanas";
+import { FichaExtra } from "./SectionParts";
 import { botonClase, botonForma, enlaceSeguro, esExterno, imagenSegura, Parrafos, Vinculo } from "./comun";
 
 // Los elementos descritos por esquema (src/lib/cms/elementos.ts), tal como se ven en el sitio. Reciben los datos ya limpios
@@ -375,6 +376,16 @@ function Caracteristicas({ d }: { d: Datos }) {
   );
 }
 
+// Una ficha de tema suelta (en el editor y en páginas sin cuadrícula de temas); en las secciones se suma a la cuadrícula.
+function FichaSuelta({ d }: { d: Datos }) {
+  if (!t(d.titulo)) return null;
+  return (
+    <ol className="hub-grid my-6 max-w-md">
+      <FichaExtra ficha={{ titulo: t(d.titulo), texto: t(d.texto), enlace: t(d.enlace) }} numero={1} />
+    </ol>
+  );
+}
+
 function Enlaces({ d }: { d: Datos }) {
   const items = lista(d.items).filter((e) => t(e.titulo) && enlaceSeguro(t(e.enlace)));
   if (!items.length) return null;
@@ -532,6 +543,7 @@ export function ElementoExtra({ tipo, datos }: { tipo: TipoEsquema; datos: Datos
     case "tabla": return <Tabla d={datos} />;
     case "personas": return <Personas d={datos} />;
     case "contacto": return <Contacto d={datos} />;
+    case "ficha": return <FichaSuelta d={datos} />;
     case "espaciador": return <Espacio d={datos} />;
   }
 }
