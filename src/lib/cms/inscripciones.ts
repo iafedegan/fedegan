@@ -45,3 +45,11 @@ export async function conteoInscritos(eventId: string) {
   const { count } = await db.from("event_registrations").select("id", { count: "exact", head: true }).eq("event_id", eventId);
   return count ?? 0;
 }
+
+/** ¿Existe la tabla de inscripciones y el servidor puede usarla? Si no, el formulario público no se muestra. */
+export async function inscripcionesDisponibles() {
+  const db = adminDb();
+  if (!db) return false;
+  const { error } = await db.from("event_registrations").select("id", { head: true, count: "exact" }).limit(1);
+  return !error;
+}
