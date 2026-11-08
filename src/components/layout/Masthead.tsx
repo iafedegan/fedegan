@@ -16,6 +16,7 @@ export function Masthead() {
           </Link>
           <span className="mh-line mh-line-r" aria-hidden="true" />
         </Container>
+        <p className="mh-date mh-date-desk">{date}</p>
       </div>
       <div className="mh-mob">
         <div className="mh-row">

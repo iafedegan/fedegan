@@ -454,3 +454,6 @@ html .hub-wrap > .hub-panel {
   max-height: 22rem; overflow-y: auto;
 }
 html .hub-wrap > .hub-panel[hidden] { display: none; }
+
+/* Fecha larga debajo del logo (escritorio) */
+.mh-desk .mh-date-desk { margin: 0; padding: 0 1rem 0.55rem; text-align: center; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: #10240f; }
