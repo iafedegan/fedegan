@@ -8,8 +8,11 @@ import { QuizForm } from "@/components/lms/QuizForm";
 import { completeLesson } from "@/lib/lms/actions";
 import { iaActiva } from "@/lib/lms/ia-activa";
 import { flatLessons, getCourse, getEnrollment, getLearner, getProgress, getQuiz, videoEmbed } from "@/lib/lms/queries";
+import { leerMateriales } from "@/lib/lms/studio";
 
 export const metadata: Metadata = { title: "Aula", robots: { index: false } };
+// Preparar los materiales del Studio (una sola vez por lección) puede tardar cerca de un minuto.
+export const maxDuration = 60;
 const ICON = { video: PlayCircle, lectura: FileText, quiz: HelpCircle } as const;
 
 export default async function LessonPage({ params, searchParams }: { params: Promise<{ slug: string; lessonId: string }>; searchParams: Promise<{ fin?: string }> }) {
@@ -34,6 +37,8 @@ export default async function LessonPage({ params, searchParams }: { params: Pro
   const video = lesson.videoUrl ? videoEmbed(lesson.videoUrl) : null;
   const questions = lesson.kind === "quiz" && enrollment ? await getQuiz(lesson.id) : [];
   const finished = Boolean(enrollment?.completedAt);
+  // Materiales del Studio ya preparados (se generan una vez y quedan guardados).
+  const materiales = me && (enrollment || lesson.freePreview) ? await leerMateriales(course.id, lesson.id) : { leccion: null, curso: null };
 
   return (
     <div className="mx-auto grid w-full max-w-[112rem] gap-0 xl:grid-cols-[minmax(0,1fr)_22rem]">
@@ -137,7 +142,7 @@ export default async function LessonPage({ params, searchParams }: { params: Pro
       {me && (enrollment || lesson.freePreview) && (
         <aside aria-label="Studio" className="order-2 border-t border-[var(--border)] xl:order-3 xl:border-l xl:border-t-0">
           <div className="xl:sticky xl:top-16 xl:max-h-[calc(100svh-4rem)] xl:overflow-y-auto">
-            <StudioPanel courseId={course.id} lessonId={lesson.id} slug={slug} enabled={iaLista} />
+            <StudioPanel courseId={course.id} lessonId={lesson.id} slug={slug} enabled={iaLista} lessonTitle={lesson.title} courseTitle={course.title} initial={materiales} />
           </div>
         </aside>
       )}

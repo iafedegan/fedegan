@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ChevronRight, Database, ExternalLink, FolderArchive, KeyRound, Newspaper, ShieldCheck, Sparkles } from "lucide-react";
+import { ChevronRight, Database, ExternalLink, FolderArchive, GraduationCap, KeyRound, Newspaper, ShieldCheck, Sparkles } from "lucide-react";
 import { auth, demoEnabled, entraConfigured } from "@/auth";
 import { ROLES, hasAnyRole } from "@/lib/access";
 import { ApiKeyForm, ApiTestButton } from "@/components/admin/ApiForms";
@@ -11,12 +11,14 @@ import { secretsAvailable } from "@/lib/cms/secrets";
 import { contextoCredentials } from "@/lib/contexto";
 import { removeApiKey } from "@/lib/cms/api-actions";
 import { CopiaDocumentos } from "@/components/admin/CopiaDocumentos";
+import { StudioAdmin } from "@/components/admin/StudioAdmin";
+import { colaStudio } from "@/lib/lms/studio";
 import { estadoCopia } from "@/lib/cms/documentos-copia";
 import { credencialIA, PROVEEDORES, type Proveedor } from "@/lib/ia";
 
 export const metadata: Metadata = { title: "Conexiones · Panel del portal", robots: { index: false } };
 
-// La copia de documentos trabaja por lotes de ~40 s.
+// La copia de documentos y la generación de materiales del Studio trabajan por lotes de ~45 s.
 export const maxDuration = 60;
 
 const dot = (ok: boolean) => <i className={`inline-block h-2 w-2 rounded-full ${ok ? "bg-[#1f8a5b]" : "bg-[#d64545]"}`} />;
@@ -24,7 +26,7 @@ const dot = (ok: boolean) => <i className={`inline-block h-2 w-2 rounded-full ${
 export default async function ApisPage() {
   const session = await auth();
   const isAdmin = hasAnyRole(session?.user?.roles, [ROLES.portalAdmin]);
-  const [creds, meta, copia] = await Promise.all([contextoCredentials(), getStoredMeta("contexto"), estadoCopia()]);
+  const [creds, meta, copia, studio] = await Promise.all([contextoCredentials(), getStoredMeta("contexto"), estadoCopia(), colaStudio()]);
   const ias = await Promise.all(
     (["claude", "gemini"] as Proveedor[]).map(async (id) => {
       const [c, m] = await Promise.all([credencialIA(id), getStoredMeta(id)]);
@@ -148,6 +150,18 @@ export default async function ApisPage() {
           </div>
         </div>
         <CopiaDocumentos inicial={copia} puede={isAdmin} />
+      </section>
+
+      {/* Materiales del Studio */}
+      <section id="studio" className="ad-card scroll-mt-6 flex flex-col gap-5 p-6 sm:p-8">
+        <div className="flex items-start gap-4">
+          <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#f3e3ec] text-[#89114C]"><GraduationCap size={22} /></span>
+          <div>
+            <h2 className="text-xl font-bold">Materiales del Studio · Escuela Virtual</h2>
+            <p className="mt-0.5 max-w-2xl text-sm text-[#5d6e65]">Resumen, guía, mapa mental interactivo, tarjetas, cuestionario, preguntas frecuentes, línea de tiempo, glosario e informe de cada lección y de cada curso. Se generan una vez con IA a partir del video y quedan guardados en Supabase.</p>
+          </div>
+        </div>
+        <StudioAdmin inicial={studio.estado} puede={isAdmin} />
       </section>
 
       <div className="grid gap-6 lg:grid-cols-2">
