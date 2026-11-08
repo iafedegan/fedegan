@@ -32,7 +32,8 @@ export function HubExpand({ head, text, count, href, items }: { head: ReactNode;
   const [open, setOpen] = useState(false);
   const id = useId();
   return (
-    <div className={`hub-cell hub-exp ${open ? "is-open" : ""}`}>
+    <div className="hub-wrap">
+      <div className={`hub-cell hub-exp ${open ? "is-open" : ""}`}>
       <button type="button" className="hub-toggle" aria-expanded={open} aria-controls={id} onClick={() => setOpen((v) => !v)}>
         {head}
         {text && <span className="hub-text">{text}</span>}
@@ -41,6 +42,7 @@ export function HubExpand({ head, text, count, href, items }: { head: ReactNode;
           <ChevronDown size={16} aria-hidden className="hub-chev" />
         </span>
       </button>
+      </div>
       <div id={id} className="hub-panel" hidden={!open}>
         {href && (
           <Link href={href} className="hub-open">

@@ -440,3 +440,17 @@ html .mh-main-in { justify-content: center; gap: clamp(1rem, 3vw, 2.5rem); }
 .mh-line-r { background: linear-gradient(270deg, transparent, rgba(255, 255, 255, 0.75)); }
 .mh-emblem { height: 6.5rem; }
 .mh-brand.mh-title .mh-emblem { height: 4.6rem; }
+
+/* Fichas del hub: todas del mismo alto; la lista se despliega encima, sin empujar la página */
+html .hub-grid { align-items: stretch; }
+html .hub-grid > li { height: 100%; }
+html .hub-wrap { position: relative; height: 100%; }
+html .hub-wrap > .hub-cell { height: 100%; }
+html .hub-toggle { flex: 1; height: 100%; }
+html .hub-toggle .hub-foot { margin-top: auto; }
+html .hub-wrap > .hub-panel {
+  position: absolute; z-index: 30; top: calc(100% - 1px); left: 0; right: 0; margin: 0; padding: 0.9rem 1.2rem 1rem;
+  background: #fff; border: 1px solid #72bf44; border-radius: 0 0 0.6rem 0.6rem; box-shadow: 0 18px 30px -16px rgba(16, 36, 15, 0.45);
+  max-height: 22rem; overflow-y: auto;
+}
+html .hub-wrap > .hub-panel[hidden] { display: none; }
