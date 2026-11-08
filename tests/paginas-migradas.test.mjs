@@ -52,3 +52,15 @@ test("el texto con negrita y enlaces se muestra formateado en el campo, sin sím
     }
   }
 });
+
+import { piezasDeParrafo } from "../src/lib/cms/documentos-tarjetas.ts";
+test("un índice de revista (títulos en negrita + enlaces a PDF) se vuelve títulos y tarjetas", () => {
+  const t = "**EDITORIAL**\n\n[Uno](https://x.org/a.pdf)\n**[Dos](https://x.org/b.pdf)\n**INTERNACIONAL**\n**Salud**\n[Tres\n\nDetalle](https://x.org/c.pdf)";
+  const p = piezasDeParrafo(t);
+  assert.equal(p.map((x) => x.t).join(","), "titulo,docs,titulo,titulo,docs");
+  assert.equal(p[1].tarjetas.length, 2);
+  assert.equal(p[3].nivel, 2);
+  assert.equal(p[4].tarjetas[0].detalle, "Detalle");
+  assert.equal(piezasDeParrafo("[a](https://x.org/a.pdf)"), null);
+  assert.equal(piezasDeParrafo("[a](https://x.org/a.pdf) [b](https://x.org/pagina)"), null);
+});

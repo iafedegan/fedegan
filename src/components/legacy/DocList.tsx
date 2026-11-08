@@ -15,7 +15,7 @@ export function DocList({ tarjetas }: { tarjetas: TarjetaDoc[] }) {
   return (
     <ul className="doc-grid" role="list">
       {tarjetas.map((t, k) => (
-        <DocCard key={k} titulo={t.titulo} docs={t.docs.map((d) => ({ url: d.url, etiqueta: d.etiqueta, clave: d.tipo.clave, sigla: d.tipo.sigla, nombre: d.tipo.nombre }))} />
+        <DocCard key={k} titulo={t.titulo} detalle={t.detalle} docs={t.docs.map((d) => ({ url: d.url, etiqueta: d.etiqueta, clave: d.tipo.clave, sigla: d.tipo.sigla, nombre: d.tipo.nombre }))} />
       ))}
     </ul>
   );

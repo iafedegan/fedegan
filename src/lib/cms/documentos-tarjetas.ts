@@ -25,8 +25,8 @@ const ENLACE = /^\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)\s*$/;
 // «Nombre (Excel)», «Nombre — Etiqueta (PDF)»: el tipo entre paréntesis al final no es parte del nombre.
 const SUFIJO = /\s*\((?:Excel|PDF|Word|PowerPoint|CSV|ZIP|RAR|audio|Audio)\)\s*$/i;
 
-export type Doc = { nombre: string; etiqueta: string; url: string; tipo: TipoDoc };
-export type TarjetaDoc = { titulo: string; docs: Doc[] };
+export type Doc = { nombre: string; etiqueta: string; url: string; tipo: TipoDoc; detalle?: string };
+export type TarjetaDoc = { titulo: string; docs: Doc[]; detalle?: string };
 
 /** El tipo de documento de una dirección (según su extensión), o null si no es un documento conocido. */
 export function tipoDeUrl(url: string): TipoDoc | null {
@@ -59,7 +59,7 @@ function agrupar(docs: Doc[]): TarjetaDoc[] {
   for (const d of docs) {
     const prev = out[out.length - 1];
     if (prev && prev.titulo === d.nombre && !prev.docs.some((x) => x.url === d.url)) prev.docs.push(d);
-    else out.push({ titulo: d.nombre, docs: [d] });
+    else out.push({ titulo: d.nombre, docs: [d], detalle: d.detalle });
   }
   return out;
 }
@@ -87,4 +87,46 @@ export function tarjetasDeEnlaces(items: { nombre: string; url: string }[]): Tar
     docs.push(d);
   }
   return agrupar(docs);
+}
+
+export type PiezaDocs = { t: "titulo"; texto: string; nivel: 1 | 2 } | { t: "docs"; tarjetas: TarjetaDoc[] };
+
+const ENLACES = /\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g;
+
+/**
+ * Un párrafo de páginas migradas que mezcla títulos en negrita con enlaces a documentos (el índice de una revista, por ejemplo):
+ * lo devuelve como títulos y grupos de tarjetas. null si no hay al menos `minimo` documentos o si algún enlace no es un documento.
+ * El texto de un enlace con varias líneas es el nombre (primera línea) y su detalle (las demás).
+ */
+export function piezasDeParrafo(texto: string, minimo = 2): PiezaDocs[] | null {
+  const piezas: PiezaDocs[] = [];
+  let docs: Doc[] = [];
+  let total = 0;
+  const cerrar = () => {
+    if (docs.length) piezas.push({ t: "docs", tarjetas: agrupar(docs) });
+    docs = [];
+  };
+  const titulos = (trozo: string) => {
+    for (const l of trozo.replace(/\*+/g, "").split("\n")) {
+      const t = l.trim();
+      if (!t) continue;
+      cerrar();
+      const mayus = t === t.toUpperCase() && /[A-ZÁÉÍÓÚÑ]/.test(t);
+      piezas.push({ t: "titulo", texto: t, nivel: mayus ? 1 : 2 });
+    }
+  };
+  let desde = 0;
+  for (const m of texto.matchAll(ENLACES)) {
+    titulos(texto.slice(desde, m.index));
+    desde = m.index + m[0].length;
+    const [primera, ...resto] = m[1].split("\n").map((x) => x.trim()).filter(Boolean);
+    const d = primera ? docDe(primera, m[2]) : null;
+    if (!d) return null;
+    if (resto.length) d.detalle = resto.join(" · ");
+    docs.push(d);
+    total++;
+  }
+  titulos(texto.slice(desde));
+  cerrar();
+  return total >= minimo ? piezas : null;
 }

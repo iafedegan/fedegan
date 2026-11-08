@@ -6,6 +6,7 @@ import { BLOQUES_RICOS, BloqueRico } from "./BloquesRicos";
 import { UploadDocs } from "./UploadDocs";
 import { EntryExplorer, type ExplorerEntry } from "./EntryExplorer";
 import { DocList, tarjetasDeDocumentos } from "./DocList";
+import { piezasDeParrafo } from "@/lib/cms/documentos-tarjetas";
 
 // Celdas con varias líneas: los enlaces sueltos van como lista y el resto como párrafos.
 function CellLines({ text }: { text: string }) {
@@ -272,6 +273,25 @@ export function LegacyContent({ blocks, lead: allowLead = true, preview = false,
         </p>,
       );
       i++;
+      continue;
+    }
+
+    // Párrafo con títulos y enlaces a documentos (índice de una revista…): títulos de grupo y tarjetas con vista previa.
+    const piezas = b.t === "p" ? piezasDeParrafo(b.text ?? "") : null;
+    if (piezas) {
+      nodes.push(
+        <div key={key} className="doc-indice">
+          {piezas.map((pz, n) =>
+            pz.t === "docs" ? (
+              <DocList key={n} tarjetas={pz.tarjetas} />
+            ) : pz.nivel === 1 ? (
+              <h3 key={n} className="doc-grupo">{pz.texto}</h3>
+            ) : (
+              <h4 key={n} className="doc-subgrupo">{pz.texto}</h4>
+            ),
+          )}
+        </div>,
+      );
       continue;
     }
 

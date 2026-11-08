@@ -28,7 +28,7 @@ function vistaDe(d: DocVista): Vista {
 const nombreBtn = (d: DocVista) => (d.etiqueta ? `${d.etiqueta} · ${d.nombre}` : d.nombre);
 
 // Tarjeta de documento: el nombre y «Vista previa» abren una ventana con el archivo (sin salir de la página) y los botones descargan.
-export function DocCard({ titulo, docs }: { titulo: string; docs: DocVista[] }) {
+export function DocCard({ titulo, docs, detalle }: { titulo: string; docs: DocVista[]; detalle?: string }) {
   const dialogo = useRef<HTMLDialogElement>(null);
   const [abierto, setAbierto] = useState(false);
   const [activo, setActivo] = useState(0);
@@ -58,6 +58,7 @@ export function DocCard({ titulo, docs }: { titulo: string; docs: DocVista[] }) 
       </button>
       <div className="doc-body">
         <button type="button" className="doc-title" onClick={() => abrir(0)}>{titulo}</button>
+        {detalle && <p className="doc-det">{detalle}</p>}
         <div className="doc-acts">
           <button type="button" className="doc-btn doc-view" onClick={() => abrir(0)}>
             <Eye size={14} aria-hidden /> Vista previa
