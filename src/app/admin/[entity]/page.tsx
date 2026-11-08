@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ListTree, AlertCircle, ArrowDown, ArrowUp, CheckCircle2, ChevronRight, Eye, EyeOff, ImageOff, Pencil, Plus } from "lucide-react";
 import { ConfigNotice } from "@/components/admin/ConfigNotice";
+import { RowMenu } from "@/components/admin/RowMenu";
 import { DeleteButton } from "@/components/admin/DeleteButton";
 import { readDb } from "@/lib/cms/client";
 import { getEntity } from "@/lib/cms/entities";
@@ -75,10 +76,10 @@ export default async function EntityListPage({
       )}
       {!writable && <ConfigNotice compact />}
 
-      <div className="ad-card overflow-hidden">
+      <div className="ad-card">
         <div className="flex items-center justify-between border-b border-[#eceae0] px-5 py-3.5 sm:px-6">
           <p className="text-sm font-semibold">{rows.length} {rows.length === 1 ? "elemento" : "elementos"}</p>
-          <p className="text-xs text-[#8a978f]">{entity.ordered ? "Use las flechas para cambiar el orden en el sitio" : "Ordenados por fecha"}</p>
+          <p className="text-xs text-[#8a978f]">{entity.ordered ? "El orden y la visibilidad están en el menú ⋯ de cada fila" : "Ordenados por fecha"}</p>
         </div>
 
         {rows.length === 0 ? (
@@ -104,46 +105,49 @@ export default async function EntityListPage({
                     </span>
                   )}
                   <div className="min-w-0 flex-1 basis-56">
-                    <p className="truncate font-semibold">{title}</p>
+                    <Link href={`/admin/${entity.key}/${id}`} className="block truncate font-semibold hover:text-[#165a43]">{title}</Link>
                     <p className="mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-[#5d6e65]">
                       {subtitle(r) && <span className="truncate">{subtitle(r)}</span>}
                       {updated && <span className="text-xs text-[#8a978f]">Editado {updated}</span>}
                     </p>
                   </div>
                   <span className={`ad-pill ${published ? "ad-pill-ok" : "ad-pill-off"}`}>{published ? "Publicado" : "Oculto"}</span>
-                  <div className="flex items-center gap-1.5">
-                    {entity.ordered && (
-                      <>
-                        <form action={moveRecord}>
-                          <input type="hidden" name="_entity" value={entity.key} />
-                          <input type="hidden" name="_id" value={id} />
-                          <input type="hidden" name="_dir" value="up" />
-                          <button type="submit" aria-label="Subir" title="Subir" disabled={!writable || i === 0} className="ad-icon-btn"><ArrowUp size={16} /></button>
-                        </form>
-                        <form action={moveRecord}>
-                          <input type="hidden" name="_entity" value={entity.key} />
-                          <input type="hidden" name="_id" value={id} />
-                          <input type="hidden" name="_dir" value="down" />
-                          <button type="submit" aria-label="Bajar" title="Bajar" disabled={!writable || i === rows.length - 1} className="ad-icon-btn"><ArrowDown size={16} /></button>
-                        </form>
-                      </>
-                    )}
-                    <form action={togglePublished}>
-                      <input type="hidden" name="_entity" value={entity.key} />
-                      <input type="hidden" name="_id" value={id} />
-                      <button type="submit" disabled={!writable} aria-label={published ? "Ocultar del sitio" : "Publicar"} title={published ? "Ocultar del sitio" : "Publicar"} className="ad-icon-btn">
-                        {published ? <Eye size={16} /> : <EyeOff size={16} />}
-                      </button>
-                    </form>
+                  <div className="flex items-center gap-2">
                     {entity.key === "cursos" && (
-                      <Link href={`/admin/cursos/${id}/curriculo`} aria-label="Currículo" title="Currículo (módulos y lecciones)" className="ad-icon-btn"><ListTree size={16} /></Link>
+                      <Link href={`/admin/cursos/${id}/curriculo`} className="ad-btn ad-btn-ghost !px-3.5 !py-2 text-sm"><ListTree size={15} /> Currículo</Link>
                     )}
-                    <Link href={`/admin/${entity.key}/${id}`} aria-label="Editar" title="Editar" className="ad-icon-btn"><Pencil size={16} /></Link>
-                    <form action={deleteRecord}>
-                      <input type="hidden" name="_entity" value={entity.key} />
-                      <input type="hidden" name="_id" value={id} />
-                      <DeleteButton label={title} disabled={!writable} />
-                    </form>
+                    <Link href={`/admin/${entity.key}/${id}`} className="ad-btn ad-btn-ghost !px-3.5 !py-2 text-sm"><Pencil size={15} /> Editar</Link>
+                    <RowMenu label={title}>
+                      {entity.ordered && (
+                        <>
+                          <form action={moveRecord}>
+                            <input type="hidden" name="_entity" value={entity.key} />
+                            <input type="hidden" name="_id" value={id} />
+                            <input type="hidden" name="_dir" value="up" />
+                            <button type="submit" disabled={!writable || i === 0} className="at-item"><ArrowUp size={15} aria-hidden /> Subir en el sitio</button>
+                          </form>
+                          <form action={moveRecord}>
+                            <input type="hidden" name="_entity" value={entity.key} />
+                            <input type="hidden" name="_id" value={id} />
+                            <input type="hidden" name="_dir" value="down" />
+                            <button type="submit" disabled={!writable || i === rows.length - 1} className="at-item"><ArrowDown size={15} aria-hidden /> Bajar en el sitio</button>
+                          </form>
+                        </>
+                      )}
+                      <form action={togglePublished}>
+                        <input type="hidden" name="_entity" value={entity.key} />
+                        <input type="hidden" name="_id" value={id} />
+                        <button type="submit" disabled={!writable} className="at-item">
+                          {published ? <EyeOff size={15} aria-hidden /> : <Eye size={15} aria-hidden />} {published ? "Ocultar del sitio" : "Publicar en el sitio"}
+                        </button>
+                      </form>
+                      <div className="at-sep" role="separator" />
+                      <form action={deleteRecord}>
+                        <input type="hidden" name="_entity" value={entity.key} />
+                        <input type="hidden" name="_id" value={id} />
+                        <DeleteButton label={title} disabled={!writable} menu />
+                      </form>
+                    </RowMenu>
                   </div>
                 </li>
               );
