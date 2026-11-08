@@ -6,12 +6,14 @@ import { CourseAssistant } from "@/components/lms/CourseAssistant";
 import { StudioPanel } from "@/components/lms/StudioPanel";
 import { QuizForm } from "@/components/lms/QuizForm";
 import { completeLesson } from "@/lib/lms/actions";
+import { iaActiva } from "@/lib/lms/ia-activa";
 import { flatLessons, getCourse, getEnrollment, getLearner, getProgress, getQuiz, videoEmbed } from "@/lib/lms/queries";
 
 export const metadata: Metadata = { title: "Aula", robots: { index: false } };
 const ICON = { video: PlayCircle, lectura: FileText, quiz: HelpCircle } as const;
 
 export default async function LessonPage({ params, searchParams }: { params: Promise<{ slug: string; lessonId: string }>; searchParams: Promise<{ fin?: string }> }) {
+  const iaLista = await iaActiva();
   const { slug, lessonId } = await params;
   const { fin } = await searchParams;
   const course = await getCourse(slug);
@@ -72,7 +74,7 @@ export default async function LessonPage({ params, searchParams }: { params: Pro
           {lesson.kind === "quiz" && enrollment && (questions.length ? <QuizForm courseId={course.id} lessonId={lesson.id} slug={slug} questions={questions} passScore={lesson.passScore} done={done} /> : <p className="text-[var(--text-muted)]">Esta evaluación aún no tiene preguntas.</p>)}
 
           {me && (enrollment || lesson.freePreview) && (
-            <CourseAssistant courseId={course.id} lessonId={lesson.id} slug={slug} lessonTitle={lesson.title} sources={lessons.map((l, i) => ({ n: i + 1, title: l.title, current: l.id === lesson.id }))} enabled={Boolean(process.env.GEMINI_API_KEY)} />
+            <CourseAssistant courseId={course.id} lessonId={lesson.id} slug={slug} lessonTitle={lesson.title} sources={lessons.map((l, i) => ({ n: i + 1, title: l.title, current: l.id === lesson.id }))} enabled={iaLista} />
           )}
 
           <div className="flex flex-wrap items-center gap-3 border-t border-[var(--border)] pt-6">
@@ -123,7 +125,7 @@ export default async function LessonPage({ params, searchParams }: { params: Pro
       {me && (enrollment || lesson.freePreview) && (
         <aside aria-label="Studio" className="order-2 border-t border-[var(--border)] lg:col-span-2 xl:order-3 xl:col-span-1 xl:border-l xl:border-t-0">
           <div className="xl:sticky xl:top-16 xl:max-h-[calc(100svh-4rem)] xl:overflow-y-auto">
-            <StudioPanel courseId={course.id} lessonId={lesson.id} slug={slug} enabled={Boolean(process.env.GEMINI_API_KEY)} />
+            <StudioPanel courseId={course.id} lessonId={lesson.id} slug={slug} enabled={iaLista} />
           </div>
         </aside>
       )}

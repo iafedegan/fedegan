@@ -1,12 +1,23 @@
 "use server";
 
+import Anthropic from "@anthropic-ai/sdk";
 import { adminDb } from "@/lib/cms/client";
+import { credencialIA, PROVEEDORES } from "@/lib/ia";
 import { flatLessons, getCourse, getEnrollment, getLearner } from "@/lib/lms/queries";
 
 export type ChatTurn = { role: "user" | "model"; text: string };
 export type AssistantReply = { answer?: string; error?: string };
 
-const MODEL = process.env.GEMINI_ASSISTANT_MODEL ?? "gemini-3.5-flash";
+// El asistente y el Studio usan la clave que se guarda en Conexiones (o la variable de entorno): Claude si la tiene y, si no, Gemini.
+const MODELO_CLAUDE = process.env.CLAUDE_ASSISTANT_MODEL ?? "claude-sonnet-5-5";
+type Prov = { p: "claude" | "gemini"; key: string };
+async function proveedorActivo(): Promise<Prov | null> {
+  for (const p of ["claude", "gemini"] as const) {
+    const { key } = await credencialIA(p);
+    if (key) return { p, key };
+  }
+  return null;
+}
 const PER_HOUR = 20;
 const PER_DAY = 80;
 
@@ -23,12 +34,12 @@ function isYouTube(url: string | null) {
   return !!url && /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\//i.test(url);
 }
 
-type Prepared = { error: string } | { key: string; me: { key: string }; course: NonNullable<Awaited<ReturnType<typeof getCourse>>>; lesson: ReturnType<typeof flatLessons>[number]; idx: number; context: string; db: ReturnType<typeof adminDb> };
+type Prepared = { error: string } | { prov: Prov; me: { key: string }; course: NonNullable<Awaited<ReturnType<typeof getCourse>>>; lesson: ReturnType<typeof flatLessons>[number]; idx: number; context: string; db: ReturnType<typeof adminDb> };
 
 /** Valida sesión, inscripción y límites de uso, y arma el contexto del curso. */
 async function prepare(input: { courseId: string; lessonId: string; slug: string }, scope: "leccion" | "curso" = "curso"): Promise<Prepared> {
-  const key = process.env.GEMINI_API_KEY;
-  if (!key) return { error: "El asistente aún no está activado en este sitio." };
+  const prov = await proveedorActivo();
+  if (!prov) return { error: "El asistente aún no está activado en este sitio: falta cargar una clave de Claude o de Gemini en Conexiones." };
   const me = await getLearner();
   if (!me) return { error: "Ingrese para usar el asistente." };
   const course = await getCourse(input.slug);
@@ -53,15 +64,31 @@ async function prepare(input: { courseId: string; lessonId: string; slug: string
   const used = scope === "leccion" ? [{ l: lesson, i: idx }] : lessons.map((l, i) => ({ l, i }));
   const sources = used.map(({ l, i }) => `Lección ${i + 1}: ${l.title}${i === idx ? " (LECCIÓN ACTUAL)" : ""}${l.content ? `\n${l.content}` : ""}`).join("\n\n");
   const context = `CURSO: ${course.title}\n${course.description}\n\nFUENTES (lecciones del curso):\n${sources}\n\nEl estudiante está en la Lección ${idx + 1}: ${lesson.title}.`;
-  return { key, me, course, lesson, idx, context, db };
+  return { prov, me, course, lesson, idx, context, db };
 }
 
-async function gemini(key: string, parts: Record<string, unknown>[], extra: { history?: unknown[]; json?: boolean; tokens?: number } = {}) {
-  const contents = [...(extra.history ?? []), { role: "user", parts }];
-  const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`, {
+type Turno = { role: "user" | "model"; text: string };
+type Pedido = { text: string; history?: Turno[]; video?: string | null; json?: boolean; tokens?: number };
+
+/** Respuesta del modelo (null si el proveedor no pudo responder). El video de la lección solo lo lee Gemini; Claude trabaja con los textos. */
+async function generar(prov: Prov, q: Pedido): Promise<string | null> {
+  if (prov.p === "claude") {
+    const client = new Anthropic({ apiKey: prov.key, timeout: 90_000, maxRetries: 1 });
+    const turnos = (q.history ?? []).map((t) => ({ role: t.role === "model" ? ("assistant" as const) : ("user" as const), content: t.text }));
+    while (turnos.length && turnos[0].role === "assistant") turnos.shift();
+    const res = await client.messages.create({ model: MODELO_CLAUDE, max_tokens: q.tokens ?? 1500, system: SYSTEM, messages: [...turnos, { role: "user", content: q.text }] });
+    const texto = res.content.map((b) => (b.type === "text" ? b.text : "")).join("").trim();
+    // A veces envuelve el JSON en un bloque de código aunque se le pida que no.
+    return (q.json ? texto.replace(/^```[a-z]*\n([\s\S]*?)\n```$/i, "$1").trim() : texto) || null;
+  }
+  const parts: Record<string, unknown>[] = [];
+  if (q.video) parts.push({ fileData: { fileUri: q.video, mimeType: "video/*" } });
+  parts.push({ text: q.text });
+  const history = (q.history ?? []).map((t) => ({ role: t.role, parts: [{ text: t.text }] }));
+  const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${PROVEEDORES.gemini.modelo}:generateContent`, {
     method: "POST",
-    headers: { "Content-Type": "application/json", "x-goog-api-key": key },
-    body: JSON.stringify({ systemInstruction: { parts: [{ text: SYSTEM }] }, contents, generationConfig: { temperature: 0.3, maxOutputTokens: extra.tokens ?? 1500, ...(extra.json ? { responseMimeType: "application/json" } : {}) } }),
+    headers: { "Content-Type": "application/json", "x-goog-api-key": prov.key },
+    body: JSON.stringify({ systemInstruction: { parts: [{ text: SYSTEM }] }, contents: [...history, { role: "user", parts }], generationConfig: { temperature: 0.3, maxOutputTokens: q.tokens ?? 1500, ...(q.json ? { responseMimeType: "application/json" } : {}) } }),
     signal: AbortSignal.timeout(90_000),
   });
   const data = await res.json();
@@ -75,15 +102,13 @@ export async function askAssistant(input: { courseId: string; lessonId: string; 
   if (!question) return { error: "Escriba su pregunta." };
   const p = await prepare(input);
   if ("error" in p) return p;
-  const { key, me, course, lesson, context, db } = p;
+  const { prov, me, course, lesson, context, db } = p;
 
-  const history = input.history.slice(-8).map((t) => ({ role: t.role, parts: [{ text: t.text.slice(0, 3000) }] }));
-  const userParts: Record<string, unknown>[] = [];
-  if (lesson.kind === "video" && isYouTube(lesson.videoUrl)) userParts.push({ fileData: { fileUri: lesson.videoUrl, mimeType: "video/*" } });
-  userParts.push({ text: `${context}\n\nPREGUNTA DEL ESTUDIANTE: ${question}` });
+  const history = input.history.slice(-8).map((t) => ({ role: t.role, text: t.text.slice(0, 3000) }));
+  const video = lesson.kind === "video" && isYouTube(lesson.videoUrl) ? lesson.videoUrl : null;
 
   try {
-    const answer = await gemini(key, userParts, { history });
+    const answer = await generar(prov, { text: `${context}\n\nPREGUNTA DEL ESTUDIANTE: ${question}`, history, video });
     if (!answer) return { error: "El asistente no pudo responder ahora. Intente de nuevo." };
     await db?.from("lms_ai_log").insert({ user_key: me.key, course_id: course.id, lesson_id: lesson.id });
     return { answer };
@@ -113,12 +138,10 @@ export async function generateStudio(input: { courseId: string; lessonId: string
   if (!(kind in STUDIO_PROMPT)) return { kind, error: "Material no disponible." };
   const p = await prepare(input, input.scope);
   if ("error" in p) return { kind, error: p.error };
-  const { key, me, course, lesson, context, db } = p;
-  const parts: Record<string, unknown>[] = [];
-  if (input.scope === "leccion" && lesson.kind === "video" && isYouTube(lesson.videoUrl)) parts.push({ fileData: { fileUri: lesson.videoUrl, mimeType: "video/*" } });
-  parts.push({ text: `${context}\n\nTAREA (${input.scope === "leccion" ? "solo la lección actual" : "todo el curso"}): ${STUDIO_PROMPT[kind]}` });
+  const { prov, me, course, lesson, context, db } = p;
+  const video = input.scope === "leccion" && lesson.kind === "video" && isYouTube(lesson.videoUrl) ? lesson.videoUrl : null;
   try {
-    const text = await gemini(key, parts, { json: kind === "tarjetas" || kind === "cuestionario", tokens: 3000 });
+    const text = await generar(prov, { text: `${context}\n\nTAREA (${input.scope === "leccion" ? "solo la lección actual" : "todo el curso"}): ${STUDIO_PROMPT[kind]}`, video, json: kind === "tarjetas" || kind === "cuestionario", tokens: 3000 });
     if (!text) return { kind, error: "No se pudo generar el material. Intente de nuevo." };
     await db?.from("lms_ai_log").insert({ user_key: me.key, course_id: course.id, lesson_id: lesson.id });
     return { kind, text };
