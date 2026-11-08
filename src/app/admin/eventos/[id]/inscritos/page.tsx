@@ -19,7 +19,7 @@ export default async function InscritosPage({ params, searchParams }: { params: 
   if (!ev) notFound();
   const todos = await inscritosDe(id);
   const term = q.trim().toLowerCase();
-  const lista = term ? todos.filter((i) => `${i.name} ${i.email} ${i.code} ${i.document ?? ""} ${i.organization ?? ""}`.toLowerCase().includes(term)) : todos;
+  const lista = term ? todos.filter((i) => `${i.name} ${i.email} ${i.code} ${i.document ?? ""} ${i.organization ?? ""} ${(i.answers ?? []).map((a) => (Array.isArray(a.v) ? a.v.join(" ") : a.v)).join(" ")}`.toLowerCase().includes(term)) : todos;
   const asistieron = todos.filter((i) => i.checked_in_at).length;
 
   return (
@@ -72,6 +72,22 @@ export default async function InscritosPage({ params, searchParams }: { params: 
                 <div className="min-w-0 flex-1 basis-56">
                   <p className="truncate font-semibold">{i.name}</p>
                   <p className="truncate text-sm text-[#5d6e65]">{i.email}{i.organization ? ` · ${i.organization}` : ""}</p>
+                  {(i.answers ?? []).filter((a) => a.e && (Array.isArray(a.v) ? a.v.length : a.v)).length > 0 && (
+                    <details className="mt-1.5 text-sm">
+                      <summary className="cursor-pointer font-semibold text-[#165a43]">Ver respuestas{i.webhook && i.webhook !== "ok" ? " · la API no recibió esta inscripción" : ""}</summary>
+                      <dl className="mt-2 grid gap-x-4 gap-y-1 sm:grid-cols-[max-content_1fr]">
+                        {(i.answers ?? []).filter((a) => a.e && (Array.isArray(a.v) ? a.v.length : a.v)).map((a, k) => {
+                          const v = Array.isArray(a.v) ? a.v.join(", ") : a.v;
+                          return (
+                            <div key={k} className="contents">
+                              <dt className="text-[#5d6e65]">{a.e}</dt>
+                              <dd className="[overflow-wrap:anywhere]">{/^https:\/\//.test(v) ? <a href={v} target="_blank" rel="noopener noreferrer" className="font-semibold text-[#165a43] hover:underline">Abrir archivo</a> : v}</dd>
+                            </div>
+                          );
+                        })}
+                      </dl>
+                    </details>
+                  )}
                 </div>
                 <code className="rounded-md bg-[#f1f0e8] px-2 py-1 text-xs font-bold">{i.code}</code>
                 {i.checked_in_at ? <span className="ad-pill ad-pill-ok"><UserCheck size={12} /> Asistió</span> : <span className="ad-pill ad-pill-off">Pendiente</span>}

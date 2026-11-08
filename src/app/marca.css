@@ -819,3 +819,4 @@ textarea.fm-in { resize: vertical; min-height: 6rem; }
 .fm-trampa { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
 .fm-ok { display: flex; flex-direction: column; align-items: center; gap: 0.7rem; padding: 2.4rem 1.6rem; text-align: center; color: #2c6a14; background: linear-gradient(180deg, #f1f9ea, #e3f2d6); }
 .fm-ok-t { margin: 0; font: 700 1.15rem/1.4 var(--font-display); color: #10240f; }
+.fm-opc { font-weight: 400; color: #667a6c; }

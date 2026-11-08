@@ -1,6 +1,7 @@
 import "server-only";
 import { randomInt } from "node:crypto";
 import { adminDb } from "./client";
+import { leerForm, type FormEvento, type Respuesta } from "./inscripcion-form";
 
 export type Inscripcion = {
   id: string;
@@ -13,6 +14,8 @@ export type Inscripcion = {
   organization: string | null;
   checked_in_at: string | null;
   created_at: string;
+  answers?: Respuesta[] | null;
+  webhook?: string | null;
 };
 
 // Sin 0/O/1/I para que el código se lea y se dicte sin confusiones.
@@ -52,4 +55,19 @@ export async function inscripcionesDisponibles() {
   if (!db) return false;
   const { error } = await db.from("event_registrations").select("id", { head: true, count: "exact" }).limit(1);
   return !error;
+}
+
+/** El formulario de inscripción de un evento (por su identificador): el que armó el editor o el de siempre si no hay uno. */
+export async function formularioDe(slug: string): Promise<FormEvento & { personalizado: boolean }> {
+  const db = adminDb();
+  const { data } = db ? await db.from("events").select("reg_form").eq("slug", slug).maybeSingle() : { data: null };
+  const raw = (data as { reg_form?: unknown } | null)?.reg_form ?? null;
+  return { ...leerForm(raw), personalizado: raw !== null };
+}
+
+/** Igual que formularioDe, pero por el id del evento (el editor). */
+export async function formularioPorId(id: string): Promise<FormEvento> {
+  const db = adminDb();
+  const { data } = db ? await db.from("events").select("reg_form").eq("id", id).maybeSingle() : { data: null };
+  return leerForm((data as { reg_form?: unknown } | null)?.reg_form ?? null);
 }

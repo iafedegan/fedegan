@@ -17,7 +17,6 @@ export const adminNav: AdminNavGroup[] = [
       { label: "Diseño del sitio", href: "/admin/diseno", icon: "palette" },
       { label: "Árbol del sitio", href: "/admin/arbol", icon: "tree" },
       { label: "Eventos", href: "/admin/eventos", icon: "calendar" },
-      { label: "Formularios", href: "/admin/formularios", icon: "forms" },
       { label: "Cifras del sector", href: "/admin/estadisticas", icon: "chart" },
     ],
   },

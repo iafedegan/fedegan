@@ -143,15 +143,3 @@ test("leer datos viejos o raros no rompe: toma los valores por omisión", () => 
   assert.equal(el.datos.tono, "info");
   assert.equal(el.datos.texto, "");
 });
-
-import { ESQUEMAS as ESQ2, limpiarDatos as limpiar2, problemaDatos as problema2, opcionesDe } from "../src/lib/cms/elementos.ts";
-test("formulario: se limpia, pide nombre interno válido y opciones en listas", () => {
-  const e = ESQ2.formulario;
-  const ok = limpiar2(e, { titulo: "Inscripción", clave: "inscripcion-1", campos: [{ etiqueta: "Nombre", tipo: "texto", opciones: "", ayuda: "", requerido: true }, { etiqueta: "Ciudad", tipo: "lista", opciones: "Bogotá\nCali\nBogotá", ayuda: "", requerido: false }], webhook: "https://api.example.com/hook" });
-  assert.equal(problema2(e, ok), null);
-  assert.deepEqual(opcionesDe("Bogotá\nCali;Bogotá"), ["Bogotá", "Cali"]);
-  assert.match(problema2(e, { ...ok, clave: "Mala Clave" }), /nombre interno/);
-  assert.match(problema2(e, { ...ok, webhook: "http://x.co" }), /https/);
-  assert.match(problema2(e, { ...ok, campos: [{ etiqueta: "Ciudad", tipo: "lista", opciones: "Solo una", ayuda: "", requerido: false }] }), /al menos dos opciones/);
-  assert.equal(limpiar2(e, { titulo: "", campos: [] }), null);
-});

@@ -187,6 +187,6 @@ export function BloqueRico({ b, preview = false }: { b: Bloque; preview?: boolea
     case "callout": return <Destacado el={el} />;
     case "docs": return <Documentos el={el} />;
     case "divider": return <hr className="my-8 border-0 border-t border-[var(--border)]" />;
-    default: return "datos" in el ? <ElementoExtra tipo={el.tipo} datos={el.datos} preview={preview} /> : null;
+    default: return "datos" in el ? <ElementoExtra tipo={el.tipo} datos={el.datos} /> : null;
   }
 }

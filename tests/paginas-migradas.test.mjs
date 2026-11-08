@@ -64,3 +64,16 @@ test("un índice de revista (títulos en negrita + enlaces a PDF) se vuelve tít
   assert.equal(piezasDeParrafo("[a](https://x.org/a.pdf)"), null);
   assert.equal(piezasDeParrafo("[a](https://x.org/a.pdf) [b](https://x.org/pagina)"), null);
 });
+
+import { leerForm, problemaForm, opcionesDe as opcs, PREGUNTAS_BASE } from "../src/lib/cms/inscripcion-form.ts";
+test("formulario de inscripción: sin configurar usa las preguntas de siempre; valida opciones, repetidas y API", () => {
+  assert.deepEqual(leerForm(null).preguntas, PREGUNTAS_BASE);
+  const f = leerForm({ preguntas: [{ etiqueta: "Ciudad", tipo: "lista", opciones: "Bogotá\nCali\nBogotá", requerido: true }, { etiqueta: "", tipo: "texto" }, { etiqueta: "X", tipo: "raro" }], webhook: "https://api.example.com/h" });
+  assert.equal(f.preguntas.length, 2);
+  assert.equal(f.preguntas[1].tipo, "texto");
+  assert.deepEqual(opcs(f.preguntas[0].opciones), ["Bogotá", "Cali"]);
+  assert.equal(problemaForm(f), null);
+  assert.match(problemaForm({ ...f, webhook: "http://x.co" }), /https/);
+  assert.match(problemaForm({ ...f, preguntas: [{ ...f.preguntas[0], opciones: "Solo una" }] }), /dos opciones/);
+  assert.match(problemaForm({ ...f, preguntas: [f.preguntas[0], { ...f.preguntas[0] }] }), /mismo nombre/);
+});

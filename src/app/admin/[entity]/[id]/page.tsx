@@ -6,6 +6,8 @@ import { RecordForm } from "@/components/admin/RecordForm";
 import { readDb } from "@/lib/cms/client";
 import { getEntity } from "@/lib/cms/entities";
 import { CourseTabs } from "@/components/admin/CourseTabs";
+import { FormularioEvento } from "@/components/admin/FormularioEvento";
+import { formularioPorId } from "@/lib/cms/inscripciones";
 
 export const metadata: Metadata = { title: "Editar contenido", robots: { index: false } };
 
@@ -39,6 +41,7 @@ export default async function EntityEditPage({ params }: { params: Promise<{ ent
       </header>
       {entity.key === "cursos" && !creating && <CourseTabs id={id} active="info" />}
       <RecordForm entity={entity} record={record} writable={writable} />
+      {entity.key === "eventos" && !creating && record && <FormularioEvento id={id} slug={String(record.slug ?? "")} inicial={await formularioPorId(id)} writable={writable} />}
     </div>
   );
 }
