@@ -521,3 +521,8 @@ html .hub-wrap > .hub-panel[hidden] { display: none; }
 .ev-sigue:focus-visible { outline: 3px solid #89114c; outline-offset: 3px; }
 .ev-sigue-ico { display: grid; place-items: center; width: 2.9rem; height: 2.9rem; border-radius: 50%; background: #72bf44; color: #10240f; flex: none; }
 .ev-sigue-barra { flex: 1; height: 0.5rem; border-radius: 999px; background: #dbe8d0; overflow: hidden; } .ev-sigue-barra i { display: block; height: 100%; border-radius: inherit; background: #3d7a22; }
+
+/* Banner de portada: ancho total de la pantalla, sin márgenes ni esquinas redondeadas (solo queda el espacio donde se montan las tarjetas) */
+section.hi-hero[data-region="hero"]:has(.hi-banner) { padding: 0 0 2.5rem !important; }
+section.hi-hero[data-region="hero"]:has(.hi-banner) > * { max-width: none !important; width: 100%; margin: 0 !important; padding-inline: 0 !important; }
+.hi-hero-img:has(.hi-banner) { border-radius: 0 !important; }
