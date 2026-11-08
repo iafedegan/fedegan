@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import type { Indicador } from "@/lib/observatorio";
+import type { Indicador } from "@/lib/estadisticas/tipos";
 import { IndicatorChart } from "./IndicatorChart";
 
 // Varios indicadores de un mismo tema con pestañas; cada uno con su propia gráfica interactiva.

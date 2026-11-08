@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { FileText, Search } from "lucide-react";
-import type { Indicador } from "@/lib/observatorio";
+import type { Indicador } from "@/lib/estadisticas/tipos";
 import type { IndicadorFedegan } from "@/lib/estadisticas/parse";
 import { IndicatorChart } from "./IndicatorChart";
 
@@ -65,11 +65,13 @@ export function CifrasFedegan({ conjuntos }: { conjuntos: ConjuntoVista[] }) {
 
       <div className="mt-5 grid gap-6 lg:grid-cols-[19rem_minmax(0,1fr)] lg:gap-8">
         <div className="min-w-0">
-          <label className="relative block">
-            <Search size={15} aria-hidden className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-faint)]" />
-            <input type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Buscar indicador" aria-label="Buscar indicador" className="w-full rounded-[0.25rem] border border-[var(--border-strong)] bg-[var(--bg)] py-2.5 pl-9 pr-3 text-sm text-[var(--text)] outline-none focus:border-[var(--fg-lime-500)]" />
-          </label>
-          <div className="mt-3 max-h-[26rem] overflow-y-auto rounded-[0.25rem] border border-[var(--border)] lg:max-h-[34rem]">
+          {conjunto.indicadores.length > 7 && (
+            <label className="relative mb-3 block">
+              <Search size={15} aria-hidden className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-faint)]" />
+              <input type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Buscar indicador" aria-label="Buscar indicador" className="w-full rounded-[0.25rem] border border-[var(--border-strong)] bg-[var(--bg)] py-2.5 pl-9 pr-3 text-sm text-[var(--text)] outline-none focus:border-[var(--fg-lime-500)]" />
+            </label>
+          )}
+          <div className="max-h-[26rem] overflow-y-auto rounded-[0.25rem] border border-[var(--border)] lg:max-h-[34rem]">
             {lista.length === 0 && <p className="p-4 text-sm text-[var(--text-muted)]">Ningún indicador coincide.</p>}
             {conDatos.length > 0 && <ul>{conDatos.map(fila)}</ul>}
             {informes.length > 0 && (

@@ -12,6 +12,14 @@ const legacyRedirects = [
   { source: "/publicaciones-institucionales", destination: "/publicaciones", permanent: true },
   { source: "/quienes-somos-fedegan", destination: "/quienes-somos", permanent: true },
   { source: "/normatividad-vigente", destination: "/normatividad", permanent: true },
+  // Las páginas de estadísticas por tema ahora son secciones de «Cifras del sector».
+  { source: "/estadisticas/inventario-ganadero", destination: "/seccion/cifras-del-sector#inventario", permanent: true },
+  { source: "/estadisticas/produccion-0", destination: "/seccion/cifras-del-sector#produccion", permanent: true },
+  { source: "/estadisticas/precios", destination: "/seccion/cifras-del-sector#precios", permanent: true },
+  { source: "/estadisticas/costos-produccion", destination: "/seccion/cifras-del-sector#costos", permanent: true },
+  { source: "/estadisticas/consumo-0", destination: "/seccion/cifras-del-sector#consumo", permanent: true },
+  { source: "/estadisticas/importaciones-y-exportaciones", destination: "/seccion/cifras-del-sector#internacional", permanent: true },
+  { source: "/estadisticas/indicadores-economicos", destination: "/seccion/cifras-del-sector#cifras-fedegan", permanent: true },
 ];
 
 // Cabeceras de seguridad (TDR §6). La CSP permite los orígenes que el portal usa: Supabase, CONtexto, Google

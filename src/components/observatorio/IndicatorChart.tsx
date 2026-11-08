@@ -2,7 +2,7 @@
 
 import { useMemo, useRef, useState } from "react";
 import { Download } from "lucide-react";
-import type { Indicador } from "@/lib/observatorio";
+import type { Indicador } from "@/lib/estadisticas/tipos";
 import { PALETTE, etiqueta, fmtValor, nf, ticks, unidadLimpia } from "./format";
 
 type Forma = "linea" | "area" | "barras";

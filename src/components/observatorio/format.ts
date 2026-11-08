@@ -1,4 +1,4 @@
-import type { Indicador } from "@/lib/observatorio";
+import type { Indicador } from "@/lib/estadisticas/tipos";
 
 export const PALETTE = ["#D8B558", "#2F9C62", "#9FB7A8", "#E7CF8C", "#5BBF8A", "#6F8F7E", "#B89A4A", "#7FD1A6", "#4C7A62"];
 

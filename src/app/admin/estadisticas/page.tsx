@@ -10,6 +10,9 @@ import { eliminarCifras, importarCifras } from "@/lib/cms/estadisticas-actions";
 
 export const metadata: Metadata = { title: "Cifras del sector · Panel del portal", robots: { index: false } };
 
+// El sistema de estadísticas anterior es lento (la página de Precios pesa más de 600 KB): se le da hasta un minuto.
+export const maxDuration = 60;
+
 const BASE = "https://estadisticas.fedegan.org.co/Indicadores";
 // Páginas del sistema de estadísticas de FEDEGÁN (cada una es un conjunto de indicadores).
 const SISTEMA = [
@@ -41,7 +44,7 @@ export default async function EstadisticasAdminPage({ searchParams }: { searchPa
         </nav>
         <h1 className="mt-2 text-3xl font-bold sm:text-4xl">Cifras del sector</h1>
         <p className="mt-1.5 max-w-3xl text-[#5d6e65]">
-          El sistema de estadísticas de FEDEGÁN entrega las cifras en un HTML poco amigable. Aquí lo trae o lo pega, y el portal lo convierte en gráficas y tablas con su diseño en{" "}
+          Estas son las únicas cifras que muestra el portal: no depende de CONtexto ni de otro sitio. Aquí trae o pega lo que envía FEDEGÁN (la página de su sistema de estadísticas o el iframe que entreguen) y el portal lo convierte en gráficas y tablas con su diseño en{" "}
           <Link href="/seccion/cifras-del-sector" className="font-semibold text-[#165a43] underline">Cifras del sector</Link>.
         </p>
       </header>
@@ -84,8 +87,8 @@ export default async function EstadisticasAdminPage({ searchParams }: { searchPa
       </section>
 
       <section className="ad-card p-5 sm:p-6" aria-labelledby="html-t">
-        <h2 id="html-t" className="flex items-center gap-2 text-lg font-bold"><FileCode2 size={18} /> Pegar el HTML que envían</h2>
-        <p className="mt-1 text-sm text-[#5d6e65]">Pegue el código completo de la página, o suba el archivo .html. Si el nombre ya existe, se reemplaza.</p>
+        <h2 id="html-t" className="flex items-center gap-2 text-lg font-bold"><FileCode2 size={18} /> Pegar el HTML o el iframe que envían</h2>
+        <p className="mt-1 text-sm text-[#5d6e65]">Pegue el código completo de la página, el iframe tal como lo entregan (el portal trae la página a la que apunta) o suba el archivo .html. Si el nombre ya existe, se reemplaza.</p>
         <form action={importarCifras} className="mt-4 grid gap-4 lg:grid-cols-[1fr_auto]">
           <div className="grid gap-4 sm:grid-cols-2 lg:col-span-2">
             <label className="flex flex-col gap-1 text-sm font-semibold">Nombre del conjunto
@@ -97,7 +100,7 @@ export default async function EstadisticasAdminPage({ searchParams }: { searchPa
             </label>
           </div>
           <label className="flex flex-col gap-1 text-sm font-semibold lg:col-span-2">HTML
-            <textarea name="html" rows={10} placeholder="<HTML> … </HTML>" className="ad-input resize-y font-mono text-xs" spellCheck={false} />
+            <textarea name="html" rows={10} placeholder="<HTML> … </HTML>   o   <iframe src=&quot;https://…&quot;></iframe>" className="ad-input resize-y font-mono text-xs" spellCheck={false} />
           </label>
           <label className="flex flex-col gap-1 text-sm font-semibold">…o suba el archivo
             <input name="archivo" type="file" accept=".html,.htm,text/html" className="ad-input" />

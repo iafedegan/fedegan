@@ -1765,38 +1765,6 @@
    "landing": "estadisticas/general",
    "tree": [
     {
-     "label": "General",
-     "key": "estadisticas/general"
-    },
-    {
-     "label": "Inventario Ganadero",
-     "key": "estadisticas/inventario-ganadero"
-    },
-    {
-     "label": "Producción",
-     "key": "estadisticas/produccion-0"
-    },
-    {
-     "label": "Precios",
-     "key": "estadisticas/precios"
-    },
-    {
-     "label": "Costos de Producción",
-     "key": "estadisticas/costos-produccion"
-    },
-    {
-     "label": "Consumo",
-     "key": "estadisticas/consumo-0"
-    },
-    {
-     "label": "Importaciones y exportaciones",
-     "key": "estadisticas/importaciones-y-exportaciones"
-    },
-    {
-     "label": "Indicadores económicos",
-     "key": "estadisticas/indicadores-economicos"
-    },
-    {
      "label": "Documentos de Estadística",
      "key": "estadisticas/documentos-de-estadistica"
     },
@@ -7476,97 +7444,6 @@
     {
      "t": "embed",
      "text": "https://estadisticas.fedegan.org.co/Indicadores/66"
-    }
-   ],
-   "sections": [
-    "cifras-del-sector"
-   ]
-  },
-  "estadisticas/inventario-ganadero": {
-   "title": "Inventario Ganadero",
-   "source": "https://www.fedegan.org.co/estadisticas/inventario-ganadero",
-   "blocks": [
-    {
-     "t": "embed",
-     "text": "https://estadisticas.fedegan.org.co/Indicadores/11"
-    }
-   ],
-   "sections": [
-    "cifras-del-sector"
-   ]
-  },
-  "estadisticas/produccion-0": {
-   "title": "Producción",
-   "source": "https://www.fedegan.org.co/estadisticas/produccion-0",
-   "blocks": [
-    {
-     "t": "embed",
-     "text": "https://estadisticas.fedegan.org.co/Indicadores/12"
-    }
-   ],
-   "sections": [
-    "cifras-del-sector"
-   ]
-  },
-  "estadisticas/precios": {
-   "title": "Precios",
-   "source": "https://www.fedegan.org.co/estadisticas/precios",
-   "blocks": [
-    {
-     "t": "embed",
-     "text": "https://estadisticas.fedegan.org.co/Indicadores/13"
-    }
-   ],
-   "sections": [
-    "cifras-del-sector"
-   ]
-  },
-  "estadisticas/costos-produccion": {
-   "title": "Costos Producción",
-   "source": "https://www.fedegan.org.co/estadisticas/costos-produccion",
-   "blocks": [
-    {
-     "t": "embed",
-     "text": "https://estadisticas.fedegan.org.co/Indicadores/14"
-    }
-   ],
-   "sections": [
-    "cifras-del-sector"
-   ]
-  },
-  "estadisticas/consumo-0": {
-   "title": "Consumo",
-   "source": "https://www.fedegan.org.co/estadisticas/consumo-0",
-   "blocks": [
-    {
-     "t": "embed",
-     "text": "https://estadisticas.fedegan.org.co/Indicadores/15"
-    }
-   ],
-   "sections": [
-    "cifras-del-sector"
-   ]
-  },
-  "estadisticas/importaciones-y-exportaciones": {
-   "title": "Importaciones y exportaciones",
-   "source": "https://www.fedegan.org.co/estadisticas/importaciones-y-exportaciones",
-   "blocks": [
-    {
-     "t": "embed",
-     "text": "https://estadisticas.fedegan.org.co/Indicadores/16"
-    }
-   ],
-   "sections": [
-    "cifras-del-sector"
-   ]
-  },
-  "estadisticas/indicadores-economicos": {
-   "title": "Indicadores Económicos",
-   "source": "https://www.fedegan.org.co/estadisticas/indicadores-economicos",
-   "blocks": [
-    {
-     "t": "embed",
-     "text": "https://estadisticas.fedegan.org.co/Indicadores/17"
     }
    ],
    "sections": [

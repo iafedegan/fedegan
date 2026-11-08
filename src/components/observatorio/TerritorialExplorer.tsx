@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Pause, Play } from "lucide-react";
-import type { Partes, Territorial } from "@/lib/observatorio";
+import type { Partes, Territorial } from "@/lib/estadisticas/tipos";
 import { nf, signo, variacion } from "./format";
 
 // Inventario por departamento, año tras año: barra de años con reproducción, puesto de cada departamento y hato por orientación.

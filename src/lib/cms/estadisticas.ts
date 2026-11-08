@@ -2,6 +2,7 @@ import "server-only";
 import { cache } from "react";
 import { adminDb } from "./client";
 import { parseIndicadores, type IndicadorFedegan } from "@/lib/estadisticas/parse";
+import { urlPermitida } from "@/lib/estadisticas/url";
 
 // Conjuntos de cifras de FEDEGÁN: el equipo pega el HTML del sistema de estadísticas y el portal lo muestra con su diseño.
 // Se guardan en site_settings (clave «estadisticas:<id>»), tabla que ya existe; solo el servidor la lee y escribe.
@@ -61,20 +62,24 @@ export async function borrarConjunto(id: string) {
   await db.from("site_settings").delete().eq("key", `${KEY}${id}`);
 }
 
-/** Descarga la página del sistema de estadísticas (solo ese sitio; el HTML viene en ISO-8859-1). */
+/** Descarga una página con cifras (el sistema de estadísticas de FEDEGÁN o la dirección de un iframe que envíen). Solo https y sitios públicos. */
 export async function traerHtml(url: string): Promise<{ html: string } | { error: string }> {
-  let u: URL;
+  const u = urlPermitida(url);
+  if (!u) return { error: "La dirección debe ser https y de un sitio público (sin números IP ni direcciones internas)." };
   try {
-    u = new URL(url);
+    const res = await fetch(u, { cache: "no-store", signal: AbortSignal.timeout(50000), redirect: "follow" });
+    if (!res.ok) return { error: `El sitio respondió ${res.status}.` };
+    const buf = await res.arrayBuffer();
+    // La codificación sale del encabezado o de la etiqueta meta; el sistema de estadísticas anterior usa ISO-8859-1 (windows-1252).
+    const cabecera = /charset=([\w-]+)/i.exec(res.headers.get("content-type") ?? "")?.[1] ?? /<meta[^>]+charset=["']?([\w-]+)/i.exec(new TextDecoder("latin1").decode(buf.slice(0, 4096)))?.[1] ?? "windows-1252";
+    let decoder: TextDecoder;
+    try {
+      decoder = new TextDecoder(cabecera);
+    } catch {
+      decoder = new TextDecoder("utf-8");
+    }
+    return { html: decoder.decode(buf) };
   } catch {
-    return { error: "La dirección no es válida." };
-  }
-  if (u.protocol !== "https:" || u.hostname !== "estadisticas.fedegan.org.co") return { error: "Solo se pueden traer páginas de estadisticas.fedegan.org.co." };
-  try {
-    const res = await fetch(u, { cache: "no-store", signal: AbortSignal.timeout(20000) });
-    if (!res.ok) return { error: `El sistema de estadísticas respondió ${res.status}.` };
-    return { html: new TextDecoder("windows-1252").decode(await res.arrayBuffer()) };
-  } catch {
-    return { error: "No pudimos conectar con el sistema de estadísticas." };
+    return { error: "No pudimos conectar con ese sitio." };
   }
 }
