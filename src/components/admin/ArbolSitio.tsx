@@ -4,8 +4,8 @@ import { useActionState, useEffect, useMemo, useRef, useState, type ReactNode } 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
-  ArrowDown, ArrowUp, CheckCircle2, ChevronRight, ChevronsDownUp, ChevronsUpDown, ExternalLink, Eye, EyeOff, FileText, FolderTree, Globe, LayoutPanelTop, Layers, Link2,
-  Loader2, MoreHorizontal, PanelTop, Pencil, Plus, Search, SearchX, X, XCircle,
+  ArrowDown, ArrowUp, CheckCircle2, ChevronRight, ChevronsDownUp, ChevronsUpDown, ExternalLink, Eye, EyeOff, FileText, FolderTree, Globe, House, LayoutPanelTop, LayoutTemplate, Layers, Link2,
+  Component, Loader2, MoreHorizontal, PanelBottom, PanelTop, Pencil, Plus, Search, SearchX, X, XCircle,
   type LucideIcon,
 } from "lucide-react";
 import type { ArbolKind, ArbolNodo } from "@/lib/cms/arbol-tipos";
@@ -20,13 +20,28 @@ const ICONO: Record<ArbolKind, LucideIcon> = {
   grupo: FolderTree,
   enlace: Link2,
   ruta: Globe,
+  elemento: Component,
 };
-const ICONO_GRUPO: Record<string, LucideIcon> = { "g:nav": PanelTop, "g:sec": LayoutPanelTop, "g:fijas": Globe };
+const ICONO_GRUPO: Record<string, LucideIcon> = { "g:head": LayoutTemplate, "g:nav": PanelTop, "g:home": House, "g:sec": LayoutPanelTop, "g:fijas": Globe, "g:pie": PanelBottom };
 const DESCRIPCION_GRUPO: Record<string, string> = {
+  "g:head": "Lo primero que se ve, arriba de todo",
   "g:nav": "Lo que se ve en el menú principal del sitio",
+  "g:home": "Los bloques de la página de inicio",
   "g:sec": "Secciones que no están en la barra",
   "g:fijas": "Rutas propias del portal; no se editan aquí",
+  "g:pie": "Lo que se ve al final de todas las páginas",
 };
+const UNIDAD_GRUPO: Record<string, string> = { "g:head": "elementos", "g:home": "bloques", "g:pie": "elementos", "g:fijas": "rutas" };
+
+// Las zonas del sitio, en el mismo orden en que se ven en la página: cada una agrupa lo que se edita allí.
+const ZONAS: { id: string; titulo: string; corto: string; Icono: LucideIcon; grupos: string[] }[] = [
+  { id: "cabecera", titulo: "Cabecera", corto: "Cintillos, logo, fecha, buscador y avisos", Icono: LayoutTemplate, grupos: ["g:head"] },
+  { id: "navegacion", titulo: "Navegación", corto: "El menú principal y sus secciones", Icono: PanelTop, grupos: ["g:nav"] },
+  { id: "portada", titulo: "Portada", corto: "Los bloques del inicio", Icono: House, grupos: ["g:home"] },
+  { id: "secciones", titulo: "Secciones y páginas", corto: "Todo lo que no está en el menú", Icono: LayoutPanelTop, grupos: ["g:sec", "g:fijas"] },
+  { id: "pie", titulo: "Pie de página", corto: "Portales aliados, enlaces y contacto", Icono: PanelBottom, grupos: ["g:pie"] },
+];
+const GRUPOS_ABIERTOS = ["g:head", "g:nav", "g:home", "g:sec", "g:fijas", "g:pie"];
 // Solo se rotulan los tipos que no se reconocen por su icono.
 const ETIQUETA: Partial<Record<ArbolKind, string>> = { grupo: "Grupo", enlace: "Enlace", ruta: "Ruta fija" };
 
@@ -314,7 +329,7 @@ function Grupo({ n, c }: { n: ArbolNodo; c: Ctx }) {
   const Icono = ICONO_GRUPO[n.id] ?? FolderTree;
   const abierto = c.q ? true : c.abiertos.has(n.id);
   const formSeccion = `seccion:${n.id}`;
-  const puedeCrear = c.writable && n.id !== "g:fijas";
+  const puedeCrear = c.writable && (n.id === "g:nav" || n.id === "g:sec");
   return (
     <li>
       <div className="flex flex-wrap items-center gap-x-3 gap-y-2 rounded-xl bg-[#f4f2e9] px-2.5 py-2.5">
@@ -332,7 +347,7 @@ function Grupo({ n, c }: { n: ArbolNodo; c: Ctx }) {
             <span className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
               <span className="text-[0.98rem] font-bold text-[#11271d]">{n.label}</span>
               <span className="rounded-full bg-white px-2 py-0.5 text-[0.7rem] font-semibold text-[#5d6e65] ring-1 ring-[#e4e2d6]">
-                {n.total} {n.id === "g:fijas" ? "rutas" : "páginas"}
+                {n.total} {UNIDAD_GRUPO[n.id] ?? "páginas"}
               </span>
             </span>
             <span className="block text-xs text-[#8a978f]">{DESCRIPCION_GRUPO[n.id]}</span>
@@ -490,13 +505,18 @@ function Fila({ n, c }: { n: ArbolNodo; c: Ctx }) {
 }
 
 export function ArbolSitio({ raiz, writable }: { raiz: ArbolNodo[]; writable: boolean }) {
-  const [abiertos, setAbiertos] = useState<Set<string>>(() => new Set(["g:nav", "g:sec"]));
+  const [abiertos, setAbiertos] = useState<Set<string>>(() => new Set(GRUPOS_ABIERTOS));
+  const [zonaId, setZonaId] = useState("navegacion");
   const [busqueda, setBusqueda] = useState("");
   const [agregando, setAgregando] = useState<string | null>(null);
   const q = norm(busqueda.trim());
   const visibles = useMemo(() => (q ? filtrar(raiz, q) : raiz), [raiz, q]);
   const todos = useMemo(() => conHijos(raiz), [raiz]);
   const aciertos = useMemo(() => (q ? coincidencias(visibles.flatMap((g) => g.children), q) : 0), [visibles, q]);
+  const zona = ZONAS.find((z) => z.id === zonaId) ?? ZONAS[1];
+  // Sin búsqueda se ve una zona a la vez; con búsqueda se muestran los resultados de todas.
+  const mostrados = q ? visibles : visibles.filter((g) => zona.grupos.includes(g.id));
+  const totalZona = (z: (typeof ZONAS)[number]) => raiz.filter((g) => z.grupos.includes(g.id)).reduce((a, g) => a + g.total, 0);
 
   const alternar = (id: string) =>
     setAbiertos((prev) => {
@@ -508,6 +528,34 @@ export function ArbolSitio({ raiz, writable }: { raiz: ArbolNodo[]; writable: bo
 
   return (
     <div className="ad-card p-4 sm:p-5">
+      {/* Zonas del sitio, en el orden en que se ven en la página */}
+      <nav aria-label="Zonas del sitio" className="-mx-1 mb-4 overflow-x-auto px-1 pb-1">
+        <ol className="grid min-w-[44rem] grid-cols-5 gap-2.5 lg:min-w-0">
+          {ZONAS.map((z, i) => {
+            const activa = !q && z.id === zona.id;
+            const Icono = z.Icono;
+            return (
+              <li key={z.id}>
+                <button
+                  type="button"
+                  onClick={() => { setZonaId(z.id); setBusqueda(""); }}
+                  aria-current={activa ? "true" : undefined}
+                  className={`flex h-full w-full flex-col gap-1.5 rounded-2xl border p-3 text-left transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#89114c] ${activa ? "border-[#72bf44] bg-[#f1f9ea] shadow-[inset_0_-3px_0_#72bf44]" : "border-[#e4e2d6] bg-white hover:border-[#b8cfa6]"} ${q ? "opacity-60" : ""}`}
+                >
+                  <span className="flex items-center justify-between gap-2">
+                    <span className={`grid h-8 w-8 place-items-center rounded-lg ${activa ? "bg-[#72bf44] text-[#10240f]" : "bg-[#eceae0] text-[#5d6e65]"}`}><Icono size={16} aria-hidden /></span>
+                    <span className="text-[0.68rem] font-bold uppercase tracking-[0.14em] text-[#8a978f]">{i + 1}</span>
+                  </span>
+                  <span className="text-[0.95rem] font-bold leading-tight text-[#11271d]">{z.titulo}</span>
+                  <span className="text-xs leading-snug text-[#5d6e65]">{z.corto}</span>
+                  <span className="mt-auto pt-0.5 text-[0.7rem] font-semibold text-[#3d7a22]">{totalZona(z)} {z.id === "navegacion" || z.id === "secciones" ? "páginas" : "elementos"}</span>
+                </button>
+              </li>
+            );
+          })}
+        </ol>
+      </nav>
+
       {/* La barra de búsqueda se queda arriba mientras se recorre el árbol (en pantallas angostas, bajo la barra del panel). */}
       <div className="sticky top-[4.5rem] z-20 -mx-4 -mt-4 mb-3 flex flex-wrap items-center gap-2 rounded-t-[1.25rem] border-b border-[#eeece2] bg-white/90 px-4 py-3 backdrop-blur sm:-mx-5 sm:-mt-5 sm:px-5 lg:top-0">
         <div className="relative min-w-[13rem] flex-1">
@@ -530,7 +578,7 @@ export function ArbolSitio({ raiz, writable }: { raiz: ArbolNodo[]; writable: bo
           <button type="button" onClick={() => setAbiertos(new Set(todos))} title="Expandir todo" className="at-btn">
             <ChevronsUpDown size={15} aria-hidden /> <span className="hidden sm:inline">Expandir todo</span>
           </button>
-          <button type="button" onClick={() => setAbiertos(new Set(["g:nav", "g:sec"]))} title="Contraer" className="at-btn">
+          <button type="button" onClick={() => setAbiertos(new Set(GRUPOS_ABIERTOS))} title="Contraer" className="at-btn">
             <ChevronsDownUp size={15} aria-hidden /> <span className="hidden sm:inline">Contraer</span>
           </button>
         </div>
@@ -538,7 +586,7 @@ export function ArbolSitio({ raiz, writable }: { raiz: ArbolNodo[]; writable: bo
 
       {q && visibles.length > 0 && (
         <p role="status" className="mb-2 px-1 text-xs font-medium text-[#5d6e65]">
-          {aciertos} {aciertos === 1 ? "coincidencia" : "coincidencias"} para «{busqueda.trim()}»
+          {aciertos} {aciertos === 1 ? "coincidencia" : "coincidencias"} para «{busqueda.trim()}» en todas las zonas
         </p>
       )}
 
@@ -551,7 +599,7 @@ export function ArbolSitio({ raiz, writable }: { raiz: ArbolNodo[]; writable: bo
         </div>
       ) : (
         <ul className="flex flex-col gap-3">
-          {visibles.map((g) => (
+          {mostrados.map((g) => (
             <Grupo key={g.id} n={g} c={c} />
           ))}
         </ul>

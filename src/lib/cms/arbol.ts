@@ -1,12 +1,14 @@
 import "server-only";
 import { getLegacyPage, legacyHref, legacySections, type NavNode } from "@/content/legacy";
 import type { ArbolNodo } from "./arbol-tipos";
+import { footerLinks } from "@/content/site";
 import { mergeTree, type SiteNode } from "./nodos";
 
 // Arma el árbol completo del sitio para /admin/arbol: barra de navegación → secciones → subsecciones → páginas,
 // hasta el último nivel, con lo copiado del portal actual y lo creado en el panel.
 
 export type NavRow = { id: string; label: string; href: string; published: boolean };
+export type PortalRow = { id?: string; nombre: string; href: string };
 
 const SECCION_RE = /^\/seccion\/([^/?#]+)\/?$/;
 const PENDIENTES: Record<string, string> = { "seguridad-ganadera": "Sección en preparación" };
@@ -101,7 +103,71 @@ function nodoSeccion(s: Seccion, ctx: Ctx): ArbolNodo {
   };
 }
 
-export function construirArbol({ nav, nodes, editadas }: { nav: NavRow[]; nodes: SiteNode[]; editadas: Set<string> }): ArbolNodo[] {
+// Lo que está en la portada y en el pie de página: cada elemento lleva al editor que lo maneja (o dice que es fijo del diseño).
+const ficha = (id: string, label: string, href: string | undefined, extra: Partial<ArbolNodo> = {}): ArbolNodo => ({ id: `x:${id}`, label, kind: "elemento", href, total: 0, children: [], ...extra });
+const FIJO = "Fijo en el diseño";
+
+function grupoCabecera(): ArbolNodo {
+  const kids = [
+    ficha("head-mercado", "Cintillo de mercado", undefined, { nota: "Automático: dólar, petróleo, bolsas, oro y ganado" }),
+    ficha("head-logo", "Logo, fecha y cintillo de colores", "/", { nota: FIJO }),
+    ficha("head-buscador", "Buscador", "/buscador", { nota: FIJO }),
+    ficha("head-cuenta", "Cuenta («Equipo» o «Ingresar»)", "/ingresar", { nota: FIJO }),
+    ficha("head-titulares", "Cintillo de titulares", "/", { editHref: "/admin/diseno", nota: "Diseño → Cintillo" }),
+    ficha("head-banner", "Banner bajo el encabezado", "/", { editHref: "/admin/diseno", nota: "Diseño → Publicidad" }),
+    ficha("head-popup", "Ventana emergente", "/", { editHref: "/admin/diseno", nota: "Diseño → Ventana emergente" }),
+    ficha("head-estilo", "Plantilla, colores y fuentes de la cabecera", "/", { editHref: "/admin/diseno", nota: "Diseño del sitio" }),
+  ];
+  return { id: "g:head", label: "Cabecera", kind: "grupo-raiz", total: sumar(kids), children: kids };
+}
+
+function grupoPortada(): ArbolNodo {
+  const kids = [
+    ficha("home-carrusel", "Carrusel de portada (banners)", "/", { editHref: "/admin/diseno", nota: "Diseño → Publicidad" }),
+    ficha("home-accesos", "Accesos rápidos y tarjetas de inicio", "/", { nota: FIJO }),
+    ficha("home-noticias", "Noticias destacadas (CONtexto)", "/noticias", { editHref: "/admin/apis", nota: "Vienen de CONtexto" }),
+    ficha("home-publicaciones", "Publicaciones", "/publicaciones", { editHref: "/admin/publicaciones" }),
+    ficha("home-eventos", "Eventos y agenda", "/eventos", { editHref: "/admin/eventos" }),
+    ficha("home-preguntas", "Preguntas frecuentes", "/preguntas-frecuentes", { editHref: "/admin/preguntas" }),
+    ficha("home-locales", "Locales del gremio", "/", { editHref: "/admin/locales" }),
+    ficha("home-cifras", "Cifras del sector (inicio)", "/", { editHref: "/admin/cifras" }),
+  ];
+  return { id: "g:home", label: "Portada (inicio)", kind: "grupo-raiz", total: sumar(kids), children: kids };
+}
+
+function grupoPie(portales: PortalRow[]): ArbolNodo {
+  const aliados: ArbolNodo[] = portales.map((p, i) => ({
+    id: `x:pie-aliado-${p.id ?? i}`,
+    label: p.nombre,
+    kind: "enlace",
+    href: p.href,
+    external: externa(p.href),
+    editHref: p.id ? `/admin/portales/${p.id}` : undefined,
+    total: 0,
+    children: [],
+  }));
+  const lista = (id: string, label: string, links: { label: string; href: string }[], extra: Partial<ArbolNodo> = {}): ArbolNodo => {
+    const hijos = links.map((l, i) => ficha(`${id}-${i}`, l.label, l.href, { external: externa(l.href) }));
+    return ficha(id, label, undefined, { children: hijos, total: hijos.length, ...extra });
+  };
+  const kids = [
+    ficha("pie-aliados", "Portales aliados (logos)", undefined, { editHref: "/admin/portales", children: aliados, total: aliados.length }),
+    lista("pie-enlaces", "Enlaces rápidos", [...footerLinks.enlaces, { label: "Pagos, trámites y avisos", href: "/accesos" }], { nota: FIJO }),
+    lista("pie-servicios", "Servicios destacados", footerLinks.servicios, { nota: FIJO }),
+    ficha("pie-contacto", "Contacto y correos institucionales", "/contacto", { nota: FIJO }),
+    ficha("pie-boletin", "Suscripción al boletín", undefined, { nota: FIJO }),
+    lista("pie-legal", "Enlaces legales", [
+      { label: "Mapa del sitio", href: "/mapa-del-sitio" },
+      { label: "Privacidad", href: "/privacidad" },
+      { label: "Términos", href: "/terminos" },
+      { label: "Transparencia", href: "/transparencia" },
+      { label: "Contacto", href: "/contacto" },
+    ], { nota: FIJO }),
+  ];
+  return { id: "g:pie", label: "Pie de página (footer)", kind: "grupo-raiz", total: sumar(kids), children: kids };
+}
+
+export function construirArbol({ nav, nodes, editadas, portales = [] }: { nav: NavRow[]; nodes: SiteNode[]; editadas: Set<string>; portales?: PortalRow[] }): ArbolNodo[] {
   const ctx: Ctx = { porId: new Map(nodes.map((n) => [n.id, n])), editadas };
   const todas = secciones(nodes);
   const usadas = new Set<string>();
@@ -137,7 +203,10 @@ export function construirArbol({ nav, nodes, editadas }: { nav: NavRow[]; nodes:
   const fijas: ArbolNodo[] = FIJAS.map(([label, href]) => ({ id: `ruta:${href}`, label, kind: "ruta", href, total: 0, children: [] }));
 
   return [
+    grupoCabecera(),
     { id: "g:nav", label: "Barra de navegación", kind: "grupo-raiz", total: sumar(barra), children: barra },
+    grupoPortada(),
+    grupoPie(portales),
     { id: "g:sec", label: "Otras secciones del portal", kind: "grupo-raiz", total: sumar(otras), children: otras },
     { id: "g:fijas", label: "Páginas fijas del portal", kind: "grupo-raiz", total: fijas.length, children: fijas },
   ];

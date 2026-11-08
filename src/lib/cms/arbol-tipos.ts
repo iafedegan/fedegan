@@ -1,6 +1,6 @@
 // Tipos del árbol del sitio que comparten el servidor y el panel (/admin/arbol). Sin acceso a datos.
 
-export type ArbolKind = "grupo-raiz" | "nav" | "seccion" | "pagina" | "grupo" | "enlace" | "ruta";
+export type ArbolKind = "grupo-raiz" | "nav" | "seccion" | "pagina" | "grupo" | "enlace" | "ruta" | "elemento";
 
 export type ArbolNodo = {
   id: string;

@@ -5,14 +5,6 @@ export type AdminNavGroup = { group: string; items: AdminNavItem[] };
 export const adminNav: AdminNavGroup[] = [
   { group: "General", items: [{ label: "Resumen", href: "/admin", icon: "layout" }] },
   {
-    group: "Home",
-    items: [
-      { label: "Locales del gremio", href: "/admin/locales", icon: "store" },
-      { label: "Cifras del sector", href: "/admin/cifras", icon: "chart" },
-      { label: "Portales aliados", href: "/admin/portales", icon: "link" },
-    ],
-  },
-  {
     group: "Escuela Virtual",
     items: [
       { label: "Cursos", href: "/admin/cursos", icon: "graduation" },
