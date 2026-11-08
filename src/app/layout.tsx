@@ -5,6 +5,8 @@ import "./templates.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { getNav } from "@/lib/cms/content";
+import { getSection } from "@/lib/cms/nodos";
+import { legacyHref, type NavNode } from "@/content/legacy";
 import { Providers } from "@/components/layout/Providers";
 import { ChromeGate } from "@/components/layout/ChromeGate";
 import { SiteChrome } from "@/components/layout/SiteChrome";
@@ -85,6 +87,21 @@ const siteJsonLd = {
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {
   const [nav, design] = await Promise.all([getNav(), getPublishedDesign()]);
+  // Cada opción que lleva a una sección muestra sus páginas al pasar el mouse.
+  type Sub = { label: string; href: string; children?: Sub[] };
+  const subs = (nodes: NavNode[], slug: string): Sub[] =>
+    nodes.flatMap((n) => {
+      const href = n.key ? legacyHref(slug, n.key) : n.href;
+      return href ? [{ label: n.label, href, children: n.children?.length ? subs(n.children, slug) : undefined }] : [];
+    });
+  const navConHijos = await Promise.all(
+    nav.map(async (it) => {
+      const slug = /^\/seccion\/([^/?#]+)\/?$/.exec(it.href)?.[1];
+      const section = slug ? await getSection(slug).catch(() => null) : null;
+      const children = section && slug ? subs(section.tree, slug) : [];
+      return children.length ? { ...it, children } : it;
+    }),
+  );
   const css = designCss(design);
   const tpl = design.template ? TEMPLATE_BY_ID[design.template] : null;
   return (
@@ -129,7 +146,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
                 </a>
                 <MarketBar />
                 <Masthead />
-                <Header nav={sortNav(nav, design.order)} />
+                <Header nav={sortNav(navConHijos, design.order)} />
                 <Ticker initial={design.ticker} />
                 <AdSlot zone="top" initial={design.ads.top} />
               </>

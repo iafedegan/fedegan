@@ -19,6 +19,51 @@ function isActive(pathname: string, href: string) {
 const visibleFrom = (i: number) => (i < 3 ? "" : i < 6 ? "hidden xl:block" : i < 8 ? "hidden 2xl:block" : "hidden");
 const inMoreOnlyBelow = (i: number) => (i < 6 ? "xl:hidden" : i < 8 ? "2xl:hidden" : "");
 
+function SubList({ items, onPick }: { items: SubItem[]; onPick: () => void }) {
+  return (
+    <ul role="none">
+      {items.map((it, k) => (
+        <li key={`${it.href}-${k}`} role="none">
+          <Link href={it.href} role="menuitem" onClick={onPick} className="block px-5 py-2 text-[0.74rem] font-medium uppercase tracking-[0.16em] text-[var(--text)] transition-colors hover:bg-[var(--bg-muted)] hover:text-[var(--fg-lime-400)]">
+            {it.label}
+          </Link>
+          {it.children && it.children.length > 0 && (
+            <div className="pl-4"><SubList items={it.children} onPick={onPick} /></div>
+          )}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+// Opción de la barra: si tiene páginas dentro, se despliega al pasar el mouse (o con el teclado).
+function HoverItem({ item, active, wrap, pathname }: { item: { label: string; href: string; children?: SubItem[] }; active: boolean; wrap: string; pathname: string }) {
+  const [openAt, setOpenAt] = useState<string | null>(null);
+  const open = openAt === pathname;
+  const kids = item.children ?? [];
+  const cls = `nv-link ${active ? "text-[var(--fg-lime-400)] nv-active" : ""}`;
+  if (!kids.length) {
+    return <Link href={item.href} aria-current={active ? "page" : undefined} className={`${cls} ${wrap}`}>{item.label}</Link>;
+  }
+  return (
+    <div
+      className={`relative ${wrap}`}
+      onMouseEnter={() => setOpenAt(pathname)}
+      onMouseLeave={() => setOpenAt(null)}
+      onKeyDown={(e) => e.key === "Escape" && setOpenAt(null)}
+    >
+      <Link href={item.href} aria-haspopup="menu" aria-expanded={open} aria-current={active ? "page" : undefined} className={`${cls} flex items-center gap-1.5`} onFocus={() => setOpenAt(pathname)}>
+        {item.label} <ChevronDown size={14} aria-hidden className={`transition-transform duration-300 ${open ? "rotate-180" : ""}`} />
+      </Link>
+      {open && (
+        <div role="menu" className="absolute left-0 top-full z-50 max-h-[70vh] w-72 overflow-y-auto rounded-[0.25rem] border border-[var(--border-strong)] bg-[var(--surface-solid)] py-2 shadow-[var(--shadow-lg)]">
+          <SubList items={[{ label: `Ver todo en ${item.label}`, href: item.href }, ...kids]} onPick={() => setOpenAt(null)} />
+        </div>
+      )}
+    </div>
+  );
+}
+
 function MoreMenu({ items, pathname }: { items: { label: string; href: string }[]; pathname: string }) {
   const [openAt, setOpenAt] = useState<string | null>(null);
   const open = openAt === pathname;
@@ -86,7 +131,8 @@ function MoreMenu({ items, pathname }: { items: { label: string; href: string }[
   );
 }
 
-export function Header({ nav: mainNav }: { nav: { label: string; href: string }[] }) {
+export type SubItem = { label: string; href: string; children?: SubItem[] };
+export function Header({ nav: mainNav }: { nav: { label: string; href: string; children?: SubItem[] }[] }) {
   const pathname = usePathname();
   const router = useRouter();
   const { data: session } = useSession();
@@ -207,14 +253,7 @@ export function Header({ nav: mainNav }: { nav: { label: string; href: string }[
             {mainNav.map((item, i) => {
               const active = isActive(pathname, item.href);
               return (
-                <Link
-                  key={`${item.href}-${i}`}
-                  href={item.href}
-                  aria-current={active ? "page" : undefined}
-                  className={`nv-link ${visibleFrom(i)} ${active ? "text-[var(--fg-lime-400)] nv-active" : ""}`}
-                >
-                  {item.label}
-                </Link>
+                <HoverItem key={`${item.href}-${i}`} item={item} active={active} wrap={visibleFrom(i)} pathname={pathname} />
               );
             })}
             <MoreMenu items={mainNav} pathname={pathname} />
