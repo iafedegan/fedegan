@@ -10,18 +10,20 @@ export function Masthead() {
     <div className="mh" data-region="masthead">
       <div className="mh-desk mh-main">
         <Container className="mh-main-in">
+          <span className="mh-line mh-line-l" aria-hidden="true" />
           <Link href="/" className="mh-brand" aria-label="FEDEGÁN FNG, inicio">
-            <Image src="/brand/fedegan-emblema-blanco.png" alt="" width={410} height={404} priority unoptimized className="mh-emblem" />
-            <span className="mh-name">FEDE<b>GAN</b></span>
+            <Image src="/brand/fedegan-logo-completo-blanco.png" alt="" width={516} height={204} priority unoptimized className="mh-emblem" />
           </Link>
+          <span className="mh-line mh-line-r" aria-hidden="true" />
         </Container>
       </div>
       <div className="mh-mob">
         <div className="mh-row">
+          <span className="mh-line mh-line-l" aria-hidden="true" />
           <Link href="/" className="mh-title mh-brand" aria-label="FEDEGÁN FNG, inicio">
-            <Image src="/brand/fedegan-emblema-blanco.png" alt="" width={410} height={404} priority unoptimized className="mh-emblem" />
-            <span className="mh-name">FEDE<b>GAN</b></span>
+            <Image src="/brand/fedegan-logo-completo-blanco.png" alt="" width={516} height={204} priority unoptimized className="mh-emblem" />
           </Link>
+          <span className="mh-line mh-line-r" aria-hidden="true" />
         </div>
         <p className="mh-date">{date}</p>
         <MastheadTools />
