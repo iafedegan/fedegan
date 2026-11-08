@@ -46,7 +46,7 @@ export default async function EditarNodoPage({ params }: { params: Promise<{ id:
         </p>
       </header>
 
-      <div className={esEnlace ? "grid max-w-4xl gap-6 lg:grid-cols-[1fr_16rem] lg:items-start" : "grid gap-6 lg:grid-cols-[minmax(0,1fr)_16rem] lg:items-start"}>
+      <div className={esEnlace ? "grid gap-6 lg:grid-cols-[1fr_16rem] lg:items-start" : "grid gap-6 lg:grid-cols-[minmax(0,1fr)_16rem] lg:items-start"}>
         <div className="ad-card min-w-0 p-5 sm:p-7">
           <NodoForm id={nodo.id} label={nodo.label} title={nodo.title} href={nodo.href ?? ""} bloques={nodo.blocks} esEnlace={esEnlace} writable={writable} marco={marco} />
         </div>
