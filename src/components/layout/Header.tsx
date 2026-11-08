@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
-import { ArrowRight, ChevronDown, LogIn, LogOut, Menu, Search, UserCircle2, X } from "lucide-react";
+import { ArrowRight, ChevronDown, ChevronRight, LogIn, LogOut, Menu, Search, UserCircle2, X } from "lucide-react";
 import { Logo } from "./Logo";
 import { ThemeToggle } from "./ThemeToggle";
 import { LoginMenu } from "./LoginMenu";
@@ -19,18 +19,48 @@ function isActive(pathname: string, href: string) {
 const visibleFrom = (i: number) => (i < 3 ? "" : i < 6 ? "hidden xl:block" : i < 8 ? "hidden 2xl:block" : "hidden");
 const inMoreOnlyBelow = (i: number) => (i < 6 ? "xl:hidden" : i < 8 ? "2xl:hidden" : "");
 
+// Lista del menú: solo se ven las opciones del primer nivel; las que tienen sub-opciones abren un panel al costado
+// al pasar el mouse (o con el teclado), así no se despliega todo de una vez.
+function SubEntry({ it, onPick }: { it: SubItem; onPick: () => void }) {
+  const [open, setOpen] = useState(false);
+  const kids = it.children ?? [];
+  return (
+    <li
+      role="none"
+      className="relative"
+      onMouseEnter={() => setOpen(true)}
+      onMouseLeave={() => setOpen(false)}
+      onKeyDown={(e) => {
+        if (e.key === "ArrowRight" && kids.length) { setOpen(true); e.preventDefault(); }
+        if (e.key === "ArrowLeft") setOpen(false);
+      }}
+    >
+      <Link
+        href={it.href}
+        role="menuitem"
+        aria-haspopup={kids.length ? "menu" : undefined}
+        aria-expanded={kids.length ? open : undefined}
+        onClick={onPick}
+        onFocus={() => kids.length && setOpen(true)}
+        className={`flex items-center justify-between gap-3 px-5 py-2.5 text-[0.82rem] font-semibold normal-case leading-snug tracking-normal transition-colors hover:bg-[var(--bg-muted)] hover:text-[var(--fg-lime-400)] ${open ? "bg-[var(--bg-muted)] text-[var(--fg-lime-400)]" : "text-[var(--text)]"}`}
+      >
+        <span>{it.label}</span>
+        {kids.length > 0 && <ChevronRight size={15} aria-hidden className="shrink-0 opacity-70" />}
+      </Link>
+      {open && kids.length > 0 && (
+        <div role="menu" className="absolute left-full top-0 z-50 -ml-1 max-h-[70vh] w-72 overflow-y-auto rounded-[0.25rem] border border-[var(--border-strong)] bg-[var(--surface-solid)] py-2 shadow-[var(--shadow-lg)]">
+          <SubList items={kids} onPick={onPick} />
+        </div>
+      )}
+    </li>
+  );
+}
+
 function SubList({ items, onPick }: { items: SubItem[]; onPick: () => void }) {
   return (
     <ul role="none">
       {items.map((it, k) => (
-        <li key={`${it.href}-${k}`} role="none">
-          <Link href={it.href} role="menuitem" onClick={onPick} className="block px-5 py-2 text-[0.74rem] font-medium uppercase tracking-[0.16em] text-[var(--text)] transition-colors hover:bg-[var(--bg-muted)] hover:text-[var(--fg-lime-400)]">
-            {it.label}
-          </Link>
-          {it.children && it.children.length > 0 && (
-            <div className="pl-4"><SubList items={it.children} onPick={onPick} /></div>
-          )}
-        </li>
+        <SubEntry key={`${it.href}-${k}`} it={it} onPick={onPick} />
       ))}
     </ul>
   );
@@ -56,7 +86,7 @@ function HoverItem({ item, active, wrap, pathname }: { item: { label: string; hr
         {item.label} <ChevronDown size={14} aria-hidden className={`transition-transform duration-300 ${open ? "rotate-180" : ""}`} />
       </Link>
       {open && (
-        <div role="menu" className="absolute left-0 top-full z-50 max-h-[70vh] w-72 overflow-y-auto rounded-[0.25rem] border border-[var(--border-strong)] bg-[var(--surface-solid)] py-2 shadow-[var(--shadow-lg)]">
+        <div role="menu" className="absolute left-0 top-full z-50 w-72 rounded-[0.25rem] border border-[var(--border-strong)] bg-[var(--surface-solid)] py-2 shadow-[var(--shadow-lg)]">
           <SubList items={[{ label: `Ver todo en ${item.label}`, href: item.href }, ...kids]} onPick={() => setOpenAt(null)} />
         </div>
       )}
