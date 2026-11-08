@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ListTree, AlertCircle, ArrowDown, ArrowUp, CheckCircle2, ChevronRight, Eye, EyeOff, ImageOff, Pencil, Plus } from "lucide-react";
+import { ListTree, AlertCircle, ArrowDown, ArrowUp, CheckCircle2, ChevronRight, Eye, EyeOff, ImageOff, Pencil, Plus, Search } from "lucide-react";
 import { ConfigNotice } from "@/components/admin/ConfigNotice";
 import { RowMenu } from "@/components/admin/RowMenu";
 import { DeleteButton } from "@/components/admin/DeleteButton";
@@ -18,10 +18,10 @@ export default async function EntityListPage({
   searchParams,
 }: {
   params: Promise<{ entity: string }>;
-  searchParams: Promise<{ ok?: string; error?: string }>;
+  searchParams: Promise<{ ok?: string; error?: string; q?: string; estado?: string }>;
 }) {
   const { entity: key } = await params;
-  const { ok, error } = await searchParams;
+  const { ok, error, q = "", estado = "" } = await searchParams;
   const entity = getEntity(key);
   if (!entity) notFound();
 
@@ -39,6 +39,17 @@ export default async function EntityListPage({
     }
     return entity.subtitleField ? String(r[entity.subtitleField] ?? "") : "";
   };
+
+  const term = q.trim().toLowerCase();
+  const visibles = rows
+    .map((r, idx) => ({ r, idx }))
+    .filter(({ r }) => {
+      if (estado === "publicado" && !r.published) return false;
+      if (estado === "oculto" && r.published) return false;
+      if (!term) return true;
+      return `${String(r[entity.titleField] ?? "")} ${subtitle(r)}`.toLowerCase().includes(term);
+    });
+  const filtrando = Boolean(term || estado);
 
   return (
     <div className="flex flex-col gap-6">
@@ -77,23 +88,35 @@ export default async function EntityListPage({
       {!writable && <ConfigNotice compact />}
 
       <div className="ad-card">
-        <div className="flex items-center justify-between border-b border-[#eceae0] px-5 py-3.5 sm:px-6">
-          <p className="text-sm font-semibold">{rows.length} {rows.length === 1 ? "elemento" : "elementos"}</p>
-          <p className="text-xs text-[#8a978f]">{entity.ordered ? "El orden y la visibilidad están en el menú ⋯ de cada fila" : "Ordenados por fecha"}</p>
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#eceae0] px-5 py-3.5 sm:px-6">
+          <form method="get" role="search" className="flex flex-1 flex-wrap items-center gap-2">
+            <label className="relative min-w-[14rem] flex-1 sm:max-w-xs">
+              <Search size={15} aria-hidden className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[#8a978f]" />
+              <input type="search" name="q" defaultValue={q} placeholder={`Buscar en ${entity.plural.toLowerCase()}`} aria-label="Buscar" className="w-full rounded-lg border border-[#e4e2d6] bg-white py-2 pl-9 pr-3 text-sm outline-none focus:border-[#72bf44]" />
+            </label>
+            <select name="estado" defaultValue={estado} aria-label="Estado" className="rounded-lg border border-[#e4e2d6] bg-white px-3 py-2 text-sm outline-none focus:border-[#72bf44]">
+              <option value="">Todos</option>
+              <option value="publicado">Publicados</option>
+              <option value="oculto">Ocultos</option>
+            </select>
+            <button type="submit" className="rounded-lg bg-[#eef6f1] px-3.5 py-2 text-sm font-semibold text-[#165a43] hover:bg-[#e1f1e7]">Filtrar</button>
+            {filtrando && <Link href={`/admin/${entity.key}`} className="text-sm text-[#5d6e65] underline">Quitar filtros</Link>}
+          </form>
+          <p className="text-sm text-[#5d6e65]">{filtrando ? `${visibles.length} de ${rows.length}` : rows.length} {rows.length === 1 ? "elemento" : "elementos"}</p>
         </div>
 
-        {rows.length === 0 ? (
-          <p className="px-6 py-14 text-center text-[#8a978f]">Todavía no hay elementos.{writable ? " Cree el primero con el botón de arriba." : ""}</p>
+        {visibles.length === 0 ? (
+          <p className="px-6 py-14 text-center text-[#8a978f]">{filtrando ? "Ningún elemento coincide con la búsqueda." : <>Todavía no hay elementos.{writable ? " Cree el primero con el botón de arriba." : ""}</>}</p>
         ) : (
           <ul className="divide-y divide-[#eceae0]">
-            {rows.map((r, i) => {
+            {visibles.map(({ r, idx: i }) => {
               const id = r.id as string;
               const title = String(r[entity.titleField] ?? "");
               const thumb = entity.thumbField ? (r[entity.thumbField] as string | null) : null;
               const published = Boolean(r.published);
               const updated = r.updated_at ? new Date(String(r.updated_at)).toLocaleDateString("es-CO", { day: "numeric", month: "short" }) : "";
               return (
-                <li key={id} className="flex flex-wrap items-center gap-4 px-5 py-4 transition-colors hover:bg-[#faf9f4] sm:px-6">
+                <li key={id} className="flex flex-wrap items-center gap-4 px-5 py-5 transition-colors hover:bg-[#faf9f4] sm:px-6">
                   {entity.thumbField && (
                     <span className="flex h-14 w-20 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-[#e4e2d6] bg-[#f1f0e8]">
                       {thumb ? (
@@ -105,7 +128,7 @@ export default async function EntityListPage({
                     </span>
                   )}
                   <div className="min-w-0 flex-1 basis-56">
-                    <Link href={`/admin/${entity.key}/${id}`} className="block truncate font-semibold hover:text-[#165a43]">{title}</Link>
+                    <Link href={`/admin/${entity.key}/${id}`} className="block truncate font-semibold !text-[#10240f] hover:underline">{title}</Link>
                     <p className="mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-[#5d6e65]">
                       {subtitle(r) && <span className="truncate">{subtitle(r)}</span>}
                       {updated && <span className="text-xs text-[#8a978f]">Editado {updated}</span>}
@@ -114,9 +137,9 @@ export default async function EntityListPage({
                   <span className={`ad-pill ${published ? "ad-pill-ok" : "ad-pill-off"}`}>{published ? "Publicado" : "Oculto"}</span>
                   <div className="flex items-center gap-2">
                     {entity.key === "cursos" && (
-                      <Link href={`/admin/cursos/${id}/curriculo`} className="ad-btn ad-btn-ghost !px-3.5 !py-2 text-sm"><ListTree size={15} /> Currículo</Link>
+                      <Link href={`/admin/cursos/${id}/curriculo`} className="inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium !text-[#5d6e65] hover:bg-[#f1f0e8]"><ListTree size={15} /> Currículo</Link>
                     )}
-                    <Link href={`/admin/${entity.key}/${id}`} className="ad-btn ad-btn-ghost !px-3.5 !py-2 text-sm"><Pencil size={15} /> Editar</Link>
+                    <Link href={`/admin/${entity.key}/${id}`} className="inline-flex items-center gap-1.5 rounded-lg border border-[#dcdcd6] px-3 py-2 text-sm font-medium !text-[#165a43] hover:bg-[#eef6f1]"><Pencil size={15} /> Editar</Link>
                     <RowMenu label={title}>
                       {entity.ordered && (
                         <>
