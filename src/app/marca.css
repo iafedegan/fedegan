@@ -438,5 +438,5 @@ html .mh-main-in { justify-content: center; gap: clamp(1rem, 3vw, 2.5rem); }
 .mh-line { flex: 1; height: 1px; }
 .mh-line-l { background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.75)); }
 .mh-line-r { background: linear-gradient(270deg, transparent, rgba(255, 255, 255, 0.75)); }
-.mh-emblem { height: 4.4rem; }
-.mh-brand.mh-title .mh-emblem { height: 3.6rem; }
+.mh-emblem { height: 6.5rem; }
+.mh-brand.mh-title .mh-emblem { height: 4.6rem; }
