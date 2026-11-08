@@ -23,7 +23,6 @@ export const adminNav: AdminNavGroup[] = [
     group: "Enlaces",
     items: [
       { label: "Ver el sitio", href: "/", icon: "globe", external: true },
-      { label: "Panel de CONtexto", href: "https://contexto-olive.vercel.app/panel", icon: "newspaper", external: true },
     ],
   },
 ];
