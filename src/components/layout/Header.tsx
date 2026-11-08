@@ -46,7 +46,7 @@ function MoreMenu({ items, pathname }: { items: { label: string; href: string }[
     <div
       ref={ref}
       className="relative"
-      onMouseEnter={(e) => { if (e.nativeEvent instanceof MouseEvent) setOpenAt(pathname); }}
+      onMouseEnter={() => setOpenAt(pathname)}
       onMouseLeave={() => setOpenAt(null)}
     >
       <button
