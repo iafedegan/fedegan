@@ -16,8 +16,8 @@ function isActive(pathname: string, href: string) {
 }
 
 // Primeras opciones visibles según el ancho; el resto va en «Más».
-const visibleFrom = (i: number) => (i < 3 ? "" : i < 6 ? "hidden xl:block" : "hidden");
-const inMoreOnlyBelow = (i: number) => (i < 6 ? "xl:hidden" : "");
+const visibleFrom = (i: number) => (i < 3 ? "" : i < 6 ? "hidden xl:block" : i < 8 ? "hidden 2xl:block" : "hidden");
+const inMoreOnlyBelow = (i: number) => (i < 6 ? "xl:hidden" : i < 8 ? "2xl:hidden" : "");
 
 function MoreMenu({ items, pathname }: { items: { label: string; href: string }[]; pathname: string }) {
   const [openAt, setOpenAt] = useState<string | null>(null);
