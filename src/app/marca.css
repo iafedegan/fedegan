@@ -472,8 +472,9 @@ html .hub-wrap > .hub-panel[hidden] { display: none; }
 .ev-btn-ghost { background: #fff; color: #10240f; border: 1.5px solid #cfd8c8; }
 .ev-btn-ghost:hover, .ev-btn-ghost:focus-visible { border-color: #72bf44; color: #2c6a14; transform: translateY(-2px); }
 .ev-mascota { position: relative; display: flex; justify-content: center; align-items: flex-end; min-height: 20rem; }
-.ev-mascota-fondo { position: absolute; inset: 6% 6% 0; border-radius: 2.4rem; background: radial-gradient(120% 90% at 30% 10%, #2a4aa3 0%, #14264d 60%, #0d1a36 100%); box-shadow: 0 30px 60px -28px rgba(13, 26, 54, 0.75); }
-.ev-mascota-fondo::after { content: ""; position: absolute; inset: 0; border-radius: inherit; background-image: radial-gradient(rgba(255, 255, 255, 0.14) 1.2px, transparent 1.4px); background-size: 18px 18px; mask-image: linear-gradient(135deg, #000 0%, transparent 65%); }
+.ev-mascota-fondo { position: absolute; inset: 6% 6% 0; border-radius: 2.4rem; overflow: hidden; background: url("/headers/campo.jpg") center / cover no-repeat, #3d7a22; box-shadow: 0 30px 60px -28px rgba(16, 36, 15, 0.6); }
+/* Un velo suave abajo para que Beto y las etiquetas se lean sobre la finca. */
+.ev-mascota-fondo::after { content: ""; position: absolute; inset: 0; border-radius: inherit; background: linear-gradient(180deg, rgba(16, 36, 15, 0) 40%, rgba(16, 36, 15, 0.35) 100%); }
 .ev-flota { position: absolute; display: inline-flex; align-items: center; gap: 0.45rem; padding: 0.55rem 0.9rem; border-radius: 999px; background: rgba(255, 255, 255, 0.95); box-shadow: 0 14px 28px -14px rgba(10, 25, 60, 0.6); font: 800 0.82rem/1 var(--font-body); color: #10240f; animation: ev-flota 5s ease-in-out infinite; }
 .ev-flota svg { color: #3d7a22; }
 .ev-flota-a { left: 0; top: 18%; } .ev-flota-b { right: 0; bottom: 14%; animation-delay: -2.4s; }
