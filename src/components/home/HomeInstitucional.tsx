@@ -27,17 +27,17 @@ export function HomeInstitucional({ d, banners }: { d: HomeData; banners: AdConf
   return (
     <div className="hi">
       <section data-region="hero" className="hi-hero">
-        <Container>
-          <HeroCarousel
+        <HeroCarousel
             initial={banners}
             fallback={
-              <div className="hi-hero-in">
-                <HeroText initial={portada} />
-                <div className="hi-hero-img"><Pic src={foto} alt={d.lead?.imageAlt ?? ""} sizes="(min-width: 1024px) 50vw, 100vw" priority /></div>
-              </div>
+              <Container>
+                <div className="hi-hero-in">
+                  <HeroText initial={portada} />
+                  <div className="hi-hero-img"><Pic src={foto} alt={d.lead?.imageAlt ?? ""} sizes="(min-width: 1024px) 50vw, 100vw" priority /></div>
+                </div>
+              </Container>
             }
           />
-        </Container>
       </section>
 
       <Container>
