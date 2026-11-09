@@ -21,7 +21,7 @@ export function AccountPicker() {
   useEffect(() => {
     if (!picked) return;
     const timers = steps.map((_, i) => setTimeout(() => setStep(i + 1), 700 * (i + 1)));
-    const done = setTimeout(() => signIn("demo", { profile: picked, redirectTo: "/mi-fedegan" }), 700 * steps.length + 500);
+    const done = setTimeout(() => signIn("demo", { profile: picked, redirectTo: "/ingresar" }), 700 * steps.length + 500);
     return () => {
       timers.forEach(clearTimeout);
       clearTimeout(done);

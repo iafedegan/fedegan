@@ -4,6 +4,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { HelpCircle, Lock, ShieldCheck } from "lucide-react";
 import { auth, demoEnabled, entraConfigured } from "@/auth";
+import { destinoTrasIngresar } from "@/lib/access";
 import { Container } from "@/components/ui/Container";
 import { SignInPanel } from "@/components/blocks/SignInPanel";
 
@@ -14,7 +15,7 @@ export default async function IngresarPage({ searchParams }: { searchParams: Pro
   const { callbackUrl } = await searchParams;
   if (callbackUrl && /^\/escuela-virtual(\/|$|\?)/.test(callbackUrl)) redirect(`/escuela-virtual/ingresar?callbackUrl=${encodeURIComponent(callbackUrl)}`);
   const session = await auth();
-  if (session?.user) redirect("/mi-fedegan");
+  if (session?.user) redirect(destinoTrasIngresar(session.user.roles));
 
   return (
     <>

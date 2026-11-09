@@ -27,7 +27,7 @@ export function SignInPanel({ entra, demo }: { entra: boolean; demo: boolean }) 
 
   async function go() {
     setBusy(true);
-    await signIn("microsoft-entra-id", { redirectTo: "/mi-fedegan" });
+    await signIn("microsoft-entra-id", { redirectTo: "/ingresar" });
     setBusy(false);
   }
 
@@ -45,7 +45,7 @@ export function SignInPanel({ entra, demo }: { entra: boolean; demo: boolean }) 
             </div>
           </div>
           <p className="text-sm leading-relaxed text-[var(--text-muted)]">
-            Cuenta institucional de Microsoft. Verá las aplicaciones habilitadas para su perfil, entre ellas la administración del portal y de CONtexto Ganadero.
+            Cuenta institucional de Microsoft. Al ingresar pasará directo al panel del portal si su perfil lo permite; si no, a sus aplicaciones.
           </p>
           {entra ? (
             <Button disabled={busy} onClick={go} className="w-full">

@@ -27,20 +27,16 @@ export const apps: AppEntry[] = [
     icon: "shield",
     anyOf: [ROLES.portalAdmin, ROLES.portalEditor],
   },
-  {
-    id: "contexto-admin",
-    nombre: "Administrar CONtexto Ganadero",
-    descripcion: "Panel editorial: notas, categorías, boletín y claves de API.",
-    href: "https://contexto-olive.vercel.app/panel",
-    external: true,
-    icon: "newspaper",
-    anyOf: [ROLES.contextoAdmin, ROLES.contextoEditor],
-  },
 ];
 
 export function appsForRoles(roles: string[] | undefined) {
   const set = new Set(roles ?? []);
   return apps.filter((a) => a.anyOf.some((r) => set.has(r)));
+}
+
+/** Adónde va quien acaba de iniciar sesión: quien edita el portal pasa directo al panel; los demás, a Mi FEDEGÁN. */
+export function destinoTrasIngresar(roles: string[] | undefined) {
+  return hasAnyRole(roles, [ROLES.portalAdmin, ROLES.portalEditor]) ? "/admin" : "/mi-fedegan";
 }
 
 export function hasAnyRole(roles: string[] | undefined, allowed: string[]) {

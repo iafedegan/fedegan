@@ -4,6 +4,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Lock, ShieldCheck, Sparkles } from "lucide-react";
 import { auth, demoEnabled } from "@/auth";
+import { destinoTrasIngresar } from "@/lib/access";
 import { Container } from "@/components/ui/Container";
 import { AccountPicker } from "@/components/blocks/AccountPicker";
 
@@ -12,7 +13,7 @@ export const metadata: Metadata = { title: "Elegir cuenta", robots: { index: fal
 export default async function CuentaPage() {
   if (!demoEnabled) redirect("/ingresar");
   const session = await auth();
-  if (session?.user) redirect("/mi-fedegan");
+  if (session?.user) redirect(destinoTrasIngresar(session.user.roles));
 
   return (
     <>
