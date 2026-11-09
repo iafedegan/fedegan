@@ -33,7 +33,7 @@ const csp = [
   "img-src 'self' data: blob: https:",
   "media-src 'self' https:",
   "connect-src 'self' https://*.supabase.co https://contexto-olive.vercel.app https://www.google-analytics.com https://*.google-analytics.com https://www.googletagmanager.com",
-  "frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com https://www.googletagmanager.com",
+  "frame-src 'self' https://pagos.fedegan.org.co https://www.youtube.com https://www.youtube-nocookie.com https://www.googletagmanager.com",
   "frame-ancestors 'self'",
   "base-uri 'self'",
   "form-action 'self'",

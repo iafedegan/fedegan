@@ -13,6 +13,7 @@ Inventario de lo que FEDEGÁN–FNG debe tener bajo su control al recibir el pro
 | Google Tag Manager / GA4 | Analítica con consentimiento | Pendiente de crear el contenedor | _por designar_ |
 | Dominio `fedegan.org.co` (DNS) | Dirección pública | Sin apuntar al portal nuevo | _por designar_ |
 | CONtexto Ganadero | Noticias (API) | Activo; claves en `/admin/apis` | _por designar_ |
+| Sistema de pagos (`pagos.fedegan.org.co`) | Formulario de ingreso de recaudadores dentro de `/pagos/cuota` | El portal ya lo incrusta solo cuando ese sitio lo permite; hoy responde `X-Frame-Options: SAMEORIGIN` y se muestra un acceso directo. Para activarlo, que quien administre ese sistema (o su Cloudflare) quite `X-Frame-Options` y envíe `Content-Security-Policy: frame-ancestors 'self' https://www.fedegan.org.co` (más `https://fedegan.vercel.app` para pruebas). El portal debe servirse desde `fedegan.org.co`: las cookies de sesión de pagos son `SameSite=Lax` | _por designar_ |
 
 **Acción de traspaso**: pasar la propiedad de GitHub, Vercel y Supabase a cuentas institucionales (organización de FEDEGÁN) y dejar a la firma contratista solo con el acceso acordado para el periodo de estabilización.
 

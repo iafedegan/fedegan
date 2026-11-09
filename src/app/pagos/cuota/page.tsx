@@ -3,7 +3,8 @@ import Link from "next/link";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Container } from "@/components/ui/Container";
-import { PaymentLogin } from "@/components/pagos/PaymentLogin";
+import { PagosEmbebido } from "@/components/pagos/PagosEmbebido";
+import { getPagosEmbebible } from "@/lib/pagos-embed-server";
 import { ley, pagosActual } from "@/content/pagos";
 
 export const metadata: Metadata = { title: "Cuota de fomento: ingreso de recaudadores" };
@@ -17,6 +18,7 @@ const pasos = [
 export default async function CuotaPage({ searchParams }: { searchParams: Promise<{ c?: string }> }) {
   const { c } = await searchParams;
   const concepto = c === "carne" ? "carne" : "leche";
+  const embebible = await getPagosEmbebible();
   return (
     <>
       <PageHeader
@@ -43,7 +45,7 @@ export default async function CuotaPage({ searchParams }: { searchParams: Promis
               </Link>
             ))}
           </div>
-          <PaymentLogin />
+          <PagosEmbebido embebible={embebible} />
           <Link href={`/pagos/planilla?c=${concepto}`} className="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-[0.12em] text-[var(--fg-lime-400)] hover:text-[var(--text)]">
             Ver la planilla de {concepto} <ArrowRight size={16} />
           </Link>
