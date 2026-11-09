@@ -28,7 +28,6 @@ import { WebVitals } from "@/components/layout/WebVitals";
 import { SITE_URL } from "@/lib/site-url";
 import { Analytics } from "@/components/layout/Analytics";
 import { UsageTracker } from "@/components/layout/UsageTracker";
-import { SideMenu } from "@/components/layout/SideMenu";
 
 export const viewport: Viewport = {
   themeColor: "#72bf44",
@@ -164,7 +163,6 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
                 </ChromeGate>
                 <SitePopup initial={design.popup} />
                 <PwaRegister build={process.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 8) ?? "local"} />
-                <SideMenu />
                 <BackToTop />
                 <MobileTabBar />
               </>

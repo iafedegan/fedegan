@@ -2068,47 +2068,6 @@ body:has(.mx-hero) :is(a.wc.wp, a.mx-card, a.gl, a.pn-card, .mx-lift):not(.ed-ra
 html[data-theme="esmeralda"] body:has(.mx-hero) :is(.wc.wp, .mx-card, .gl, .mx-panel, .pn-card):not(.ed-rail)::after { background: linear-gradient(110deg, transparent 35%, rgba(255, 255, 255, 0.1) 50%, transparent 65%); }
 @media (prefers-reduced-motion: reduce) { body:has(.mx-hero) :is(.wc.wp, .mx-card, .gl, .mx-panel, .pn-card)::before, body:has(.mx-hero) :is(.wc.wp, .mx-card, .gl, .mx-panel, .pn-card)::after { transition: none; } }
 
-/* Menú lateral derecho (recorrido de la portada en las demás páginas): franja fina que se abre al pasar el cursor */
-.sm { position: fixed; z-index: 60; top: 50%; right: 0; transform: translateY(-50%); display: none; }
-@media (min-width: 1024px) { .sm { display: block; } }
-.sm-tab { display: flex; flex-direction: column; align-items: flex-end; gap: 0.55rem; padding: 0.9rem 0.55rem 0.9rem 1.2rem; cursor: pointer; }
-.sm-tab i { display: block; width: 0.55rem; height: 0.55rem; border-radius: 50%; border: 1.5px solid rgba(var(--veil, 255, 255, 255), 1); background: rgba(0, 0, 0, 0.35); box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.25); }
-.sm-tab i:first-child { background: #d8b558; border-color: #d8b558; }
-.sm-panel { position: absolute; right: 0.5rem; top: 50%; margin: 0; padding: 1.1rem 1.3rem 1.1rem 1.6rem; list-style: none; display: flex; flex-direction: column; gap: 0.15rem; min-width: 17rem; max-height: 86vh; overflow-y: auto;
-  border-radius: 0.9rem; background: rgba(12, 20, 15, 0.86); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); border: 1px solid rgba(216, 181, 88, 0.3); box-shadow: 0 24px 50px -20px rgba(0, 0, 0, 0.6);
-  opacity: 0; visibility: hidden; transform: translate(1rem, -50%); transition: opacity 0.3s, transform 0.45s var(--ease-lux, ease), visibility 0s 0.3s; }
-.sm:hover .sm-panel, .sm:focus-within .sm-panel { opacity: 1; visibility: visible; transform: translate(0, -50%); transition-delay: 0s; }
-.sm:hover .sm-tab, .sm:focus-within .sm-tab { opacity: 0; }
-.sm-panel a { display: flex; align-items: center; justify-content: flex-end; gap: 0.7rem; padding: 0.42rem 0; font: 600 0.78rem/1.2 var(--font-body); letter-spacing: 0.14em; text-transform: uppercase; color: rgba(244, 242, 233, 0.82); text-decoration: none; text-align: right; transition: color 0.2s; }
-.sm-panel a b { flex: none; width: 0.62rem; height: 0.62rem; border-radius: 50%; border: 2px solid currentColor; }
-.sm-panel a:hover, .sm-panel a:focus-visible { color: #fff; }
-.sm-panel li[data-on] a { color: #d8b558; }
-.sm-panel li[data-on] a b { background: #d8b558; }
-@media (prefers-reduced-motion: reduce) { .sm-panel { transition: none; } }
-
-
-/* Franja del menú lateral: fondo propio y una flecha que avisa que hay un menú */
-.sm-tab { align-items: center; gap: 0.5rem; padding: 0.6rem 0.5rem 0.7rem; border-radius: 0.9rem 0 0 0.9rem; background: rgba(12, 20, 15, 0.82); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border: 1px solid rgba(216, 181, 88, 0.35); border-right: 0; box-shadow: -8px 10px 24px -14px rgba(0, 0, 0, 0.55); transition: opacity 0.25s, padding 0.3s var(--ease-lux, ease); }
-.sm-tab::before { content: ""; width: 0.5rem; height: 0.5rem; margin: 0.15rem 0 0.2rem; border-left: 2px solid #d8b558; border-bottom: 2px solid #d8b558; transform: rotate(45deg); animation: smnudge 1.8s ease-in-out infinite; }
-.sm-tab i { border-color: rgba(244, 242, 233, 0.85); background: transparent; box-shadow: none; }
-.sm-tab i:first-child { background: #d8b558; border-color: #d8b558; }
-.sm:hover .sm-tab { padding-left: 0.9rem; }
-@keyframes smnudge { 0%, 100% { transform: translateX(0) rotate(45deg); } 50% { transform: translateX(-3px) rotate(45deg); } }
-@media (prefers-reduced-motion: reduce) { .sm-tab::before { animation: none; } }
-
-/* Franja del menú lateral: «Más secciones» en vertical y una flecha con pulso y estela */
-.sm-tab { gap: 0.7rem; padding: 0.9rem 0.55rem 1rem; overflow: hidden; }
-.sm-tab::before { content: none; }
-.sm-tab i { display: none; }
-.sm-label { writing-mode: vertical-rl; transform: rotate(180deg); font: 700 0.72rem/1 var(--font-body); letter-spacing: 0.22em; text-transform: uppercase; color: #f4f2e9; white-space: nowrap; }
-.sm-arrow { position: relative; display: block; width: 1.5rem; height: 1.5rem; border-radius: 50%; background: rgba(216, 181, 88, 0.16); }
-.sm-arrow::before { content: ""; position: absolute; left: 0.62rem; top: 0.52rem; width: 0.42rem; height: 0.42rem; border-left: 2px solid #d8b558; border-bottom: 2px solid #d8b558; transform: rotate(45deg); animation: smarrow 1.6s var(--ease-lux, ease) infinite; }
-.sm-arrow::after { content: ""; position: absolute; inset: 0; border-radius: 50%; border: 1.5px solid #d8b558; animation: smpulse 1.6s ease-out infinite; }
-.sm:hover .sm-arrow::before { animation-duration: 0.8s; }
-@keyframes smarrow { 0% { transform: translateX(3px) rotate(45deg); opacity: 0; } 40% { opacity: 1; } 100% { transform: translateX(-4px) rotate(45deg); opacity: 0; } }
-@keyframes smpulse { 0% { transform: scale(0.7); opacity: 0.9; } 100% { transform: scale(1.5); opacity: 0; } }
-@media (prefers-reduced-motion: reduce) { .sm-arrow::before, .sm-arrow::after { animation: none; } .sm-arrow::before { opacity: 1; } }
-
 /* Tarjetas más redondeadas: la foto interior sigue la curva de la tarjeta */
 body:has(.mx-hero) .wc.wp .wp-img { border-radius: 0.95rem; }
 body:has(.mx-hero) .wc.wp:not(.ed-rail) { padding: 0.85rem 0.85rem 1.2rem; }
