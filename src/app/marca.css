@@ -833,3 +833,11 @@ textarea.fm-in { resize: vertical; min-height: 6rem; }
 .hi-pub .hi-pub-body b { margin-top: auto; padding-top: 0.9rem; border-top: 1px solid #e8ece3; justify-content: space-between; font-size: 0.86rem; }
 .hi-pub-go { display: grid; place-items: center; width: 2rem; height: 2rem; border-radius: 50%; background: #eef8e6; color: #3d7a22; transition: background-color 0.2s, color 0.2s; }
 .hi-pub:hover .hi-pub-go { background: #3d7a22; color: #fff; }
+
+/* Portadas de sección con muchas páginas: las primeras como fichas y el resto como lista simple */
+.hub-resto { margin-top: 1.6rem; border: 1px solid var(--border); border-radius: 0.9rem; background: var(--surface-solid, #fff); }
+.hub-resto > summary { cursor: pointer; padding: 0.9rem 1.2rem; font-weight: 800; color: var(--text); }
+.hub-resto > ul { margin: 0; padding: 0 1.2rem 1.2rem; list-style: none; columns: 3 17rem; column-gap: 2rem; }
+.hub-resto > ul > li { break-inside: avoid; padding: 0.3rem 0; font-size: 0.92rem; line-height: 1.35; }
+.hub-resto > ul a { color: var(--text-muted); text-decoration: none; }
+.hub-resto > ul a:hover { color: var(--fg-lime-400, #3d7a22); text-decoration: underline; }

@@ -18,13 +18,16 @@ export function SectionSearch({ label, className = "" }: { label: string; classN
   );
 }
 
-const toLinks = (nodes: NavNode[], slug: string): HubLink[] =>
-  nodes.map((n) => ({
-    label: n.label,
-    href: n.key ? legacyHref(slug, n.key) : n.href,
-    external: !n.key && /^https?:\/\//.test(n.href ?? ""),
-    children: n.children ? toLinks(n.children, slug) : undefined,
-  }));
+// Una ficha lleva a lo sumo MAX_ENLACES páginas por lista; si hay más, el último enlace abre la página de la rama (el HTML no puede crecer sin límite).
+const MAX_ENLACES = 40;
+const toLinks = (nodes: NavNode[], slug: string, verTodas?: string): HubLink[] => {
+  const lista: HubLink[] = nodes.slice(0, MAX_ENLACES).map((n) => {
+    const href = n.key ? legacyHref(slug, n.key) : n.href;
+    return { label: n.label, href, external: !n.key && /^https?:\/\//.test(n.href ?? ""), children: n.children ? toLinks(n.children, slug, href) : undefined };
+  });
+  if (nodes.length > MAX_ENLACES && verTodas) lista.push({ label: `Ver las ${nodes.length} páginas →`, href: verTodas });
+  return lista;
+};
 
 // Entrada de la sección: celda de texto con número, título, extracto y cuántas páginas trae. Sin fotos repetidas: se escanea rápido.
 export type Ficha = { titulo: string; texto: string; enlace: string };
@@ -96,7 +99,7 @@ export function SectionTiles({ nodes, slug, custom = {}, extras = [] }: { nodes:
         return (
           <li key={`${n.label}-${i}`} style={style}>
             {total > 0 && !external ? (
-              <HubExpand head={head} text={text} count={total} href={href} items={toLinks(kids, slug)} />
+              <HubExpand head={head} text={text} count={total} href={href} items={toLinks(kids, slug, href)} />
             ) : href ? (
               external ? (
                 <a href={href} target="_blank" rel="noopener noreferrer" className="hub-cell">

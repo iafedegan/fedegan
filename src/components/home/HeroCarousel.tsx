@@ -1,10 +1,12 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { ArrowRight, ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
 import type { AdConfig } from "@/lib/design/regions";
 import { useLiveDesign } from "@/components/design/live";
+import { canOptimize } from "@/lib/image-host";
 import { HERO_DEFAULTS } from "./HeroText";
 
 type Slide = AdConfig;
@@ -88,8 +90,9 @@ export function HeroCarousel({ initial, fallback }: { initial: Slide[]; fallback
           const Titulo = k === 0 ? "h1" : "h2";
           return (
             <div key={`${s.image}-${k}`} className="car-slide" data-on={k === act ? "si" : "no"} aria-hidden={k !== act} inert={k !== act} role="group" aria-roledescription="diapositiva" aria-label={`${k + 1} de ${n}`}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={s.image} alt={s.alt || ""} className="car-img" loading={k === 0 ? "eager" : "lazy"} fetchPriority={k === 0 ? "high" : "auto"} />
+              {/* Las imágenes subidas desde el panel pasan por el optimizador: el tamaño de pantalla justo, en AVIF o WebP y con caché larga
+                  (sin esto, una foto de 2 MB se descargaba completa en cada visita y la portada tardaba varios segundos). */}
+              <Image src={s.image as string} alt={s.alt || ""} fill sizes="(min-width: 1536px) 1536px, 100vw" quality={72} priority={k === 0} unoptimized={!canOptimize(s.image as string)} className="car-img" />
               {conTexto && <div className="car-veil" aria-hidden />}
               {conTexto ? (
                 <div className="car-text">

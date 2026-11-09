@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { NavTree, type NavItem } from "./NavTree";
 
@@ -9,9 +9,11 @@ import { NavTree, type NavItem } from "./NavTree";
 export function SectionMenu({ label, items, current }: { label: string; items: NavItem[]; current: string }) {
   const ref = useRef<HTMLDialogElement>(null);
   const close = () => ref.current?.close();
+  // El árbol solo se pinta cuando se abre el menú: antes duplicaba cientos de enlaces ocultos en cada página.
+  const [listo, setListo] = useState(false);
   return (
     <>
-      <button type="button" className="menu-btn" onClick={() => ref.current?.showModal()} aria-haspopup="dialog">
+      <button type="button" className="menu-btn" onClick={() => { setListo(true); ref.current?.showModal(); }} aria-haspopup="dialog">
         <Menu size={16} aria-hidden /> Menú de {label}
       </button>
       <dialog
@@ -36,7 +38,7 @@ export function SectionMenu({ label, items, current }: { label: string; items: N
               if ((e.target as HTMLElement).closest("a")) close();
             }}
           >
-            <NavTree nodes={items} current={current} />
+            {listo && <NavTree nodes={items} current={current} />}
           </nav>
         </div>
       </dialog>

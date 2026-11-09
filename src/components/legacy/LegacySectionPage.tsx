@@ -7,6 +7,7 @@ import { QuickRail } from "@/components/blocks/Accesos";
 import { NavTree, type NavItem } from "@/components/legacy/NavTree";
 import { TocRail, type TocItem } from "@/components/legacy/TocRail";
 import { SectionMenu } from "@/components/legacy/SectionMenu";
+import { podarMenu } from "@/components/legacy/menu-poda";
 import { ArticleTools } from "@/components/legacy/ArticleTools";
 import { PrevNext, SectionSearch, SectionTiles, countBelow, flattenTree, sacarFichas } from "@/components/legacy/SectionParts";
 import { journeyPhotos } from "@/content/scroll-world";
@@ -68,7 +69,7 @@ export async function LegacySectionPage({ slug, ruta }: { slug: string; ruta: st
   }
 
   const hasMenu = section.tree.length > 0;
-  const menuItems = toItems(section.tree, slug);
+  const menuItems = podarMenu(toItems(section.tree, slug), key, `/seccion/${slug}`);
   // Índice de la página: sus títulos (sin las entradas que son solo un enlace), con el mismo id que pinta LegacyContent.
   const toc: TocItem[] = page.blocks
     .map((b, i) => ({ b, i }))
@@ -92,6 +93,11 @@ export async function LegacySectionPage({ slug, ruta }: { slug: string; ruta: st
   if (isLanding) {
     const branches = section.tree.filter((n) => n.key !== key);
     const pages = branches.reduce((a, n) => a + 1 + countBelow(n), 0);
+    // Con cientos de páginas, las primeras van como fichas y el resto como lista simple (si no, la portada pesaba más de 1 MB).
+    const FICHAS_MAX = 36;
+    const partir = branches.length > FICHAS_MAX + 12;
+    const destacadas = partir ? branches.slice(0, FICHAS_MAX) : branches;
+    const restantes = partir ? branches.slice(FICHAS_MAX) : [];
     return (
       <>
         <PageHeader
@@ -120,7 +126,18 @@ export async function LegacySectionPage({ slug, ruta }: { slug: string; ruta: st
                 <h2 id="hub-explorar">Explore {section.label}</h2>
                 <p>Elija un tema. Cada ficha muestra lo que encontrará dentro.</p>
               </div>
-              <SectionTiles nodes={branches} slug={slug} custom={custom} extras={fichas} />
+              <SectionTiles nodes={destacadas} slug={slug} custom={custom} extras={fichas} />
+              {restantes.length > 0 && (
+                <details className="hub-resto">
+                  <summary>Ver las {restantes.length} páginas restantes</summary>
+                  <ul>
+                    {restantes.map((n, i) => {
+                      const h = n.key ? legacyHref(slug, n.key) : n.href;
+                      return <li key={`${n.label}-${i}`}>{h ? <Link href={h}>{n.label}</Link> : n.label}</li>;
+                    })}
+                  </ul>
+                </details>
+              )}
             </section>
           )}
 

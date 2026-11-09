@@ -89,16 +89,21 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   const [nav, design] = await Promise.all([getNav(), getPublishedDesign()]);
   // Cada opción que lleva a una sección muestra sus páginas al pasar el mouse.
   type Sub = { label: string; href: string; children?: Sub[] };
-  const subs = (nodes: NavNode[], slug: string): Sub[] =>
-    nodes.flatMap((n) => {
+  // Este menú viaja en TODAS las páginas: se recorta a 2 niveles (opciones y su panel al costado) y a 12 entradas por lista (con un enlace «Ver las N páginas»).
+  // Antes mandaba cientos de páginas de la columna del presidente, las cartas y las publicaciones en cada visita (unos 200 KB).
+  const MAX_ENTRADAS = 12;
+  const subs = (nodes: NavNode[], slug: string, verTodas: string, nivel = 1): Sub[] => {
+    const lista = nodes.flatMap((n) => {
       const href = n.key ? legacyHref(slug, n.key) : n.href;
-      return href ? [{ label: n.label, href, children: n.children?.length ? subs(n.children, slug) : undefined }] : [];
+      return href ? [{ label: n.label, href, ...(n.children?.length && nivel < 2 ? { children: subs(n.children, slug, href, nivel + 1) } : {}) }] : [];
     });
+    return lista.length > MAX_ENTRADAS ? [...lista.slice(0, MAX_ENTRADAS), { label: `Ver las ${lista.length} páginas →`, href: verTodas }] : lista;
+  };
   const navConHijos = await Promise.all(
     nav.map(async (it) => {
       const slug = /^\/seccion\/([^/?#]+)\/?$/.exec(it.href)?.[1];
       const section = slug ? await getSection(slug).catch(() => null) : null;
-      const children = section && slug ? subs(section.tree, slug) : [];
+      const children = section && slug ? subs(section.tree, slug, it.href) : [];
       return children.length ? { ...it, children } : it;
     }),
   );

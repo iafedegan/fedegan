@@ -65,6 +65,9 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       { protocol: "https", hostname: "*.supabase.co", pathname: "/storage/v1/object/public/**" },
       { protocol: "https", hostname: "contexto-olive.vercel.app" },
+      { protocol: "https", hostname: "storage.fedegan.org.co" },
+      { protocol: "https", hostname: "static.fedegan.org.co" },
+      { protocol: "https", hostname: "storage.googleapis.com", pathname: "/static-fedegan/**" },
     ],
   },
   async headers() {

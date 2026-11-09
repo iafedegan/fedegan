@@ -1,4 +1,6 @@
+import Image from "next/image";
 import { ArrowRight, ArrowUpRight, ChevronDown, Download, FileText } from "lucide-react";
+import { canOptimize } from "@/lib/image-host";
 import { ScrollRail } from "@/components/design/ScrollRail";
 import { elementoDeBloque, type Bloque, type Elemento, type Tarjeta } from "@/lib/cms/bloques";
 import { TIPOS_ESQUEMA } from "@/lib/cms/elementos";
@@ -27,8 +29,8 @@ function Imagen({ el }: { el: De<"image"> }) {
   if (!src) return null;
   return (
     <figure className="my-6 max-w-3xl">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={src} alt={el.alt} loading="lazy" decoding="async" className="h-auto w-full rounded-[var(--radius-md)] border border-[var(--border)]" />
+      {/* Por el optimizador: afiches e infografías de 1 a 2 MB llegan en el tamaño de pantalla y en WebP/AVIF. */}
+      <Image src={src} alt={el.alt} width={1200} height={900} sizes="(min-width: 768px) 768px, 100vw" quality={75} unoptimized={!canOptimize(src)} className="h-auto w-full rounded-[var(--radius-md)] border border-[var(--border)]" />
       {el.pie && <figcaption className="mt-2 text-sm leading-snug text-[var(--text-muted)]">{el.pie}</figcaption>}
     </figure>
   );
