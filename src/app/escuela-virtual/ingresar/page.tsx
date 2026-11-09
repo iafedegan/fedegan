@@ -21,9 +21,9 @@ export default async function UniversityLoginPage({ searchParams }: { searchPara
       <span aria-hidden className="pointer-events-none absolute -right-24 bottom-0 h-[30rem] w-[30rem] rounded-full bg-[radial-gradient(closest-side,rgba(47,156,98,0.2),transparent)]" />
       <div className="relative mx-auto grid min-h-[calc(100dvh-4rem)] w-full max-w-[84rem] items-center gap-10 px-4 py-10 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
         <div className="flex flex-col items-start gap-6">
-          <Image src="/brand/ucg-escudo.svg" alt="Escudo UCG" width={1893} height={2385} unoptimized priority className="h-20 w-auto drop-shadow-[0_10px_24px_rgba(0,0,0,0.5)]" />
+          <Image src="/brand/fedegan-escudo.svg" alt="Escudo FEDEGÁN" width={211} height={253} unoptimized priority className="h-20 w-auto drop-shadow-[0_10px_24px_rgba(0,0,0,0.5)]" />
           <div>
-            <p className="text-[0.72rem] font-bold uppercase tracking-[0.22em] text-[var(--fg-lime-400)]">Escuela Virtual UCG</p>
+            <p className="text-[0.72rem] font-bold uppercase tracking-[0.22em] text-[var(--fg-lime-400)]">Escuela Virtual FEDEGÁN</p>
             <h1 className="mt-2 font-[var(--font-display)] text-4xl font-bold leading-tight text-[var(--text)] sm:text-5xl">Bienvenido, ganadero y aliado</h1>
             <p className="mt-4 max-w-xl text-lg leading-relaxed text-[var(--text-muted)]">Ingrese o cree su cuenta gratis para estudiar a su ritmo, evaluarse, obtener su certificado y su carnet de estudiante.</p>
           </div>
@@ -33,7 +33,7 @@ export default async function UniversityLoginPage({ searchParams }: { searchPara
               return <li key={String(t)} className="flex items-center gap-3"><span className="flex h-9 w-9 items-center justify-center rounded-full bg-[rgba(216,181,88,0.14)] text-[var(--fg-lime-400)]"><I size={17} /></span>{String(t)}</li>;
             })}
           </ul>
-          <Image src="/brand/mascota-beto.svg" alt="" width={1671} height={2388} unoptimized className="hidden h-56 w-auto drop-shadow-[0_18px_30px_rgba(0,0,0,0.55)] lg:block" />
+          <Image src="/brand/beto-fedegan.svg" alt="" width={1671} height={2388} unoptimized className="hidden h-56 w-auto drop-shadow-[0_18px_30px_rgba(0,0,0,0.55)] lg:block" />
         </div>
         <div className="flex justify-center lg:justify-end">
           <UniversityLogin callbackUrl={to} />

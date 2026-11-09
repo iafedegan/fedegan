@@ -188,7 +188,7 @@ export async function ensureStudent(me: Learner): Promise<{ code: string; since:
   const { data } = await db.from("lms_students").select("code,created_at").eq("user_key", me.key).maybeSingle();
   if (data) return { code: s(data.code), since: s(data.created_at) };
   for (let i = 0; i < 5; i++) {
-    const code = `UCG-${new Date().getFullYear()}-${String(Math.floor(Math.random() * 1_000_000)).padStart(6, "0")}`;
+    const code = `FED-${new Date().getFullYear()}-${String(Math.floor(Math.random() * 1_000_000)).padStart(6, "0")}`;
     const { data: ins, error } = await db.from("lms_students").insert({ user_key: me.key, code, name: me.name }).select("code,created_at").single();
     if (!error && ins) return { code: s(ins.code), since: s(ins.created_at) };
   }
@@ -211,7 +211,7 @@ export type CodeLookup =
 /** Verifica un código de carnet o de certificado (página pública de verificación). */
 export async function lookupCode(code: string): Promise<CodeLookup> {
   const db = adminDb();
-  if (!db || !/^UCG-\d{4}-[A-Z0-9]{6}$/i.test(code)) return null;
+  if (!db || !/^(UCG|FED)-\d{4}-[A-Z0-9]{6}$/i.test(code)) return null;
   const c = code.toUpperCase();
   const { data: st } = await db.from("lms_students").select("user_key,name,created_at").eq("code", c).maybeSingle();
   if (st) {

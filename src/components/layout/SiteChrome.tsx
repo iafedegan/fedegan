@@ -33,7 +33,7 @@ export function SiteChrome({ top, bottom, children, template }: { top: ReactNode
   }, [publico]);
 
   if (pathname.startsWith("/admin")) return <>{children}</>;
-  // La Escuela Virtual (UCG) es un espacio aparte, con su propio marco.
+  // La Escuela Virtual es un espacio aparte, con su propio marco.
   if (pathname.startsWith("/escuela-virtual")) return <UniversityShell>{children}</UniversityShell>;
   return (
     <div data-site-chrome data-template={template} className="flex min-h-dvh flex-1 flex-col pb-[calc(5.5rem+env(safe-area-inset-bottom))] md:pb-0">

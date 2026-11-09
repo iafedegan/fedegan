@@ -35,7 +35,7 @@ export default async function CertificatePage({ params }: { params: Promise<{ sl
       {enrollment.demo && <p className="w-full rounded-[0.25rem] border border-[#e8d9a8] bg-[#fbf5de] px-4 py-2.5 text-sm text-[#6b5518] print:hidden">Certificado de demostración: sirve para probar la publicación en LinkedIn y no acredita la finalización del curso.</p>}
       <article className="relative w-full overflow-hidden rounded-[0.5rem] border-[10px] border-double border-[#b08f4f] bg-[#fbf8ee] p-8 text-center text-[#11271d] shadow-[var(--shadow-lg)] sm:p-14 print:shadow-none">
         {enrollment.demo && <span aria-hidden className="pointer-events-none absolute right-[-3.2rem] top-8 rotate-45 bg-[#b08f4f] px-14 py-1 text-[0.7rem] font-bold uppercase tracking-[0.3em] text-white">Demostración</span>}
-        <Image src="/brand/ucg-escudo.svg" alt="Escudo UCG" width={1893} height={2385} unoptimized className="mx-auto h-24 w-auto" />
+        <Image src="/brand/fedegan-escudo.svg" alt="Escudo FEDEGÁN" width={211} height={253} unoptimized className="mx-auto h-24 w-auto" />
         <p className="mt-5 text-xs font-bold uppercase tracking-[0.3em] text-[#8a6d2f]">Escuela Virtual · FEDEGÁN–FNG</p>
         <h1 className="mt-3 font-[var(--font-display)] text-4xl font-bold sm:text-5xl">Certificado de finalización</h1>
         <p className="mt-8 text-lg text-[#4a5a52]">Se certifica que</p>

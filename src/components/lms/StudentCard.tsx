@@ -15,10 +15,10 @@ export function StudentCard({ d }: { d: StudentCardData }) {
           {/* Frente */}
           <article aria-label="Carnet de estudiante, frente" className="relative aspect-[1.586/1] w-full max-w-[34rem] overflow-hidden rounded-[1.1rem] border border-[#b08f4f]/60 bg-[#fbf8ee] text-[#11271d] shadow-[var(--shadow-lg)] print:shadow-none">
             <div className="flex items-center gap-3 bg-[linear-gradient(100deg,#0b4a2d,#1e3258)] px-5 py-3 text-white">
-              <Image src="/brand/ucg-escudo.svg" alt="" width={1893} height={2385} unoptimized className="h-12 w-auto" />
+              <Image src="/brand/fedegan-escudo.svg" alt="" width={211} height={253} unoptimized className="h-12 w-auto" />
               <div className="leading-tight">
-                <p className="font-[var(--font-display)] text-xl font-bold tracking-wide">UCG</p>
-                <p className="text-[0.62rem] font-bold uppercase tracking-[0.22em] text-[#e6cf8e]">Escuela Virtual · FEDEGÁN–FNG</p>
+                <p className="font-[var(--font-display)] text-xl font-bold tracking-wide">FEDEGÁN</p>
+                <p className="text-[0.62rem] font-bold uppercase tracking-[0.22em] text-[#e6cf8e]">Escuela Virtual</p>
               </div>
               <span className="ml-auto rounded-full border border-[#e6cf8e]/70 px-3 py-1 text-[0.6rem] font-bold uppercase tracking-[0.2em] text-[#e6cf8e]">Estudiante</span>
             </div>
@@ -35,7 +35,7 @@ export function StudentCard({ d }: { d: StudentCardData }) {
             <div className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-[#e9e3cc]/70 px-5 py-2 text-[0.62rem] font-bold uppercase tracking-[0.16em] text-[#4a5a52]">
               <span>Desde {since}</span><span>Válido {year}</span>
             </div>
-            <Image src="/brand/mascota-beto.svg" alt="" width={1671} height={2388} unoptimized className="pointer-events-none absolute bottom-6 right-3 h-32 w-auto drop-shadow-[0_6px_10px_rgba(0,0,0,0.3)]" />
+            <Image src="/brand/beto-fedegan.svg" alt="" width={1671} height={2388} unoptimized className="pointer-events-none absolute bottom-6 right-3 h-32 w-auto drop-shadow-[0_6px_10px_rgba(0,0,0,0.3)]" />
           </article>
 
           {/* Reverso */}

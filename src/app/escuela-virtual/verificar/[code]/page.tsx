@@ -12,7 +12,7 @@ export default async function VerifyPage({ params }: { params: Promise<{ code: s
   const fmt = (d: string) => new Date(d).toLocaleDateString("es-CO", { day: "numeric", month: "long", year: "numeric" });
   return (
     <div className="mx-auto flex w-full max-w-xl flex-col items-center gap-6 px-4 py-14 text-center">
-      <Image src="/brand/ucg-escudo.svg" alt="Escudo UCG" width={1893} height={2385} unoptimized className="h-20 w-auto" />
+      <Image src="/brand/fedegan-escudo.svg" alt="Escudo FEDEGÁN" width={211} height={253} unoptimized className="h-20 w-auto" />
       {found ? (
         <div className="w-full rounded-[var(--radius-lg)] border border-[var(--fg-lime-500)] bg-[var(--surface-solid)] p-8">
           <BadgeCheck size={36} className="mx-auto text-[var(--fg-lime-400)]" />

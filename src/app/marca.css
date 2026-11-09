@@ -458,7 +458,7 @@ html .hub-wrap > .hub-panel[hidden] { display: none; }
 /* Fecha larga debajo del logo (escritorio) */
 .mh-desk .mh-date-desk { margin: 0; padding: 0 1rem 0.55rem; text-align: center; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: #10240f; }
 
-/* ---------- Escuela Virtual (UCG): portada moderna y catálogo en tarjetas ---------- */
+/* ---------- Escuela Virtual: portada moderna y catálogo en tarjetas ---------- */
 .ev-hero { background: linear-gradient(180deg, #f3faee 0%, #ffffff 100%); }
 .ev-blob { position: absolute; border-radius: 999px; filter: blur(70px); opacity: 0.55; pointer-events: none; }
 .ev-blob-a { width: 30rem; height: 30rem; top: -10rem; left: -8rem; background: #cfeab9; }

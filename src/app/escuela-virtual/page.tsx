@@ -54,8 +54,8 @@ export default async function EscuelaVirtualPage() {
         <Container className="relative grid items-center gap-10 py-12 sm:py-16 lg:grid-cols-[1.1fr_0.9fr] lg:gap-6 lg:py-20">
           <div className="flex flex-col items-start gap-7">
             <span className="ev-pill">
-              <Image src="/brand/ucg-escudo.svg" alt="" width={1893} height={2385} unoptimized className="h-6 w-auto" />
-              Universidad Ganadera · Escuela Virtual
+              <Image src="/brand/fedegan-escudo.svg" alt="" width={211} height={253} unoptimized className="h-6 w-auto" />
+              Escuela Virtual FEDEGÁN
             </span>
             <div>
               <h1 id="intro" className="ev-title">
@@ -82,7 +82,7 @@ export default async function EscuelaVirtualPage() {
 
           <div className="ev-mascota">
             <span aria-hidden className="ev-mascota-fondo" />
-            <Image src="/brand/mascota-beto.svg" alt="Beto, la mascota de la UCG, saluda con un diploma bajo el brazo" width={1080} height={1455} unoptimized priority className="relative h-72 w-auto drop-shadow-[0_22px_30px_rgba(10,25,60,0.35)] sm:h-96 lg:h-[27rem]" />
+            <Image src="/brand/beto-fedegan.svg" alt="Beto, la mascota de la Escuela Virtual, saluda con un diploma bajo el brazo" width={1080} height={1455} unoptimized priority className="relative h-72 w-auto drop-shadow-[0_22px_30px_rgba(10,25,60,0.35)] sm:h-96 lg:h-[27rem]" />
             <span className="ev-flota ev-flota-a"><PlayCircle size={18} aria-hidden /> {videos} videos</span>
             <span className="ev-flota ev-flota-b"><Award size={18} aria-hidden /> Certificado</span>
           </div>

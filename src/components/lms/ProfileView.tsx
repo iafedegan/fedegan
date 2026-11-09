@@ -54,7 +54,7 @@ export function ProfileView({ me, student, stats, mine, origin, carnetQr, inscri
               <span className="flex h-full w-full items-center justify-center rounded-full bg-[var(--bg)] font-[var(--font-display)] text-4xl font-bold text-[var(--fg-lime-400)]">{initials}</span>
             </span>
             <div className="min-w-0 flex-1 basis-72">
-              <p className="text-[0.72rem] font-bold uppercase tracking-[0.22em] text-[var(--fg-lime-400)]">Estudiante UCG</p>
+              <p className="text-[0.72rem] font-bold uppercase tracking-[0.22em] text-[var(--fg-lime-400)]">Estudiante FEDEGÁN</p>
               <h1 className="mt-1 font-[var(--font-display)] text-4xl font-bold leading-tight text-[var(--text)] sm:text-5xl">{me.name}</h1>
               <ul className="mt-3 flex flex-wrap gap-2 text-sm text-[var(--text-muted)]">
                 <li className="inline-flex items-center gap-2 rounded-full border border-[var(--border-strong)] px-3.5 py-1.5"><Mail size={14} className="text-[var(--fg-lime-400)]" /> {me.key}</li>
@@ -131,7 +131,7 @@ export function ProfileView({ me, student, stats, mine, origin, carnetQr, inscri
           </div>
           {mine.length === 0 ? (
             <div className="mt-5 flex flex-col items-center gap-4 rounded-[var(--radius-lg)] border border-dashed border-[var(--border-strong)] p-10 text-center">
-              <Image src="/brand/mascota-beto.svg" alt="" width={1671} height={2388} unoptimized className="h-36 w-auto" />
+              <Image src="/brand/beto-fedegan.svg" alt="" width={1671} height={2388} unoptimized className="h-36 w-auto" />
               <p className="text-[var(--text-muted)]">Todavía no se ha inscrito a ningún curso.</p>
               <Link href="/escuela-virtual" className={btnPrimary}>Explorar los cursos</Link>
             </div>
@@ -174,7 +174,7 @@ export function ProfileView({ me, student, stats, mine, origin, carnetQr, inscri
                     <div className="relative border-b-[6px] border-double border-[#b08f4f] bg-[#fbf8ee] px-6 py-6 text-[#11271d]">
                       {demo && <span className="absolute right-4 top-4 rounded-full border border-[#b08f4f] px-2.5 py-0.5 text-[0.65rem] font-bold uppercase tracking-[0.14em] text-[#8a6d2f]">Demostración</span>}
                       <div className="flex items-center gap-4">
-                        <Image src="/brand/ucg-escudo.svg" alt="" width={1893} height={2385} unoptimized className="h-16 w-auto shrink-0" />
+                        <Image src="/brand/fedegan-escudo.svg" alt="" width={211} height={253} unoptimized className="h-16 w-auto shrink-0" />
                         <div className="min-w-0">
                           <p className="text-[0.62rem] font-bold uppercase tracking-[0.26em] text-[#8a6d2f]">Certificado de finalización</p>
                           <p className="mt-1 font-[var(--font-display)] text-xl font-bold leading-snug">{course.title}</p>
@@ -200,7 +200,7 @@ export function ProfileView({ me, student, stats, mine, origin, carnetQr, inscri
             <div className="flex flex-wrap items-end justify-between gap-4 print:hidden">
               <div>
                 <h2 id="carnet-titulo" className="font-[var(--font-display)] text-3xl font-bold text-[var(--text)]">Mi carnet de estudiante</h2>
-                <p className="mt-1 text-[var(--text-muted)]">Su identificación como estudiante de la UCG. El código QR permite verificarla.</p>
+                <p className="mt-1 text-[var(--text-muted)]">Su identificación como estudiante de la Escuela Virtual FEDEGÁN. El código QR permite verificarla.</p>
               </div>
               <PrintButton />
             </div>

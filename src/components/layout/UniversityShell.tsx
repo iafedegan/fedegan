@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
 import { GraduationCap, LogIn, LogOut, UserCircle2 } from "lucide-react";
 
-// Marco propio de la Escuela Virtual (UCG): se ve como un sitio aparte, sin el encabezado, el menú ni el pie del portal de
+// Marco propio de la Escuela Virtual: se ve como un sitio aparte, sin el encabezado, el menú ni el pie del portal de
 // FEDEGÁN. La salida es «Cerrar sesión», que devuelve al portal.
 export function UniversityShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
@@ -25,10 +25,10 @@ export function UniversityShell({ children }: { children: ReactNode }) {
       </a>
       <header className="sticky top-0 z-50 border-b print:hidden border-[var(--border-strong)] bg-[color-mix(in_srgb,var(--bg)_92%,transparent)] backdrop-blur-xl">
         <div className="mx-auto flex h-16 w-full max-w-[96rem] items-center gap-3 px-4 sm:px-6">
-          <Link href="/escuela-virtual" className="flex shrink-0 items-center gap-3" aria-label="UCG, Escuela Virtual: inicio">
-            <Image src="/brand/ucg-escudo.svg" alt="" width={1893} height={2385} unoptimized priority className="h-10 w-auto" />
+          <Link href="/escuela-virtual" className="flex shrink-0 items-center gap-3" aria-label="FEDEGÁN, Escuela Virtual: inicio">
+            <Image src="/brand/fedegan-escudo.svg" alt="" width={211} height={253} unoptimized priority className="h-10 w-auto" />
             <span className="hidden leading-tight sm:block">
-              <span className="block font-[var(--font-display)] text-lg font-bold tracking-wide text-[var(--text)]">UCG</span>
+              <span className="block font-[var(--font-display)] text-lg font-bold tracking-wide text-[var(--text)]">FEDEGÁN</span>
               <span className="block text-[0.6rem] font-bold uppercase tracking-[0.22em] text-[var(--fg-lime-400)]">Escuela Virtual</span>
             </span>
           </Link>
@@ -68,7 +68,7 @@ export function UniversityShell({ children }: { children: ReactNode }) {
       <main id="contenido" data-region="body" className="flex-1">{children}</main>
 
       <footer className="border-t border-[var(--border)] py-6 print:hidden text-center text-xs text-[var(--text-faint)]">
-        © {new Date().getFullYear()} UCG · Escuela Virtual FEDEGÁN–FNG
+        © {new Date().getFullYear()} Escuela Virtual FEDEGÁN–FNG
       </footer>
     </div>
   );

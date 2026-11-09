@@ -32,7 +32,7 @@ const int = (fd: FormData, k: string) => {
 const safeUrl = (v: string) => (!v ? null : /^(https:\/\/|http:\/\/|\/(?!\/))/.test(v) ? v : null);
 
 function certificateCode() {
-  return `UCG-${new Date().getFullYear()}-${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
+  return `FED-${new Date().getFullYear()}-${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
 }
 
 // ---------------------------------------------------------------- estudiante

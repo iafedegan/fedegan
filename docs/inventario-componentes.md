@@ -86,7 +86,7 @@
 | `SiteChrome` | `src/components/layout/SiteChrome.tsx` | Encabezado, pie y barra móvil del sitio público. El panel /admin trae su propio marco. |
 | `ThemeScript` | `src/components/layout/ThemeScript.tsx` | Aplica el tono guardado antes del primer pintado para evitar el parpadeo. |
 | `ThemeToggle` | `src/components/layout/ThemeToggle.tsx` | Cambio de tono claro / oscuro. La elección se recuerda; el script del <head> la aplica antes de pintar. |
-| `UniversityShell` | `src/components/layout/UniversityShell.tsx` | Marco propio de la Escuela Virtual (UCG): se ve como un sitio aparte, sin el encabezado, el menú ni el pie del portal de |
+| `UniversityShell` | `src/components/layout/UniversityShell.tsx` | Marco propio de la Escuela Virtual: se ve como un sitio aparte, sin el encabezado, el menú ni el pie del portal de |
 | `UsageTracker` | `src/components/layout/UsageTracker.tsx` | Cuenta una visita cada vez que la persona entra a una sección del recorrido (solo con su permiso). |
 | `WebVitals` | `src/components/layout/WebVitals.tsx` | Mide LCP, INP, CLS, FCP y TTFB de visitantes reales y las envía a /api/vitals (y al dataLayer de GTM si existe). |
 
