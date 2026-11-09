@@ -26,7 +26,7 @@ Las páginas copiadas del portal anterior se editan con el mismo constructor que
 
 Una página en blanco ofrece diez plantillas de arranque (informativa, servicios con tarjetas, documentos y descargas, preguntas frecuentes, con portada, programa o campaña, informe con cifras, convocatoria o comunicado, equipo y contacto, galería y aliados); después se puede cambiar todo.
 
-- **Elementos** (a la izquierda, 35 en siete grupos que se pliegan):
+- **Elementos** (a la izquierda, 36 en siete grupos que se pliegan):
   - *Texto*: título, subtítulo, párrafo, lista, aviso (información, éxito, advertencia o importante), cita y columnas de texto.
   - *Acciones*: botón, destacado, botones (varios en una fila), banner con imagen de fondo y redes sociales.
   - *Medios*: imagen, video o tablero, imagen y texto, galería de fotos, audio y logos de aliados.
@@ -36,6 +36,7 @@ Una página en blanco ofrece diez plantillas de arranque (informativa, servicios
   - *Diseño*: separador y espacio.
 
   Se arrastran a la página o se pulsan para añadirlos debajo del elemento que se está editando. El buscador de la paleta filtra por nombre o por lo que hace («foto», «teléfono», «descarga»…).
+- **Partes automáticas**: lo que el sitio arma solo (las fichas de los temas, los accesos rápidos, «En esta página», las páginas de este tema y «Anterior / Siguiente») aparece en la lista como un elemento más, con borde punteado. Se sube, baja, arrastra o quita igual que los demás, y entre ellas se puede poner cualquier elemento: un banner antes de las fichas, un aviso entre las fichas y el texto, lo que se quiera. Si se quita una, se puede volver a añadir desde el grupo *Diseño* → *Parte automática*. Lo único fijo es el encabezado de arriba (nombre de la sección, migas y menú lateral). Una página que nunca se ha guardado desde el editor sigue con su disposición de siempre; al publicarla desde aquí pasa a tener la que se ve en el editor (los accesos rápidos de una portada, por ejemplo, quedan dentro del texto y no al costado).
 - **Armar la página**: pulse un elemento para abrir sus opciones y ver cómo queda al instante. Las flechas lo suben o bajan, el icono de la hoja lo duplica y el de la papelera lo quita (pide confirmación). **Vista previa** muestra la página completa.
 - **Deshacer y rehacer**: los botones de arriba (o `Ctrl/⌘ + Z` y `Ctrl/⌘ + Mayús + Z`) devuelven o repiten los cambios, incluso añadir o quitar un elemento. Lo escrito seguido en un mismo campo cuenta como un solo paso.
 - **Documentos**: se ven como **tarjetas** (ícono del tipo de archivo, nombre, *Vista previa* y *Descargar*), igual que en las páginas ya publicadas. Se suben varios a la vez con **Subir documentos**, o se añade un enlace a mano. Si dos archivos seguidos tienen el mismo nombre (el Excel y el PDF del mismo informe, por ejemplo), comparten tarjeta. Una *Lista* en la que todos los puntos son enlaces a documentos (dos o más) también se ve como tarjetas.

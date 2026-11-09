@@ -1,3 +1,4 @@
+import { Fragment, type ReactNode } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Container } from "@/components/ui/Container";
@@ -16,6 +17,7 @@ import { getCopias } from "@/lib/cms/documentos-copia";
 import { aplicarCopias } from "@/lib/cms/documentos-copia-util";
 import { findTrail, legacyHref, type NavNode } from "@/content/legacy";
 import { customPagesOf, getPage, getSection } from "@/lib/cms/nodos";
+import type { LegacyBlock } from "@/content/legacy";
 
 // Resuelve las rutas del menú en el servidor para no enviar el contenido migrado al navegador.
 const toItems = (nodes: NavNode[], slug: string): NavItem[] =>
@@ -28,6 +30,25 @@ const toItems = (nodes: NavNode[], slug: string): NavItem[] =>
   }));
 
 const PHOTO_ID: Record<string, string> = { "cifras-del-sector": "cifras", "sistema-integrado-de-gestion": "sig" };
+
+// Disposición propia: el texto va por tramos y, entre ellos, las partes automáticas donde el equipo las puso.
+function cuerpoConPartes(blocks: LegacyBlock[], libre: boolean | undefined, partes: Record<string, ReactNode>) {
+  const out: ReactNode[] = [];
+  let i = 0;
+  while (i < blocks.length) {
+    if (blocks[i].t === "parte") {
+      const cual = String(blocks[i].data?.cual ?? "");
+      if (partes[cual]) out.push(<Fragment key={`p${i}`}>{partes[cual]}</Fragment>);
+      i++;
+      continue;
+    }
+    let j = i;
+    while (j < blocks.length && blocks[j].t !== "parte") j++;
+    out.push(<LegacyContent key={`t${i}`} blocks={blocks.slice(i, j)} libre={libre} lead={i === 0} offset={i} />);
+    i = j;
+  }
+  return out;
+}
 
 const sizeOf = (title: string) => (title.length > 90 ? "ed-t4" : title.length > 60 ? "ed-t3" : title.length > 32 ? "ed-t2" : "ed-t1");
 
@@ -84,6 +105,7 @@ export async function LegacySectionPage({ slug, ruta }: { slug: string; ruta: st
   const prev = at > 0 ? order[at - 1] : undefined;
   const next = at >= 0 && at < order.length - 1 ? order[at + 1] : undefined;
 
+  const propia = page.blocks.some((b) => b.t === "parte");
   const empty = (
     <p className="rounded-[0.25rem] border border-dashed border-[var(--border-strong)] bg-[var(--surface-2)] p-6 text-[var(--text-muted)]">
       Esta página reúne documentos y tableros del portal actual. Puede consultarla directamente allí.
@@ -98,6 +120,31 @@ export async function LegacySectionPage({ slug, ruta }: { slug: string; ruta: st
     const partir = branches.length > FICHAS_MAX + 12;
     const destacadas = partir ? branches.slice(0, FICHAS_MAX) : branches;
     const restantes = partir ? branches.slice(FICHAS_MAX) : [];
+    const fichasNodo = (
+      <>
+          {(branches.length > 0 || fichas.length > 0) && (
+            <section aria-labelledby="hub-explorar">
+              <div className="hub-head">
+                <h2 id="hub-explorar">Explore {section.label}</h2>
+                <p>Elija un tema. Cada ficha muestra lo que encontrará dentro.</p>
+              </div>
+              <SectionTiles nodes={destacadas} slug={slug} custom={custom} extras={fichas} />
+              {restantes.length > 0 && (
+                <details className="hub-resto">
+                  <summary>Ver las {restantes.length} páginas restantes</summary>
+                  <ul>
+                    {restantes.map((n, i) => {
+                      const h = n.key ? legacyHref(slug, n.key) : n.href;
+                      return <li key={`${n.label}-${i}`}>{h ? <Link href={h}>{n.label}</Link> : n.label}</li>;
+                    })}
+                  </ul>
+                </details>
+              )}
+            </section>
+          )}
+      </>
+    );
+    const accesosNodo = <div className="my-6 max-w-sm"><QuickRail /></div>;
     return (
       <>
         <PageHeader
@@ -120,26 +167,11 @@ export async function LegacySectionPage({ slug, ruta }: { slug: string; ruta: st
           }
         />
         <Container className="hub-body">
-          {(branches.length > 0 || fichas.length > 0) && (
-            <section aria-labelledby="hub-explorar">
-              <div className="hub-head">
-                <h2 id="hub-explorar">Explore {section.label}</h2>
-                <p>Elija un tema. Cada ficha muestra lo que encontrará dentro.</p>
-              </div>
-              <SectionTiles nodes={destacadas} slug={slug} custom={custom} extras={fichas} />
-              {restantes.length > 0 && (
-                <details className="hub-resto">
-                  <summary>Ver las {restantes.length} páginas restantes</summary>
-                  <ul>
-                    {restantes.map((n, i) => {
-                      const h = n.key ? legacyHref(slug, n.key) : n.href;
-                      return <li key={`${n.label}-${i}`}>{h ? <Link href={h}>{n.label}</Link> : n.label}</li>;
-                    })}
-                  </ul>
-                </details>
-              )}
-            </section>
-          )}
+          {propia ? (
+            <article className="ed-body min-w-0 [overflow-wrap:anywhere]">{cuerpoConPartes(page.blocks, page.libre, { fichas: fichasNodo, accesos: accesosNodo })}</article>
+          ) : (
+            <>
+          {fichasNodo}
 
           <div className={`hub-intro ${page.blocks.length > 0 ? "" : "is-empty"}`}>
             <article className="ed-body min-w-0 [overflow-wrap:anywhere]">
@@ -155,6 +187,8 @@ export async function LegacySectionPage({ slug, ruta }: { slug: string; ruta: st
               <QuickRail />
             </aside>
           </div>
+            </>
+          )}
         </Container>
       </>
     );
@@ -164,6 +198,22 @@ export async function LegacySectionPage({ slug, ruta }: { slug: string; ruta: st
   // Un solo recorrido: migas arriba; el menú de la sección a la izquierda (siempre visible en escritorio);
   // y en el centro el titular, el índice plegado de la página, el texto y «anterior / siguiente».
   const kids = (here?.children ?? []).filter((n) => n.key !== key);
+  const tocNodo =
+    toc.length >= 3 ? (
+      <details className="toc-m">
+        <summary>
+          En esta página <span>{toc.length}</span>
+        </summary>
+        <TocRail items={toc} title="Ir a" />
+      </details>
+    ) : null;
+  const kidsNodo =
+    kids.length > 0 || fichas.length > 0 ? (
+      <section className="art-kids" aria-labelledby="art-kids-h">
+        <h2 id="art-kids-h">Dentro de {here?.label}</h2>
+        <SectionTiles nodes={kids} slug={slug} custom={custom} extras={fichas} />
+      </section>
+    ) : null;
   return (
     <>
       <PageHeader variant="strip" title={page.title} breadcrumbs={crumbs} image={sectionPhoto?.src} imagePos={sectionPhoto?.pos} />
@@ -190,6 +240,14 @@ export async function LegacySectionPage({ slug, ruta }: { slug: string; ruta: st
             )}
           </header>
 
+          {propia ? (
+            cuerpoConPartes(page.blocks, page.libre, {
+              indice: tocNodo,
+              hijas: kidsNodo,
+              anteriorsiguiente: <PrevNext prev={prev} next={next} />,
+            })
+          ) : (
+            <>
           {toc.length >= 3 && (
             <details className="toc-m">
               <summary>
@@ -209,6 +267,9 @@ export async function LegacySectionPage({ slug, ruta }: { slug: string; ruta: st
           )}
 
           <PrevNext prev={prev} next={next} />
+            </>
+          )}
+
           <ArticleTools />
         </article>
       </Container>

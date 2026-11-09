@@ -108,7 +108,7 @@ function toExplorer(entries: Entry[]): ExplorerEntry[] {
 // `libre`: páginas armadas en el constructor. Cada elemento se pinta tal cual, sin las reglas que reagrupan el texto copiado
 // del portal actual (primer párrafo destacado, fichas por subtítulo, listas de publicaciones), para que la página se vea
 // igual que en el editor. `preview`: vista previa dentro del editor (sin anclas ni movimiento).
-export function LegacyContent({ blocks, lead: allowLead = true, preview = false, libre = false }: { blocks: LegacyBlock[]; lead?: boolean; preview?: boolean; libre?: boolean }) {
+export function LegacyContent({ blocks, lead: allowLead = true, preview = false, libre = false, offset = 0 }: { blocks: LegacyBlock[]; lead?: boolean; preview?: boolean; libre?: boolean; offset?: number }) {
   const nodes: ReactNode[] = [];
   let leadDone = !allowLead || libre;
   // Páginas con varios apartados de tercer nivel (programas, servicios…): cada apartado va en su propia ficha.
@@ -136,7 +136,7 @@ export function LegacyContent({ blocks, lead: allowLead = true, preview = false,
       while (j < blocks.length && !/^h[1-6]$/.test(blocks[j].t)) j++;
       nodes.push(
         <section key={key} className="ed-item">
-          <h3 id={preview ? undefined : `s${i}`} className="font-[var(--font-display)] text-xl font-bold leading-snug text-[var(--text)]">
+          <h3 id={preview ? undefined : `s${offset + i}`} className="font-[var(--font-display)] text-xl font-bold leading-snug text-[var(--text)]">
             <Inline text={b.text ?? ""} />
           </h3>
           <LegacyContent blocks={blocks.slice(i + 1, j)} lead={false} libre={libre} />
@@ -251,7 +251,7 @@ export function LegacyContent({ blocks, lead: allowLead = true, preview = false,
       nodes.push(
         <Tag
           key={key}
-          id={preview ? undefined : `s${i}`}
+          id={preview ? undefined : `s${offset + i}`}
           className={
             big
               ? "mb-3 mt-10 font-[var(--font-display)] text-2xl font-bold leading-snug text-[var(--text)] first:mt-0 sm:text-[1.7rem]"

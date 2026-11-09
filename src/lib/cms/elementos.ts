@@ -571,6 +571,22 @@ export const ESQUEMAS = {
   },
 
   // ── Diseño
+  parte: {
+    nombre: "Parte automática",
+    ayuda: "Algo que el sitio arma solo (fichas de los temas, accesos rápidos, anterior y siguiente…) para ponerlo donde quiera",
+    grupo: "Diseño",
+    icono: "LayoutPanelTop",
+    campos: [
+      {
+        k: "cual", tipo: "opcion", etiqueta: "Qué parte es",
+        opciones: op(["fichas", "Fichas de los temas"], ["hijas", "Páginas de este tema"], ["accesos", "Accesos rápidos"], ["indice", "Índice «En esta página»"], ["anteriorsiguiente", "Anterior y siguiente"], ["ninguna", "Ninguna (no muestra nada)"]),
+        defecto: "fichas",
+        ayuda: "Solo se muestra si la página tiene lo necesario (por ejemplo, las fichas necesitan páginas dentro de este tema).",
+      },
+    ],
+    siempre: true,
+    vacioMensaje: "",
+  },
   espaciador: {
     nombre: "Espacio",
     ayuda: "Un espacio en blanco entre dos partes de la página",

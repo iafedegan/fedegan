@@ -77,3 +77,21 @@ test("formulario de inscripción: sin configurar usa las preguntas de siempre; v
   assert.match(problemaForm({ ...f, preguntas: [{ ...f.preguntas[0], opciones: "Solo una" }] }), /dos opciones/);
   assert.match(problemaForm({ ...f, preguntas: [f.preguntas[0], { ...f.preguntas[0] }] }), /mismo nombre/);
 });
+
+import { sembrarPartes, marcarSinPartes } from "../src/lib/cms/partes.ts";
+test("partes automáticas: se siembran en su lugar, se respetan y se marca cuando se quitan todas", () => {
+  const ini = { antes: ["fichas"], despues: ["accesos"] };
+  const p = [{ t: "p", text: "Hola" }];
+  assert.deepEqual(sembrarPartes(p, ini).map((b) => b.t === "parte" ? b.data.cual : b.t), ["fichas", "p", "accesos"]);
+  assert.equal(sembrarPartes(p, null), p);
+  const propia = [{ t: "p", text: "x" }, { t: "parte", data: { cual: "accesos" } }];
+  assert.deepEqual(sembrarPartes(propia, ini), propia);
+  assert.deepEqual(sembrarPartes([{ t: "parte", data: { cual: "ninguna" } }, ...p], ini).map((b) => b.t), ["parte", "p"].slice(1));
+  assert.match(marcarSinPartes(JSON.stringify(p)), /ninguna/);
+  assert.equal(marcarSinPartes(JSON.stringify(propia)), JSON.stringify(propia));
+});
+test("una parte automática pasa la validación del servidor y vuelve igual", () => {
+  const r = sanearBloques([{ t: "p", text: "a" }, { t: "parte", data: { cual: "hijas" } }, { t: "parte", data: { cual: "rara" } }]);
+  assert.equal(r.ok, true);
+  assert.deepEqual(r.bloques.filter((b) => b.t === "parte").map((b) => b.data.cual), ["hijas", "fichas"]);
+});

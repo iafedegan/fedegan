@@ -55,7 +55,7 @@ function Documentos({ faltan, enTablas, onAnadir }: { faltan: DocFaltante[]; enT
 // Edita una página copiada del portal actual. Se ve y se arma con los mismos elementos que una página nueva; el texto
 // original se conserva y se puede restaurar. Nada se publica hasta pulsar «Publicar cambios».
 export function PaginaForm({ pageKey, title, bloques, writable, faltan, enTablas, marco }: { pageKey: string; title: string; bloques: Bloque[]; writable: boolean; faltan?: DocFaltante[]; enTablas?: number; marco?: MarcoPagina | null }) {
-  const { elementos, setElementos, publicables, sucio, incompletos, marcarPublicado, historial } = useEditorPagina(bloques);
+  const { elementos, setElementos, publicables, sucio, incompletos, marcarPublicado, historial } = useEditorPagina(bloques, marco?.inicial);
   const [state, action] = useActionState<PaginaState, FormData>(async (prev, fd) => {
     const r = await savePagina(prev, fd);
     if (r.ok) marcarPublicado(String(fd.get("bloques") ?? ""));

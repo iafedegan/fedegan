@@ -12,7 +12,7 @@ import { useEditorPagina } from "./constructor/useEditorPagina";
 // Edita una página, sección o enlace creado en el árbol del sitio. Una página se arma arrastrando elementos
 // (botones, tarjetas, carruseles…) y no se publica hasta pulsar «Publicar cambios».
 export function NodoForm({ id, label, title, href, bloques, esEnlace, writable, marco }: { id: string; label: string; title: string; href: string; bloques: Bloque[]; esEnlace: boolean; writable: boolean; marco?: MarcoPagina | null }) {
-  const { elementos, setElementos, publicables, sucio, incompletos, marcarPublicado, historial } = useEditorPagina(bloques);
+  const { elementos, setElementos, publicables, sucio, incompletos, marcarPublicado, historial } = useEditorPagina(bloques, marco?.inicial);
   const [state, action] = useActionState<NodoState, FormData>(async (prev, fd) => {
     const r = await editarNodo(prev, fd);
     if (r.ok) marcarPublicado(String(fd.get("bloques") ?? ""));

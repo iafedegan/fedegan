@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useReducer, useState, type Dispatch, type SetStateAction } from "react";
 import { aBloques, aElementos, problema, type Bloque, type Elemento } from "@/lib/cms/bloques";
+import { marcarSinPartes, sembrarPartes, type InicialPartes } from "@/lib/cms/partes";
 
 // Historial de los cambios de la página (deshacer y rehacer). Varios cambios seguidos al mismo elemento en menos de un segundo
 // (escribir) cuentan como uno solo; cualquier cambio de la estructura (añadir, mover, quitar) es un paso propio.
@@ -43,14 +44,17 @@ function reducir(s: Estado, a: Accion): Estado {
  * Estado de una página que se arma en el constructor: los elementos (con su historial), lo que se publicaría y si quedan cambios por publicar.
  * `marcarPublicado` recibe lo que se acaba de publicar (el mismo texto que viaja en el campo `bloques` del formulario).
  */
-export function useEditorPagina(bloques: Bloque[]) {
-  const [estado, despachar] = useReducer(reducir, bloques, (b): Estado => ({ actual: aElementos(b), pasado: [], futuro: [], marca: { t: 0, clave: "" } }));
+export function useEditorPagina(bloques: Bloque[], partes?: InicialPartes | null) {
+  const [estado, despachar] = useReducer(reducir, bloques, (b): Estado => ({ actual: aElementos(sembrarPartes(b, partes)), pasado: [], futuro: [], marca: { t: 0, clave: "" } }));
   const elementos = estado.actual;
   const setElementos: Dispatch<SetStateAction<Elemento[]>> = useCallback((f) => despachar({ tipo: "poner", f, t: Date.now() }), []);
   const deshacer = useCallback(() => despachar({ tipo: "deshacer" }), []);
   const rehacer = useCallback(() => despachar({ tipo: "rehacer" }), []);
 
-  const publicables = useMemo(() => JSON.stringify(aBloques(elementos)), [elementos]);
+  const publicables = useMemo(() => {
+    const json = JSON.stringify(aBloques(elementos));
+    return partes ? marcarSinPartes(json) : json;
+  }, [elementos, partes]);
   const [publicado, setPublicado] = useState(publicables);
   const incompletos = useMemo(() => elementos.filter((e) => problema(e) !== null).length, [elementos]);
   const sucio = publicables !== publicado;

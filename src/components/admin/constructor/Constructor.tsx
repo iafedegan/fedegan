@@ -2,12 +2,12 @@
 
 import { Fragment, memo, useCallback, useEffect, useMemo, useRef, useState, type Dispatch, type DragEvent, type ReactNode, type SetStateAction } from "react";
 import {
-  AlertTriangle, AppWindow, ArrowDown, ArrowUp, BadgeCheck, Building2, ChartColumn, ChevronRight, Columns3, ContactRound, Copy, Eye, GalleryHorizontal, GripVertical, Headphones,
+  AlertTriangle, AppWindow, ArrowDown, ArrowUp, BadgeCheck, Building2, ChartColumn, LayoutPanelTop, ChevronRight, Columns3, ContactRound, Copy, Eye, GalleryHorizontal, GripVertical, Headphones,
   Heading2, Heading3, Image as ImageIcon, Images, Info, LayoutGrid, Link2, List, ListCollapse, ListOrdered, Megaphone, Milestone, Minus, MousePointerClick, MoveVertical, Paperclip,
   PanelLeft, PanelTop, Pencil, Puzzle, Quote, Redo2, Search, Share2, SquareMousePointer, Table2, Trash2, Type, Undo2, Upload, UsersRound, Video, X, type LucideIcon,
 } from "lucide-react";
 import { LegacyContent } from "@/components/legacy/LegacyContent";
-import { CATALOGO, ESQUEMAS, GRUPOS, NOMBRE_TIPO, PLANTILLAS, aBloques, elementoNuevo, nuevoId, problema, type Elemento, type TipoNuevo } from "@/lib/cms/bloques";
+import { CATALOGO, ESQUEMAS, GRUPOS, NOMBRE_TIPO, PLANTILLAS, aBloques, elementoNuevo, nuevoId, problema, type Bloque, type Elemento, type TipoNuevo } from "@/lib/cms/bloques";
 import { TIPOS_ESQUEMA } from "@/lib/cms/elementos";
 import { EditorElemento } from "./Editores";
 
@@ -21,7 +21,7 @@ const ICONO_BASE: Record<string, LucideIcon> = {
 // Los iconos que piden los esquemas de src/lib/cms/elementos.ts (por su nombre en lucide-react).
 const ICONO_ESQUEMA: Record<string, LucideIcon> = {
   Info, Quote, Columns3, SquareMousePointer, PanelTop, Share2, PanelLeft, Images, Headphones, Building2, AppWindow, ChartColumn, ListOrdered, Milestone, BadgeCheck, Link2, Table2,
-  UsersRound, ContactRound, MoveVertical, LayoutGrid,
+  UsersRound, ContactRound, MoveVertical, LayoutGrid, LayoutPanelTop,
 };
 const ICONOS: Record<string, LucideIcon> = {
   ...ICONO_BASE,
@@ -126,6 +126,7 @@ function Hueco({ activo }: { activo: boolean }) {
 
 type MarcoProps = {
   el: Elemento;
+  partes?: Record<string, ReactNode>;
   indice: number;
   total: number;
   seleccionado: boolean;
@@ -139,7 +140,7 @@ type MarcoProps = {
   onFin: () => void;
 };
 
-const Marco = memo(function Marco({ el, indice, total, seleccionado, carpeta, onSeleccionar, onActualizar, onMover, onDuplicar, onQuitar, onArrastre, onFin }: MarcoProps) {
+const Marco = memo(function Marco({ el, partes, indice, total, seleccionado, carpeta, onSeleccionar, onActualizar, onMover, onDuplicar, onQuitar, onArrastre, onFin }: MarcoProps) {
   // Lo que viene copiado de la página original (una tabla, por ejemplo) se muestra con su nombre y no se edita.
   const Icono = el.tipo === "otro" && el.bloque.t === "table" ? Table2 : (ICONOS[el.tipo] ?? Puzzle);
   const nombre = el.tipo === "otro" ? (NOMBRE_TIPO[el.bloque.t] ?? NOMBRE_TIPO.otro) : NOMBRE_TIPO[el.tipo];
@@ -200,7 +201,9 @@ const Marco = memo(function Marco({ el, indice, total, seleccionado, carpeta, on
       {/* Vista previa tal como se verá en el sitio; un botón transparente encima la abre para editarla. */}
       <div className="relative p-4">
         <div inert className="ed-body" style={{ counterReset: "none" }}>
-          {bloques.length ? (
+          {el.tipo === "parte" ? (
+            <ParteAuto cual={String(el.datos.cual ?? "")} partes={partes} />
+          ) : bloques.length ? (
             <LegacyContent blocks={bloques} preview libre lead={false} />
           ) : (
             <p className="py-3 text-sm italic text-[#8a978f]">{aviso ?? "Elemento vacío."} {seleccionado ? "Complételo en el formulario de abajo." : "Púlselo para completarlo."}</p>
@@ -223,6 +226,33 @@ const Marco = memo(function Marco({ el, indice, total, seleccionado, carpeta, on
     </div>
   );
 });
+
+// ───────────────────────── partes automáticas
+
+/** Una parte que arma el sitio (fichas, accesos…), tal como se ve en esa página. «Ninguna» no muestra nada. */
+function ParteAuto({ cual, partes }: { cual: string; partes?: Record<string, ReactNode> }) {
+  if (cual === "ninguna") return <p className="py-3 text-sm italic text-[#8a978f]">Parte sin elegir: no muestra nada. Púlsela para elegir cuál es.</p>;
+  return <div className="rounded-xl border border-dashed border-[#cfd8c4] bg-[#f6f8f2] p-3">{partes?.[cual] ?? <p className="text-sm italic text-[#8a978f]">Esta parte no aplica a esta página.</p>}</div>;
+}
+
+/** La página completa: el texto por tramos y, entre ellos, las partes automáticas en el lugar donde se pusieron. */
+function VistaPagina({ bloques, partes, libre, lead }: { bloques: Bloque[]; partes?: Record<string, ReactNode>; libre: boolean; lead: boolean }) {
+  const out: ReactNode[] = [];
+  let i = 0;
+  while (i < bloques.length) {
+    if (bloques[i].t === "parte") {
+      const cual = String(bloques[i].data?.cual ?? "");
+      if (cual !== "ninguna") out.push(<div key={`p${i}`} className="my-4">{partes?.[cual]}</div>);
+      i++;
+      continue;
+    }
+    let j = i;
+    while (j < bloques.length && bloques[j].t !== "parte") j++;
+    out.push(<LegacyContent key={`t${i}`} blocks={bloques.slice(i, j)} preview libre={libre} lead={lead && i === 0} offset={i} />);
+    i = j;
+  }
+  return <>{out}</>;
+}
 
 // ───────────────────────── página en blanco
 
@@ -253,7 +283,7 @@ function Vacio({ onPlantilla }: { onPlantilla: (id: string) => void }) {
  */
 export type Historial = { deshacer: () => void; rehacer: () => void; puedeDeshacer: boolean; puedeRehacer: boolean };
 
-export function Constructor({ elementos, setElementos, carpeta, fiel = false, historial, marco }: { elementos: Elemento[]; setElementos: Dispatch<SetStateAction<Elemento[]>>; carpeta: string; fiel?: boolean; historial?: Historial; marco?: { antes: ReactNode; despues: ReactNode } }) {
+export function Constructor({ elementos, setElementos, carpeta, fiel = false, historial, marco }: { elementos: Elemento[]; setElementos: Dispatch<SetStateAction<Elemento[]>>; carpeta: string; fiel?: boolean; historial?: Historial; marco?: { antes: ReactNode; partes: Record<string, ReactNode> } }) {
   const [sel, setSel] = useState<string | null>(null);
   const [destino, setDestino] = useState<number | null>(null);
   const [modo, setModo] = useState<"editar" | "vista">("editar");
@@ -435,9 +465,8 @@ export function Constructor({ elementos, setElementos, carpeta, fiel = false, hi
         <div className="flex flex-col gap-3 rounded-2xl border border-[#e4e2d6] bg-white p-5 sm:p-8">
           {marco?.antes}
           <div inert className="ed-body">
-            {publicables.length ? <LegacyContent blocks={publicables} preview libre={!fiel} lead={fiel} /> : <p className="text-sm text-[#5d6e65]">Aún no hay nada que publicar.</p>}
+            {publicables.length ? <VistaPagina bloques={publicables} partes={marco?.partes} libre={!fiel} lead={fiel} /> : <p className="text-sm text-[#5d6e65]">Aún no hay nada que publicar.</p>}
           </div>
-          {marco?.despues}
         </div>
       ) : (
         <div className="grid grid-cols-[minmax(0,1fr)] gap-4 xl:grid-cols-[12.5rem_minmax(0,1fr)] xl:items-start">
@@ -466,6 +495,7 @@ export function Constructor({ elementos, setElementos, carpeta, fiel = false, hi
                     <Hueco activo={destino === i} />
                     <Marco
                       el={el}
+                      partes={marco?.partes}
                       indice={i}
                       total={elementos.length}
                       seleccionado={sel === el.id}
@@ -484,7 +514,6 @@ export function Constructor({ elementos, setElementos, carpeta, fiel = false, hi
               </>
             )}
           </div>
-          {marco?.despues}
           </div>
         </div>
       )}

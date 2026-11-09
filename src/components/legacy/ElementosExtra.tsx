@@ -545,5 +545,7 @@ export function ElementoExtra({ tipo, datos }: { tipo: TipoEsquema; datos: Datos
     case "contacto": return <Contacto d={datos} />;
     case "ficha": return <FichaSuelta d={datos} />;
     case "espaciador": return <Espacio d={datos} />;
+    // Las partes automáticas las coloca la página (LegacySectionPage) o el editor; suelta, no pinta nada.
+    case "parte": return null;
   }
 }
