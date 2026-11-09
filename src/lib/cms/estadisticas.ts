@@ -3,6 +3,8 @@ import { cache } from "react";
 import { adminDb } from "./client";
 import { parseIndicadores, type IndicadorFedegan } from "@/lib/estadisticas/parse";
 import { urlPermitida } from "@/lib/estadisticas/url";
+import { leerObservatorioContexto, normalizarCopia } from "@/lib/estadisticas/contexto";
+import type { Observatorio } from "@/lib/estadisticas/tipos";
 
 // Conjuntos de cifras de FEDEGÁN: el equipo pega el HTML del sistema de estadísticas y el portal lo muestra con su diseño.
 // Se guardan en site_settings (clave «estadisticas:<id>»), tabla que ya existe; solo el servidor la lee y escribe.
@@ -82,4 +84,41 @@ export async function traerHtml(url: string): Promise<{ html: string } | { error
   } catch {
     return { error: "No pudimos conectar con ese sitio." };
   }
+}
+
+// ---------- Copia única de CONtexto ----------
+// El Observatorio de CONtexto trae el historial desde 2021 y el inventario por departamento, que el sistema de estadísticas de FEDEGÁN
+// no entrega de una vez. Se copia UNA sola vez a la base de datos del portal; después el portal ya no consulta a CONtexto.
+
+/** Página pública del Observatorio de CONtexto (de donde se hace la copia única). */
+export const URL_CONTEXTO = "https://contexto-olive.vercel.app/observatorio";
+const KEY_COPIA = "copia:observatorio-contexto";
+
+export type CopiaContexto = { observatorio: Observatorio; origen: string; copiado: string; copiadoPor?: string };
+
+export const getCopiaContexto = cache(async (): Promise<CopiaContexto | null> => {
+  const db = adminDb();
+  if (!db) return null;
+  const { data } = await db.from("site_settings").select("value,updated_at,updated_by").eq("key", KEY_COPIA).maybeSingle();
+  const v = data?.value as { observatorio?: Observatorio; origen?: string } | undefined;
+  if (!data || !v?.observatorio) return null;
+  return { observatorio: normalizarCopia(v.observatorio), origen: v.origen ?? URL_CONTEXTO, copiado: data.updated_at, copiadoPor: data.updated_by ?? undefined };
+});
+
+export type ResultadoCopia = { error: string } | { ok: true; indicadores: number; periodos: number; departamentos: number };
+export async function guardarCopiaContexto(opts: { html: string; origen: string; actor: string }): Promise<ResultadoCopia> {
+  const db = adminDb();
+  if (!db) return { error: "El servidor no tiene la clave de servicio de Supabase." };
+  const obs = leerObservatorioContexto(opts.html);
+  if (!obs) return { error: "Esa página no trae las cifras del Observatorio (no se encontraron indicadores). No se cambió nada." };
+  const { error } = await db.from("site_settings").upsert({ key: KEY_COPIA, value: { origen: opts.origen, observatorio: obs }, updated_at: new Date().toISOString(), updated_by: opts.actor });
+  if (error) return { error: `No se pudo guardar: ${error.message}` };
+  const n = Object.values(obs.indicadores);
+  return { ok: true, indicadores: n.length, periodos: Math.max(0, ...n.map((i) => i.periodos.length)), departamentos: obs.bovinos?.departamentos.length ?? 0 };
+}
+
+export async function borrarCopiaContexto() {
+  const db = adminDb();
+  if (!db) return;
+  await db.from("site_settings").delete().eq("key", KEY_COPIA);
 }

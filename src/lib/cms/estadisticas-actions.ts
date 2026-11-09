@@ -5,7 +5,7 @@ import { revalidatePath, updateTag } from "next/cache";
 import { CMS_TAG } from "./client";
 import { requireEditorActor } from "./guard";
 import { iframeDe } from "@/lib/estadisticas/url";
-import { borrarConjunto, guardarConjunto, slugConjunto, traerHtml } from "./estadisticas";
+import { URL_CONTEXTO, borrarConjunto, borrarCopiaContexto, guardarConjunto, guardarCopiaContexto, slugConjunto, traerHtml } from "./estadisticas";
 
 const txt = (v: FormDataEntryValue | null, max: number) => String(v ?? "").trim().slice(0, max);
 const volver = (qs: string): never => redirect(`/admin/estadisticas?${qs}`);
@@ -48,4 +48,30 @@ export async function eliminarCifras(fd: FormData) {
   updateTag(CMS_TAG);
   revalidatePath("/seccion/cifras-del-sector");
   volver("ok=" + encodeURIComponent("Conjunto eliminado"));
+}
+
+/** Copia única del historial y de los departamentos del Observatorio de CONtexto. Si la página no responde o no trae cifras, no se toca lo que ya había. */
+export async function copiarDeContexto(fd: FormData) {
+  const actor = await requireEditorActor();
+  const origen = txt(fd.get("url"), 300) || URL_CONTEXTO;
+  const r = await traerHtml(origen);
+  if ("error" in r) volver("error=" + encodeURIComponent(`No se pudo copiar de CONtexto: ${r.error}`));
+  else {
+    const res = await guardarCopiaContexto({ html: r.html, origen, actor });
+    if ("error" in res) volver("error=" + encodeURIComponent(res.error));
+    else {
+      updateTag(CMS_TAG);
+      revalidatePath("/seccion/cifras-del-sector");
+      revalidatePath("/admin/estadisticas");
+      volver(`ok=${encodeURIComponent(`Copia lista: ${res.indicadores} indicadores con historial de hasta ${res.periodos} periodos y ${res.departamentos} departamentos`)}`);
+    }
+  }
+}
+
+export async function quitarCopiaContexto() {
+  await requireEditorActor();
+  await borrarCopiaContexto();
+  updateTag(CMS_TAG);
+  revalidatePath("/seccion/cifras-del-sector");
+  volver("ok=" + encodeURIComponent("Copia de CONtexto quitada"));
 }

@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { AlertCircle, ArrowUpRight, CheckCircle2, ChevronRight, CloudDownload, FileCode2, Trash2 } from "lucide-react";
+import { AlertCircle, ArrowUpRight, CheckCircle2, ChevronRight, CloudDownload, FileCode2, History, Trash2 } from "lucide-react";
 import { ConfigNotice } from "@/components/admin/ConfigNotice";
 import { cmsWritable } from "@/lib/cms/client";
 import { getEditor } from "@/lib/cms/guard";
-import { getConjuntos, slugConjunto } from "@/lib/cms/estadisticas";
-import { eliminarCifras, importarCifras } from "@/lib/cms/estadisticas-actions";
+import { URL_CONTEXTO, getConjuntos, getCopiaContexto, slugConjunto } from "@/lib/cms/estadisticas";
+import { copiarDeContexto, eliminarCifras, importarCifras, quitarCopiaContexto } from "@/lib/cms/estadisticas-actions";
 
 export const metadata: Metadata = { title: "Cifras del sector · Panel del portal", robots: { index: false } };
 
@@ -31,7 +31,13 @@ export default async function EstadisticasAdminPage({ searchParams }: { searchPa
   const ed = await getEditor();
   if (!ed) notFound();
   const { ok, error } = await searchParams;
-  const conjuntos = cmsWritable ? await getConjuntos() : [];
+  const [conjuntos, copia] = cmsWritable ? await Promise.all([getConjuntos(), getCopiaContexto()]) : [[], null];
+  const resumen = copia
+    ? (() => {
+        const n = Object.values(copia.observatorio.indicadores);
+        return `${n.length} indicadores · hasta ${Math.max(0, ...n.map((i) => i.periodos.length))} periodos · ${copia.observatorio.bovinos?.departamentos.length ?? 0} departamentos`;
+      })()
+    : "";
   const guardado = new Map(conjuntos.map((c) => [c.id, c]));
   const propios = conjuntos.filter((c) => !SISTEMA.some((s) => slugConjunto(s.titulo) === c.id));
 
@@ -52,6 +58,44 @@ export default async function EstadisticasAdminPage({ searchParams }: { searchPa
       {ok && <p role="status" className="flex items-center gap-2 rounded-xl border border-[#b9dcc7] bg-[#e5f3ea] px-4 py-3 text-sm text-[#14573a]"><CheckCircle2 size={18} /> {ok}. Ya se ve en el sitio.</p>}
       {error && <p role="alert" className="flex items-center gap-2 rounded-xl border border-[#f0b5b5] bg-[#fdecec] px-4 py-3 text-sm text-[#7a1f1f]"><AlertCircle size={18} /> {error}</p>}
       {!cmsWritable && <ConfigNotice compact />}
+
+      <section className="ad-card" aria-labelledby="cx-t">
+        <div className="border-b border-[#eceae0] px-5 py-4 sm:px-6">
+          <h2 id="cx-t" className="flex items-center gap-2 text-lg font-bold"><History size={18} /> Historial y departamentos (copia única de CONtexto)</h2>
+          <p className="mt-1 max-w-3xl text-sm text-[#5d6e65]">
+            El sistema de estadísticas solo entrega los últimos 12 meses y un par de departamentos por indicador. CONtexto tiene el historial desde 2021 y los 32 departamentos: se copian <b>una sola vez</b> a la base de datos del portal.
+            Después el portal ya no consulta a CONtexto; si FEDEGÁN envía cifras más recientes, estas se suman encima de la copia.
+          </p>
+        </div>
+        <div className="flex flex-wrap items-center gap-4 px-5 py-4 sm:px-6">
+          <div className="min-w-0 flex-1 basis-64">
+            {copia ? (
+              <>
+                <p className="font-semibold">Copia guardada</p>
+                <p className="text-sm text-[#5d6e65]">{resumen} · {fecha(copia.copiado)}</p>
+              </>
+            ) : (
+              <>
+                <p className="font-semibold">Todavía no se ha copiado</p>
+                <p className="text-sm text-[#5d6e65]">Hágalo mientras CONtexto siga en línea.</p>
+              </>
+            )}
+          </div>
+          <form action={copiarDeContexto} className="flex flex-wrap items-end gap-3">
+            <label className="flex flex-col gap-1 text-xs font-semibold text-[#5d6e65]">Página del Observatorio
+              <input name="url" type="url" defaultValue={URL_CONTEXTO} className="ad-input w-72 max-w-full text-sm" />
+            </label>
+            <button type="submit" disabled={!cmsWritable} className="inline-flex items-center gap-1.5 rounded-lg border border-[#dcdcd6] px-3.5 py-2 text-sm font-medium text-[#165a43] hover:bg-[#eef6f1] disabled:opacity-50">
+              <CloudDownload size={15} /> {copia ? "Copiar de nuevo" : "Copiar ahora"}
+            </button>
+          </form>
+          {copia && (
+            <form action={quitarCopiaContexto}>
+              <button type="submit" className="inline-flex items-center gap-1.5 rounded-lg border border-[#dcdcd6] px-3.5 py-2 text-sm font-medium text-[#b3363a] hover:bg-[#fdecec]"><Trash2 size={15} /> Quitar copia</button>
+            </form>
+          )}
+        </div>
+      </section>
 
       <section className="ad-card" aria-labelledby="sis-t">
         <div className="border-b border-[#eceae0] px-5 py-4 sm:px-6">

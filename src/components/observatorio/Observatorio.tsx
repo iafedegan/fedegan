@@ -9,7 +9,8 @@ import { IndicatorTabs } from "./IndicatorTabs";
 import { TerritorialExplorer } from "./TerritorialExplorer";
 import { nf, signo, variacion } from "./format";
 import { CifrasFedegan } from "./CifrasFedegan";
-import { getConjuntos } from "@/lib/cms/estadisticas";
+import { getConjuntos, getCopiaContexto } from "@/lib/cms/estadisticas";
+import { fusionarConCopia } from "@/lib/estadisticas/contexto";
 import { codigosCubiertos, repartir } from "@/lib/estadisticas/reparto";
 
 function Spark({ valores }: { valores: number[] }) {
@@ -46,10 +47,6 @@ function Kpi({ etiqueta, valor, delta, unidad, serie }: { etiqueta: string; valo
 }
 
 const last = <T,>(a: T[]) => a[a.length - 1];
-const fechaCorta = (iso: string) => {
-  const d = new Date(iso);
-  return Number.isNaN(d.getTime()) ? "hace un tiempo" : d.toLocaleString("es-CO", { day: "numeric", month: "long", year: "numeric", hour: "numeric", minute: "2-digit", timeZone: "America/Bogota" });
-};
 const por = (o: Record<string, Indicador>, claves: string[]) => claves.map((c) => o[c]).filter(Boolean);
 
 function Seccion({ id, n, titulo, texto, children }: { id: string; n: string; titulo: string; texto: string; children: React.ReactNode }) {
@@ -67,10 +64,11 @@ function Seccion({ id, n, titulo, texto, children }: { id: string; n: string; ti
   );
 }
 
-/** Cifras del sector: las del sistema de estadísticas de FEDEGÁN (el HTML que se carga en el panel), con el diseño del portal. No lee nada de servicios externos. */
+/** Cifras del sector: las del sistema de estadísticas de FEDEGÁN (el HTML que se carga en el panel) más la copia única del historial, con el diseño del portal. No consulta servicios externos al mostrarse. */
 export async function Observatorio({ datos }: { datos?: Awaited<ReturnType<typeof getConjuntos>> } = {}) {
-  const conjuntos = datos ?? (await getConjuntos().catch(() => []));
-  const obs = observatorioDesdeConjuntos(conjuntos);
+  const [conjuntos, copia] = await Promise.all([datos ?? getConjuntos().catch(() => []), getCopiaContexto().catch(() => null)]);
+  // El historial (desde 2021) y los departamentos salen de la copia guardada una sola vez; lo más reciente, del HTML de FEDEGÁN.
+  const obs = fusionarConCopia(observatorioDesdeConjuntos(conjuntos), copia?.observatorio ?? null);
   // Hay cifras cargadas, pero ninguna de las principales: se muestran todas en el catálogo.
   if (!obs && conjuntos.length > 0) {
     return (

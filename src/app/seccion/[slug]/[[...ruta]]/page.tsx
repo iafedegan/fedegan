@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
 
 export default async function SeccionPage({ params }: { params: Promise<Params> }) {
   const { slug, ruta = [] } = await params;
-  // Cifras del sector: el Observatorio ganadero con las cifras vivas de CONtexto.
+  // Cifras del sector: el Observatorio ganadero con las cifras de FEDEGÁN guardadas en el portal (no consulta servicios externos).
   if (slug === "cifras-del-sector" && ruta.length === 0) return <Observatorio />;
   if (await getSection(slug)) return <LegacySectionPage slug={slug} ruta={ruta} />;
 
