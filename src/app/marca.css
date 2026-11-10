@@ -898,3 +898,7 @@ textarea.fm-in { resize: vertical; min-height: 6rem; }
 .sx-lat .sx-sub .sx-fila-a { padding: 0.5rem 0.6rem; border-left: 0; }
 .sx-lat .sx-sub .sx-nombre { font: 600 0.98rem/1.3 var(--font-body); }
 .sx-lat .sx-sub .sx-fila-a[aria-current="page"] { background: #f3f9ee; box-shadow: inset 2px 0 0 #7dc242; }
+/* El botón de la flecha no hereda el estilo de las filas de la portada (ocupaba toda la fila y tapaba el texto al pasar el mouse) */
+.sx-menu button.sx-fila-b { display: grid; width: 2.4rem; flex: none; padding: 0; margin: 0; border: 0; align-items: center; justify-items: center; }
+.sx-menu .sx-sub button.sx-fila-b { padding: 0; margin: 0; }
+.sx-menu .sx-fila-a { align-items: baseline; }
