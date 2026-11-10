@@ -902,3 +902,5 @@ textarea.fm-in { resize: vertical; min-height: 6rem; }
 .sx-menu button.sx-fila-b { display: grid; width: 2.4rem; flex: none; padding: 0; margin: 0; border: 0; align-items: center; justify-items: center; }
 .sx-menu .sx-sub button.sx-fila-b { padding: 0; margin: 0; }
 .sx-menu .sx-fila-a { align-items: baseline; }
+/* La franja institucional va de borde a borde, pegada al filo inferior del cintillo (sin el margen de la cabecera ni su filete propio) */
+.mh > .mh-util { margin: -1rem -1rem 1rem; border-top: 0; border-image: none; }
