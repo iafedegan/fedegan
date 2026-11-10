@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
+import { getSection } from "@/lib/cms/nodos";
 import { type PictogramName } from "@/components/ui/Pictogram";
 import { WaveCard } from "@/components/ui/WaveCard";
 import { PhotoCard } from "@/components/ui/PhotoCard";
@@ -33,7 +35,9 @@ const fronts = [
   { image: "/locales/publicaciones.jpg", pos: "60% 50%", acc: "112,214,196", kicker: "Social", title: "Fundagán", text: "Ganadería y derechos humanos, y responsabilidad social.", href: "/seccion/programas/programa/fundagan" },
 ];
 
-export default function QuienesSomosPage() {
+export default async function QuienesSomosPage() {
+  // Si la página ya está en el Árbol del sitio (editable en el constructor), se muestra esa; esta versión es la de respaldo.
+  if (await getSection("quienes-somos")) redirect("/seccion/quienes-somos");
   return (
     <>
       <PageHeader

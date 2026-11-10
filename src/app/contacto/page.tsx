@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
+import { getSection } from "@/lib/cms/nodos";
 import { ArrowUpRight, Clock, Mail, MapPin, Phone } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { PageHeader } from "@/components/ui/PageHeader";
@@ -21,7 +23,9 @@ const channels = [
   { icon: Clock, label: "Horario", value: contacto.horario },
 ];
 
-export default function ContactoPage() {
+export default async function ContactoPage() {
+  // Si la página ya está en el Árbol del sitio (editable en el constructor), se muestra esa; esta versión es la de respaldo.
+  if (await getSection("contacto")) redirect("/seccion/contacto");
   return (
     <>
       <PageHeader
