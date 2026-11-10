@@ -10,6 +10,7 @@ import { TocRail, type TocItem } from "@/components/legacy/TocRail";
 import { SectionMenu } from "@/components/legacy/SectionMenu";
 import { podarMenu } from "@/components/legacy/menu-poda";
 import { ArticleTools } from "@/components/legacy/ArticleTools";
+import { SeccionExplorador, type TemaMenu } from "@/components/legacy/SeccionExplorador";
 import { PrevNext, SectionSearch, SectionTiles, countBelow, flattenTree, sacarFichas } from "@/components/legacy/SectionParts";
 import { journeyPhotos } from "@/content/scroll-world";
 import { getPageOverride } from "@/lib/cms/paginas";
@@ -120,30 +121,24 @@ export async function LegacySectionPage({ slug, ruta }: { slug: string; ruta: st
     const partir = branches.length > FICHAS_MAX + 12;
     const destacadas = partir ? branches.slice(0, FICHAS_MAX) : branches;
     const restantes = partir ? branches.slice(FICHAS_MAX) : [];
-    const fichasNodo = (
-      <>
-          {(branches.length > 0 || fichas.length > 0) && (
-            <section aria-labelledby="hub-explorar">
-              <div className="hub-head">
-                <h2 id="hub-explorar">Explore {section.label}</h2>
-                <p>Elija un tema. Cada ficha muestra lo que encontrará dentro.</p>
-              </div>
-              <SectionTiles nodes={destacadas} slug={slug} custom={custom} extras={fichas} />
-              {restantes.length > 0 && (
-                <details className="hub-resto">
-                  <summary>Ver las {restantes.length} páginas restantes</summary>
-                  <ul>
-                    {restantes.map((n, i) => {
-                      const h = n.key ? legacyHref(slug, n.key) : n.href;
-                      return <li key={`${n.label}-${i}`}>{h ? <Link href={h}>{n.label}</Link> : n.label}</li>;
-                    })}
-                  </ul>
-                </details>
-              )}
-            </section>
-          )}
-      </>
-    );
+    // Menú de temas en vertical: al elegir uno, su página se muestra al lado (SeccionExplorador). Las fichas del constructor suman temas con enlace.
+    const temas: TemaMenu[] = [
+      ...branches.map((n) => ({
+        clave: n.key,
+        nombre: n.label,
+        href: n.key ? legacyHref(slug, n.key) : n.href,
+        hijos: (n.children ?? []).map((c) => ({ nombre: c.label, href: (c.key ? legacyHref(slug, c.key) : c.href) ?? `/seccion/${slug}` })),
+      })),
+      ...fichas.map((f) => ({ nombre: f.titulo, href: f.enlace, hijos: [] })),
+    ];
+    const introNodo =
+      page.blocks.length > 0 ? (
+        <article className="ed-body min-w-0 [overflow-wrap:anywhere]">
+          <p className="hub-label">Sobre esta sección</p>
+          <LegacyContent blocks={page.blocks} libre={page.libre} />
+        </article>
+      ) : null;
+    const fichasNodo = temas.length > 0 ? <SeccionExplorador slug={slug} titulo={`Explore ${section.label}`} temas={temas} inicial={propia ? null : introNodo} lateral={propia ? undefined : <QuickRail />} /> : null;
     const accesosNodo = <div className="my-6 max-w-sm"><QuickRail /></div>;
     return (
       <>
@@ -171,8 +166,7 @@ export async function LegacySectionPage({ slug, ruta }: { slug: string; ruta: st
             <article className="ed-body min-w-0 [overflow-wrap:anywhere]">{cuerpoConPartes(page.blocks, page.libre, { fichas: fichasNodo, accesos: accesosNodo })}</article>
           ) : (
             <>
-          {fichasNodo}
-
+          {fichasNodo ?? (
           <div className={`hub-intro ${page.blocks.length > 0 ? "" : "is-empty"}`}>
             <article className="ed-body min-w-0 [overflow-wrap:anywhere]">
               {page.blocks.length > 0 && (
@@ -187,6 +181,7 @@ export async function LegacySectionPage({ slug, ruta }: { slug: string; ruta: st
               <QuickRail />
             </aside>
           </div>
+          )}
             </>
           )}
         </Container>
