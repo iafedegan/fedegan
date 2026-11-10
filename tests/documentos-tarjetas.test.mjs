@@ -47,3 +47,8 @@ test("el elemento «Documentos» muestra tarjetas aunque tenga un solo archivo",
   assert.equal(tarjetasDeEnlaces([{ nombre: "Sitio", url: "https://example.com/inicio" }]), null);
   assert.equal(tarjetasDeEnlaces([{ nombre: "Acta", url: "/documentos/acta.pdf" }]).length, 1, "también con rutas del portal");
 });
+
+test("un enlace a documento con guion o negrita sigue siendo un documento (tarjeta)", () => {
+  const u = "https://x.org/a.pdf";
+  assert.equal(tarjetasDeTextos([`[Uno](${u})`]).length, 1);
+});

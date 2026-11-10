@@ -7,7 +7,7 @@ import { UploadDocs } from "./UploadDocs";
 import { EntryExplorer, type ExplorerEntry } from "./EntryExplorer";
 import { DocList, tarjetasDeDocumentos } from "./DocList";
 import { DocCard } from "./DocCard";
-import { piezasDeParrafo, tipoDeUrl } from "@/lib/cms/documentos-tarjetas";
+import { piezasDeParrafo, tarjetasDeTextos, tipoDeUrl } from "@/lib/cms/documentos-tarjetas";
 
 // Celdas con varias líneas: los enlaces sueltos van como lista y el resto como párrafos.
 function CellLines({ text }: { text: string }) {
@@ -25,6 +25,13 @@ function CellLines({ text }: { text: string }) {
       })}
     </>
   );
+}
+
+/** Si el párrafo es solo «[nombre](enlace a un documento)» (con o sin negrita), devuelve ese enlace sin la negrita. */
+function soloDocumento(texto: string | undefined): string | null {
+  const m = /^\s*(?:\*\*)?\s*(?:[-–•]\s+)?(\[[^\]\n]+\]\(https?:\/\/[^)\s]+\))(?:\*\*)?\s*$/.exec(texto ?? "");
+  const url = m ? /\((https?:\/\/[^)\s]+)\)/.exec(m[1])?.[1] : undefined;
+  return m && url && tipoDeUrl(url) ? m[1] : null;
 }
 
 /** «Tab_gestion_documental-2022.html» → «Tab gestion documental 2022». */
@@ -293,6 +300,19 @@ export function LegacyContent({ blocks, lead: allowLead = true, preview = false,
       );
       i++;
       continue;
+    }
+
+    // Párrafos seguidos que son solo un enlace a un documento (a veces en negrita): una tarjeta por documento.
+    if (b.t === "p" && soloDocumento(b.text)) {
+      const textos: string[] = [];
+      let j = i;
+      while (j < blocks.length && blocks[j].t === "p" && soloDocumento(blocks[j].text)) textos.push(soloDocumento(blocks[j++].text)!);
+      const docs = tarjetasDeTextos(textos);
+      if (docs) {
+        nodes.push(<DocList key={key} tarjetas={docs} />);
+        i = j - 1;
+        continue;
+      }
     }
 
     // Párrafo con títulos y enlaces a documentos (índice de una revista…): títulos de grupo y tarjetas con vista previa.
