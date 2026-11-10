@@ -532,7 +532,7 @@ export const PLANTILLAS_FILA: PlantillaFila[] = [
   { id: "degradado", nombre: "Mensaje con degradado", ayuda: "Fila verde con un texto grande", crear: () => fila("12", [[gen("destacado", { texto: "Una idea que resume la página en una frase.", tamano: "enorme", alinear: "centro" })]], { fondo: "degradado", espaciado: "grande" }) },
   { id: "cifras", nombre: "Cuatro cifras", ayuda: "Cuatro columnas con una cifra cada una", crear: () => fila("3-3-3-3", [["+500", "12", "98%", "24/7"].map((c) => gen("cifras", { items: [{ valor: c, etiqueta: "Describa la cifra" }] }))], { fondo: "suave" }) },
   { id: "principal-lateral", nombre: "Contenido y barra lateral", ayuda: "Una columna ancha y una angosta", crear: () => fila("8-4", [[t2("Contenido principal"), par("El texto más importante va aquí.")], [t3("A un lado"), par("Datos de contacto, enlaces o un aviso corto.")]]) },
-  { id: "contacto-mapa", nombre: "Contacto y mapa", ayuda: "Datos de contacto junto a un mapa", crear: () => fila("5-7", [[gen("contacto", { titulo: "Oficina principal" })], [gen("mapa", {})]], { alinear: "centro" }) },
+  { id: "contacto-mapa", nombre: "Contacto y mapa", ayuda: "Datos de contacto junto a un mapa", crear: () => fila("5-7", [[gen("contacto", { titulo: "Oficina principal" })], [gen("mapa", { lugar: "FEDEGÁN, Bogotá" })]], { alinear: "centro" }) },
   { id: "testimonios", nombre: "Testimonios", ayuda: "Una cita grande junto a un texto", crear: () => fila("7-5", [[gen("testimonios", { estilo: "grande", items: [{ texto: "Un testimonio que da confianza.", nombre: "Nombre Apellido", cargo: "Ganadero, Córdoba", foto: "" }] })], [t3("Lo que dicen"), par("Presente a las personas que ya confían en este servicio.")]], { fondo: "suave", alinear: "centro" }) },
 ];
 
