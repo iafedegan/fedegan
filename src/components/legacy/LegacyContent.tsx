@@ -6,7 +6,8 @@ import { BLOQUES_RICOS, BloqueRico } from "./BloquesRicos";
 import { UploadDocs } from "./UploadDocs";
 import { EntryExplorer, type ExplorerEntry } from "./EntryExplorer";
 import { DocList, tarjetasDeDocumentos } from "./DocList";
-import { piezasDeParrafo } from "@/lib/cms/documentos-tarjetas";
+import { DocCard } from "./DocCard";
+import { piezasDeParrafo, tipoDeUrl } from "@/lib/cms/documentos-tarjetas";
 
 // Celdas con varias líneas: los enlaces sueltos van como lista y el resto como párrafos.
 function CellLines({ text }: { text: string }) {
@@ -24,6 +25,16 @@ function CellLines({ text }: { text: string }) {
       })}
     </>
   );
+}
+
+/** «Tab_gestion_documental-2022.html» → «Tab gestion documental 2022». */
+function nombreDeUrl(href: string): string {
+  try {
+    const f = decodeURIComponent(new URL(href).pathname.split("/").pop() ?? "").replace(/\.[a-z0-9]{2,5}$/i, "").replace(/[_-]+/g, " ").trim();
+    return f || "Documento";
+  } catch {
+    return "Documento";
+  }
 }
 
 type EmbedInfo = { kind: "video" | "link"; src: string; href: string; title: string; hint: string };
@@ -226,6 +237,14 @@ export function LegacyContent({ blocks, lead: allowLead = true, preview = false,
               {e.hint}
             </a>
           </div>
+        ) : e.title === "Documento" || e.title === "Tablero interactivo" ? (
+          // Un documento o tablero suelto se ve como el resto de los documentos: tarjeta con «Vista previa» y botón.
+          <ul key={key} className="doc-grid" role="list">
+            <DocCard
+              titulo={nombreDeUrl(e.href)}
+              docs={[{ url: e.href, etiqueta: "", clave: tipoDeUrl(e.href)?.clave ?? "web", sigla: tipoDeUrl(e.href)?.sigla ?? "WEB", nombre: tipoDeUrl(e.href)?.nombre ?? "Página web" }]}
+            />
+          </ul>
         ) : (
           <a
             key={key}

@@ -1,14 +1,14 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Download, Eye, Headphones, Loader2, X } from "lucide-react";
+import { Download, ExternalLink, Eye, Headphones, Loader2, X } from "lucide-react";
 import { VistaExcel, VistaWord } from "./VistaDocumento";
 
 export type DocVista = { url: string; etiqueta: string; clave: string; sigla: string; nombre: string };
 
 // Cómo se muestra cada archivo dentro del portal. El archivo pasa por /api/documentos/ver, que lo entrega con su tipo correcto
 // (los del sitio anterior se sirven como «descarga»). PDF: visor del navegador; Excel y Word: los lee el propio portal.
-type Vista = { tipo: "pdf" | "excel" | "word" | "audio" | "ninguna"; src: string };
+type Vista = { tipo: "pdf" | "excel" | "word" | "audio" | "marco" | "ninguna"; src: string };
 function vistaDe(d: DocVista): Vista {
   const ext = (() => {
     try {
@@ -19,6 +19,8 @@ function vistaDe(d: DocVista): Vista {
   })();
   const via = `/api/documentos/ver?u=${encodeURIComponent(d.url)}`;
   if (d.clave === "mp3") return { tipo: "audio", src: d.url };
+  // Una página o tablero web (no un archivo): se ve dentro de la ventana, tal cual.
+  if (d.clave === "web") return { tipo: "marco", src: d.url };
   if (ext === "pdf") return { tipo: "pdf", src: via };
   if (ext === "xlsx") return { tipo: "excel", src: via };
   if (ext === "docx") return { tipo: "word", src: via };
@@ -64,9 +66,9 @@ export function DocCard({ titulo, docs, detalle }: { titulo: string; docs: DocVi
             <Eye size={14} aria-hidden /> Vista previa
           </button>
           {docs.map((x, n) => (
-            <a key={n} href={x.url} target="_blank" rel="noopener noreferrer" className="doc-btn" data-tipo={x.clave} download>
-              {x.clave === "mp3" ? <Headphones size={14} aria-hidden /> : <Download size={14} aria-hidden />}
-              {x.etiqueta ? `${x.etiqueta} · ${x.nombre}` : `Descargar ${x.nombre}`}
+            <a key={n} href={x.url} target="_blank" rel="noopener noreferrer" className="doc-btn" data-tipo={x.clave} download={x.clave === "web" ? undefined : true}>
+              {x.clave === "mp3" ? <Headphones size={14} aria-hidden /> : x.clave === "web" ? <ExternalLink size={14} aria-hidden /> : <Download size={14} aria-hidden />}
+              {x.clave === "web" ? "Abrir en otra pestaña" : x.etiqueta ? `${x.etiqueta} · ${x.nombre}` : `Descargar ${x.nombre}`}
             </a>
           ))}
         </div>
@@ -106,6 +108,12 @@ export function DocCard({ titulo, docs, detalle }: { titulo: string; docs: DocVi
               {vista.tipo === "pdf" && (
                 <>
                   {cargando && <span className="doc-cargando"><Loader2 size={20} className="animate-spin" aria-hidden /> Cargando la vista previa…</span>}
+                  <iframe key={vista.src} src={vista.src} title={`Vista previa: ${titulo}`} onLoad={() => setCargando(false)} />
+                </>
+              )}
+              {vista.tipo === "marco" && (
+                <>
+                  {cargando && <span className="doc-cargando"><Loader2 size={20} className="animate-spin" aria-hidden /> Cargando…</span>}
                   <iframe key={vista.src} src={vista.src} title={`Vista previa: ${titulo}`} onLoad={() => setCargando(false)} />
                 </>
               )}

@@ -22,9 +22,10 @@ test("el tipo entre paréntesis y la etiqueta no son parte del nombre", () => {
   assert.equal(nombreConTipo("Sin tipo conocido", "https://example.com/x"), "Sin tipo conocido");
 });
 
-test("una lista de viñetas solo se vuelve tarjetas si todas son documentos y hay al menos dos", () => {
+test("una lista de viñetas solo se vuelve tarjetas si todas son documentos (aunque sea uno solo)", () => {
   const li = (n, u) => `[${n}](${u})`;
-  assert.equal(tarjetasDeTextos([li("Uno (Excel)", xlsx)]), null);
+  assert.equal(tarjetasDeTextos([li("Uno (Excel)", xlsx)]).length, 1);
+  assert.equal(tarjetasDeTextos([li("Uno", "https://example.com/pagina")]), null);
   assert.equal(tarjetasDeTextos([li("Uno (Excel)", xlsx), "Un texto cualquiera"]), null);
   assert.equal(tarjetasDeTextos([li("Uno", "https://example.com/pagina"), li("Dos", pdf)]), null);
   const t = tarjetasDeTextos([li("Uno (Excel)", xlsx), li("Dos (PDF)", pdf)]);

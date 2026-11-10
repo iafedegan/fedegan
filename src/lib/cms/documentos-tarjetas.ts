@@ -65,7 +65,7 @@ function agrupar(docs: Doc[]): TarjetaDoc[] {
 }
 
 /** Tarjetas de una lista de viñetas, si TODAS son «[nombre](https://…documento)» y hay al menos `minimo`; si no, null (lista normal). */
-export function tarjetasDeTextos(textos: string[], minimo = 2): TarjetaDoc[] | null {
+export function tarjetasDeTextos(textos: string[], minimo = 1): TarjetaDoc[] | null {
   if (textos.length < minimo || textos.length === 0) return null;
   const docs: Doc[] = [];
   for (const t of textos) {

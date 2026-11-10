@@ -122,15 +122,13 @@ export async function LegacySectionPage({ slug, ruta }: { slug: string; ruta: st
     const destacadas = partir ? branches.slice(0, FICHAS_MAX) : branches;
     const restantes = partir ? branches.slice(FICHAS_MAX) : [];
     // Menú de temas en vertical: al elegir uno, su página se muestra al lado (SeccionExplorador). Las fichas del constructor suman temas con enlace.
-    const temas: TemaMenu[] = [
-      ...branches.map((n) => ({
-        clave: n.key,
-        nombre: n.label,
-        href: n.key ? legacyHref(slug, n.key) : n.href,
-        hijos: (n.children ?? []).map((c) => ({ nombre: c.label, href: (c.key ? legacyHref(slug, c.key) : c.href) ?? `/seccion/${slug}` })),
-      })),
-      ...fichas.map((f) => ({ nombre: f.titulo, href: f.enlace, hijos: [] })),
-    ];
+    const aTema = (n: NavNode): TemaMenu => ({
+      clave: n.key,
+      nombre: n.label,
+      href: (n.key ? legacyHref(slug, n.key) : n.href) || undefined,
+      hijos: (n.children ?? []).map(aTema),
+    });
+    const temas: TemaMenu[] = [...branches.map(aTema), ...fichas.map((f) => ({ nombre: f.titulo, href: f.enlace, hijos: [] }))];
     const introNodo =
       page.blocks.length > 0 ? (
         <article className="ed-body min-w-0 [overflow-wrap:anywhere]">

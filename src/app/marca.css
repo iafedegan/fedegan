@@ -863,3 +863,16 @@ textarea.fm-in { resize: vertical; min-height: 6rem; }
 .sx-hijos { margin: 0; padding: 0; list-style: none; display: grid; gap: 0.5rem; }
 .sx-hijos a { display: block; padding: 0.8rem 1rem; border: 1px solid #dcdcd2; border-radius: 0.6rem; font-weight: 650; color: #10240f; text-decoration: none; }
 .sx-hijos a:hover { border-color: #7dc242; background: #f6faf0; }
+.doc-card[data-tipo="web"] .doc-ico { background: #2c6a14; } .doc-ico-sm[data-tipo="web"] { background: #2c6a14; }
+.doc-btn[data-tipo="web"] { border-color: #b6d49f; background: #f3f9ee; color: #245611 !important; } .doc-btn[data-tipo="web"]:hover { background: #2c6a14; color: #fff !important; border-color: #2c6a14; }
+.sx-menu button { align-items: center; }
+.sx-flecha { flex: none; margin-left: auto; color: #6c7a72; transition: transform .2s; }
+.sx-flecha.is-abierta { transform: rotate(180deg); }
+.sx-menu .sx-sub { margin: 0 0 0.6rem 2.6rem; padding: 0 0 0 0.9rem; border-left: 1px solid #cfd8c4; }
+.sx-menu .sx-sub button, .sx-menu button.sx-hijo { padding: 0.55rem 0.6rem; margin-left: 0; border-left: 0; }
+.sx-menu .sx-sub .sx-nombre { font: 600 0.98rem/1.3 var(--font-body); }
+.sx-menu .sx-sub button[aria-current="true"] { background: #f3f9ee; box-shadow: inset 2px 0 0 #7dc242; }
+.sx-menu .sx-sub .sx-sub { margin-left: 0.8rem; }
+.sx-sub-t { margin: 2rem 0 0.8rem; font: 700 0.8rem/1 var(--font-body); letter-spacing: 0.16em; text-transform: uppercase; color: #55665a; }
+.sx-hijos button { display: block; width: 100%; padding: 0.8rem 1rem; border: 1px solid #dcdcd2; border-radius: 0.6rem; background: #fff; text-align: left; font-weight: 650; color: #10240f; cursor: pointer; }
+.sx-hijos button:hover { border-color: #7dc242; background: #f6faf0; }
