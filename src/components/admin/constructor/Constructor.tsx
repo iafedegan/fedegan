@@ -7,7 +7,7 @@ import {
   PanelLeft, PanelTop, Pencil, Puzzle, Quote, Redo2, Search, Share2, SquareMousePointer, Table2, Trash2, Type, Undo2, Upload, UsersRound, Video, X, type LucideIcon,
 } from "lucide-react";
 import { LegacyContent } from "@/components/legacy/LegacyContent";
-import { CATALOGO, ESQUEMAS, GRUPOS, NOMBRE_TIPO, PLANTILLAS, aBloques, elementoNuevo, nuevoId, problema, type Bloque, type Elemento, type TipoNuevo } from "@/lib/cms/bloques";
+import { CATALOGO, ESQUEMAS, GRUPOS, NOMBRE_TIPO, PLANTILLAS, PLANTILLAS_FILA, aBloques, elementoNuevo, nuevoId, problema, type Bloque, type Elemento, type TipoNuevo } from "@/lib/cms/bloques";
 import { TIPOS_ESQUEMA } from "@/lib/cms/elementos";
 import { EditorElemento } from "./Editores";
 
@@ -16,7 +16,7 @@ import { EditorElemento } from "./Editores";
 
 const ICONO_BASE: Record<string, LucideIcon> = {
   h2: Heading2, h3: Heading3, h4: Heading3, p: Type, lista: List, button: MousePointerClick, callout: Megaphone, cards: LayoutGrid,
-  carousel: GalleryHorizontal, accordion: ListCollapse, image: ImageIcon, embed: Video, divider: Minus, docs: Paperclip, upload: Upload, otro: Puzzle,
+  carousel: GalleryHorizontal, accordion: ListCollapse, image: ImageIcon, embed: Video, divider: Minus, docs: Paperclip, upload: Upload, fila: Columns3, otro: Puzzle,
 };
 // Los iconos que piden los esquemas de src/lib/cms/elementos.ts (por su nombre en lucide-react).
 const ICONO_ESQUEMA: Record<string, LucideIcon> = {
@@ -34,7 +34,8 @@ type Arrastre = { tipo: "nuevo"; elemento: TipoNuevo } | { tipo: "mover"; id: st
 
 const sinAcentos = (t: string) => t.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
 
-function Paleta({ onAnadir, onInicio, onFin }: { onAnadir: (t: TipoNuevo) => void; onInicio: (t: TipoNuevo, e: DragEvent) => void; onFin: () => void }) {
+function Paleta({ onAnadir, onInicio, onFin, onFila }: { onAnadir: (t: TipoNuevo) => void; onInicio: (t: TipoNuevo, e: DragEvent) => void; onFin: () => void; onFila: (id: string) => void }) {
+  const [pestana, setPestana] = useState<"elementos" | "plantillas">("elementos");
   // En pantallas angostas la paleta se puede plegar para dejar sitio a la página.
   const [abierta, setAbierta] = useState(true);
   const [busqueda, setBusqueda] = useState("");
@@ -58,7 +59,23 @@ function Paleta({ onAnadir, onInicio, onFin }: { onAnadir: (t: TipoNuevo) => voi
           {abierta ? "Ocultar" : "Mostrar"}
         </button>
       </div>
-      <div className={`flex flex-col gap-3 ${abierta ? "" : "max-xl:hidden"}`}>
+      <div role="tablist" aria-label="Qué mostrar" className={`grid grid-cols-2 gap-1 rounded-xl bg-[#eceae0] p-1 text-xs font-bold ${abierta ? "" : "max-xl:hidden"}`}>
+        {([["elementos", "Elementos"], ["plantillas", "Plantillas"]] as const).map(([k, n]) => (
+          <button key={k} type="button" role="tab" aria-selected={pestana === k} onClick={() => setPestana(k)} className={`rounded-lg px-2 py-1.5 transition-colors ${pestana === k ? "bg-white text-[#11271d] shadow-sm" : "text-[#5d6e65]"}`}>{n}</button>
+        ))}
+      </div>
+      {pestana === "plantillas" && (
+        <div className={`flex flex-col gap-2 ${abierta ? "" : "max-xl:hidden"}`}>
+          <p className="text-xs leading-snug text-[#5d6e65]">Filas ya armadas: púlselas para añadirlas y cambie lo que quiera.</p>
+          {PLANTILLAS_FILA.map((p) => (
+            <button key={p.id} type="button" onClick={() => onFila(p.id)} className="flex flex-col items-start gap-0.5 rounded-xl border border-[#e4e2d6] bg-white px-3 py-2.5 text-left transition-colors hover:border-[#b08f4f] hover:bg-[#fbf6e8]">
+              <span className="text-[0.8rem] font-bold text-[#11271d]">{p.nombre}</span>
+              <span className="text-xs text-[#5d6e65]">{p.ayuda}</span>
+            </button>
+          ))}
+        </div>
+      )}
+      <div className={`flex flex-col gap-3 ${abierta && pestana === "elementos" ? "" : "hidden"}`}>
         <div className="relative">
           <Search size={15} aria-hidden className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[#8a978f]" />
           <input
@@ -310,6 +327,20 @@ export function Constructor({ elementos, setElementos, carpeta, fiel = false, hi
     },
     [setElementos],
   );
+  const insertarFila = useCallback(
+    (id: string) => {
+      const nuevo = PLANTILLAS_FILA.find((p) => p.id === id)?.crear();
+      if (!nuevo) return;
+      enfocar.current = nuevo.id;
+      setSel(nuevo.id);
+      setElementos((prev) => {
+        const tras = prev.findIndex((e) => e.id === selRef.current) + 1;
+        const i = tras > 0 ? tras : prev.length;
+        return [...prev.slice(0, i), nuevo, ...prev.slice(i)];
+      });
+    },
+    [setElementos],
+  );
   // Un elemento recién añadido se muestra y deja listo su primer campo.
   useEffect(() => {
     const id = enfocar.current;
@@ -470,7 +501,7 @@ export function Constructor({ elementos, setElementos, carpeta, fiel = false, hi
         </div>
       ) : (
         <div className="grid grid-cols-[minmax(0,1fr)] gap-4 xl:grid-cols-[12.5rem_minmax(0,1fr)] xl:items-start">
-          <Paleta onAnadir={(t) => insertar(t)} onInicio={iniciarNuevo} onFin={finArrastre} />
+          <Paleta onAnadir={(t) => insertar(t)} onInicio={iniciarNuevo} onFin={finArrastre} onFila={insertarFila} />
           <div className="flex min-w-0 flex-col gap-3">
           {marco?.antes}
           <div

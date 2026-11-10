@@ -6,6 +6,7 @@ import { elementoDeBloque, type Bloque, type Elemento, type Tarjeta } from "@/li
 import { TIPOS_ESQUEMA } from "@/lib/cms/elementos";
 import { tarjetasDeEnlaces } from "@/lib/cms/documentos-tarjetas";
 import { DocList } from "./DocList";
+import { Fila } from "./Fila";
 import { ElementoExtra } from "./ElementosExtra";
 import { Inline } from "./Inline";
 import { botonBase, botonClase, enlaceSeguro, esExterno, imagenSegura, Vinculo } from "./comun";
@@ -176,9 +177,10 @@ function Documentos({ el }: { el: De<"docs"> }) {
 }
 
 /** Tipos de bloque que se pintan aquí. */
-export const BLOQUES_RICOS = new Set<string>(["button", "image", "cards", "carousel", "accordion", "callout", "docs", "divider", ...TIPOS_ESQUEMA]);
+export const BLOQUES_RICOS = new Set<string>(["fila", "button", "image", "cards", "carousel", "accordion", "callout", "docs", "divider", ...TIPOS_ESQUEMA]);
 
 export function BloqueRico({ b, preview = false }: { b: Bloque; preview?: boolean }) {
+  if (b.t === "fila") return <Fila d={b.data ?? {}} preview={preview} />;
   const el = elementoDeBloque(b);
   switch (el.tipo) {
     case "button": return <Boton el={el} />;

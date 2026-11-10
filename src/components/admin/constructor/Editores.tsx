@@ -3,8 +3,8 @@
 import { useRef, useState, type ClipboardEvent, type ReactNode } from "react";
 import { ArrowDown, ArrowUp, FileUp, ImagePlus, Link2, Loader2, Plus, Table2, Trash2, Upload } from "lucide-react";
 import {
-  EMBED_OK, ENLACE_OK, ESQUEMAS, IMAGEN_OK, normalizarUrl, normalizarVideo, tarjetaVacia,
-  type ElTexto, type Elemento, type ItemLista, type Tarjeta,
+  ALINEACIONES_FILA, CATALOGO, DIVISIONES, EMBED_OK, ENLACE_OK, ESPACIADOS_FILA, ESQUEMAS, FONDOS_FILA, IMAGEN_OK, NOMBRE_TIPO, columnasDe, elementoNuevo, normalizarUrl, normalizarVideo, nuevoId, problema, tarjetaVacia,
+  type Division, type ElTexto, type Elemento, type ItemLista, type Tarjeta, type TipoNuevo,
 } from "@/lib/cms/bloques";
 import { datosDe, datosIniciales, type CampoLista, type CampoSimple, type CampoTabla, type Datos, type Esquema } from "@/lib/cms/elementos";
 import { nombreConTipo, tipoDeUrl } from "@/lib/cms/documentos-tarjetas";
@@ -760,6 +760,122 @@ function EditorOtro({ el, cambiar }: { el: Extract<Elemento, { tipo: "otro" }>; 
   );
 }
 
+// ───────────────────────── fila de columnas
+
+const FONDOS_NOMBRE: Record<string, string> = { ninguno: "Sin fondo", suave: "Verde suave", color: "Verde", oscuro: "Oscuro", degradado: "Degradado", imagen: "Imagen" };
+const ESPACIOS_NOMBRE: Record<string, string> = { ninguno: "Ninguno", pequeno: "Pequeño", medio: "Mediano", grande: "Grande" };
+type ElFila = De<"fila">;
+const AGREGABLES = CATALOGO.filter((c) => c.tipo !== "fila" && c.tipo !== ("parte" as TipoNuevo));
+
+function EditorFila({ el, cambiar, actualizar, carpeta }: { el: ElFila } & Acciones) {
+  const [abierto, setAbierto] = useState<string | null>(null);
+  const poner = (cols: Elemento[][]) => cambiar({ ...el, cols });
+  const dividir = (d: Division) => {
+    const n = columnasDe(d);
+    const cols = Array.from({ length: n }, (_, k) => el.cols[k] ?? []);
+    // Si hay menos columnas que antes, lo de las que sobran pasa a la última: no se pierde nada.
+    for (let k = n; k < el.cols.length; k++) cols[n - 1] = [...cols[n - 1], ...el.cols[k]];
+    cambiar({ ...el, division: d, cols });
+  };
+  const enColumna = (k: number, fn: (c: Elemento[]) => Elemento[]) => poner(el.cols.map((c, i) => (i === k ? fn(c) : c)));
+  const mover = (k: number, i: number, d: -1 | 1) =>
+    enColumna(k, (c) => {
+      const j = i + d;
+      if (j < 0 || j >= c.length) return c;
+      const n = [...c];
+      [n[i], n[j]] = [n[j], n[i]];
+      return n;
+    });
+  // Lo que termina tarde (una subida) se aplica sobre el estado más reciente de la fila, buscando el elemento por su id.
+  const actualizarHijo = (id: string) => (fn: (x: Elemento) => Elemento) =>
+    actualizar((f) => (f.tipo === "fila" ? { ...f, cols: f.cols.map((c) => c.map((x) => (x.id === id ? fn(x) : x))) } : f));
+
+  return (
+    <div className="flex flex-col gap-5">
+      <div className="flex flex-col gap-1.5">
+        <span className="text-sm font-semibold text-[#11271d]">Cómo se divide (sobre 12)</span>
+        <div role="radiogroup" aria-label="División de la fila" className="grid grid-cols-2 gap-2 sm:grid-cols-4 lg:grid-cols-7">
+          {DIVISIONES.map((d) => (
+            <button key={d} type="button" role="radio" aria-checked={el.division === d} onClick={() => dividir(d)} title={d.replaceAll("-", " · ")}
+              className={`flex flex-col gap-1.5 rounded-lg border p-2 transition-colors ${el.division === d ? "border-[#b08f4f] bg-[#f7edcf]" : "border-[#d9d6cb] bg-white hover:border-[#b08f4f]"}`}>
+              <span className="flex h-5 gap-0.5">
+                {d.split("-").map((n, i) => <span key={i} style={{ flex: Number(n) }} className="rounded-sm bg-[#4f9a2a]/70" />)}
+              </span>
+              <span className="text-center text-xs font-semibold text-[#5d6e65]">{d.replaceAll("-", " · ")}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+      <div className="grid gap-4 sm:grid-cols-3">
+        <Campo etiqueta="Fondo">
+          <select className={ctl} value={el.fondo} onChange={(e) => cambiar({ ...el, fondo: e.target.value as ElFila["fondo"] })}>
+            {FONDOS_FILA.map((f) => <option key={f} value={f}>{FONDOS_NOMBRE[f]}</option>)}
+          </select>
+        </Campo>
+        <Campo etiqueta="Espacio alrededor">
+          <select className={ctl} value={el.espaciado} onChange={(e) => cambiar({ ...el, espaciado: e.target.value as ElFila["espaciado"] })}>
+            {ESPACIADOS_FILA.map((f) => <option key={f} value={f}>{ESPACIOS_NOMBRE[f]}</option>)}
+          </select>
+        </Campo>
+        <Campo etiqueta="Alinear las columnas">
+          <select className={ctl} value={el.alinear} onChange={(e) => cambiar({ ...el, alinear: e.target.value as ElFila["alinear"] })}>
+            {ALINEACIONES_FILA.map((f) => <option key={f} value={f}>{f === "arriba" ? "Arriba" : "Al centro"}</option>)}
+          </select>
+        </Campo>
+      </div>
+      {el.fondo === "imagen" && (
+        <CampoImagen etiqueta="Imagen de fondo" valor={el.imagen} onCambio={(v) => cambiar({ ...el, imagen: v })} onSubida={(url) => actualizar((f) => (f.tipo === "fila" ? { ...f, imagen: url } : f))} carpeta={carpeta} />
+      )}
+
+      <div className="grid gap-4 lg:grid-cols-[repeat(auto-fit,minmax(16rem,1fr))]">
+        {el.cols.map((col, k) => (
+          <section key={k} className="flex min-w-0 flex-col gap-2 rounded-xl border border-[#e4e2d6] bg-white p-3" aria-label={`Columna ${k + 1}`}>
+            <p className="text-xs font-bold uppercase tracking-wide text-[#5d6e65]">Columna {k + 1} · {el.division.split("-")[k]}/12</p>
+            {col.map((x, i) => {
+              const aviso = problema(x);
+              const abre = abierto === x.id;
+              return (
+                <div key={x.id} className="rounded-lg border border-[#e4e2d6] bg-[#faf9f4]">
+                  <div className="flex items-center gap-1 px-2 py-1.5">
+                    <button type="button" onClick={() => setAbierto(abre ? null : x.id)} aria-expanded={abre} className="min-w-0 flex-1 truncate text-left text-sm font-semibold">
+                      {x.tipo === "otro" ? NOMBRE_TIPO.otro : NOMBRE_TIPO[x.tipo]}
+                      {aviso && <span className="ml-2 text-xs font-normal text-[#a36a00]">incompleto</span>}
+                    </button>
+                    <button type="button" onClick={() => mover(k, i, -1)} disabled={i === 0} aria-label="Subir" className="ad-icon-btn !h-7 !w-7"><ArrowUp size={13} /></button>
+                    <button type="button" onClick={() => mover(k, i, 1)} disabled={i === col.length - 1} aria-label="Bajar" className="ad-icon-btn !h-7 !w-7"><ArrowDown size={13} /></button>
+                    <button type="button" onClick={() => enColumna(k, (c) => [...c.slice(0, i + 1), { ...x, id: nuevoId() }, ...c.slice(i + 1)])} aria-label="Duplicar" className="ad-icon-btn !h-7 !w-7"><Plus size={13} /></button>
+                    <button type="button" onClick={() => enColumna(k, (c) => c.filter((y) => y.id !== x.id))} aria-label="Quitar" className="ad-icon-btn !h-7 !w-7 hover:!text-[#a33a3a]"><Trash2 size={13} /></button>
+                  </div>
+                  {abre && (
+                    <div className="border-t border-[#eeece2] p-3">
+                      <EditorElemento el={x} cambiar={(n) => enColumna(k, (c) => c.map((y) => (y.id === x.id ? n : y)))} actualizar={actualizarHijo(x.id)} carpeta={carpeta} />
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+            <select
+              aria-label={`Añadir un elemento a la columna ${k + 1}`}
+              className={`${ctl} !text-sm`}
+              value=""
+              onChange={(e) => {
+                const tipo = e.target.value as TipoNuevo;
+                if (!tipo) return;
+                const nuevo = elementoNuevo(tipo);
+                enColumna(k, (c) => [...c, nuevo]);
+                setAbierto(nuevo.id);
+              }}
+            >
+              <option value="">+ Añadir un elemento…</option>
+              {AGREGABLES.map((c) => <option key={c.tipo} value={c.tipo}>{c.nombre}</option>)}
+            </select>
+          </section>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export function EditorElemento({ el, cambiar, actualizar, carpeta }: { el: Elemento } & Acciones) {
   switch (el.tipo) {
     case "h2": case "h3": case "h4": case "p": return <EditorTexto el={el} cambiar={cambiar} />;
@@ -772,6 +888,7 @@ export function EditorElemento({ el, cambiar, actualizar, carpeta }: { el: Eleme
     case "docs": return <EditorDocumentos el={el} cambiar={cambiar} actualizar={actualizar} carpeta={carpeta} />;
     case "embed": return <EditorVideo el={el} cambiar={cambiar} />;
     case "upload": return <EditorRecibir el={el} cambiar={cambiar} />;
+    case "fila": return <EditorFila el={el} cambiar={cambiar} actualizar={actualizar} carpeta={carpeta} />;
     case "divider": return <p className="text-sm text-[#5d6e65]">Una línea que separa dos partes de la página. No tiene opciones.</p>;
     case "otro": return <EditorOtro el={el} cambiar={cambiar} />;
     default: return "datos" in el ? <EditorEsquema el={el} cambiar={cambiar} actualizar={actualizar} carpeta={carpeta} /> : null;

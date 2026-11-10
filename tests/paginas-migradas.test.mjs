@@ -95,3 +95,21 @@ test("una parte automática pasa la validación del servidor y vuelve igual", ()
   assert.equal(r.ok, true);
   assert.deepEqual(r.bloques.filter((b) => b.t === "parte").map((b) => b.data.cual), ["hijas", "fichas"]);
 });
+
+import { aElementos as aEl2, aBloques as aBl2, problema as prob2, PLANTILLAS_FILA, elementoNuevo as nuevo2 } from "../src/lib/cms/bloques.ts";
+test("fila de columnas: se sanea, conserva el contenido de cada columna y las plantillas nacen válidas", () => {
+  const f = { t: "fila", data: { division: "4-8", fondo: "raro", espaciado: "medio", cols: [[{ t: "p", text: "Uno" }, { t: "fila", data: {} }], [{ t: "h2", text: "Dos" }, { t: "button", text: "Ir", data: { href: "javascript:alert(1)" } }], [{ t: "p", text: "sobra" }]] } };
+  const r = sanearBloques([f]);
+  assert.equal(r.ok, false); // el botón con javascript: se rechaza
+  const ok = sanearBloques([{ ...f, data: { ...f.data, cols: [f.data.cols[0], [{ t: "h2", text: "Dos" }]] } }]);
+  assert.equal(ok.ok, true);
+  const d = ok.bloques[0].data;
+  assert.equal(d.fondo, "ninguno");
+  assert.equal(d.cols.length, 2);
+  assert.equal(d.cols[0].length, 1); // la fila anidada se descarta
+  const vuelta = aBl2(aEl2(ok.bloques));
+  assert.deepEqual(vuelta, ok.bloques);
+  assert.notEqual(prob2(nuevo2("fila")), null);
+  // Solo pueden quedar pendientes los datos que la persona tiene que poner (la foto).
+  for (const p of PLANTILLAS_FILA) assert.match(prob2(p.crear()) ?? "Falta la imagen.", /^(Columna \d: )?Falta la imagen\.$/, p.id);
+});

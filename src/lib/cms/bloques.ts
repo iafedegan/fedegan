@@ -16,6 +16,18 @@ export { ESQUEMAS, GRUPOS, esquemaDe, type Grupo, type TipoEsquema } from "./ele
 
 export type Bloque = { t: string; text?: string; rows?: string[][]; data?: Record<string, unknown> };
 
+export const DIVISIONES = ["12", "6-6", "4-8", "8-4", "3-9", "9-3", "5-7", "7-5", "4-4-4", "3-6-3", "6-3-3", "3-3-6", "3-3-3-3", "2-8-2"] as const;
+export type Division = (typeof DIVISIONES)[number];
+export const FONDOS_FILA = ["ninguno", "suave", "color", "oscuro", "degradado", "imagen"] as const;
+export type FondoFila = (typeof FONDOS_FILA)[number];
+export const ESPACIADOS_FILA = ["ninguno", "pequeno", "medio", "grande"] as const;
+export type EspaciadoFila = (typeof ESPACIADOS_FILA)[number];
+export const ALINEACIONES_FILA = ["arriba", "centro"] as const;
+export type AlinearFila = (typeof ALINEACIONES_FILA)[number];
+/** Cuántas columnas tiene cada división. */
+export const columnasDe = (d: string): number => d.split("-").length;
+const enLista = <T extends string>(l: readonly T[], v: unknown, def: T): T => (l.includes(v as T) ? (v as T) : def);
+
 export type Estilo = "solido" | "borde";
 export type Tono = "verde" | "dorado" | "claro";
 export type Tarjeta = { titulo: string; texto: string; imagen: string; enlace: string; boton: string };
@@ -37,6 +49,8 @@ export type Elemento =
   | { id: string; tipo: "embed"; url: string }
   | { id: string; tipo: "upload"; texto: string }
   | { id: string; tipo: "divider" }
+  /** Una fila de la página: se divide en columnas (sobre 12) y cada columna lleva su propia lista de elementos. */
+  | { id: string; tipo: "fila"; division: Division; fondo: FondoFila; imagen: string; espaciado: EspaciadoFila; alinear: AlinearFila; cols: Elemento[][] }
   /** Elementos descritos por un esquema (src/lib/cms/elementos.ts): sus datos viajan tal cual. */
   | { id: string; tipo: TipoEsquema; datos: Datos }
   /** Un bloque que el constructor no sabe editar (por ejemplo, una tabla copiada): se conserva tal cual. */
@@ -67,6 +81,7 @@ const BASE: { tipo: TipoNuevo; nombre: string; ayuda: string; grupo: Grupo }[] =
   { tipo: "docs", nombre: "Documentos", ayuda: "Tarjetas de documentos con vista previa y descarga", grupo: "Archivos" },
   { tipo: "upload", nombre: "Recibir archivos", ayuda: "Botón para que el visitante cargue documentos", grupo: "Archivos" },
   { tipo: "divider", nombre: "Separador", ayuda: "Línea divisoria", grupo: "Diseño" },
+  { tipo: "fila", nombre: "Fila de columnas", ayuda: "Divide una parte de la página en 2, 3 o 4 columnas, con fondo propio", grupo: "Diseño" },
 ];
 
 /** Lo que se ofrece en la paleta, por grupos: dentro de cada uno, primero los de siempre y luego los descritos por esquema. */
@@ -78,7 +93,7 @@ export const CATALOGO: { tipo: TipoNuevo; nombre: string; ayuda: string; grupo: 
 export const NOMBRE_TIPO: Record<string, string> = {
   h2: "Título", h3: "Subtítulo", h4: "Detalle", p: "Párrafo", lista: "Lista", li: "Lista", button: "Botón", callout: "Destacado",
   cards: "Tarjetas", carousel: "Carrusel", accordion: "Preguntas", image: "Imagen", embed: "Video o tablero", divider: "Separador",
-  docs: "Documentos", upload: "Recibir archivos", table: "Tabla", otro: "Elemento copiado",
+  docs: "Documentos", upload: "Recibir archivos", fila: "Fila de columnas", table: "Tabla", otro: "Elemento copiado",
   ...Object.fromEntries(TIPOS_ESQUEMA.map((t) => [t, ESQUEMAS[t].nombre])),
 };
 
@@ -125,14 +140,14 @@ const documentos = (v: unknown): Documento[] => lista(v).map((x) => ({ nombre: t
 
 // ───────────────────────── Bloque (guardado) → Elemento (editor)
 
-export function aElementos(blocks: Bloque[]): Elemento[] {
+export function aElementos(blocks: Bloque[], prefijo = "i"): Elemento[] {
   const out: Elemento[] = [];
   // Identificadores por posición, no al azar: así el servidor y el navegador generan los mismos al pintar la página.
   let n = 0;
   for (let i = 0; i < blocks.length; i++) {
     const b = blocks[i];
     const d = obj(b.data);
-    const id = `i${n++}`;
+    const id = `${prefijo}${n++}`;
     switch (b.t) {
       case "h2":
       case "h3":
@@ -178,6 +193,13 @@ export function aElementos(blocks: Bloque[]): Elemento[] {
       case "divider":
         out.push({ id, tipo: "divider" });
         break;
+      case "fila": {
+        const division = enLista(DIVISIONES, d.division, "6-6");
+        const crudas = Array.isArray(d.cols) ? d.cols : [];
+        const cols = Array.from({ length: columnasDe(division) }, (_, k) => aElementos(Array.isArray(crudas[k]) ? (crudas[k] as Bloque[]) : [], `${id}c${k}_`));
+        out.push({ id, tipo: "fila", division, fondo: enLista(FONDOS_FILA, d.fondo, "ninguno"), imagen: texto(d.imagen), espaciado: enLista(ESPACIADOS_FILA, d.espaciado, "medio"), alinear: enLista(ALINEACIONES_FILA, d.alinear, "arriba"), cols });
+        break;
+      }
       default: {
         const esq = esquemaDe(b.t);
         out.push(esq ? { id, tipo: b.t as TipoEsquema, datos: leerDatos(esq, b.data) } : { id, tipo: "otro", bloque: b });
@@ -219,6 +241,8 @@ function bloqueCrudo(el: Exclude<Elemento, { tipo: "lista" | "otro" }>): Bloque 
       return { t: "upload", text: el.texto };
     case "divider":
       return { t: "divider" };
+    case "fila":
+      return { t: "fila", data: { division: el.division, fondo: el.fondo, imagen: el.imagen, espaciado: el.espaciado, alinear: el.alinear, cols: el.cols.map((c) => aBloques(c)) } };
     default:
       return { t: el.tipo, data: el.datos };
   }
@@ -290,6 +314,19 @@ export function canonico(b: Bloque): Bloque | null {
       return { t: "upload", text: linea(b.text, 80) || "Cargar documentos" };
     case "divider":
       return { t: "divider" };
+    case "fila": {
+      const division = enLista(DIVISIONES, d.division, "6-6");
+      const crudas = Array.isArray(d.cols) ? d.cols : [];
+      const cols = Array.from({ length: columnasDe(division) }, (_, k) =>
+        (Array.isArray(crudas[k]) ? (crudas[k] as unknown[]) : [])
+          .slice(0, MAX_ITEMS)
+          .flatMap((x) => (x && typeof x === "object" && typeof (x as Bloque).t === "string" && (x as Bloque).t !== "fila" && (x as Bloque).t !== "parte" ? [canonico(x as Bloque)] : []))
+          .filter((x): x is Bloque => x !== null),
+      );
+      if (cols.every((c) => c.length === 0)) return null;
+      const fondo = enLista(FONDOS_FILA, d.fondo, "ninguno");
+      return { t: "fila", data: { division, fondo, imagen: fondo === "imagen" ? normalizarUrl(linea(d.imagen, 800)) : "", espaciado: enLista(ESPACIADOS_FILA, d.espaciado, "medio"), alinear: enLista(ALINEACIONES_FILA, d.alinear, "arriba"), cols } };
+    }
     case "table": {
       if (!Array.isArray(b.rows)) return null;
       const rows = b.rows.slice(0, 200).map((r) => (Array.isArray(r) ? r.slice(0, 20).map((c) => (typeof c === "string" ? c.slice(0, 2000) : "")) : []));
@@ -360,6 +397,17 @@ export function problemaBloque(b: Bloque): string | null {
     }
     case "embed":
       return EMBED_OK.test(b.text ?? "") ? null : "La dirección debe empezar con https:// o http://.";
+    case "fila": {
+      const cols = Array.isArray(d.cols) ? (d.cols as Bloque[][]) : [];
+      for (let k = 0; k < cols.length; k++) {
+        for (const x of cols[k]) {
+          const p = problemaBloque(x);
+          if (p) return `Columna ${k + 1}: ${p}`;
+        }
+      }
+      if (d.fondo === "imagen" && texto(d.imagen) && !IMAGEN_OK.test(texto(d.imagen))) return "La imagen de fondo debe empezar con https://.";
+      return null;
+    }
     case "?":
       return "Tipo de elemento no reconocido.";
     default: {
@@ -384,6 +432,14 @@ function elementoABloques(el: Elemento): Bloque[] {
 /** Qué le impide a un elemento publicarse (null = se publica tal cual). */
 export function problema(el: Elemento): string | null {
   if (el.tipo === "otro" || el.tipo === "divider") return null;
+  if (el.tipo === "fila") {
+    for (let k = 0; k < el.cols.length; k++) {
+      const mal = el.cols[k].map((x) => problema(x)).find((x) => x !== null);
+      if (mal) return `Columna ${k + 1}: ${mal}`;
+    }
+    if (el.fondo === "imagen" && el.imagen.trim() && !IMAGEN_OK.test(normalizarUrl(el.imagen))) return "La imagen de fondo debe empezar con https://.";
+    return el.cols.every((c) => c.length === 0) ? "Añada al menos un elemento a las columnas." : null;
+  }
   const bs = elementoABloques(el);
   if (el.tipo === "lista") {
     if (!bs.length) return "Escriba al menos un elemento de la lista.";
@@ -444,6 +500,7 @@ export function elementoNuevo(tipo: TipoNuevo): Elemento {
     case "embed": return { id, tipo, url: "" };
     case "upload": return { id, tipo, texto: "Cargar documentos" };
     case "divider": return { id, tipo };
+    case "fila": return { id, tipo, division: "6-6", fondo: "ninguno", imagen: "", espaciado: "medio", alinear: "arriba", cols: [[], []] };
     default: return { id, tipo, datos: datosIniciales(ESQUEMAS[tipo]) };
   }
 }
@@ -456,6 +513,29 @@ const gen = (tipo: TipoEsquema, datos: Datos = {}): Elemento => ({ id: nuevoId()
 const parte = (...pares: [string, string][]) => pares.map(([titulo, texto]) => ({ titulo, texto }));
 
 /** Puntos de partida para una página en blanco. El texto de muestra se reemplaza al editar cada elemento. */
+// ───────────────────────── filas ya armadas (pestaña «Plantillas» de la paleta)
+
+export type PlantillaFila = { id: string; nombre: string; ayuda: string; crear: () => Elemento };
+
+const t2 = (texto: string): Elemento => ({ id: nuevoId(), tipo: "h2", texto });
+const t3 = (texto: string): Elemento => ({ id: nuevoId(), tipo: "h3", texto });
+const par = (texto: string): Elemento => ({ id: nuevoId(), tipo: "p", texto });
+const boton = (texto: string, href: string): Elemento => ({ id: nuevoId(), tipo: "button", texto, href, estilo: "solido" });
+const fila = (division: Division, cols: Elemento[][], extra: Partial<Extract<Elemento, { tipo: "fila" }>> = {}): Elemento => ({
+  id: nuevoId(), tipo: "fila", division, fondo: "ninguno", imagen: "", espaciado: "medio", alinear: "arriba", cols, ...extra,
+});
+
+export const PLANTILLAS_FILA: PlantillaFila[] = [
+  { id: "texto-imagen", nombre: "Texto e imagen", ayuda: "Dos columnas: un texto y una foto", crear: () => fila("6-6", [[t2("Un título claro"), par("Cuente en pocas líneas de qué se trata y por qué le importa a quien lee."), boton("Conocer más", "/")], [{ id: nuevoId(), tipo: "image", src: "", alt: "", pie: "" }]], { alinear: "centro" }) },
+  { id: "tres-tarjetas", nombre: "Tres razones", ayuda: "Tres columnas con título y texto", crear: () => fila("4-4-4", [[t3("Primera razón"), par("Explique en una o dos frases.")], [t3("Segunda razón"), par("Explique en una o dos frases.")], [t3("Tercera razón"), par("Explique en una o dos frases.")]], { fondo: "suave" }) },
+  { id: "llamado-oscuro", nombre: "Llamado a la acción", ayuda: "Fila oscura con título, texto y botón", crear: () => fila("12", [[t2("¿Listo para dar el siguiente paso?"), par("Una frase que invite a actuar."), boton("Empezar", "/")]], { fondo: "oscuro", espaciado: "grande" }) },
+  { id: "degradado", nombre: "Mensaje con degradado", ayuda: "Fila verde con un texto grande", crear: () => fila("12", [[gen("destacado", { texto: "Una idea que resume la página en una frase.", tamano: "enorme", alinear: "centro" })]], { fondo: "degradado", espaciado: "grande" }) },
+  { id: "cifras", nombre: "Cuatro cifras", ayuda: "Cuatro columnas con una cifra cada una", crear: () => fila("3-3-3-3", [["+500", "12", "98%", "24/7"].map((c) => gen("cifras", { items: [{ valor: c, etiqueta: "Describa la cifra" }] }))], { fondo: "suave" }) },
+  { id: "principal-lateral", nombre: "Contenido y barra lateral", ayuda: "Una columna ancha y una angosta", crear: () => fila("8-4", [[t2("Contenido principal"), par("El texto más importante va aquí.")], [t3("A un lado"), par("Datos de contacto, enlaces o un aviso corto.")]]) },
+  { id: "contacto-mapa", nombre: "Contacto y mapa", ayuda: "Datos de contacto junto a un mapa", crear: () => fila("5-7", [[gen("contacto", { titulo: "Oficina principal" })], [gen("mapa", {})]], { alinear: "centro" }) },
+  { id: "testimonios", nombre: "Testimonios", ayuda: "Una cita grande junto a un texto", crear: () => fila("7-5", [[gen("testimonios", { estilo: "grande", items: [{ texto: "Un testimonio que da confianza.", nombre: "Nombre Apellido", cargo: "Ganadero, Córdoba", foto: "" }] })], [t3("Lo que dicen"), par("Presente a las personas que ya confían en este servicio.")]], { fondo: "suave", alinear: "centro" }) },
+];
+
 export const PLANTILLAS: Plantilla[] = [
   {
     id: "informativa",
