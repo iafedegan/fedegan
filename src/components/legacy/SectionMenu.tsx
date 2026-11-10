@@ -33,7 +33,7 @@ export function SectionMenu({ label, items, current }: { label: string; items: N
           </div>
           <nav
             aria-label={`Menú de ${label}`}
-            className="menu-nav"
+            className="menu-nav sx-menu sx-lat"
             onClick={(e) => {
               if ((e.target as HTMLElement).closest("a")) close();
             }}

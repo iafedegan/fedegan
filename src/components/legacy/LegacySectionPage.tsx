@@ -214,8 +214,8 @@ export async function LegacySectionPage({ slug, ruta }: { slug: string; ruta: st
         {hasMenu && (
           <aside className="doc-rail hidden lg:block">
             <div className="doc-sticky">
-              <nav aria-label={`Menú de ${section.label}`} className="ed-rail">
-                <Link href={`/seccion/${slug}`} className="ed-rail-title">{section.label}</Link>
+              <nav aria-label={`Menú de ${section.label}`} className="sx-menu sx-lat">
+                <Link href={`/seccion/${slug}`} className="sx-menu-t">{section.label}</Link>
                 <NavTree nodes={menuItems} current={key} />
               </nav>
             </div>
