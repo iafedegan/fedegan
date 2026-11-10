@@ -8,6 +8,18 @@ export function Masthead() {
   const date = new Intl.DateTimeFormat("es-CO", { weekday: "long", day: "numeric", month: "long", year: "numeric", timeZone: "America/Bogota" }).format(new Date());
   return (
     <div className="mh" data-region="masthead">
+      {/* Franja institucional (maqueta del TDR): país, el sistema nacional y los accesos de la entidad. */}
+      <div className="mh-util mh-desk">
+        <Container className="mh-util-in">
+          <span className="mh-country"><i aria-hidden="true" /> Colombia</span>
+          <span className="mh-util-tag">Sistema Nacional de Identificación e Información Ganadera</span>
+          <nav aria-label="Accesos institucionales">
+            <Link href="/transparencia">Transparencia</Link>
+            <Link href="/noticias">Sala de prensa</Link>
+            <Link href="/contacto">Trabaje con nosotros</Link>
+          </nav>
+        </Container>
+      </div>
       <div className="mh-desk mh-main">
         <Container className="mh-main-in">
           <span className="mh-line mh-line-l" aria-hidden="true" />

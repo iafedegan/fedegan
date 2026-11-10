@@ -1,16 +1,21 @@
 // Contenido de ejemplo para validar arquitectura, layout y componentes.
 // En producción esto se reemplaza por consultas al CMS headless (Fase 1-E1/E3 del TDR).
 
+// Menú principal según el TDR (maqueta de la portada): las siete opciones institucionales. Los «locales» (trámites, Escuela Virtual,
+// Contexto Ganadero, TVGAN…) van en la portada y en la franja de accesos; el equipo reordena todo desde Panel → Menú principal.
 export const mainNav = [
-  { label: "Inicio", href: "/" },
-  { label: "Nosotros", href: "/quienes-somos" },
-  { label: "Sala de Prensa", href: "/noticias" },
-  { label: "Cartas de Presidencia", href: "/seccion/cartas-de-presidencia" },
-  { label: "Seguridad Ganadera", href: "/seccion/seguridad-ganadera" },
-  { label: "Preguntas Frecuentes", href: "/preguntas-frecuentes" },
-  { label: "PQRSD", href: "/contacto" },
+  { label: "Quiénes somos", href: "/quienes-somos" },
+  { label: "Programas", href: "/seccion/programas" },
+  { label: "Noticias", href: "/noticias" },
+  { label: "Publicaciones", href: "/seccion/publicaciones" },
+  { label: "Eventos", href: "/eventos" },
+  { label: "Servicios", href: "/servicios" },
+  { label: "Contacto", href: "/contacto" },
+  { label: "Zona de pagos", href: "/pagos" },
   { label: "Consulta RUV", href: "/servicios" },
-  { label: "Cursos Virtuales", href: "/escuela-virtual" },
+  { label: "Cifras del sector", href: "/seccion/cifras-del-sector" },
+  { label: "Sistema Integrado de Gestión", href: "/seccion/sistema-integrado-de-gestion" },
+  { label: "Escuela Virtual", href: "/escuela-virtual" },
 ];
 
 export const quickAccess = [

@@ -876,3 +876,8 @@ textarea.fm-in { resize: vertical; min-height: 6rem; }
 .sx-sub-t { margin: 2rem 0 0.8rem; font: 700 0.8rem/1 var(--font-body); letter-spacing: 0.16em; text-transform: uppercase; color: #55665a; }
 .sx-hijos button { display: block; width: 100%; padding: 0.8rem 1rem; border: 1px solid #dcdcd2; border-radius: 0.6rem; background: #fff; text-align: left; font-weight: 650; color: #10240f; cursor: pointer; }
 .sx-hijos button:hover { border-color: #7dc242; background: #f6faf0; }
+
+/* Franja institucional del TDR: verde oscuro con los accesos de la entidad */
+.mh-util { background: #0f5a2b; color: #fff; }
+.mh-util a, .mh-util .mh-country, .mh-util .mh-util-tag { color: #fff; }
+.mh-util .mh-util-tag { font-weight: 500; opacity: .92; }
