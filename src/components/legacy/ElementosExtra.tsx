@@ -5,6 +5,7 @@ import {
 import type { Datos, TipoEsquema } from "@/lib/cms/elementos";
 import { FacebookIcon, InstagramIcon, LinkedinIcon, XIcon, YoutubeIcon } from "@/components/ui/SocialIcons";
 import { Galeria } from "./Galeria";
+import { Comparacion, CuentaRegresiva } from "./ElementosInteractivos";
 import { ICONOS_CARACT } from "./iconos-caracteristicas";
 import { Inline } from "./Inline";
 import { Pestanas } from "./Pestanas";
@@ -514,6 +515,139 @@ function Contacto({ d }: { d: Datos }) {
   );
 }
 
+// ───────────────────────── Más bloques
+
+function Testimonios({ d }: { d: Datos }) {
+  const items = lista(d.items).filter((x) => t(x.texto));
+  if (!items.length) return null;
+  const persona = (x: Datos) => (
+    <div className="flex items-center gap-3">
+      {imagenSegura(t(x.foto)) && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={t(x.foto)} alt="" loading="lazy" className="size-12 rounded-full object-cover" />
+      )}
+      <span className="leading-tight">
+        <span className="block font-bold text-[var(--text)]">{t(x.nombre)}</span>
+        <span className="text-sm text-[var(--text-muted)]">{t(x.cargo)}</span>
+      </span>
+    </div>
+  );
+  if (t(d.estilo) === "grande") {
+    const x = items[0];
+    return (
+      <figure className="@container my-10 max-w-3xl">
+        <Quote size={32} aria-hidden className="text-[var(--fg-lime-500)]" />
+        <blockquote className="mt-2 font-[var(--font-display)] text-2xl font-bold leading-snug text-[var(--text)] @md:text-3xl">{t(x.texto)}</blockquote>
+        <figcaption className="mt-4">{persona(x)}</figcaption>
+      </figure>
+    );
+  }
+  return (
+    <div className="@container my-8">
+      <ul className="grid list-none gap-4 p-0 @md:grid-cols-2 @3xl:grid-cols-3">
+        {items.map((x, i) => (
+          <li key={i} className="flex flex-col gap-4 rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface-solid)] p-5">
+            <Quote size={22} aria-hidden className="text-[var(--fg-lime-500)]" />
+            <p className="flex-1 leading-relaxed text-[var(--text-muted)]">{t(x.texto)}</p>
+            {(t(x.nombre) || t(x.cargo)) && persona(x)}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+const TAM_DESTACADO = { grande: "text-3xl @md:text-4xl", enorme: "text-4xl @md:text-6xl" } as const;
+const COLOR_DESTACADO = { normal: "text-[var(--text)]", verde: "text-[var(--fg-green-800)]", oro: "text-[#8a6d1f]" } as const;
+const ALINEAR = { izquierda: "text-left", centro: "text-center", derecha: "text-right" } as const;
+
+function Destacado({ d }: { d: Datos }) {
+  if (!t(d.texto)) return null;
+  const tam = TAM_DESTACADO[t(d.tamano) as keyof typeof TAM_DESTACADO] ?? TAM_DESTACADO.grande;
+  const color = COLOR_DESTACADO[t(d.color) as keyof typeof COLOR_DESTACADO] ?? COLOR_DESTACADO.normal;
+  const alinear = ALINEAR[t(d.alinear) as keyof typeof ALINEAR] ?? ALINEAR.izquierda;
+  return (
+    <div className="@container my-8">
+      <p className={`font-[var(--font-display)] font-extrabold leading-[1.1] ${tam} ${color} ${alinear}`}>{t(d.texto)}</p>
+    </div>
+  );
+}
+
+const ALTOS_MAPA = { bajo: "h-56", medio: "h-80", alto: "h-[28rem]" } as const;
+
+function Mapa({ d }: { d: Datos }) {
+  if (!t(d.lugar)) return null;
+  const zoom = ["8", "12", "15", "17"].includes(t(d.zoom)) ? t(d.zoom) : "15";
+  const alto = ALTOS_MAPA[t(d.alto) as keyof typeof ALTOS_MAPA] ?? ALTOS_MAPA.medio;
+  return (
+    <div className="my-8">
+      <iframe
+        title={`Mapa: ${t(d.lugar)}`}
+        src={`https://www.google.com/maps?q=${encodeURIComponent(t(d.lugar))}&z=${zoom}&output=embed`}
+        loading="lazy"
+        referrerPolicy="no-referrer-when-downgrade"
+        className={`w-full rounded-[var(--radius-lg)] border border-[var(--border)] ${alto}`}
+      />
+      <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(t(d.lugar))}`} target="_blank" rel="noopener noreferrer" className="mt-2 inline-flex items-center gap-1 text-sm font-semibold text-[var(--fg-green-800)]">
+        <MapPin size={14} aria-hidden /> Abrir en Google Maps
+      </a>
+    </div>
+  );
+}
+
+function Descarga({ d }: { d: Datos }) {
+  const href = enlaceSeguro(t(d.enlace));
+  if (!t(d.titulo) || !href) return null;
+  return (
+    <section className="@container my-8 flex flex-col gap-4 rounded-[var(--radius-lg)] border border-[var(--border)] border-l-4 border-l-[var(--fg-lime-500)] bg-[var(--surface-solid)] p-5 @md:flex-row @md:items-center @md:p-6">
+      <span className="grid size-14 shrink-0 place-items-center rounded-2xl bg-[var(--fg-green-800)] text-white"><Download size={26} aria-hidden /></span>
+      <div className="min-w-0 flex-1">
+        <Titulo className="text-lg">{t(d.titulo)}</Titulo>
+        {t(d.texto) && <p className="mt-1 text-[var(--text-muted)]">{t(d.texto)}</p>}
+        {t(d.detalle) && <p className="mt-1 text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">{t(d.detalle)}</p>}
+      </div>
+      <a href={href} target="_blank" rel="noopener noreferrer" download className="inline-flex items-center justify-center gap-2 rounded-full bg-[var(--fg-green-800)] px-6 py-3 text-sm font-bold text-white no-underline">
+        <Download size={16} aria-hidden /> {t(d.boton) || "Descargar"}
+      </a>
+    </section>
+  );
+}
+
+const COLUMNAS_PRECIOS = { 2: "@md:grid-cols-2", 3: "@md:grid-cols-2 @3xl:grid-cols-3", 4: "@md:grid-cols-2 @3xl:grid-cols-4" } as const;
+
+function Precios({ d }: { d: Datos }) {
+  const items = lista(d.items).filter((p) => t(p.nombre));
+  if (!items.length) return null;
+  return (
+    <div className="@container my-8">
+      <ul className={`grid list-none items-stretch gap-4 p-0 ${COLUMNAS_PRECIOS[columnas(d.columnas, 3)]}`}>
+        {items.map((p, i) => {
+          const dest = p.destacado === true;
+          const href = enlaceSeguro(t(p.enlace));
+          return (
+            <li key={i} className={`flex flex-col gap-3 rounded-[var(--radius-lg)] border p-6 ${dest ? "border-[var(--fg-green-800)] bg-[var(--fg-green-800)] text-white shadow-lg" : "border-[var(--border)] bg-[var(--surface-solid)]"}`}>
+              <Titulo className={`text-lg ${dest ? "!text-white" : ""}`}>{t(p.nombre)}</Titulo>
+              {t(p.precio) && (
+                <p className="font-[var(--font-display)] text-3xl font-extrabold leading-none">
+                  {t(p.precio)} {t(p.periodo) && <span className="text-sm font-medium opacity-80">{t(p.periodo)}</span>}
+                </p>
+              )}
+              <ul className="flex flex-1 list-none flex-col gap-1.5 p-0">
+                {t(p.incluye).split("\n").map((x) => x.trim()).filter(Boolean).map((x) => (
+                  <li key={x} className="flex items-start gap-2 text-sm leading-snug"><CheckCircle2 size={15} aria-hidden className="mt-0.5 shrink-0 opacity-80" /> {x}</li>
+                ))}
+              </ul>
+              {t(p.boton) && href && (
+                <a href={href} className={`mt-2 inline-block rounded-full px-5 py-2.5 text-center text-sm font-bold no-underline ${dest ? "bg-white text-[var(--fg-green-800)]" : "bg-[var(--fg-green-800)] text-white"}`}>{t(p.boton)}</a>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  );
+}
+
 // ───────────────────────── Diseño
 
 const ESPACIOS = { pequeno: "h-4", medio: "h-10", grande: "h-20" } as const;
@@ -547,5 +681,12 @@ export function ElementoExtra({ tipo, datos }: { tipo: TipoEsquema; datos: Datos
     case "espaciador": return <Espacio d={datos} />;
     // Las partes automáticas las coloca la página (LegacySectionPage) o el editor; suelta, no pinta nada.
     case "parte": return null;
+    case "testimonios": return <Testimonios d={datos} />;
+    case "destacado": return <Destacado d={datos} />;
+    case "mapa": return <Mapa d={datos} />;
+    case "descarga": return <Descarga d={datos} />;
+    case "precios": return <Precios d={datos} />;
+    case "cuenta": return <CuentaRegresiva titulo={t(datos.titulo)} fecha={t(datos.fecha)} fin={t(datos.fin)} boton={t(datos.boton)} enlace={t(datos.enlace)} />;
+    case "comparacion": return <Comparacion antes={t(datos.antes)} despues={t(datos.despues)} etiqueta1={t(datos.etiqueta1)} etiqueta2={t(datos.etiqueta2)} />;
   }
 }

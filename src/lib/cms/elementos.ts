@@ -570,6 +570,128 @@ export const ESQUEMAS = {
     vacioMensaje: "Escriba el nombre o el área del contacto.",
   },
 
+  // ── Más bloques
+  testimonios: {
+    nombre: "Testimonios",
+    ayuda: "Lo que dicen las personas: tarjetas o una cita grande",
+    grupo: "Personas",
+    icono: "MessageSquareQuote",
+    campos: [
+      { k: "estilo", tipo: "opcion", etiqueta: "Presentación", opciones: op(["tarjetas", "Tarjetas"], ["grande", "Una cita grande"]), defecto: "tarjetas" },
+      {
+        k: "items", tipo: "lista", etiqueta: "Testimonios", nombreItem: "Testimonio", max: 12, minimo: 1, inicial: 2,
+        campos: [
+          { k: "texto", tipo: "parrafo", etiqueta: "Lo que dijo", max: 600, filas: 3, obligatorio: true },
+          { k: "nombre", tipo: "texto", etiqueta: "Nombre", max: 100 },
+          { k: "cargo", tipo: "texto", etiqueta: "Cargo o lugar", max: 120 },
+          { k: "foto", tipo: "imagen", etiqueta: "Foto (opcional)" },
+        ],
+      },
+    ],
+    principales: ["items"],
+    vacioMensaje: "Añada al menos un testimonio.",
+  },
+  destacado: {
+    nombre: "Texto grande",
+    ayuda: "Una frase grande que marca el tono de la página",
+    grupo: "Texto",
+    icono: "Heading1",
+    campos: [
+      { k: "texto", tipo: "parrafo", etiqueta: "Texto", max: 400, filas: 3, obligatorio: true, placeholder: "Una frase grande…" },
+      { k: "tamano", tipo: "opcion", etiqueta: "Tamaño", opciones: op(["grande", "Grande"], ["enorme", "Enorme"]), defecto: "grande" },
+      { k: "color", tipo: "opcion", etiqueta: "Color", opciones: op(["normal", "Normal"], ["verde", "Verde"], ["oro", "Dorado"]), defecto: "normal" },
+      { k: "alinear", tipo: "opcion", etiqueta: "Alineación", opciones: ALINEACION, defecto: "izquierda" },
+    ],
+    principales: ["texto"],
+    vacioMensaje: "Escriba el texto.",
+  },
+  mapa: {
+    nombre: "Mapa",
+    ayuda: "Un mapa de Google con un lugar o dirección",
+    grupo: "Medios",
+    icono: "MapPin",
+    campos: [
+      { k: "lugar", tipo: "texto", etiqueta: "Lugar o dirección", max: 200, obligatorio: true, placeholder: "Calle 37 # 14-31, Bogotá" },
+      { k: "alto", tipo: "opcion", etiqueta: "Alto del mapa", opciones: op(["bajo", "Bajo"], ["medio", "Medio"], ["alto", "Alto"]), defecto: "medio" },
+      { k: "zoom", tipo: "opcion", etiqueta: "Acercamiento", opciones: op(["8", "Región"], ["12", "Ciudad"], ["15", "Calle"], ["17", "Edificio"]), defecto: "15" },
+    ],
+    principales: ["lugar"],
+    vacioMensaje: "Escriba el lugar.",
+  },
+  cuenta: {
+    nombre: "Cuenta regresiva",
+    ayuda: "Cuánto falta para un evento o fecha, con botón opcional",
+    grupo: "Contenido",
+    icono: "Timer",
+    campos: [
+      { k: "titulo", tipo: "texto", etiqueta: "Título", max: 120, placeholder: "Faltan" },
+      {
+        k: "fecha", tipo: "texto", etiqueta: "Fecha y hora", max: 20, obligatorio: true, placeholder: "2026-12-15 08:00",
+        ayuda: "Formato AAAA-MM-DD HH:MM (hora de Colombia).",
+        patron: { re: /^\d{4}-\d{2}-\d{2}( \d{2}:\d{2})?$/, mensaje: "La fecha debe verse así: 2026-12-15 08:00." },
+      },
+      { k: "fin", tipo: "texto", etiqueta: "Texto al llegar la hora", max: 120, placeholder: "¡Ya empezó!" },
+      { k: "boton", tipo: "texto", etiqueta: "Botón (opcional)", max: 60 },
+      { k: "enlace", tipo: "enlace", etiqueta: "Enlace del botón", placeholder: "https://… o /ruta" },
+    ],
+    principales: ["fecha"],
+    vacioMensaje: "Escriba la fecha y la hora.",
+    regla: (d) => reglaBoton(d.boton, d.enlace),
+  },
+  descarga: {
+    nombre: "Descarga",
+    ayuda: "Un archivo destacado con su descripción y botón",
+    grupo: "Archivos",
+    icono: "FileDown",
+    campos: [
+      { k: "titulo", tipo: "texto", etiqueta: "Título", max: 140, obligatorio: true },
+      { k: "texto", tipo: "parrafo", etiqueta: "Descripción", max: 400, filas: 2 },
+      { k: "enlace", tipo: "archivo", etiqueta: "Archivo", aceptar: ".pdf,.xlsx,.xls,.docx,.doc,.pptx,.zip", obligatorio: true },
+      { k: "detalle", tipo: "texto", etiqueta: "Detalle", max: 60, placeholder: "PDF · 2 MB" },
+      { k: "boton", tipo: "texto", etiqueta: "Texto del botón", max: 40, placeholder: "Descargar" },
+    ],
+    principales: ["titulo", "enlace"],
+    vacioMensaje: "Escriba el título y suba el archivo.",
+  },
+  comparacion: {
+    nombre: "Antes y después",
+    ayuda: "Dos imágenes que se comparan deslizando",
+    grupo: "Medios",
+    icono: "SquareSplitHorizontal",
+    campos: [
+      { k: "antes", tipo: "imagen", etiqueta: "Imagen «antes»" },
+      { k: "despues", tipo: "imagen", etiqueta: "Imagen «después»" },
+      { k: "etiqueta1", tipo: "texto", etiqueta: "Rótulo antes", max: 40, placeholder: "Antes" },
+      { k: "etiqueta2", tipo: "texto", etiqueta: "Rótulo después", max: 40, placeholder: "Después" },
+    ],
+    principales: ["antes", "despues"],
+    vacioMensaje: "Elija las dos imágenes.",
+    regla: (d) => ((s(d.antes) && !s(d.despues)) || (!s(d.antes) && s(d.despues)) ? "Faltan las dos imágenes: antes y después." : null),
+  },
+  precios: {
+    nombre: "Planes",
+    ayuda: "Planes o tarifas lado a lado, con uno destacado",
+    grupo: "Contenido",
+    icono: "BadgeDollarSign",
+    campos: [
+      { k: "columnas", tipo: "opcion", etiqueta: "Por fila", opciones: DE_2_A_4, defecto: "3" },
+      {
+        k: "items", tipo: "lista", etiqueta: "Planes", nombreItem: "Plan", max: 6, minimo: 1, inicial: 3,
+        campos: [
+          { k: "nombre", tipo: "texto", etiqueta: "Nombre", max: 60, obligatorio: true },
+          { k: "precio", tipo: "texto", etiqueta: "Precio", max: 40, placeholder: "$1.200.000" },
+          { k: "periodo", tipo: "texto", etiqueta: "Periodo", max: 40, placeholder: "al mes" },
+          { k: "incluye", tipo: "parrafo", etiqueta: "Qué incluye (uno por línea)", max: 600, filas: 4 },
+          { k: "boton", tipo: "texto", etiqueta: "Botón", max: 40 },
+          { k: "enlace", tipo: "enlace", etiqueta: "Enlace del botón", placeholder: "https://… o /ruta" },
+          { k: "destacado", tipo: "sino", etiqueta: "Destacarlo", defecto: false },
+        ],
+      },
+    ],
+    principales: ["items"],
+    vacioMensaje: "Añada al menos un plan.",
+  },
+
   // ── Diseño
   parte: {
     nombre: "Parte automática",
