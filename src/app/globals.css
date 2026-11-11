@@ -2092,3 +2092,5 @@ header[data-region="navbar"] {
 header[data-region="navbar"] .nv-link { color: #10240f; }
 header[data-region="navbar"] .nv-link:hover, header[data-region="navbar"] .nv-active { color: #10240f; }
 header[data-region="navbar"] .nv-brand, header[data-region="navbar"] .nv-brand span { color: #10240f; -webkit-text-fill-color: #10240f; background: none; }
+/* Iconos de la barra (buscar, cuenta, tono): negros */
+header[data-region="navbar"] svg { color: #000 !important; }
