@@ -12,8 +12,9 @@ export async function Masthead() {
     <div className="mh" data-region="masthead">
       <div className="mh-row">
         <span aria-hidden className="mh-rule mh-rule-l" />
-        <Link href="/" className="mh-title" aria-label="FEDEGÁN FNG, inicio">
-          FEDEGÁN <span>FNG</span>
+        <Link href="/" className="mh-title" aria-label="FEDEGÁN, inicio">
+          <span aria-hidden className="mh-gem" />
+          FEDEGÁN
         </Link>
         <span aria-hidden className="mh-rule mh-rule-r" />
       </div>

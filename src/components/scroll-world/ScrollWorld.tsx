@@ -117,7 +117,6 @@ export function ScrollWorld({ scenes: base }: { scenes: JourneyScene[] }) {
   }, []);
   const shown = hover ?? current;
   const sc = scenes[shown];
-  const fondo = scenes.find((x) => x.id === "fng") ?? scenes[0];
   useEffect(() => {
     const abrir = () => setMenu(true);
     window.addEventListener("fedegan:secciones", abrir);
@@ -162,13 +161,6 @@ export function ScrollWorld({ scenes: base }: { scenes: JourneyScene[] }) {
 
       layerRefs.current.forEach((el, i) => {
         if (!el) return;
-        if (i === 0) {
-          el.style.visibility = "visible";
-          el.style.opacity = "1";
-          el.style.transform = "none";
-          el.style.filter = "none";
-          return;
-        }
         const u = s - i;
         const hidden = u < -0.85 || u > 1.15;
         el.style.visibility = hidden ? "hidden" : "visible";
@@ -306,18 +298,26 @@ export function ScrollWorld({ scenes: base }: { scenes: JourneyScene[] }) {
     <section className="sw" data-region="hero" aria-label="Recorrido por los locales del portal">
       <div ref={trackRef} className="sw-track" style={{ "--sw-k": K } as React.CSSProperties}>
         <div ref={stageRef} className="sw-stage" style={{ "--acc": scenes[0].accent } as React.CSSProperties}>
-          {/* Una sola foto fija de fondo: no cambia al recorrer las secciones. */}
-          <div className="sw-layer" ref={(el) => { layerRefs.current[0] = el; }}>
-            <Image
-              src={fondo.image}
-              alt={fondo.alt}
-              fill
-              sizes="100vw"
-              priority
-              unoptimized={fondo.image.startsWith("http")}
-              style={{ objectFit: "cover", objectPosition: fondo.pos }}
-            />
-          </div>
+          {scenes.map((s, i) => (
+            <div
+              key={s.id}
+              ref={(el) => {
+                layerRefs.current[i] = el;
+              }}
+              className="sw-layer"
+              style={i === 0 ? undefined : { visibility: "hidden", opacity: 0 }}
+            >
+              <Image
+                src={s.image}
+                alt={s.alt}
+                fill
+                sizes="100vw"
+                priority={i < 2}
+                unoptimized={s.image.startsWith("http")}
+                style={{ objectFit: "cover", objectPosition: s.pos }}
+              />
+            </div>
+          ))}
           <div className="sw-shade" aria-hidden />
           <span ref={barRef} className="sw-bar" aria-hidden />
           {!desliza && <p className="sw-swipe" aria-hidden><ChevronUp size={22} />Deslice hacia arriba</p>}

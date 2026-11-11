@@ -275,8 +275,8 @@ export function Header({ nav: mainNav }: { nav: { label: string; href: string; c
       <nav className="hidden border-t border-[var(--border)] lg:block" aria-label="Navegación principal">
         <Container className="flex items-center justify-between gap-6 py-3">
           {/* Marca compacta: solo se ve en las páginas interiores, donde la cabecera grande se oculta. */}
-          <Link href="/" className="nv-brand" aria-label="FEDEGÁN FNG, inicio">
-            FEDEGÁN <span>FNG</span>
+          <Link href="/" className="nv-brand" aria-label="FEDEGÁN, inicio">
+            FEDEGÁN
           </Link>
           <div className="flex min-w-0 flex-1 items-center justify-center gap-0.5">
             {mainNav.map((item, i) => {
