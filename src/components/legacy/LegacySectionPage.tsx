@@ -30,6 +30,8 @@ const toItems = (nodes: NavNode[], slug: string): NavItem[] =>
     children: n.children ? toItems(n.children, slug) : undefined,
   }));
 
+// Secciones que conservan el menú numerado (portada) y el menú lateral (páginas interiores).
+const MENU_NUMERADO = new Set(["cifras-del-sector"]);
 const PHOTO_ID: Record<string, string> = { "cifras-del-sector": "cifras", "sistema-integrado-de-gestion": "sig" };
 
 // Disposición propia: el texto va por tramos y, entre ellos, las partes automáticas donde el equipo las puso.
@@ -136,7 +138,34 @@ export async function LegacySectionPage({ slug, ruta }: { slug: string; ruta: st
           <LegacyContent blocks={page.blocks} libre={page.libre} />
         </article>
       ) : null;
-    const fichasNodo = temas.length > 0 ? <SeccionExplorador slug={slug} titulo={`Explore ${section.label}`} temas={temas} inicial={propia ? null : introNodo} lateral={propia ? undefined : <QuickRail />} /> : null;
+    // El menú numerado en vertical solo se conserva en «Cifras del sector»; en las demás secciones van las fichas de siempre.
+    const fichasLista = (
+      <>
+        {(branches.length > 0 || fichas.length > 0) && (
+          <section aria-labelledby="hub-explorar">
+            <div className="hub-head">
+              <h2 id="hub-explorar">Explore {section.label}</h2>
+              <p>Elija un tema. Cada ficha muestra lo que encontrará dentro.</p>
+            </div>
+            <SectionTiles nodes={destacadas} slug={slug} custom={custom} extras={fichas} />
+            {restantes.length > 0 && (
+              <details className="hub-resto">
+                <summary>Ver las {restantes.length} páginas restantes</summary>
+                <ul>
+                  {restantes.map((n, i) => {
+                    const h = n.key ? legacyHref(slug, n.key) : n.href;
+                    return <li key={`${n.label}-${i}`}>{h ? <Link href={h}>{n.label}</Link> : n.label}</li>;
+                  })}
+                </ul>
+              </details>
+            )}
+          </section>
+        )}
+      </>
+    );
+    const fichasNodo = !MENU_NUMERADO.has(slug)
+      ? fichasLista
+      : temas.length > 0 ? <SeccionExplorador slug={slug} titulo={`Explore ${section.label}`} temas={temas} inicial={propia ? null : introNodo} lateral={propia ? undefined : <QuickRail />} /> : null;
     const accesosNodo = <div className="my-6 max-w-sm"><QuickRail /></div>;
     return (
       <>
@@ -190,6 +219,7 @@ export async function LegacySectionPage({ slug, ruta }: { slug: string; ruta: st
   /* ───────────── Página de contenido ───────────── */
   // Un solo recorrido: migas arriba; el menú de la sección a la izquierda (siempre visible en escritorio);
   // y en el centro el titular, el índice plegado de la página, el texto y «anterior / siguiente».
+  const verMenu = hasMenu && MENU_NUMERADO.has(slug);
   const kids = (here?.children ?? []).filter((n) => n.key !== key);
   const tocNodo =
     toc.length >= 3 ? (
@@ -210,8 +240,8 @@ export async function LegacySectionPage({ slug, ruta }: { slug: string; ruta: st
   return (
     <>
       <PageHeader variant="strip" title={page.title} breadcrumbs={crumbs} image={sectionPhoto?.src} imagePos={sectionPhoto?.pos} />
-      <Container className={`doc-split ${hasMenu ? "has-menu" : ""}`}>
-        {hasMenu && (
+      <Container className={`doc-split ${verMenu ? "has-menu" : ""}`}>
+        {verMenu && (
           <aside className="doc-rail hidden lg:block">
             <div className="doc-sticky">
               <nav aria-label={`Menú de ${section.label}`} className="sx-menu sx-lat">
@@ -226,7 +256,7 @@ export async function LegacySectionPage({ slug, ruta }: { slug: string; ruta: st
           <header className="art-head">
             <h1 className={`ed-title ${sizeOf(page.title)}`}>{page.title}</h1>
             {/* En pantallas sin menú lateral, el mismo árbol se abre en pantalla completa. */}
-            {hasMenu && (
+            {verMenu && (
               <div className="lg:hidden">
                 <SectionMenu label={section.label} items={menuItems} current={key} />
               </div>
