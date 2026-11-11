@@ -2080,3 +2080,15 @@ body:has(.mx-hero) .wc.wp:not(.ed-rail) { padding: 0.85rem 0.85rem 1.2rem; }
   background: linear-gradient(100deg, #b98f35 0%, #e7cf8c 35%, #fff2c8 55%, #d8b558 100%);
   -webkit-mask: url(/brand/fedegan-emblema-blanco.png) center / contain no-repeat; mask: url(/brand/fedegan-emblema-blanco.png) center / contain no-repeat;
 }
+
+/* Barra de navegación: el mismo verde del pie de página (#72BF44) con texto en tinta oscura para que se lea */
+header[data-region="navbar"] {
+  background-color: #72bf44 !important;
+  --text: #10240f; --text-muted: rgba(16, 36, 15, 0.86); --text-faint: rgba(16, 36, 15, 0.7); --link: #10240f;
+  --fg-lime-500: #10240f; --fg-lime-400: #10240f; --bg: #72bf44; --bg-muted: rgba(255, 255, 255, 0.28); --surface-2: rgba(255, 255, 255, 0.2);
+  --border: rgba(16, 36, 15, 0.2); --border-strong: rgba(16, 36, 15, 0.4);
+  border-bottom: 0;
+}
+header[data-region="navbar"] .nv-link { color: #10240f; }
+header[data-region="navbar"] .nv-link:hover, header[data-region="navbar"] .nv-active { color: #10240f; }
+header[data-region="navbar"] .nv-brand, header[data-region="navbar"] .nv-brand span { color: #10240f; -webkit-text-fill-color: #10240f; background: none; }
