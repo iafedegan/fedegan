@@ -12,7 +12,7 @@ export const mainNav = [
   { label: "Servicios", href: "/servicios" },
   { label: "FNG", href: "/seccion/fng" },
   { label: "FEP", href: "/seccion/fep" },
-  { label: "Opinión", href: "/noticias?categoria=opinion" },
+  { label: "Opinión", href: "/opinion" },
   { label: "Contacto", href: "/contacto" },
   { label: "Zona de pagos", href: "/pagos" },
   { label: "Consulta RUV", href: "/servicios" },

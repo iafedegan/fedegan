@@ -6,6 +6,6 @@ begin
     insert into public.nav_items (label, href, sort_order, published) values
       ('FNG', '/seccion/fng', 7, true),
       ('FEP', '/seccion/fep', 8, true),
-      ('Opinión', '/noticias?categoria=opinion', 9, true);
+      ('Opinión', '/opinion', 9, true);
   end if;
 end $$;

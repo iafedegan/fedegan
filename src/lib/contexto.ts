@@ -201,6 +201,40 @@ export async function getNoticias(opts: { limit?: number; categoria?: string; cu
   return { ok: true as const, items: r.data.items.map(fromApi), nextCursor: r.data.siguienteCursor ?? null };
 }
 
+/**
+ * Columnas, editoriales y blogs de la sección Opinión de CONtexto, de la más reciente a la más antigua.
+ * La API no filtra por autor ni por fecha: con `hasta` (ISO) se pide desde esa fecha hacia atrás y se recorren varias páginas por
+ * categoría (todo con caché); el filtro por autor y por mes se aplica aquí sobre lo recibido.
+ */
+export async function getOpinion(opts: { hasta?: string; paginas?: number } = {}) {
+  const { hasta, paginas = 3 } = opts;
+  const cats = ["opinion", ...HIJAS.opinion];
+  const pedirTodo = async (cat: string) => {
+    const out: Noticia[] = [];
+    let cursor = hasta;
+    let ok = false;
+    for (let i = 0; i < paginas; i++) {
+      const qs = new URLSearchParams({ limite: "50", categoria: cat });
+      if (cursor) qs.set("cursor", cursor);
+      const r = await api<{ items: ApiArticulo[]; siguienteCursor: string | null }>(`/articulos?${qs}`);
+      if (!r.ok) break;
+      ok = true;
+      out.push(...r.data.items.map(fromApi));
+      cursor = r.data.siguienteCursor ?? undefined;
+      if (!cursor) break;
+    }
+    return { ok, out };
+  };
+  const res = await Promise.all(cats.map(pedirTodo));
+  if (!res.some((r) => r.ok)) return { ok: false as const, items: [] as Noticia[] };
+  const seen = new Set<string>();
+  const items = res
+    .flatMap((r) => r.out)
+    .filter((n) => (seen.has(n.slug) ? false : (seen.add(n.slug), true)))
+    .sort((a, b) => (b.publishedAt ?? "").localeCompare(a.publishedAt ?? ""));
+  return { ok: true as const, items };
+}
+
 export async function getNoticia(slug: string): Promise<Noticia | null> {
   const r = await api<ApiArticuloDetalle>(`/articulos/${encodeURIComponent(slug)}`);
   if (!r.ok) return null;
