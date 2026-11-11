@@ -724,7 +724,7 @@ p { text-wrap: pretty; }
 .mh-rule-r { background: linear-gradient(270deg, transparent, rgba(216, 181, 88, 0.55)); }
 .mh-title {
   font-family: var(--font-display); font-weight: 700; line-height: 1.05; letter-spacing: -0.01em; white-space: nowrap;
-  font-size: clamp(1.9rem, 5.2vw, 3.4rem);
+  font-size: clamp(1.4rem, 3.6vw, 2.4rem);
   background: linear-gradient(100deg, #b98f35 0%, #e7cf8c 35%, #fff2c8 55%, #d8b558 100%);
   -webkit-background-clip: text; background-clip: text; color: transparent;
 }
