@@ -2097,3 +2097,12 @@ header[data-region="navbar"] svg { color: #000 !important; }
 /* Cabezote: la razón social y la fecha en dorado */
 html .mh .mh-tag { color: #e7cf8c; }
 html .mh .mh-date { color: #d8b558; }
+
+/* Todas las tarjetas del portal: bordes redondeados */
+:root { --card-radius: 1rem; }
+:is(.wc, .wc.wp, .mx-card, .mx-panel, .gl, .mx-stat, .mx-quote, .hub-cell, .hub-panel, .hub-stats, .pn-card, .doc-card, .hi-card, .st-ficha, .st-ficha-sel, .sw-card, .sx-panel, .mr-card, .ad-card, .ad-card-dark, .art-tile, .tile, .toc-m) {
+  border-radius: var(--card-radius) !important;
+}
+:is(div, article, section, li, aside, details)[class*="rounded-[0.25rem]"]:not([class*="inline-flex"]) {
+  border-radius: var(--card-radius) !important;
+}
