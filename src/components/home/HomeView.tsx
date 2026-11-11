@@ -1,5 +1,10 @@
 import type { ReactNode } from "react";
 import { PortalJourney } from "@/components/blocks/PortalJourney";
+import { HeroNews } from "@/components/blocks/HeroNews";
+import { NewsGrid } from "@/components/blocks/NewsGrid";
+import { PublicationsGrid } from "@/components/blocks/PublicationsGrid";
+import { PaymentsBand } from "@/components/blocks/PaymentsBand";
+import { VoiceAndAgenda } from "@/components/blocks/VoiceAndAgenda";
 import { AccountStrip } from "@/components/blocks/AccountStrip";
 import { CampaignWall } from "@/components/blocks/Accesos";
 import { AdSlot } from "@/components/design/AdSlot";
@@ -19,10 +24,24 @@ export type HomeKind = TemplateId | "clasico";
 export async function HomeView({ kind, design }: { kind: HomeKind; design: DesignConfig }) {
   const ad = <AdSlot zone="mid" initial={design.ads.mid} />;
   let cuerpo: ReactNode;
-  if (kind === "clasico" || kind === "marca") {
+  if (kind === "clasico") {
+    // Portada de siempre: recorrido con foto, noticias, pagos, voz del gremio, publicaciones, avisos y aliados.
     cuerpo = (
       <>
-        {kind === "clasico" && <PortalJourney />}
+        <PortalJourney />
+        <HeroNews />
+        <PaymentsBand />
+        <NewsGrid />
+        {ad}
+        <VoiceAndAgenda />
+        <PublicationsGrid />
+        <CampaignWall />
+        <AccountStrip />
+      </>
+    );
+  } else if (kind === "marca") {
+    cuerpo = (
+      <>
         <HomeInstitucional d={await getHomeData()} banners={[design.ads.portada, ...(design.banners ?? [])].filter((b): b is NonNullable<typeof b> => Boolean(b))} />
         {ad}
       </>

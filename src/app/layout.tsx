@@ -31,7 +31,7 @@ import { Analytics } from "@/components/layout/Analytics";
 import { UsageTracker } from "@/components/layout/UsageTracker";
 
 export const viewport: Viewport = {
-  themeColor: "#72bf44",
+  themeColor: "#05100b",
   colorScheme: "dark",
   viewportFit: "cover",
 };
@@ -150,7 +150,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
                 >
                   Saltar al contenido
                 </a>
-                <MarketBar />
+                {design.template === "marca" && <MarketBar />}
                 <Masthead />
                 <Header nav={sortNav(navConHijos, design.order)} />
                 <Ticker initial={design.ticker} />
