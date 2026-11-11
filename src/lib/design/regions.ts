@@ -106,6 +106,16 @@ export const TEMPLATES = [
     parts: { navbar: "clasico", footer: "completo", hero: "izquierda" },
     swatch: ["#f3ead9", "#fffaf0", "#4d6b3a", "#c2693a"],
   },
+  {
+    id: "marca",
+    label: "Marca FEDEGÁN",
+    description: "Diseño institucional del manual de marca: fondo blanco, verde #72BF44 y rojo #89114C, logo blanco, franja institucional y cintas corporativas.",
+    traits: ["Fondo blanco", "Verde y rojo corporativos", "Franja institucional"],
+    mode: "claro",
+    fonts: `${GF}Fira+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,500;1,700&display=swap`,
+    parts: { navbar: "clasico", footer: "completo", hero: "izquierda" },
+    swatch: ["#ffffff", "#72bf44", "#89114c", "#10240f"],
+  },
 ] as const;
 export type TemplateId = (typeof TEMPLATES)[number]["id"];
 export const TEMPLATE_BY_ID = Object.fromEntries(TEMPLATES.map((t) => [t.id, t])) as Record<TemplateId, (typeof TEMPLATES)[number]>;

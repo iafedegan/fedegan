@@ -19,10 +19,10 @@ export type HomeKind = TemplateId | "clasico";
 export async function HomeView({ kind, design }: { kind: HomeKind; design: DesignConfig }) {
   const ad = <AdSlot zone="mid" initial={design.ads.mid} />;
   let cuerpo: ReactNode;
-  if (kind === "clasico") {
+  if (kind === "clasico" || kind === "marca") {
     cuerpo = (
       <>
-        <PortalJourney />
+        {kind === "clasico" && <PortalJourney />}
         <HomeInstitucional d={await getHomeData()} banners={[design.ads.portada, ...(design.banners ?? [])].filter((b): b is NonNullable<typeof b> => Boolean(b))} />
         {ad}
       </>

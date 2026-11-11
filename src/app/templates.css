@@ -53,7 +53,7 @@ html[data-tpl-mode] body:has([data-template]) {
 
 /* La cabecera grande (nombre y fecha) solo se conserva en Editorial; en los demás la marca va en la barra */
 @media (min-width: 1024px) {
-  html[data-tpl-mode] body:has([data-template]:not([data-template="editorial"])) .mh { display: none; }
+  html[data-tpl-mode] body:has([data-template]:not([data-template="editorial"], [data-template="marca"])) .mh { display: none; }
 }
 
 /* ======================================================================

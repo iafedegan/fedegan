@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import "./funciones.css";
+import { MARCA_CSS } from "@/lib/design/marca-css";
 import "./templates.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
@@ -129,6 +130,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }} />
       </head>
       <body className="min-h-full flex flex-col">
+        {design.template === "marca" && <style id="tpl-marca" dangerouslySetInnerHTML={{ __html: MARCA_CSS }} />}
         {css && <style id="design-css" dangerouslySetInnerHTML={{ __html: css }} />}
         <Providers>
           <ElementEdits initial={design.elements} />
