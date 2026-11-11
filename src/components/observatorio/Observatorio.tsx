@@ -182,7 +182,7 @@ export async function Observatorio({ datos }: { datos?: Awaited<ReturnType<typeo
         </Container>
       </section>
 
-      <Container className="lg:grid lg:grid-cols-[15rem_minmax(0,1fr)] lg:gap-12">
+      <Container>
         <ObservatorioNav items={[...secciones.map((x) => ({ id: x.id, n: x.n, t: x.t })), ...(otras.length ? [{ id: "cifras-fedegan", n: "07", t: "Otras cifras" }] : []), { id: "documentos", n: otras.length ? "08" : "07", t: "Documentos" }]} />
         <div className="min-w-0">
         {secciones.map((s) => (
