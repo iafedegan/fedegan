@@ -152,10 +152,7 @@ export async function getJourneyScenes(): Promise<JourneyScene[]> {
     scenes.sort((a, b) => rank(a.id) - rank(b.id));
   }
 
-  // Los portales aliados (TvGan, Fundagán, Bursagán, Maestro de la Carne, Colombian Beef) viven en el pie de página, no en el recorrido.
-  // Cifras del sector, Zona de pagos y el Sistema Integrado de Gestión pasaron a la barra principal.
-  const EN_BARRA = ["cifras", "pagos", "sig"];
-  return scenes.filter((s) => s.id !== "tvgan" && !s.id.startsWith("aliado-") && !EN_BARRA.includes(s.id));
+  return scenes;
 }
 
 export async function PortalJourney() {
