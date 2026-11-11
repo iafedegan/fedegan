@@ -17,8 +17,7 @@ export function ThemeRoute() {
     const inner = pathname !== "/" && !adm;
     // Una plantilla activa fija el tono (no en el panel).
     const tpl = root.getAttribute("data-tpl-mode");
-    const dark = tpl && !adm ? tpl === "oscuro" : false; // el manual de marca: fondo blanco siempre
-    void stored; void inner;
+    const dark = tpl && !adm ? tpl === "oscuro" : stored ? stored === "oscuro" : inner;
     const next = dark ? "esmeralda" : "institucional";
     if (root.getAttribute("data-theme") !== next) root.setAttribute("data-theme", next);
     document.querySelector('meta[name="theme-color"]')?.setAttribute("content", dark ? "#0e0e0e" : "#0a2a20");

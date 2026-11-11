@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { PortalJourney } from "@/components/blocks/PortalJourney";
 import { AccountStrip } from "@/components/blocks/AccountStrip";
 import { CampaignWall } from "@/components/blocks/Accesos";
 import { AdSlot } from "@/components/design/AdSlot";
@@ -21,6 +22,7 @@ export async function HomeView({ kind, design }: { kind: HomeKind; design: Desig
   if (kind === "clasico") {
     cuerpo = (
       <>
+        <PortalJourney />
         <HomeInstitucional d={await getHomeData()} banners={[design.ads.portada, ...(design.banners ?? [])].filter((b): b is NonNullable<typeof b> => Boolean(b))} />
         {ad}
       </>

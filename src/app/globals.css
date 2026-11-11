@@ -2072,12 +2072,3 @@ html[data-theme="esmeralda"] body:has(.mx-hero) :is(.wc.wp, .mx-card, .gl, .mx-p
 body:has(.mx-hero) .wc.wp .wp-img { border-radius: 0.95rem; }
 body:has(.mx-hero) .wc.wp:not(.ed-rail) { padding: 0.85rem 0.85rem 1.2rem; }
 
-/* ======================================================================
-   Logo de FEDEGÁN: el emblema blanco (sin fondo) en la cabecera, la barra compacta y el pie
-   ====================================================================== */
-.mh-title { background: none !important; background-image: none !important; -webkit-background-clip: border-box; background-clip: border-box; color: inherit; line-height: 0; display: inline-flex; align-items: center; }
-.mh-logo { width: auto; height: clamp(3.4rem, 7.5vw, 5.8rem); }
-@media (max-width: 767px) { .mh-logo { height: 2.9rem; } }
-.nv-brand { align-items: center !important; gap: 0.55rem !important; }
-.nv-emblem { width: auto; height: 2.1rem; flex: none; }
-.nv-name { display: inline-flex; align-items: baseline; gap: 0.35rem; }

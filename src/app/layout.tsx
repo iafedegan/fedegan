@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
-import "./marca.css";
+import "./funciones.css";
 import "./templates.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";

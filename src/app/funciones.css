@@ -1,91 +1,4 @@
-/* ======================================================================
-   MARCA FEDEGÁN — Manual de logo: verde Pantone DS290-1 C (#72BF44), rojo Pantone 222 C (#89114C),
-   fondo blanco, tipografía Meta (aquí Fira Sans, de la misma familia de diseño), barra corporativa con los colores de las submarcas.
-   Sin fotos ni colores de fondo en las páginas. Las plantillas (templates.css) van después y mandan cuando hay una activa.
-   ====================================================================== */
-:root, [data-theme="institucional"], [data-theme="esmeralda"] {
-  --brand-green: #72bf44; --brand-green-ink: #3d7a22; --brand-red: #89114c; --brand-ink: #10240f;
-  --bg: #fff; --bg-muted: #f6f6f4; --bg-sunken: #efefec; --surface: #fff; --surface-solid: #fff; --surface-2: #f6f6f4; --card-a: #fff; --card-b: #f6f6f4;
-  --border: #dcdcd6; --border-strong: #89114c; --border-hover: #72bf44;
-  --text: #1f2421; --text-muted: #484f4a; --text-faint: #5a625c; --text-on-brand: #fff; --on-accent: #10240f;
-  --fg-green-900: #10240f; --fg-green-800: #2f6a18; --fg-green-700: #3d7a22; --fg-green-600: #3d7a22; --fg-teal-600: #3d7a22;
-  --fg-lime-500: #72bf44; --fg-lime-400: #3d7a22; --accent: #3d7a22; --accent-2: #89114c; --link: #89114c; --focus-ring: #89114c;
-  --font-display: "Fira Sans", "Inter", system-ui, sans-serif; --font-body: "Fira Sans", "Inter", system-ui, sans-serif; --font-read: "Fira Sans", "Inter", system-ui, sans-serif;
-  --ed-ink: #1f2421; --ed-on-ink: #fff; --ed-gold: #72bf44; --ed-gold-ink: #89114c; --ed-hair: #dcdcd6; --ed-card: #fff; --pill: #89114c; --pill-ink: #fff;
-  color-scheme: light;
-}
-html, html[data-theme] { background: #fff !important; }
-html[data-theme] body { background: #fff; color: var(--text); }
-h1, h2, h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
-/* Sin fotos ni degradados de fondo */
-body::before, body::after, html[data-theme] body::before, html[data-theme] body::after { display: none !important; }
-html:has(.ed-bgmark)::before { display: none !important; }
-.pg-photo, .mx-hero-orn { display: none !important; }
-:is(.mx-hero, .ph, .pg-stage, .ed-head) { background: none !important; }
-:is(.wc.wp, .mx-card, .mx-panel, .gl, .mx-stat, .hub-cell, .pn-card):not(.ed-rail) { background: #fff !important; border: 1px solid #dcdcd6 !important; box-shadow: none !important; border-radius: 0.5rem !important; }
-:is(.wc.wp, .mx-card, .mx-panel, .gl, .mx-stat, .hub-cell, .pn-card):not(.ed-rail)::before, :is(.wc.wp, .mx-card, .mx-panel, .gl, .mx-stat, .hub-cell, .pn-card):not(.ed-rail)::after { display: none !important; }
-a:is(.wc.wp, .mx-card, .gl, .hub-cell, .pn-card):hover { border-color: #72bf44 !important; }
-[data-theme-toggle] { display: none !important; }
-/* Cabecera y barra: verde corporativo, logo blanco (versión negativa del manual), texto en tinta oscura */
-:is(.mh, header[data-region="navbar"]), html[data-theme] :is(.mh, header[data-region="navbar"]) {
-  background-color: #72bf44;
-  --text: #10240f; --text-muted: rgba(16, 36, 15, 0.86); --text-faint: rgba(16, 36, 15, 0.7); --link: #10240f;
-  --fg-lime-500: #89114c; --fg-lime-400: #89114c; --bg: #72bf44; --bg-muted: rgba(255, 255, 255, 0.28); --surface-solid: #6cb73f; --surface-2: rgba(255, 255, 255, 0.2);
-  --border: rgba(16, 36, 15, 0.2); --border-strong: rgba(16, 36, 15, 0.4);
-  border-top: 6px solid transparent; border-image: linear-gradient(90deg, #faa619 0 14.3%, #b10069 14.3% 28.6%, #005387 28.6% 42.9%, #7396ce 42.9% 57.2%, #ed0c6e 57.2% 71.5%, #567c8e 71.5% 85.8%, #ffffff 85.8%) 1 0 0 0;
-}
-.mh-logo { height: clamp(3.6rem, 8vw, 6rem); }
-.mh-tag, .mh-date { color: rgba(16, 36, 15, 0.85); }
-.mh-rule-l, .mh-rule-r { background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6)); }
-.nv-emblem { height: 2.3rem; }
-.nv-link { color: #10240f; }
-.nv-link::after { background: #89114c; }
-.nv-link:hover, .nv-active { color: #89114c; }
-header[data-region="navbar"] .nv-pill { border-color: rgba(16, 36, 15, 0.4); }
-/* Pie: mismo verde, texto en tinta oscura, títulos en rojo corporativo */
-footer[data-region="footer"] { background-color: #72bf44; color: #10240f; --fg-lime-400: #6b0c3a; --fg-lime-500: #6b0c3a; border-top: 6px solid transparent; border-image: linear-gradient(90deg, #faa619 0 14.3%, #b10069 14.3% 28.6%, #005387 28.6% 42.9%, #7396ce 42.9% 57.2%, #ed0c6e 57.2% 71.5%, #567c8e 71.5% 85.8%, #ffffff 85.8%) 1 0 0 0; }
-footer[data-region="footer"] :is([class*="text-white"]) { color: #10240f !important; }
-footer[data-region="footer"] [class*="border-white"] { border-color: rgba(16, 36, 15, 0.22) !important; }
-footer[data-region="footer"] [class*="bg-white"] { background-color: rgba(255, 255, 255, 0.3) !important; }
-footer[data-region="footer"] [class*="ring-white"] { --tw-ring-color: #fff; }
-footer[data-region="footer"] a:hover { color: #6b0c3a !important; }
-/* Botones y acentos en rojo corporativo */
-.cta-link-main, .ed-flag { background: #89114c !important; color: #fff !important; }
-.ed-flag::before { background: #72bf44; }
-.sw-cta { border-radius: 0.25rem; }
-.mh { border-bottom: 0 !important; }
-header[data-region="navbar"] { border-bottom-width: 0 !important; }
-footer[data-region="footer"] button[type="submit"] { background: #89114c !important; color: #fff !important; }
-footer[data-region="footer"] input { background: #fff !important; color: #10240f !important; border-color: rgba(16, 36, 15, 0.3) !important; }
-footer[data-region="footer"] input::placeholder { color: #5a625c; }
-footer[data-region="footer"] .ft-allies h4, footer[data-region="footer"] .ft-news h4 { color: #6b0c3a; }
-footer[data-region="footer"] [class*="border-white/22"] { border-color: rgba(16, 36, 15, 0.22); }
-footer[data-region="footer"] .ft-allies span.ring-2 { background: #fff; }
-
-/* Menú principal en negrilla */
-.nv-link, header[data-region="navbar"] .nv-link { font-weight: 700 !important; }
-
-/* Banner de portada: imagen cargada desde el editor, con botón al enlace */
-.portada-banner { position: relative; background: #fff; }
-.portada-banner a, .portada-banner > div { position: relative; display: block; max-width: 100%; }
-.portada-btn { position: absolute; left: clamp(1rem, 4vw, 4rem); bottom: clamp(1rem, 4vw, 3rem); padding: 0.75rem 1.5rem; border-radius: 0.25rem; background: #72bf44; color: #10240f; font: 800 0.95rem/1 var(--font-body); text-transform: uppercase; letter-spacing: 0.06em; box-shadow: 0 10px 24px -12px rgba(0, 0, 0, 0.6); transition: background 0.2s, transform 0.2s; }
-.portada-banner a:hover .portada-btn { background: #89114c; color: #fff; transform: translateY(-2px); }
-
-/* Panel de administración: el verde corporativo en lugar del verde oscuro */
-.ad-side { background: #72bf44 !important; color: #10240f !important; }
-.ad-side .ad-navlink { color: #10240f; font-weight: 600; }
-.ad-side .ad-navlink:hover { background: rgba(255, 255, 255, 0.35); color: #10240f; }
-.ad-side .ad-navlink[aria-current="page"] { background: rgba(255, 255, 255, 0.5); color: #10240f; }
-.ad-side .ad-navlink[aria-current="page"]::before { background: #89114c; }
-.ad-side :is([class*="text-white"], [class*="text-[#"]) { color: #10240f !important; }
-.ad-side [class*="border-white"], .ad-side [class*="bg-white"] { border-color: rgba(16, 36, 15, 0.25) !important; }
-.ad-btn-primary { background: #89114c; }
-.ad-btn-primary:hover:not(:disabled) { background: #6b0c3a; }
-
-/* Títulos del pie en negro */
-footer[data-region="footer"] h4, footer[data-region="footer"] h4 * { color: #000 !important; }
-footer[data-region="footer"] [class*="text-[var(--fg-lime"] { color: #000 !important; }
-
+/* Estilos de funciones del portal (documentos, Studio, formularios, portada de sección, carrusel…). El tema de marca blanco/verde se retiró: manda el tema oscuro clásico. */
 /* ---------- Portada institucional ---------- */
 .hi { color: var(--text); }
 .hi-hero { background: #f4f9ef; overflow: hidden; }
@@ -153,54 +66,6 @@ footer[data-region="footer"] [class*="text-[var(--fg-lime"] { color: #000 !impor
 .hi-mi ul { display: flex; flex-wrap: wrap; gap: 0.4rem 1.6rem; margin: 1rem 0 1.4rem; padding: 0; list-style: none; font-weight: 600; font-size: 0.9rem; }
 .hi-mi li::before { content: "✓ "; font-weight: 800; }
 
-/* ---------- Cabecera institucional: barra de servicios, logo con buscador y menú en blanco ---------- */
-:is(.mh, header[data-region="navbar"]), html[data-theme] :is(.mh, header[data-region="navbar"]) {
-  background-color: #fff; border-image: none; border-top: 0;
-  --text: #10240f; --text-muted: #2c3a2a; --text-faint: #4d5a4b; --link: #3d7a22; --fg-lime-500: #72bf44; --fg-lime-400: #3d7a22;
-  --bg: #fff; --bg-muted: #eef8e6; --surface-solid: #fff; --surface-2: #f4f9ef; --border: #dcdcd6; --border-strong: #b9c7b0;
-}
-header[data-region="navbar"] { border-bottom: 1px solid #dcdcd6 !important; border-bottom-width: 1px !important; box-shadow: 0 8px 20px -18px rgba(16, 36, 15, 0.45); }
-.nv-link { color: #10240f; }
-.nv-link::after { background: #72bf44; }
-.nv-link:hover, .nv-active { color: #3d7a22; }
-.mh-desk { display: none; }
-@media (min-width: 768px) { .mh-desk { display: block; } .mh-mob { display: none; } }
-.mh-util { background: #2f6a18; color: #fff; border-top: 5px solid transparent; border-image: linear-gradient(90deg, #faa619 0 14.3%, #b10069 14.3% 28.6%, #005387 28.6% 42.9%, #7396ce 42.9% 57.2%, #ed0c6e 57.2% 71.5%, #567c8e 71.5% 85.8%, #72bf44 85.8%) 1 0 0 0; }
-.mh-util-in { display: flex; align-items: center; gap: 1.5rem; padding-block: 0.5rem; font-size: 0.74rem; text-align: left; }
-.mh-country { display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 700; }
-.mh-country i { width: 1.1rem; height: 0.75rem; background: linear-gradient(180deg, #fcd116 50%, #003893 50% 75%, #ce1126 75%); border-radius: 1px; }
-.mh-util-tag { flex: 1; font-weight: 600; }
-.mh-util nav { display: flex; gap: 1.6rem; }
-.mh-util a { color: #fff; font-weight: 600; text-decoration: none; }
-.mh-util a:hover { text-decoration: underline; }
-.mh-main { position: relative; z-index: 60; }
-.mh-main-in { display: flex; align-items: center; justify-content: space-between; gap: 0.9rem; padding-block: 0.9rem; }
-.mh-logo-d { width: auto; height: 3.6rem; }
-.mh-search { margin-left: auto; display: flex; align-items: center; flex: 1; max-width: 22rem; border: 1px solid #b9c7b0; border-radius: 999px; background: #fff; padding: 0.3rem 0.4rem 0.3rem 1.1rem; }
-.mh-search input { flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; color: #10240f; font: inherit; font-size: 0.9rem; }
-.mh-search button { display: grid; place-items: center; width: 2.1rem; height: 2.1rem; border: 0; border-radius: 50%; background: transparent; color: #3d7a22; cursor: pointer; }
-.mh { border-bottom: 0 !important; text-align: left; }
-.mh-mob { text-align: center; }
-.mh-tag, .mh-date { color: #4d5a4b; }
-.mh-rule-l, .mh-rule-r { background: none; }
-.hi-banner { position: absolute; inset: 0; display: block; }
-.hi-banner-img { display: block; width: 100%; height: 100%; object-fit: cover; margin-inline: auto; }
-.hi-banner .portada-btn { left: 1.2rem; bottom: 1.2rem; }
-.hi-banner:hover .portada-btn { background: #89114c; color: #fff; }
-.hi-hero-img:has(.hi-banner)::after { display: none; }
-
-/* Pie institucional fijo: las cinco columnas del diseño del cliente, sin importar la variante guardada en el editor */
-[data-footer] footer[data-region="footer"] > div:first-child { text-align: left !important; justify-items: stretch !important; }
-[data-footer] footer[data-region="footer"] > div:first-child > div { display: block !important; align-items: initial !important; }
-[data-footer] footer[data-region="footer"] > div:first-child > div:first-child { display: flex !important; flex-direction: column; align-items: flex-start !important; }
-@media (min-width: 1024px) { [data-footer] footer[data-region="footer"] > div:first-child { grid-template-columns: 1.2fr 0.8fr 0.9fr 1.2fr 1.1fr !important; } }
-@media (min-width: 640px) and (max-width: 1023px) { [data-footer] footer[data-region="footer"] > div:first-child { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; } }
-@media (max-width: 639px) { [data-footer] footer[data-region="footer"] > div:first-child { grid-template-columns: minmax(0, 1fr) !important; } }
-
-/* Hero: fondo blanco (sin color de zona) y espacio abajo para que los botones no queden bajo las tarjetas */
-.hi-hero, section.hi-hero[data-region="hero"] { background: #fff !important; background-color: #fff !important; padding-bottom: 4.5rem; }
-.hi-hero-img::after { background: linear-gradient(90deg, #fff, transparent); }
-.hi-hero-img { margin-bottom: 0; }
 .hi-banner .portada-btn { bottom: 1.2rem; }
 section.hi-hero[data-region="hero"] { padding-top: 1rem !important; padding-bottom: 4.5rem !important; }
 .hi-carousel { position: absolute; inset: 0; }
@@ -208,70 +73,12 @@ section.hi-hero[data-region="hero"] { padding-top: 1rem !important; padding-bott
 .hi-dots button { width: 0.6rem; height: 0.6rem; padding: 0; border: 0; border-radius: 50%; background: rgba(255, 255, 255, 0.7); cursor: pointer; }
 .hi-dots button.on { background: #72bf44; }
 
-/* Barra superior de servicios: verde de FEDEGÁN (#72BF44) con texto en tinta oscura */
-.mh-util { background: #72bf44; color: #10240f; }
-.mh-util a, .mh-country, .mh-util-tag { color: #10240f; }
-.mh-util a:hover { color: #89114c; text-decoration: underline; }
-
-/* Cabecera: la fila del logo y el menú van en el verde de FEDEGÁN (#72BF44) con el logo blanco; la barra de servicios vuelve al verde oscuro */
-.mh-util { background: #2f6a18; color: #fff; }
-.mh-util a, .mh-country, .mh-util-tag { color: #fff; }
-.mh-util a:hover { color: #fff; }
-:is(.mh, header[data-region="navbar"]), html[data-theme] :is(.mh, header[data-region="navbar"]) {
-  background-color: #72bf44;
-  --text: #10240f; --text-muted: rgba(16, 36, 15, 0.88); --text-faint: rgba(16, 36, 15, 0.72); --link: #10240f; --fg-lime-500: #6b0c3a; --fg-lime-400: #6b0c3a;
-  --bg: #72bf44; --bg-muted: rgba(255, 255, 255, 0.32); --surface-solid: #fff; --surface-2: rgba(255, 255, 255, 0.25); --border: rgba(16, 36, 15, 0.22); --border-strong: rgba(16, 36, 15, 0.42);
-}
-header[data-region="navbar"] { border-bottom: 0 !important; box-shadow: 0 8px 18px -16px rgba(16, 36, 15, 0.6); }
-.nv-link { color: #10240f; }
-.nv-link::after { background: #6b0c3a; }
-.nv-link:hover, .nv-active { color: #6b0c3a; }
-.mh-search { border-color: rgba(16, 36, 15, 0.25); background: #fff; }
-.mh-tag, .mh-date { color: #10240f; }
-.hi-empty { grid-column: 1 / -1; padding: 1.5rem; border: 1px dashed #b9c7b0; border-radius: 0.6rem; color: #484f4a; } .hi-empty a { color: #3d7a22; font-weight: 700; }
-
 /* Iconos duotono dentro de una ficha redondeada */
 .hi-quick svg:first-child, .hi-trio svg:first-child { box-sizing: content-box; padding: 0.6rem; border-radius: 0.9rem; background: #eef8e6; color: #3d7a22; }
 /* En los accesos rápidos la ficha del icono es blanca, para que destaque sobre el fondo tenue. */
 .hi-quick svg:first-child { background: #fff; box-shadow: 0 2px 8px -3px rgba(61, 122, 34, 0.35); }
 .hi-quick svg:last-child { margin-top: auto; }
 .hi-cal svg, .hi-meta svg { color: #3d7a22; }
-
-/* Cabezote centrado: logo con filetes, razón social y fecha, entre cintas corporativas */
-.mh { text-align: center; border-top: 6px solid transparent; border-image: linear-gradient(90deg, #faa619 0 14.3%, #b10069 14.3% 28.6%, #005387 28.6% 42.9%, #7396ce 42.9% 57.2%, #ed0c6e 57.2% 71.5%, #567c8e 71.5% 85.8%, #ffffff 85.8%) 1 0 0 0; }
-.mh-rule { background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.7)); }
-.mh-rule-r { background: linear-gradient(270deg, transparent, rgba(255, 255, 255, 0.7)); }
-.mh-tag { font-weight: 800; letter-spacing: 0.22em; text-transform: uppercase; color: #10240f; }
-.mh-date { text-transform: uppercase; letter-spacing: 0.18em; color: rgba(16, 36, 15, 0.85); }
-header[data-region="navbar"] { border-top: 6px solid transparent; border-image: linear-gradient(90deg, #faa619 0 14.3%, #b10069 14.3% 28.6%, #005387 28.6% 42.9%, #7396ce 42.9% 57.2%, #ed0c6e 57.2% 71.5%, #567c8e 71.5% 85.8%, #ffffff 85.8%) 1 0 0 0; }
-
-/* Cintillo corporativo: gana a las reglas de tema anteriores */
-html .mh, html header[data-region="navbar"] {
-  border-top: 4px solid transparent !important;
-  border-image: linear-gradient(90deg, #faa619 0 16.66%, #b10069 16.66% 33.33%, #005387 33.33% 50%, #7396ce 50% 66.66%, #ed0c6e 66.66% 83.33%, #567c8e 83.33%) 1 0 0 0 !important;
-}
-
-/* Sin cintillo en lo más alto del cabezote; queda solo el de encima del menú */
-html .mh { border-top: 0 !important; border-image: none !important; }
-
-/* Celular / app instalada: el cabezote baja lo que mide la barra de estado para que el logo no quede tapado */
-@media (max-width: 767px) {
-  html .mh { padding-top: calc(env(safe-area-inset-top, 0px) + 0.6rem) !important; }
-}
-
-/* iOS tiñe el borde superior con el fondo de la página: html en verde, el cuerpo sigue en blanco */
-@media (max-width: 767px) {
-  html { background-color: #72bf44; }
-  html body { background-color: #fff; }
-}
-
-/* Cabecera como el mockup: logo a la izquierda y buscador a la derecha, menú verde debajo */
-html .mh { text-align: left; }
-html .mh .mh-mob { text-align: center; }
-html .mh-main { background: #72bf44; }
-html .mh-main-in { padding-block: 1rem; }
-html .mh-logo-d { height: 4.2rem; }
-html .mh-search { max-width: 22rem; box-shadow: 0 6px 16px -10px rgba(16, 36, 15, 0.5); }
 
 /* Con banner cargado, la portada es solo el banner (una imagen a lo ancho, con su botón); sin banner queda texto + foto */
 .hi-hero-in:has(.hi-banner) { display: block; min-height: 0; }
@@ -307,10 +114,6 @@ section.hi-hero[data-region="hero"], .hi-hero { background: #f3f4f1 !important; 
 .hi-hero-img:has(.hi-banner) .hi-banner-img { max-width: none !important; min-height: 22rem; object-fit: cover; }
 .hi-hero-img:has(.hi-banner) .portada-btn { z-index: 3; }
 
-/* Cabecera: el buscador y «Equipo» van juntos a la derecha. */
-.mh-main-in .mh-search { flex: 0 1 22rem; margin-left: auto; }
-.mh-main-in > div:last-child, .mh-main-in > a:last-child { margin-left: 0 !important; }
-
 /* ---------- Carrusel de portada (todo se ajusta en Diseño → Publicidad) ---------- */
 .car { position: relative; width: var(--car-w, 100%); margin-inline: auto; overflow: hidden; background: #10240f; isolation: isolate; touch-action: pan-y; }
 .car[data-round="si"] { border-radius: 1.1rem; }
@@ -342,16 +145,6 @@ section.hi-hero[data-region="hero"], .hi-hero { background: #f3f4f1 !important; 
 .car-play { display: grid; place-items: center; width: 1.5rem; height: 1.5rem; padding: 0; border: 0; border-radius: 50%; background: transparent; color: #fff; cursor: pointer; }
 @media (prefers-reduced-motion: reduce) { .car-slide, .car-img { transition: none; } }
 section.hi-hero[data-region="hero"]:has(.car) { padding-bottom: 2.5rem !important; }
-
-/* Cabecera más baja: fila del logo y fila del menú compactas */
-@media (min-width: 768px) {
-  html .mh-main-in { padding-block: 0.4rem; }
-  html .mh-logo-d { height: 2.7rem; }
-  html .mh-search { padding-block: 0.15rem; }
-  html .mh-search button { width: 1.9rem; height: 1.9rem; }
-  html header[data-region="navbar"] nav .py-3 { padding-block: 0.3rem !important; }
-  html header[data-region="navbar"] .nv-link { padding-block: 0.3rem; }
-}
 
 /* ---------- Listas de documentos como tarjetas (Excel, PDF, Word, audio) ---------- */
 .doc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 21rem), 1fr)); gap: 0.9rem; margin: 1.4rem 0 2rem; padding: 0; list-style: none; max-width: none; }
@@ -424,23 +217,6 @@ dialog.doc-modal[open] { display: block; animation: doc-in 0.22s ease-out; }
 .doc-word table { border-collapse: collapse; margin: 1em 0; width: 100%; } .doc-word td, .doc-word th { border: 1px solid #cfd6c9; padding: 0.4rem 0.6rem; vertical-align: top; }
 .doc-word a { color: #2c6a14; text-decoration: underline; } .doc-word img { max-width: 100%; height: auto; }
 
-/* Cabecera: solo el emblema y FEDEGAN al lado */
-.mh-brand { display: inline-flex; align-items: center; gap: 0.75rem; color: #fff; text-decoration: none; }
-.mh-emblem { width: auto; height: 3.4rem; flex: none; }
-.mh-name { font: 300 2.2rem/1 var(--font-display); letter-spacing: -0.01em; color: #fff; }
-.mh-name b { font-weight: 800; }
-.mh-brand.mh-title { justify-content: center; }
-.mh-brand.mh-title .mh-emblem { height: 3rem; }
-.mh-brand.mh-title .mh-name { font-size: 1.9rem; }
-
-/* Logo centrado con líneas a los lados */
-html .mh-main-in { justify-content: center; gap: clamp(1rem, 3vw, 2.5rem); }
-.mh-line { flex: 1; height: 1px; }
-.mh-line-l { background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.75)); }
-.mh-line-r { background: linear-gradient(270deg, transparent, rgba(255, 255, 255, 0.75)); }
-.mh-emblem { height: 4.4rem; }
-.mh-brand.mh-title .mh-emblem { height: 3.4rem; }
-
 /* Fichas del hub: todas del mismo alto; la lista se despliega encima, sin empujar la página */
 html .hub-grid { align-items: stretch; }
 html .hub-grid > li { height: 100%; }
@@ -454,9 +230,6 @@ html .hub-wrap > .hub-panel {
   max-height: 22rem; overflow-y: auto;
 }
 html .hub-wrap > .hub-panel[hidden] { display: none; }
-
-/* Fecha larga debajo del logo (escritorio) */
-.mh-desk .mh-date-desk { margin: 0; padding: 0 1rem 0.55rem; text-align: center; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: #10240f; }
 
 /* ---------- Escuela Virtual: portada moderna y catálogo en tarjetas ---------- */
 .ev-hero { background: linear-gradient(180deg, #f3faee 0%, #ffffff 100%); }
@@ -877,11 +650,6 @@ textarea.fm-in { resize: vertical; min-height: 6rem; }
 .sx-hijos button { display: block; width: 100%; padding: 0.8rem 1rem; border: 1px solid #dcdcd2; border-radius: 0.6rem; background: #fff; text-align: left; font-weight: 650; color: #10240f; cursor: pointer; }
 .sx-hijos button:hover { border-color: #7dc242; background: #f6faf0; }
 
-/* Franja institucional del TDR: verde oscuro con los accesos de la entidad */
-.mh-util { background: #0f5a2b; color: #fff; }
-.mh-util a, .mh-util .mh-country, .mh-util .mh-util-tag { color: #fff; }
-.mh-util .mh-util-tag { font-weight: 500; opacity: .92; }
-
 /* Menú lateral de las páginas interiores: igual que el de la portada de la sección */
 .sx-lat { position: static; max-height: none; overflow: visible; }
 .sx-lat .sx-menu-t { display: block; text-decoration: none; color: #55665a; }
@@ -902,5 +670,3 @@ textarea.fm-in { resize: vertical; min-height: 6rem; }
 .sx-menu button.sx-fila-b { display: grid; width: 2.4rem; flex: none; padding: 0; margin: 0; border: 0; align-items: center; justify-items: center; }
 .sx-menu .sx-sub button.sx-fila-b { padding: 0; margin: 0; }
 .sx-menu .sx-fila-a { align-items: baseline; }
-/* La franja institucional va de borde a borde, pegada al filo inferior del cintillo (sin el margen de la cabecera ni su filete propio) */
-.mh > .mh-util { margin: -1rem -1rem 1rem; border-top: 0; border-image: none; }
