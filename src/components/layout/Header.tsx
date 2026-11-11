@@ -15,8 +15,8 @@ function isActive(pathname: string, href: string) {
 }
 
 // Primeras opciones visibles según el ancho; el resto va en «Más».
-const visibleFrom = (i: number) => (i < 3 ? "" : i < 8 ? "hidden xl:block" : i < 10 ? "hidden 2xl:block" : "hidden");
-const inMoreOnlyBelow = (i: number) => (i < 8 ? "xl:hidden" : i < 10 ? "2xl:hidden" : "");
+const visibleFrom = (i: number) => (i < 3 ? "" : i < 9 ? "hidden xl:block" : i < 11 ? "hidden 2xl:block" : "hidden");
+const inMoreOnlyBelow = (i: number) => (i < 9 ? "xl:hidden" : i < 11 ? "2xl:hidden" : "");
 
 // Lista del menú: solo se ven las opciones del primer nivel; las que tienen sub-opciones abren un panel al costado
 // al pasar el mouse (o con el teclado), así no se despliega todo de una vez.
