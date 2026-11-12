@@ -5,7 +5,7 @@ import { useEffect, useState, useTransition, type ReactNode } from "react";
 import { AlertCircle, Briefcase, Copy, Loader2, Paperclip, Plus, Search, Send, Sparkles, Trash2 } from "lucide-react";
 import { enviarFormulario } from "@/lib/cms/formularios-actions";
 import {
-  MAX_FILAS, aplicarCatalogo, esFilas, esPregunta, opcionesForm, visibles,
+  MAX_FILAS, aplicarCatalogo, columnaVisible, esFilas, esPregunta, opcionesForm, visibles,
   type CampoForm, type ColumnaTabla, type EsquemaForm, type Fila, type MapaCargos, type Valor,
 } from "@/lib/cms/formulario-esquema";
 
@@ -149,7 +149,7 @@ function TablaFilas({ campo, columnas, filas, onChange, sugerencias }: {
               </span>
             </div>
             <div className="fp-grid">
-              {columnas.map((k) => {
+              {columnas.filter((k) => columnaVisible(k, f)).map((k) => {
                 const x = f[k.id] ?? "";
                 if (deCatalogo && k.id === col) return <div key={k.id} className="fp-campo fp-ancho"><Etiqueta texto={k.etiqueta} requerido={false} chico /><p className="fp-fila-texto">{x}</p></div>;
                 return (

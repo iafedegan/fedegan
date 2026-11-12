@@ -88,7 +88,7 @@ export const TIPOS_COLUMNA = [
 ] as const;
 export type TipoColumna = (typeof TIPOS_COLUMNA)[number]["valor"];
 const TIPOS_COL = new Set<string>(TIPOS_COLUMNA.map((t) => t.valor));
-export type ColumnaTabla = { id: string; etiqueta: string; tipo: TipoColumna; opciones: string; requerido: boolean; catalogo?: FuenteCatalogo };
+export type ColumnaTabla = { id: string; etiqueta: string; tipo: TipoColumna; opciones: string; requerido: boolean; catalogo?: FuenteCatalogo; /** Solo se muestra (y se pide) si otra columna de la misma fila cumple la condición (`campo` = id de esa columna). */ si?: Condicion };
 export type Fila = Record<string, string>;
 export type EsquemaForm = { campos: CampoForm[]; gracias: string };
 export type Valor = string | string[] | Fila[];
@@ -137,7 +137,9 @@ function leerColumnas(raw: unknown, previos: string[] = []): ColumnaTabla[] {
     const tipo = (TIPOS_COL.has(String(p.tipo)) ? p.tipo : "texto") as TipoColumna;
     // Solo las columnas de texto pueden sugerir tareas del catálogo (quien responde también puede escribir otra).
     const catalogo = tipo === "texto" || tipo === "parrafo" ? leerFuente(p.catalogo, previos, ["tarea"]) : undefined;
-    return [{ id, etiqueta, tipo, opciones: typeof p.opciones === "string" ? p.opciones.slice(0, 1500) : "", requerido: p.requerido === true, ...(catalogo ? { catalogo } : {}) }];
+    const c = p.si && typeof p.si === "object" ? (p.si as Record<string, unknown>) : null;
+    const si: Condicion | undefined = c && typeof c.campo === "string" && c.campo !== id && vistos.has(c.campo) && OPS.has(String(c.op)) ? { campo: c.campo, op: c.op as Operador, valor: str(c.valor, 100) } : undefined;
+    return [{ id, etiqueta, tipo, opciones: typeof p.opciones === "string" ? p.opciones.slice(0, 1500) : "", requerido: p.requerido === true, ...(catalogo ? { catalogo } : {}), ...(si ? { si } : {}) }];
   });
 }
 
@@ -213,6 +215,10 @@ function cumple(si: Condicion, v: Valor | undefined): boolean {
 }
 
 /** Las preguntas que se muestran con estos valores (una oculta no cuenta, y las que dependen de ella tampoco). */
+/** ¿Se muestra esta columna en la fila dada? (depende de otra columna de la misma fila). */
+export function columnaVisible(k: ColumnaTabla, fila: Fila): boolean {
+  return !k.si || cumple(k.si, fila[k.si.campo]);
+}
 export function visibles(campos: CampoForm[], valores: Record<string, Valor | undefined>): Set<string> {
   const ok = new Set<string>();
   for (const c of campos) {
@@ -240,12 +246,14 @@ export function validarRespuestas(e: EsquemaForm, valores: Record<string, Valor 
       for (const f of filas) {
         const fila: Fila = {};
         for (const k of cols) {
+          if (!columnaVisible(k, fila)) continue;
           const x = typeof f[k.id] === "string" ? f[k.id].trim().slice(0, k.tipo === "parrafo" ? 2000 : 300) : "";
           if (x) fila[k.id] = x;
         }
         if (Object.keys(fila).length === 0) continue; // fila vacía: se ignora
         const n = limpias.length + 1;
         for (const k of cols) {
+          if (!columnaVisible(k, fila)) continue;
           const x = fila[k.id] ?? "";
           if (!x && k.requerido) return { error: `«${c.etiqueta}», fila ${n}: falta «${k.etiqueta}».` };
           if (x && k.tipo === "lista" && !opcionesForm(k.opciones).includes(x)) return { error: `«${c.etiqueta}», fila ${n}: «${k.etiqueta}» debe ser una de las opciones.` };
