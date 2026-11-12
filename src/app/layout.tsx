@@ -7,7 +7,7 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { getNav } from "@/lib/cms/content";
 import { getSection } from "@/lib/cms/nodos";
-import { legacyHref, type NavNode } from "@/content/legacy";
+import { getLegacyPage, legacyHref, type NavNode } from "@/content/legacy";
 import { Providers } from "@/components/layout/Providers";
 import { ChromeGate } from "@/components/layout/ChromeGate";
 import { SiteChrome } from "@/components/layout/SiteChrome";
@@ -95,10 +95,20 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   // Este menú viaja en TODAS las páginas: se recorta a 3 niveles (opciones, su panel al costado y el siguiente) y a 12 entradas por lista (con un enlace «Ver las N páginas»).
   // Antes mandaba cientos de páginas de la columna del presidente, las cartas y las publicaciones en cada visita (unos 200 KB).
   const MAX_ENTRADAS = 12;
+  const SOLO_ENLACE = /^\s*(?:\*\*)?\[([^\]]+)\]\((\/seccion\/[^)\s]+)\)(?:\*\*)?\s*$/;
+  const enlacesDePagina = (key: string): Sub[] =>
+    (getLegacyPage(key)?.blocks ?? []).flatMap((b) => {
+      const m = b.t === "p" ? SOLO_ENLACE.exec(b.text ?? "") : null;
+      return m ? [{ label: m[1].replace(/\*\*/g, "").trim(), href: m[2] }] : [];
+    });
   const subs = (nodes: NavNode[], slug: string, verTodas: string, nivel = 1): Sub[] => {
     const lista = nodes.flatMap((n) => {
       const href = n.key ? legacyHref(slug, n.key) : n.href;
-      return href ? [{ label: n.label, href, ...(n.children?.length && nivel < 3 ? { children: subs(n.children, slug, href, nivel + 1) } : {}) }] : [];
+      if (!href) return [];
+      if (n.children?.length && nivel < 3) return [{ label: n.label, href, children: subs(n.children, slug, href, nivel + 1) }];
+      // Página sin subpáginas en el árbol pero cuyo contenido es una lista de enlaces (capítulos de los Estatutos…): esos enlaces son su submenú.
+      const enLista = nivel < 3 && n.key ? enlacesDePagina(n.key) : [];
+      return [{ label: n.label, href, ...(enLista.length >= 2 ? { children: enLista.slice(0, MAX_ENTRADAS) } : {}) }];
     });
     return lista.length > MAX_ENTRADAS ? [...lista.slice(0, MAX_ENTRADAS), { label: `Ver las ${lista.length} páginas →`, href: verTodas }] : lista;
   };
