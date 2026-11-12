@@ -2197,3 +2197,6 @@ header[data-region="navbar"] [role="menu"] {
 header[data-region="navbar"] [role="menu"] svg { color: inherit !important; }
 @keyframes nv-pop { from { opacity: 0; transform: translateY(-6px) scale(0.98); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) { header[data-region="navbar"] [role="menu"] { animation: none; } }
+
+/* Menú vertical del recorrido: más desenfoque del fondo detrás de la lista */
+.sw-rail { -webkit-backdrop-filter: blur(22px) saturate(1.15); backdrop-filter: blur(22px) saturate(1.15); }
