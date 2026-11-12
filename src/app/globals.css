@@ -2241,3 +2241,48 @@ header[data-region="navbar"] .nv-gem { width: 2rem; height: 2rem; }
 header[data-region="navbar"] nav .flex.shrink-0 > div > button { width: 2.1rem; height: 2.1rem; min-height: 0; padding: 0; justify-content: center; border-radius: 999px; background: rgba(255, 255, 255, 0.3); border: 0; }
 header[data-region="navbar"] nav .flex.shrink-0 > div > button:hover { background: #071b13; }
 header[data-region="navbar"] nav .flex.shrink-0 > div > button:hover svg { color: #f0d58a !important; }
+
+/* ======================================================================
+   Páginas de contenido rediseñadas: cabecera amplia con foto y título grande, hoja de lectura en tarjeta que sube sobre la
+   cabecera, barra lateral con índice, accesos y ayuda, y tipografía editorial (cita inicial, líneas de tiempo, listas).
+   ====================================================================== */
+.mx-hero.ed-head.ed-band:has(.ed-bgmark) { position: relative; padding-top: clamp(2.2rem, 5.5vw, 4.2rem) !important; padding-bottom: clamp(4.6rem, 8vw, 6.4rem) !important; }
+.mx-hero.ed-head.ed-band:has(.ed-bgmark)::after { content: ""; position: absolute; inset: auto 0 0 0; height: 5rem; background: linear-gradient(180deg, transparent, var(--bg)); pointer-events: none; }
+.mx-hero.ed-head.ed-band .ed-title { font-size: clamp(2.3rem, 5.2vw, 4rem) !important; line-height: 1.04; letter-spacing: -0.025em; }
+.mx-hero.ed-head.ed-band .ed-title::after { content: ""; display: block; width: 4.2rem; height: 3px; margin-top: 1rem; border-radius: 3px; background: linear-gradient(90deg, #d8b558, #f0d58a); }
+.mx-hero.ed-head.ed-band .ed-deck { margin-top: 0.9rem; font: 600 0.78rem/1 var(--font-body); letter-spacing: 0.2em; text-transform: uppercase; color: #f0d58a !important; }
+
+.doc-wrap { position: relative; z-index: 2; margin-top: -3.2rem; padding-bottom: 4.5rem; }
+.doc-grid2 { display: grid; gap: 1.6rem; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 1024px) { .doc-grid2 { grid-template-columns: minmax(0, 1fr) 21rem; gap: 2.2rem; align-items: start; } }
+.doc-grid2 > .doc-content {
+  padding: clamp(1.5rem, 3.6vw, 3.4rem); border: 1px solid var(--border); border-radius: 1.6rem;
+  background: var(--surface-solid); box-shadow: 0 34px 70px -42px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+.doc-side { display: flex; flex-direction: column; gap: 1rem; }
+@media (min-width: 1024px) { .doc-side { position: sticky; top: 5.2rem; } }
+.sd-card { padding: 1.15rem 1.25rem; border: 1px solid var(--border); border-radius: 1.25rem; background: var(--surface-solid); }
+.sd-card [class*="uppercase"] { letter-spacing: 0.2em; }
+.doc-help { border-color: rgba(216, 181, 88, 0.45); background: linear-gradient(150deg, #071b13 0%, #0d2a1e 100%); color: #eaf3e4; }
+.doc-help-t { font: 700 1.15rem/1.2 var(--font-display); color: #f0d58a; }
+.doc-help-p { margin-top: 0.4rem; font-size: 0.9rem; line-height: 1.5; color: rgba(234, 243, 228, 0.82); }
+.doc-help-a { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.9rem; }
+.doc-help-a a { padding: 0.45rem 0.95rem; border: 1px solid rgba(216, 181, 88, 0.55); border-radius: 999px; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.06em; color: #f0d58a; text-decoration: none; transition: background-color 0.25s, color 0.25s; }
+.doc-help-a a:hover { background: #d8b558; color: #071b13; }
+
+/* Lectura */
+.doc-grid2 > .doc-content .ix-lead { padding-left: 1.3rem; border-left: 3px solid #d8b558; max-width: none; }
+.doc-grid2 > .doc-content .ix-lead::first-letter { float: none; margin: 0; font: inherit; color: inherit; }
+.doc-grid2 > .doc-content p.read { max-width: 46rem; font-size: 1.1rem; line-height: 1.85; }
+.doc-grid2 > .doc-content h2 { margin-top: 2.6rem; }
+
+/* Línea de tiempo: párrafos que empiezan con un año («1963. …») */
+.tl-item { position: relative; display: grid; grid-template-columns: 4.6rem minmax(0, 1fr); gap: 0.4rem 1.2rem; max-width: 48rem; margin: 0; padding: 0.2rem 0 1.5rem 1.5rem; border-left: 2px solid rgba(216, 181, 88, 0.35); }
+.tl-item::before { content: ""; position: absolute; left: -0.46rem; top: 0.55rem; width: 0.8rem; height: 0.8rem; border-radius: 50%; background: #d8b558; box-shadow: 0 0 0 4px rgba(216, 181, 88, 0.2); }
+.tl-year { font: 800 1.45rem/1.1 var(--font-display); color: #d8b558; letter-spacing: -0.01em; }
+.tl-txt { color: var(--text-muted); font-size: 1.05rem; line-height: 1.75; }
+.tl-txt strong { color: var(--text); }
+@media (max-width: 640px) { .tl-item { grid-template-columns: 1fr; } }
+html:not([data-theme="esmeralda"]) .tl-year { color: #8a6a1a; }
+html:not([data-theme="esmeralda"]) .tl-item { border-left-color: rgba(138, 106, 26, 0.35); }
+html:not([data-theme="esmeralda"]) .tl-item::before { background: #b08f4f; box-shadow: 0 0 0 4px rgba(176, 143, 79, 0.2); }

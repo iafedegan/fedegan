@@ -334,6 +334,20 @@ export function LegacyContent({ blocks, lead: allowLead = true, preview = false,
       continue;
     }
 
+    // Párrafo que empieza con un año («1963. El 13 de diciembre…» o «**1963**. …»): hito de la línea de tiempo.
+    const anio = b.t === "p" ? /^\s*(?:\*\*)?((?:19|20)\d{2})(?:\*\*)?\s*[.:–-]\s+([\s\S]+)$/.exec(b.text ?? "") : null;
+    if (anio && !libre) {
+      nodes.push(
+        <div key={key} className="tl-item">
+          <span className="tl-year">{anio[1]}</span>
+          <p className="tl-txt read">
+            <Inline text={anio[2]} />
+          </p>
+        </div>,
+      );
+      continue;
+    }
+
     const lead = !leadDone && b.t === "p" && plain(b.text ?? "").length > 60;
     if (lead) leadDone = true;
     nodes.push(

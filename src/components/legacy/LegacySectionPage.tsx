@@ -237,64 +237,75 @@ export async function LegacySectionPage({ slug, ruta }: { slug: string; ruta: st
         <SectionTiles nodes={kids} slug={slug} custom={custom} extras={fichas} />
       </section>
     ) : null;
+  const minutos = Math.max(1, Math.round(page.blocks.reduce((n, bl) => n + (bl.text ?? "").split(/\s+/).filter(Boolean).length, 0) / 200));
   return (
     <>
-      <PageHeader variant="strip" title={page.title} breadcrumbs={crumbs} image={sectionPhoto?.src} imagePos={sectionPhoto?.pos} />
-      <Container className={`doc-split ${verMenu ? "has-menu" : ""}`}>
-        {verMenu && (
-          <aside className="doc-rail hidden lg:block">
-            <div className="doc-sticky">
-              <nav aria-label={`Menú de ${section.label}`} className="sx-menu sx-lat">
-                <Link href={`/seccion/${slug}`} className="sx-menu-t">{section.label}</Link>
-                <NavTree nodes={menuItems} current={key} />
-              </nav>
-            </div>
-          </aside>
-        )}
-
-        <article className="doc-content ed-body min-w-0 [overflow-wrap:anywhere]">
-          <header className="art-head">
-            <h1 className={`ed-title ${sizeOf(page.title)}`}>{page.title}</h1>
-            {/* En pantallas sin menú lateral, el mismo árbol se abre en pantalla completa. */}
+      <PageHeader
+        variant="band"
+        eyebrow={section.label}
+        title={page.title}
+        description={`Lectura de ${minutos} min`}
+        breadcrumbs={crumbs}
+        image={sectionPhoto?.src}
+        imagePos={sectionPhoto?.pos}
+      />
+      <Container className="doc-wrap">
+        <div className="doc-grid2">
+          <article className="doc-content ed-body min-w-0 [overflow-wrap:anywhere]">
+            {/* En pantallas sin barra lateral, el árbol de la sección se abre en pantalla completa. */}
             {verMenu && (
               <div className="lg:hidden">
                 <SectionMenu label={section.label} items={menuItems} current={key} />
               </div>
             )}
-          </header>
 
-          {propia ? (
-            cuerpoConPartes(page.blocks, page.libre, {
-              indice: tocNodo,
-              hijas: kidsNodo,
-              anteriorsiguiente: <PrevNext prev={prev} next={next} />,
-            })
-          ) : (
-            <>
-          {toc.length >= 3 && (
-            <details className="toc-m">
-              <summary>
-                En esta página <span>{toc.length}</span>
-              </summary>
-              <TocRail items={toc} title="Ir a" />
-            </details>
-          )}
+            {propia ? (
+              cuerpoConPartes(page.blocks, page.libre, {
+                indice: tocNodo,
+                hijas: kidsNodo,
+                anteriorsiguiente: <PrevNext prev={prev} next={next} />,
+              })
+            ) : (
+              <>
+                {page.blocks.length > 0 ? <LegacyContent blocks={page.blocks} libre={page.libre} /> : empty}
 
-          {page.blocks.length > 0 ? <LegacyContent blocks={page.blocks} libre={page.libre} /> : empty}
+                {(kids.length > 0 || fichas.length > 0) && (
+                  <section className="art-kids" aria-labelledby="art-kids-h">
+                    <h2 id="art-kids-h">Dentro de {here?.label}</h2>
+                    <SectionTiles nodes={kids} slug={slug} custom={custom} extras={fichas} />
+                  </section>
+                )}
 
-          {(kids.length > 0 || fichas.length > 0) && (
-            <section className="art-kids" aria-labelledby="art-kids-h">
-              <h2 id="art-kids-h">Dentro de {here?.label}</h2>
-              <SectionTiles nodes={kids} slug={slug} custom={custom} extras={fichas} />
-            </section>
-          )}
+                <PrevNext prev={prev} next={next} />
+              </>
+            )}
 
-          <PrevNext prev={prev} next={next} />
-            </>
-          )}
+            <ArticleTools />
+          </article>
 
-          <ArticleTools />
-        </article>
+          <aside className="doc-side" aria-label="Más información">
+            {verMenu && (
+              <nav aria-label={`Menú de ${section.label}`} className="sd-card hidden lg:block sx-menu sx-lat">
+                <Link href={`/seccion/${slug}`} className="sx-menu-t">{section.label}</Link>
+                <NavTree nodes={menuItems} current={key} />
+              </nav>
+            )}
+            {toc.length >= 3 && (
+              <div className="sd-card doc-toc hidden lg:block">
+                <TocRail items={toc} title="En esta página" />
+              </div>
+            )}
+            <QuickRail />
+            <div className="sd-card doc-help">
+              <p className="doc-help-t">¿Necesita ayuda?</p>
+              <p className="doc-help-p">Escríbanos o consulte las preguntas frecuentes del portal.</p>
+              <div className="doc-help-a">
+                <Link href="/contacto">Contacto</Link>
+                <Link href="/preguntas-frecuentes">Preguntas frecuentes</Link>
+              </div>
+            </div>
+          </aside>
+        </div>
       </Container>
     </>
   );
