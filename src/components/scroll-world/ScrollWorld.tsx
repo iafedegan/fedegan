@@ -76,7 +76,7 @@ function EnterLink({ scene, className }: { scene: JourneyScene; className?: stri
 export function ScrollWorld({ scenes: base, portada }: { scenes: JourneyScene[]; portada?: Pick<JourneyScene, "image" | "pos" | "alt"> }) {
   // Con permiso de la persona, las secciones que más visita pasan primero en el recorrido y en la lista.
   const usoTxt = useSyncExternalStore(suscribirUso, instantaneaUso, () => "");
-  const scenes = useMemo(() => ordenarPorUso(base, parseUso(usoTxt)).map((s, i) => (i === 0 && portada ? { ...s, ...portada } : s)), [base, usoTxt, portada]);
+  const scenes = useMemo(() => ordenarPorUso(base, parseUso(usoTxt)).map((s, i) => (i === 0 && portada && s.id !== "noticias" ? { ...s, ...portada } : s)), [base, usoTxt, portada]);
   const K = scenes.length - 1;
   const trackRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
