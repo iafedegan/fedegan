@@ -171,13 +171,17 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
                 >
                   Saltar al contenido
                 </a>
-                <CifrasBar />
+                <ChromeGate en={["/formularios"]}>
+                  <CifrasBar />
+                </ChromeGate>
                 <Masthead />
                 {/* En los formularios públicos no se muestra el menú: quien responde se queda en el formulario. */}
                 <ChromeGate en={["/formularios"]}>
                   <Header nav={sortNav(navConHijos, design.order)} />
                 </ChromeGate>
-                <Ticker initial={design.ticker} />
+                <ChromeGate en={["/formularios"]}>
+                  <Ticker initial={design.ticker} />
+                </ChromeGate>
                 <AdSlot zone="top" initial={design.ads.top} />
               </>
             }
