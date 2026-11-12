@@ -177,5 +177,8 @@ export async function PortalJourney() {
   const nav = await getNav();
   const enMenu = (sc: JourneyScene) => nav.some((n) => n.href === sc.href || n.label.toLowerCase() === sc.nombre.toLowerCase());
   const visibles = scenes.filter((sc) => !enMenu(sc));
-  return <ScrollWorld scenes={visibles.length >= 2 ? visibles : scenes} />;
+  const lista = visibles.length >= 2 ? visibles : scenes;
+  // La portada abre siempre con esta foto, sea cual sea la primera sección de la lista.
+  const portada = { image: "/journey/colombian-beef.jpg", pos: "50% 50%", alt: "Novillos de pasto en una pradera verde de Colombia al amanecer" };
+  return <ScrollWorld scenes={lista.map((sc, i) => (i === 0 ? { ...sc, ...portada } : sc))} />;
 }
