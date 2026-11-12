@@ -2200,3 +2200,9 @@ header[data-region="navbar"] [role="menu"] svg { color: inherit !important; }
 
 /* Menú vertical del recorrido: desenfoque del fondo y un velo negro detrás de la lista */
 .sw-rail { background: rgba(3, 10, 7, 0.72) !important; -webkit-backdrop-filter: blur(22px) saturate(1.15); backdrop-filter: blur(22px) saturate(1.15); border-radius: 1rem; }
+
+/* Cinta dorada en el borde superior del navbar */
+header[data-region="navbar"]::before {
+  content: ""; display: block; height: 4px;
+  background: linear-gradient(90deg, #8f6a14 0%, #d8b558 14%, #fff2c8 28%, #b08f4f 42%, #e7cf8c 58%, #fff2c8 72%, #b08f4f 86%, #8f6a14 100%);
+}
