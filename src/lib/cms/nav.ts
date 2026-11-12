@@ -11,6 +11,7 @@ export const adminNav: AdminNavGroup[] = [
       { label: "Estudiantes", href: "/admin/estudiantes", icon: "users" },
     ],
   },
+  { group: "Formularios", items: [{ label: "Formularios", href: "/admin/formularios", icon: "form" }] },
   {
     group: "Sitio",
     items: [
