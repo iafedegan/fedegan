@@ -34,7 +34,7 @@ export function Inline({ text }: { text: string }) {
     out.push(
       external ? (
         <a key={`a${i++}`} href={href} target="_blank" rel="noopener noreferrer" className={linkClass}>
-          {label || href}
+          {label ? <Inline text={label} /> : href}
           {FILE.test(href) ? (
             <FileText size={13} aria-hidden className="ml-1 inline -translate-y-px" />
           ) : (
@@ -43,7 +43,7 @@ export function Inline({ text }: { text: string }) {
         </a>
       ) : (
         <Link key={`a${i++}`} href={href} className={linkClass}>
-          {label || href}
+          {label ? <Inline text={label} /> : href}
         </Link>
       ),
     );
