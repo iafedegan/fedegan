@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
-import { ChevronDown, GraduationCap, LogOut, Newspaper, ShieldCheck, UserCircle2, UserRound } from "lucide-react";
+import { GraduationCap, LogOut, Newspaper, ShieldCheck, UserCircle2, UserRound } from "lucide-react";
 import { appsForRoles } from "@/lib/access";
 
 const appIcons = { shield: ShieldCheck, newspaper: Newspaper };
@@ -48,15 +48,13 @@ export function LoginMenu() {
     <div ref={ref} className="relative ml-auto hidden shrink-0 md:block">
       <button
         type="button"
-        aria-label={user ? "Mi cuenta" : "Iniciar sesión"}
+        aria-label={user ? `Mi cuenta${user.name ? `: ${user.name}` : ""}` : "Iniciar sesión"}
         aria-haspopup="menu"
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
         className="flex min-h-11 items-center gap-1.5 rounded-full px-3 text-sm font-semibold text-[var(--text)] transition-colors hover:bg-[var(--bg-muted)]"
       >
         <UserCircle2 size={22} />
-        <span className="hidden lg:inline">{user ? user.name?.split(" ")[0] ?? "Mi cuenta" : "Iniciar sesión"}</span>
-        <ChevronDown size={14} className={`hidden transition-transform duration-300 lg:block ${open ? "rotate-180" : ""}`} />
       </button>
 
       {open && (
