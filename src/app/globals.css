@@ -2320,17 +2320,46 @@ html:not([data-theme="esmeralda"]) .tl-item::before { background: #b08f4f; box-s
 .doc-grid2 > .doc-content img { border-radius: 1rem; }
 .doc-grid2 > .doc-content table { border-radius: 1rem; overflow: hidden; }
 
-/* ---- Transición entre páginas (escritorio): el contenido entra desenfocado y se aclara mientras un destello dorado cruza la parte superior ---- */
-@keyframes page-in-d {
-  from { opacity: 0; transform: translateY(26px) scale(0.992); filter: blur(10px); }
-  60% { filter: blur(1px); }
-  to { opacity: 1; transform: none; filter: none; }
+
+/* ======================================================================
+   Temas de una sección rediseñados: el primero va destacado a todo el ancho; los demás en tarjetas con número calado, barra de color,
+   resumen y píldora con el número de páginas. Cada tarjeta lleva su color (oro, verde, turquesa, terracota).
+   ====================================================================== */
+.hub-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.6rem 2rem; margin-bottom: 1.6rem; }
+.hub-head h2 { font: 800 clamp(1.7rem, 3vw, 2.4rem)/1.1 var(--font-display); letter-spacing: -0.02em; }
+.hub-head h2::before { content: "◆ TEMAS"; display: block; margin-bottom: 0.6rem; font: 700 0.7rem/1 var(--font-body); letter-spacing: 0.3em; color: #b98f35; }
+.hub-head p { color: var(--text-muted); font-size: 0.95rem; }
+
+.hub-grid { display: grid; gap: 1.15rem; grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr)); }
+.hub-grid > li { min-width: 0; }
+.hub-grid > li:first-child { grid-column: 1 / -1; }
+.hub-grid > li:nth-child(4n+1) .hub-cell { --t: 216, 181, 88; }
+.hub-grid > li:nth-child(4n+2) .hub-cell { --t: 94, 200, 140; }
+.hub-grid > li:nth-child(4n+3) .hub-cell { --t: 112, 214, 196; }
+.hub-grid > li:nth-child(4n) .hub-cell { --t: 232, 150, 100; }
+.hub-grid .hub-cell {
+  position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 0.75rem; width: 100%; min-height: 16rem; padding: 1.6rem 1.6rem 1.4rem 1.9rem;
+  text-align: left; border: 1px solid rgba(var(--t), 0.3); border-radius: 1.4rem; overflow: hidden; isolation: isolate;
+  background: radial-gradient(120% 90% at 100% 0%, rgba(var(--t), 0.18), transparent 62%), var(--surface-solid);
+  transition: transform 0.4s var(--ease-lux, ease), border-color 0.3s, box-shadow 0.4s;
 }
-@keyframes page-sweep { from { transform: translateX(-100%); opacity: 1; } 85% { opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
-.page-sweep { display: none; }
-@media (min-width: 768px) {
-  .page-in { animation: page-in-d 0.75s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
-  .page-sweep { display: block; position: fixed; top: 0; left: 0; z-index: 90; width: 100%; height: 3px; pointer-events: none; background: linear-gradient(90deg, transparent 0%, #b08f4f 30%, #fff2c8 50%, #b08f4f 70%, transparent 100%); animation: page-sweep 0.95s cubic-bezier(0.4, 0, 0.2, 1) both; }
-  .mh { transition-duration: 0.9s, 0.6s, 0.9s; }
+.hub-grid .hub-cell::before { content: ""; position: absolute; z-index: -1; inset: 0 auto 0 0; width: 5px; right: auto; top: 0; height: auto; border-radius: 0; background: linear-gradient(180deg, rgb(var(--t)), rgba(var(--t), 0.15)); }
+.hub-grid .hub-cell::after { content: none; }
+.hub-grid .hub-cell:hover, .hub-grid .hub-cell:focus-within { transform: translateY(-4px); border-color: rgba(var(--t), 0.85); box-shadow: 0 26px 44px -28px rgba(var(--t), 0.7); }
+.hub-grid .hub-toggle { all: unset; display: flex; flex-direction: column; align-items: flex-start; gap: 0.75rem; width: 100%; height: 100%; cursor: pointer; box-sizing: border-box; }
+.hub-grid .hub-no { font: 800 3.6rem/0.9 var(--font-display); color: transparent; -webkit-text-stroke: 1.5px rgba(var(--t), 0.6); letter-spacing: -0.03em; }
+.hub-grid .hub-name { font: 700 clamp(1.25rem, 1.6vw, 1.5rem)/1.2 var(--font-display); color: var(--text); letter-spacing: -0.01em; }
+.hub-grid .hub-text { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; color: var(--text-muted); font-size: 0.97rem; line-height: 1.6; }
+.hub-grid .hub-foot {
+  display: inline-flex; align-items: center; gap: 0.55rem; margin-top: auto; padding: 0.5rem 0.95rem; border-radius: 999px;
+  background: rgba(var(--t), 0.15); color: rgb(var(--t)); font: 700 0.74rem/1 var(--font-body); letter-spacing: 0.1em; text-transform: uppercase;
+  transition: background-color 0.3s, color 0.3s, gap 0.3s;
 }
-@media (prefers-reduced-motion: reduce) { .page-in, .page-sweep { animation: none !important; } }
+.hub-grid .hub-cell:hover .hub-foot { background: rgb(var(--t)); color: #071b13; gap: 0.8rem; }
+.hub-grid > li:first-child .hub-cell { min-height: 14rem; padding: 2rem 2.2rem 1.8rem 2.5rem; }
+.hub-grid > li:first-child .hub-no { font-size: 5.2rem; }
+.hub-grid > li:first-child .hub-name { font-size: clamp(1.7rem, 2.6vw, 2.3rem); }
+.hub-grid > li:first-child .hub-text { max-width: 56rem; -webkit-line-clamp: 3; font-size: 1.05rem; }
+.hub-grid .hub-panel { margin-top: 0.6rem; border-radius: 1rem; }
+html:not([data-theme="esmeralda"]) .hub-grid .hub-foot { color: color-mix(in srgb, rgb(var(--t)) 55%, #10240f); }
+html:not([data-theme="esmeralda"]) .hub-grid .hub-no { -webkit-text-stroke-color: rgba(var(--t), 0.9); }

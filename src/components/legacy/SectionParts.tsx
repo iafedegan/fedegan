@@ -81,7 +81,7 @@ export function SectionTiles({ nodes, slug, custom = {}, extras = [] }: { nodes:
         const total = countBelow(n);
         const href = n.key ? legacyHref(slug, n.key) : n.href;
         const page = n.key ? (getLegacyPage(n.key) ?? custom[n.key] ?? null) : null;
-        const text = page ? excerptOf(page, 120).replace(/\*\*/g, "") : "";
+        const text = page ? excerptOf(page, 170).replace(/\*\*/g, "") : "";
         const external = !n.key && /^https?:\/\//.test(n.href ?? "");
         const style = { ["--i" as string]: i % 8 } as CSSProperties;
         const head = (
