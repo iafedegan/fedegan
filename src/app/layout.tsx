@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { Inter, JetBrains_Mono, Playfair_Display, Spectral } from "next/font/google";
 import "./globals.css";
 import "./funciones.css";
 import { MARCA_CSS } from "@/lib/design/marca-css";
@@ -35,6 +36,12 @@ export const viewport: Viewport = {
   colorScheme: "dark",
   viewportFit: "cover",
 };
+
+// Fuentes servidas por el propio sitio (next/font): sin la cadena CSS → Google → archivos que bloqueaba el primer pintado.
+const fBody = Inter({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800"], variable: "--ff-body", display: "swap" });
+const fDisplay = Playfair_Display({ subsets: ["latin"], weight: ["500", "600", "700", "800"], variable: "--ff-display", display: "swap" });
+const fRead = Spectral({ subsets: ["latin"], weight: ["400", "500", "600"], style: ["normal", "italic"], variable: "--ff-read", display: "swap" });
+const fMono = JetBrains_Mono({ subsets: ["latin"], weight: ["500"], variable: "--ff-mono", display: "swap" });
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -132,7 +139,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
       data-navbar={design.parts.navbar ?? "clasico"}
       data-footer={design.parts.footer ?? "completo"}
       data-hero={design.parts.hero ?? "izquierda"}
-      className="h-full antialiased"
+      className={`h-full antialiased ${fBody.variable} ${fDisplay.variable} ${fRead.variable} ${fMono.variable}`}
       suppressHydrationWarning
     >
       <head>

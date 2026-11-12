@@ -306,15 +306,16 @@ export function ScrollWorld({ scenes: base }: { scenes: JourneyScene[] }) {
               className="sw-layer"
               style={i === 0 ? undefined : { visibility: "hidden", opacity: 0 }}
             >
-              <Image
+              {/* Solo se piden la escena actual y las dos siguientes (antes bajaban las 14 fotos al abrir la portada). */}
+              {i <= current + 2 && <Image
                 src={s.image}
                 alt={s.alt}
                 fill
                 sizes="100vw"
-                priority={i < 2}
+                priority={i === 0}
                 unoptimized={s.image.startsWith("http")}
                 style={{ objectFit: "cover", objectPosition: s.pos }}
-              />
+              />}
             </div>
           ))}
           <div className="sw-shade" aria-hidden />

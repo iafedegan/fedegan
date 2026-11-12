@@ -66,7 +66,7 @@ html[data-tpl-mode] body:has([data-template="bento"]) {
   --text: #16201a; --text-muted: #46524b; --text-faint: #5f6b64;
   --fg-green-900: #0d2f24; --fg-green-800: #13412f; --fg-green-700: #13412f;
   --fg-lime-500: #27a06b; --fg-lime-400: #0f6b47; --accent: #13412f; --accent-2: #27a06b; --link: #0f6b47; --focus-ring: #27a06b;
-  --font-display: "Plus Jakarta Sans", "Inter", system-ui, sans-serif; --font-body: "Plus Jakarta Sans", "Inter", system-ui, sans-serif; --font-read: "Plus Jakarta Sans", "Inter", system-ui, sans-serif;
+  --font-display: "Plus Jakarta Sans", var(--ff-body), system-ui, sans-serif; --font-body: "Plus Jakarta Sans", var(--ff-body), system-ui, sans-serif; --font-read: "Plus Jakarta Sans", var(--ff-body), system-ui, sans-serif;
   --ed-ink: #16201a; --ed-on-ink: #fff; --ed-gold: #27a06b; --ed-gold-ink: #0f6b47; --ed-hair: rgba(22, 32, 26, 0.12); --ed-card: #fff; --pill: #16201a; --pill-ink: #fff;
   --tpl-card-bg: #fff; --tpl-card-bd: 1px solid rgba(22, 32, 26, 0.06); --tpl-card-r: 1.75rem; --tpl-card-sh: 0 1px 0 rgba(255, 255, 255, 0.9) inset, 0 18px 40px -26px rgba(22, 32, 26, 0.35);
   --tpl-pad: 1.15rem; --tpl-img-r: 1.2rem; --tpl-hover-t: translateY(-4px) scale(1.01); --tpl-hover-sh: 0 28px 50px -26px rgba(22, 32, 26, 0.45);
@@ -231,7 +231,7 @@ html[data-tpl-mode] body:has([data-template="aurora"]) {
   --text: #eef5f1; --text-muted: #b6c4bd; --text-faint: #93a39b; --text-on-brand: #06100c; --on-accent: #06100c;
   --fg-green-900: #070e0c; --fg-green-800: #0b1613; --fg-green-700: #5eead4;
   --fg-lime-500: #5eead4; --fg-lime-400: #5eead4; --accent: #5eead4; --accent-2: #a78bfa; --link: #5eead4; --focus-ring: #5eead4;
-  --font-display: "Sora", "Inter", system-ui, sans-serif; --font-body: "Sora", "Inter", system-ui, sans-serif; --font-read: "Sora", "Inter", system-ui, sans-serif;
+  --font-display: "Sora", var(--ff-body), system-ui, sans-serif; --font-body: "Sora", var(--ff-body), system-ui, sans-serif; --font-read: "Sora", var(--ff-body), system-ui, sans-serif;
   --ed-ink: #eef5f1; --ed-on-ink: #06100c; --ed-gold: #5eead4; --ed-gold-ink: #5eead4; --ed-hair: rgba(255, 255, 255, 0.14); --ed-card: rgba(255, 255, 255, 0.05); --pill: #5eead4; --pill-ink: #06100c;
   --tpl-card-bg: rgba(255, 255, 255, 0.055); --tpl-card-bd: 1px solid rgba(255, 255, 255, 0.14); --tpl-card-r: 1.15rem; --tpl-card-sh: 0 24px 48px -30px rgba(0, 0, 0, 0.9);
   --tpl-pad: 1.1rem; --tpl-img-r: 0.85rem; --tpl-hover-t: translateY(-4px); --tpl-hover-sh: 0 0 0 1px rgba(94, 234, 212, 0.55), 0 24px 50px -24px rgba(94, 234, 212, 0.45);
