@@ -2642,3 +2642,15 @@ header[data-region="navbar"]::before { content: none; }
 @media (min-width: 768px) {
   .sw-rail { bottom: calc(15rem + var(--sw-cut, 0px)); max-height: calc(100% - 16rem - var(--sw-cut, 0px)); }
 }
+
+/* Tarjeta de cada sección de la portada: más ancha, igual en todas y con letra más grande. */
+@media (min-width: 768px) {
+  .sw-panel { width: min(46rem, 56vw) !important; height: clamp(21rem, calc(100vh - 22rem), 28rem) !important; padding: 2rem 2.3rem 1.9rem !important; gap: 0.9rem !important; }
+  .sw-panel .sw-p-kicker { font-size: 0.8rem; }
+  .sw-panel .sw-p-title { font-size: clamp(2.1rem, 2.9vw, 2.9rem); }
+  .sw-panel .sw-cta-desc { font-size: 1.25rem !important; line-height: 1.55 !important; -webkit-line-clamp: 5 !important; }
+  .sw-panel:has(.sw-extra) .sw-cta-desc { -webkit-line-clamp: 3 !important; }
+  .sw-panel .sw-extra span { font-size: 0.8rem; }
+  .sw-panel .sw-extra b { font-size: 1.2rem !important; }
+  .sw-panel .sw-cta { font-size: 0.95rem !important; padding: 1rem 1.7rem !important; }
+}
