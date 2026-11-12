@@ -2616,3 +2616,8 @@ header[data-region="navbar"]::before { content: none; }
   [data-site-chrome][data-inicio] button[aria-label="Volver arriba"], [data-site-chrome][data-inicio] a[aria-label="Volver arriba"] { display: none !important; }
   button[aria-label="Volver arriba"] { bottom: calc(4.8rem + env(safe-area-inset-bottom, 0px)) !important; }
 }
+
+/* Cabezote del sitio del mismo color que el cintillo de mercado (.mk). */
+@media (min-width: 768px) {
+  html .mh, html [data-site-chrome] .mh { background: #10240f !important; }
+}
