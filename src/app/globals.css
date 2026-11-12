@@ -2204,7 +2204,7 @@ header[data-region="navbar"] [role="menu"] svg { color: inherit !important; }
 /* Cinta dorada en el borde superior del navbar */
 header[data-region="navbar"]::before {
   content: ""; display: block; height: 4px;
-  background: linear-gradient(90deg, #8f6a14 0%, #d8b558 14%, #fff2c8 28%, #b08f4f 42%, #e7cf8c 58%, #fff2c8 72%, #b08f4f 86%, #8f6a14 100%);
+  background: linear-gradient(90deg, #7a5a12 0%, #b98f35 16%, #e0c06a 30%, #a07d2b 44%, #c9a548 58%, #e0c06a 72%, #a07d2b 86%, #7a5a12 100%);
 }
 
 /* Menú vertical del recorrido: el espacio entre opciones se ajusta al alto de la pantalla para que quepan todas (Maestro de la Carne y Colombian Beef no se cortan) */
