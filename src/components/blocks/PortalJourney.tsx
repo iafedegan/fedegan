@@ -177,7 +177,20 @@ export async function PortalJourney() {
   const nav = await getNav();
   const enMenu = (sc: JourneyScene) => nav.some((n) => n.href === sc.href || n.label.toLowerCase() === sc.nombre.toLowerCase());
   const visibles = scenes.filter((sc) => !enMenu(sc));
-  // La portada abre siempre con esta foto, sea cual sea la primera sección de la lista (también tras reordenarla por uso).
-  const portada = { image: "/journey/colombian-beef.jpg", pos: "50% 50%", alt: "Novillos de pasto en una pradera verde de Colombia al amanecer" };
-  return <ScrollWorld scenes={visibles.length >= 2 ? visibles : scenes} portada={portada} />;
+  // «Inicio» abre siempre el recorrido con la foto de los novillos en la pradera, sea cual sea la primera sección.
+  const inicio: JourneyScene = {
+    id: "inicio",
+    nombre: "Inicio",
+    rubro: "FEDEGÁN",
+    descripcion: "Bienvenido a FEDEGÁN, la Federación Colombiana de Ganaderos. Recorra las secciones del portal: noticias, normatividad, opinión y los programas y aliados del gremio.",
+    tags: [],
+    href: "/",
+    subs: [],
+    accent: "190,222,203",
+    image: "/journey/colombian-beef.jpg",
+    pos: "50% 50%",
+    alt: "Novillos de pasto en una pradera verde de Colombia al amanecer",
+  };
+  const resto = visibles.length >= 2 ? visibles : scenes;
+  return <ScrollWorld scenes={[inicio, ...resto.filter((sc) => sc.id !== "inicio")]} />;
 }

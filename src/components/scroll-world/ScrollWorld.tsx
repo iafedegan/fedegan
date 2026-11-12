@@ -73,10 +73,14 @@ function EnterLink({ scene, className }: { scene: JourneyScene; className?: stri
 
 // Recorrido a pantalla completa por los locales del portal: el scroll conduce una cámara que
 // avanza de foto en foto (cada una real, de finca), con un empuje continuo entre escenas.
-export function ScrollWorld({ scenes: base, portada }: { scenes: JourneyScene[]; portada?: Pick<JourneyScene, "image" | "pos" | "alt"> }) {
+export function ScrollWorld({ scenes: base }: { scenes: JourneyScene[] }) {
   // Con permiso de la persona, las secciones que más visita pasan primero en el recorrido y en la lista.
   const usoTxt = useSyncExternalStore(suscribirUso, instantaneaUso, () => "");
-  const scenes = useMemo(() => ordenarPorUso(base, parseUso(usoTxt)).map((s, i) => (i === 0 && portada && s.id !== "noticias" ? { ...s, ...portada } : s)), [base, usoTxt, portada]);
+  // «Inicio» queda siempre de primero; el resto se reordena por uso.
+  const scenes = useMemo(() => {
+    const ord = ordenarPorUso(base, parseUso(usoTxt));
+    return [...ord.filter((s) => s.id === "inicio"), ...ord.filter((s) => s.id !== "inicio")];
+  }, [base, usoTxt]);
   const K = scenes.length - 1;
   const trackRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
@@ -401,10 +405,12 @@ export function ScrollWorld({ scenes: base, portada }: { scenes: JourneyScene[];
                   </a>
                 );
               })()}
-              <button type="button" onClick={() => navigate(sc)} className="sw-cta">
-                {sc.external ? "Visitar sitio" : "Entrar a la sección"}
-                <ArrowRight size={16} aria-hidden />
-              </button>
+              {sc.id !== "inicio" && (
+                <button type="button" onClick={() => navigate(sc)} className="sw-cta">
+                  {sc.external ? "Visitar sitio" : "Entrar a la sección"}
+                  <ArrowRight size={16} aria-hidden />
+                </button>
+              )}
             </div>
           </div>
 
