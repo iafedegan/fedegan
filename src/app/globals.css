@@ -1804,8 +1804,8 @@ body:has(.mx-hero) main .eyebrow::before { content: none; }
 
 /* Encabezado compacto en las páginas interiores: la cabecera grande (logo y fecha) se oculta y la marca pasa a la barra */
 .nv-brand { display: none; }
-body:has(.mx-hero, .nomast) .nv-brand { display: inline-flex; align-items: baseline; gap: 0.35rem; font: 700 1.2rem/1 var(--font-display); letter-spacing: 0.01em; color: var(--ed-gold-ink); text-decoration: none; white-space: nowrap; }
-body:has(.mx-hero, .nomast) .nv-brand span { color: var(--text); }
+[data-site-chrome]:not([data-inicio]) .nv-brand { display: inline-flex; align-items: baseline; gap: 0.35rem; font: 700 1.2rem/1 var(--font-display); letter-spacing: 0.01em; color: var(--ed-gold-ink); text-decoration: none; white-space: nowrap; }
+[data-site-chrome]:not([data-inicio]) .nv-brand span { color: var(--text); }
 body:has(.mx-hero) .mh-date { display: none; }
 
 /* ======================================================================
@@ -2098,7 +2098,7 @@ header[data-region="navbar"] .nv-brand {
   -webkit-background-clip: text, border-box; background-clip: text, border-box; color: transparent; -webkit-text-fill-color: transparent;
   box-shadow: 0 2px 8px -2px rgba(6, 18, 11, 0.55);
 }
-body:has(.mx-hero, .nomast) header[data-region="navbar"] .nv-brand { max-width: 4rem; padding: 0.35rem; opacity: 1; position: relative; left: calc(-0.5 * ((100vw - 100%) / 2)); }
+[data-site-chrome]:not([data-inicio]) header[data-region="navbar"] .nv-brand { max-width: 4rem; padding: 0.35rem; opacity: 1; position: relative; left: calc(-0.5 * ((100vw - 100%) / 2)); }
 header[data-region="navbar"] .nv-gem { flex: none; width: 2.4rem; height: 2.4rem; -webkit-text-fill-color: initial; }
 /* Iconos de la barra (buscar, cuenta, tono): negros */
 header[data-region="navbar"] svg { color: #000 !important; }
@@ -2224,7 +2224,7 @@ header[data-region="navbar"] nav > div { padding-block: 0.28rem !important; }
 header[data-region="navbar"] .nv-link { padding: 0.42rem 0.95rem; }
 header[data-region="navbar"] nav .flex.shrink-0 > :is(a, button, div > button, div > a) { width: 2.1rem; height: 2.1rem; }
 header[data-region="navbar"]::before { height: 3px; }
-body:has(.mx-hero, .nomast) header[data-region="navbar"] .nv-brand { padding: 0.22rem; }
+[data-site-chrome]:not([data-inicio]) header[data-region="navbar"] .nv-brand { padding: 0.22rem; }
 header[data-region="navbar"] .nv-gem { width: 2rem; height: 2rem; }
 /* Botón de cuenta (con la sesión iniciada): solo el icono, redondo como la lupa y el tono */
 header[data-region="navbar"] nav .flex.shrink-0 > div > button { width: 2.1rem; height: 2.1rem; min-height: 0; padding: 0; justify-content: center; border-radius: 999px; background: rgba(255, 255, 255, 0.3); border: 0; }
@@ -2473,8 +2473,8 @@ header[data-region="navbar"] [role="menu"] [role="menu"] { overflow: visible !im
 .mh { overflow: hidden; max-height: 24rem; transition: max-height 1.2s cubic-bezier(0.4, 0, 0.2, 1), padding 1.2s cubic-bezier(0.4, 0, 0.2, 1); }
 .mh > * { transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease 0.7s; }
 @media (min-width: 768px) {
-  body:has(.mx-hero, .nomast) .mh { display: block !important; max-height: 0; padding-top: 0 !important; padding-bottom: 0 !important; border-bottom-width: 0; pointer-events: none; }
-  body:has(.mx-hero, .nomast) .mh > * { transform: translateY(-110%); opacity: 0; }
+  [data-site-chrome]:not([data-inicio]) .mh { display: block !important; max-height: 0; padding-top: 0 !important; padding-bottom: 0 !important; border-bottom-width: 0; pointer-events: none; }
+  [data-site-chrome]:not([data-inicio]) .mh > * { transform: translateY(-110%); opacity: 0; }
 }
 @media (prefers-reduced-motion: reduce) { .mh, .mh > * { transition: none; } }
 /* Pantallas medianas: opciones un poco más compactas para que quepan diez (con SIG) sin encimarse con los iconos */
