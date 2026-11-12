@@ -2091,7 +2091,7 @@ header[data-region="navbar"] {
 }
 header[data-region="navbar"] .nv-link { color: #10240f; }
 header[data-region="navbar"] .nv-link:hover, header[data-region="navbar"] .nv-active { color: #10240f; }
-header[data-region="navbar"] .nv-brand {
+body:has(.mx-hero, .nomast) header[data-region="navbar"] .nv-brand {
   display: inline-flex; align-items: center; gap: 0.5rem;
   /* Chip verde oscuro (el del cabezote) detrás de la marca: el dorado resalta sobre él en vez de perderse en el verde claro */
   padding: 0.3rem 1.1rem 0.3rem 0.45rem; border-radius: 999px;
@@ -2099,7 +2099,7 @@ header[data-region="navbar"] .nv-brand {
   -webkit-background-clip: text, border-box; background-clip: text, border-box; color: transparent; -webkit-text-fill-color: transparent;
   box-shadow: 0 2px 8px -2px rgba(6, 18, 11, 0.55);
 }
-header[data-region="navbar"] .nv-gem { width: 2.4rem; height: 2.4rem; -webkit-text-fill-color: initial; }
+body:has(.mx-hero, .nomast) header[data-region="navbar"] .nv-gem { width: 2.4rem; height: 2.4rem; -webkit-text-fill-color: initial; }
 /* Iconos de la barra (buscar, cuenta, tono): negros */
 header[data-region="navbar"] svg { color: #000 !important; }
 /* Cabezote: la razón social y la fecha en dorado */
