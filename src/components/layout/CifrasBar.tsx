@@ -31,6 +31,18 @@ export async function CifrasBar() {
   if (items.length === 0) {
     items = [...porCodigo.values()].map(resumen).filter((x) => x !== null).slice(0, 8);
   }
+  // Solo en desarrollo y sin conexión a las cifras: valores reales de referencia para ver el cintillo en local. Nunca en producción.
+  if (items.length === 0 && process.env.NODE_ENV === "development") {
+    const ref = (id: string, label: string, valor: string, ultimo: number, previo: number) => ({ id, label, valor, cambio: ((ultimo - previo) / previo) * 100 });
+    items = [
+      ref("d1", "Precio del litro de leche pagado al productor", "$2.202", 2202, 2171),
+      ref("d2", "Precios Ganado Gordo Bolsa Mercantil", "$10.566", 10566, 10195),
+      ref("d3", "Leche en polvo descremada", "US$3.850", 3850, 3644),
+      ref("d4", "Precios Internacionales del Maíz", "US$214,65", 214.65, 207.9),
+      ref("d5", "Concentrado vacas lecheras", "$72.300", 72300, 72298),
+      ref("d6", "Fertilizantes (Urea)", "$190.850", 190850, 212000),
+    ];
+  }
   if (items.length === 0) return null;
   const item = (c: (typeof items)[number], k: string, hidden: boolean) => (
     <span key={k} className="mk-item" aria-hidden={hidden}>
