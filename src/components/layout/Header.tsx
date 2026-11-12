@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
@@ -161,7 +161,7 @@ function MoreMenu({ items, pathname }: { items: { label: string; href: string }[
 }
 
 export type SubItem = { label: string; href: string; children?: SubItem[] };
-export function Header({ nav: mainNav }: { nav: { label: string; href: string; children?: SubItem[] }[] }) {
+export function Header({ nav: mainNav, cintillo }: { nav: { label: string; href: string; children?: SubItem[] }[]; cintillo?: ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const { data: session } = useSession();
@@ -244,6 +244,7 @@ export function Header({ nav: mainNav }: { nav: { label: string; href: string; c
           : "border-[var(--border)] bg-[color-mix(in_srgb,var(--bg)_80%,transparent)]"
       }`}
     >
+      {cintillo}
       <Container className="flex items-center gap-3 py-3.5 max-md:hidden sm:gap-6 lg:hidden">
         <Logo />
 
