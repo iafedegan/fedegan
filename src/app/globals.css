@@ -2091,7 +2091,12 @@ header[data-region="navbar"] {
 }
 header[data-region="navbar"] .nv-link { color: #10240f; }
 header[data-region="navbar"] .nv-link:hover, header[data-region="navbar"] .nv-active { color: #10240f; }
-header[data-region="navbar"] .nv-brand, header[data-region="navbar"] .nv-brand span { color: #10240f; -webkit-text-fill-color: #10240f; background: none; }
+header[data-region="navbar"] .nv-brand {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  background: linear-gradient(100deg, #b98f35 0%, #e7cf8c 35%, #fff2c8 55%, #d8b558 100%); -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 1px 1px rgba(16, 36, 15, 0.55));
+}
+header[data-region="navbar"] .nv-gem { width: 2.4rem; height: 2.4rem; -webkit-text-fill-color: initial; }
 /* Iconos de la barra (buscar, cuenta, tono): negros */
 header[data-region="navbar"] svg { color: #000 !important; }
 /* Cabezote: la razón social y la fecha en dorado */

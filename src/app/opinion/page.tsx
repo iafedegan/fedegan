@@ -91,10 +91,10 @@ export default async function OpinionPage({ searchParams }: { searchParams: Prom
         <p className="mt-10 text-[var(--text-muted)]">No hay columnas para esa búsqueda.</p>
       ) : (
         <>
-          <ul className="mt-6 grid gap-x-5 md:grid-cols-2">
+          <ul className="mt-6 grid auto-rows-fr gap-x-5 md:grid-cols-2">
             {visibles.map((x) => (
-              <li key={x.slug} className="py-3">
-                <Link href={`/noticias/${x.slug}`} className="group flex h-[14rem] items-center gap-5 rounded-[1rem] border border-[var(--border)] bg-[var(--surface-solid)] p-5 transition-colors hover:border-[var(--fg-lime-500)]">
+              <li key={x.slug} className="py-2.5">
+                <Link href={`/noticias/${x.slug}`} className="group flex h-full items-center gap-5 rounded-[1rem] border border-[var(--border)] bg-[var(--surface-solid)] p-5 transition-colors hover:border-[var(--fg-lime-500)]">
                   {x.image ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img src={x.image} alt="" loading="lazy" className="h-20 w-20 shrink-0 rounded-full border border-[var(--border-strong)] object-cover" />
