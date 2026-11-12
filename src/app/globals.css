@@ -2626,7 +2626,7 @@ header[data-region="navbar"]::before { content: none; }
 .mh-lado { display: none; }
 @media (min-width: 1024px) {
   .mh { position: relative; }
-  .mh-lado { position: absolute; top: 1.35rem; z-index: 2; display: flex; align-items: center; gap: 0.6rem; margin: 0; padding: 0; list-style: none; }
+  .mh-lado { position: absolute; top: 5.4rem; z-index: 2; display: flex; align-items: center; gap: 0.6rem; margin: 0; padding: 0; list-style: none; }
   .mh-lado-l { left: clamp(1rem, 4vw, 3.5rem); }
   .mh-lado-r { right: clamp(1rem, 4vw, 3.5rem); }
   .mh-social { display: inline-flex; width: 2.5rem; height: 2.5rem; align-items: center; justify-content: center; border-radius: 999px; background: rgba(255, 255, 255, 0.1); color: #e7cf8c; transition: background 0.2s, color 0.2s; }
