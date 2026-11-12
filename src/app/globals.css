@@ -2206,3 +2206,11 @@ header[data-region="navbar"]::before {
   content: ""; display: block; height: 4px;
   background: linear-gradient(90deg, #8f6a14 0%, #d8b558 14%, #fff2c8 28%, #b08f4f 42%, #e7cf8c 58%, #fff2c8 72%, #b08f4f 86%, #8f6a14 100%);
 }
+
+/* Menú vertical del recorrido: el espacio entre opciones se ajusta al alto de la pantalla para que quepan todas (Maestro de la Carne y Colombian Beef no se cortan) */
+@media (min-width: 768px) {
+  .sw-rail .sw-dot { padding-block: clamp(0.1rem, 0.5vh, 0.4rem); }
+  .sw-rail { max-height: calc(100% - 0.75rem); }
+}
+@media (min-width: 768px) and (max-height: 820px) { .sw-rail .sw-dot { font-size: 0.86em; } }
+@media (min-width: 768px) and (max-height: 700px) { .sw-rail .sw-dot { font-size: 0.78em; padding-block: 0.06rem; } }
