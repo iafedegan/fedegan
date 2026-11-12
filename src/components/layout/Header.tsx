@@ -286,7 +286,7 @@ export function Header({ nav: mainNav }: { nav: { label: string; href: string; c
           <Link href="/" className="nv-brand" aria-label="FEDEGÁN, inicio">
             <span aria-hidden className="mh-gem nv-gem" />
           </Link>
-          <div className="flex min-w-0 flex-1 items-center justify-center gap-0.5">
+          <div className="flex min-w-0 flex-1 items-center justify-start gap-0.5">
             {mainNav.map((item, i) => {
               const active = isActive(pathname, item.href);
               return (

@@ -2621,3 +2621,16 @@ header[data-region="navbar"]::before { content: none; }
 @media (min-width: 768px) {
   html .mh, html [data-site-chrome] .mh { background: #10240f !important; }
 }
+
+/* Cabezote en escritorio: redes a la izquierda, ingreso a la derecha y el logo al centro. */
+.mh-lado { display: none; }
+@media (min-width: 1024px) {
+  .mh { position: relative; }
+  .mh-lado { position: absolute; top: 1.35rem; z-index: 2; display: flex; align-items: center; gap: 0.6rem; margin: 0; padding: 0; list-style: none; }
+  .mh-lado-l { left: clamp(1rem, 4vw, 3.5rem); }
+  .mh-lado-r { right: clamp(1rem, 4vw, 3.5rem); }
+  .mh-social { display: inline-flex; width: 2.5rem; height: 2.5rem; align-items: center; justify-content: center; border-radius: 999px; background: rgba(255, 255, 255, 0.1); color: #e7cf8c; transition: background 0.2s, color 0.2s; }
+  .mh-social:hover, .mh-ingreso:hover .mh-social { background: #8fd14f; color: #10240f; }
+  .mh-social-lleno { background: #8fd14f; color: #10240f; }
+  .mh-ingreso { display: inline-flex; align-items: center; gap: 0.6rem; color: #e7cf8c; font-size: 0.95rem; font-weight: 700; text-decoration: none; }
+}
