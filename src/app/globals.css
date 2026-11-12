@@ -2236,13 +2236,13 @@ header[data-region="navbar"] nav .flex.shrink-0 > div > button:hover svg { color
    Páginas de contenido rediseñadas: cabecera amplia con foto y título grande, hoja de lectura en tarjeta que sube sobre la
    cabecera, barra lateral con índice, accesos y ayuda, y tipografía editorial (cita inicial, líneas de tiempo, listas).
    ====================================================================== */
-.mx-hero.ed-head.ed-band:has(.ed-bgmark) { position: relative; padding-top: clamp(2.2rem, 5.5vw, 4.2rem) !important; padding-bottom: clamp(4.6rem, 8vw, 6.4rem) !important; }
-.mx-hero.ed-head.ed-band:has(.ed-bgmark)::after { content: ""; position: absolute; inset: auto 0 0 0; height: 5rem; background: linear-gradient(180deg, transparent, var(--bg)); pointer-events: none; }
-.mx-hero.ed-head.ed-band .ed-title { font-size: clamp(2.3rem, 5.2vw, 4rem) !important; line-height: 1.04; letter-spacing: -0.025em; }
-.mx-hero.ed-head.ed-band .ed-title::after { content: ""; display: block; width: 4.2rem; height: 3px; margin-top: 1rem; border-radius: 3px; background: linear-gradient(90deg, #d8b558, #f0d58a); }
-.mx-hero.ed-head.ed-band .ed-deck { margin-top: 0.9rem; font: 600 0.78rem/1 var(--font-body); letter-spacing: 0.2em; text-transform: uppercase; color: #f0d58a !important; }
+.mx-hero.ed-head.ed-band:has(.ed-bgmark) { position: relative; padding-top: clamp(1.1rem, 2.6vw, 1.9rem) !important; padding-bottom: clamp(2.6rem, 4.4vw, 3.4rem) !important; }
+.mx-hero.ed-head.ed-band:has(.ed-bgmark)::after { content: ""; position: absolute; inset: auto 0 0 0; height: 2.6rem; background: linear-gradient(180deg, transparent, var(--bg)); pointer-events: none; }
+.mx-hero.ed-head.ed-band .ed-title { font-size: clamp(1.9rem, 3.6vw, 2.9rem) !important; line-height: 1.04; letter-spacing: -0.025em; }
+.mx-hero.ed-head.ed-band .ed-title::after { content: ""; display: block; width: 4.2rem; height: 3px; margin-top: 0.6rem; border-radius: 3px; background: linear-gradient(90deg, #d8b558, #f0d58a); }
+.mx-hero.ed-head.ed-band .ed-deck { margin-top: 0.55rem; font: 600 0.78rem/1 var(--font-body); letter-spacing: 0.2em; text-transform: uppercase; color: #f0d58a !important; }
 
-.doc-wrap { position: relative; z-index: 2; margin-top: -3.2rem; padding-bottom: 4.5rem; }
+.doc-wrap { position: relative; z-index: 2; margin-top: -1.8rem; padding-bottom: 4.5rem; }
 .doc-grid2 { display: grid; gap: 1.6rem; grid-template-columns: minmax(0, 1fr); }
 @media (min-width: 1024px) { .doc-grid2 { grid-template-columns: minmax(0, 1fr) 21rem; gap: 2.2rem; align-items: start; } }
 .doc-grid2 > .doc-content {
