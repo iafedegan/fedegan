@@ -138,7 +138,7 @@ export function LegacyContent({ blocks, lead: allowLead = true, preview = false,
   // Páginas con varios apartados de tercer nivel (programas, servicios…): cada apartado va en su propia ficha.
   const grouped3 = allowLead && !libre && blocks.filter((x) => x.t === "h3").length >= 3;
   for (let i = 0; i < blocks.length; i++) {
-    const b = blocks[i];
+    let b = blocks[i];
     const key = `b${i}`;
 
     if (BLOQUES_RICOS.has(b.t)) {
@@ -403,6 +403,8 @@ export function LegacyContent({ blocks, lead: allowLead = true, preview = false,
     }
 
     // Párrafo que empieza con un año («1963. El 13 de diciembre…» o «**1963**. …»): hito de la línea de tiempo.
+    // Los textos migrados traen cortes de renglón del original («ani- males», «moder- nización»): se unen.
+    if (b.t === "p" && b.text && !libre) b = { ...b, text: b.text.replace(/([a-záéíóúñ])- ([a-záéíóúñ])/g, "$1$2") };
     const anio = b.t === "p" ? /^\s*(?:\*\*)?((?:19|20)\d{2})(?:\*\*)?\s*[.:–-]\s+([\s\S]+)$/.exec(b.text ?? "") : null;
     if (anio && !libre) {
       nodes.push(
