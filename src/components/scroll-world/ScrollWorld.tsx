@@ -73,10 +73,10 @@ function EnterLink({ scene, className }: { scene: JourneyScene; className?: stri
 
 // Recorrido a pantalla completa por los locales del portal: el scroll conduce una cámara que
 // avanza de foto en foto (cada una real, de finca), con un empuje continuo entre escenas.
-export function ScrollWorld({ scenes: base }: { scenes: JourneyScene[] }) {
+export function ScrollWorld({ scenes: base, portada }: { scenes: JourneyScene[]; portada?: Pick<JourneyScene, "image" | "pos" | "alt"> }) {
   // Con permiso de la persona, las secciones que más visita pasan primero en el recorrido y en la lista.
   const usoTxt = useSyncExternalStore(suscribirUso, instantaneaUso, () => "");
-  const scenes = useMemo(() => ordenarPorUso(base, parseUso(usoTxt)), [base, usoTxt]);
+  const scenes = useMemo(() => ordenarPorUso(base, parseUso(usoTxt)).map((s, i) => (i === 0 && portada ? { ...s, ...portada } : s)), [base, usoTxt, portada]);
   const K = scenes.length - 1;
   const trackRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
