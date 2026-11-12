@@ -188,7 +188,7 @@ export async function PortalJourney() {
     subs: [],
     accent: "190,222,203",
     image: "/journey/colombian-beef.jpg",
-    pos: "50% 50%",
+    pos: "50% 100%",
     alt: "Novillos de pasto en una pradera verde de Colombia al amanecer",
   };
   const resto = visibles.length >= 2 ? visibles : scenes;

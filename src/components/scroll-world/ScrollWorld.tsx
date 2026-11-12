@@ -318,7 +318,7 @@ export function ScrollWorld({ scenes: base }: { scenes: JourneyScene[] }) {
                 sizes="100vw"
                 priority={i === 0}
                 unoptimized={s.image.startsWith("http")}
-                style={{ objectFit: "cover", objectPosition: s.pos }}
+                style={{ objectFit: "cover", objectPosition: s.pos, ...(s.id === "inicio" ? { transform: "translateY(-10%) scale(1.22)" } : {}) }}
               />}
             </div>
           ))}
