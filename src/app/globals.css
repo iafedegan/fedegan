@@ -2217,3 +2217,15 @@ header[data-region="navbar"]::before {
 
 /* Mismo fondo oscuro en todas las páginas (sin saltos de tono al navegar) */
 html[data-theme="esmeralda"] { background-color: #05070a; }
+
+/* Cabezote: un brillo recorre el escudo y el nombre cada pocos segundos */
+html .mh :is(.mh-title, .mh-gem) {
+  background-image: linear-gradient(105deg, #b98f35 0%, #d8b558 28%, #e7cf8c 38%, #fff6d0 46%, #ffffff 50%, #fff6d0 54%, #e7cf8c 62%, #d8b558 72%, #b98f35 100%) !important;
+  background-size: 320% 100% !important; background-repeat: no-repeat !important;
+  animation: mh-shine 6s cubic-bezier(0.45, 0, 0.25, 1) infinite;
+}
+@keyframes mh-shine {
+  0%, 38% { background-position: 100% 0; }
+  78%, 100% { background-position: 0% 0; }
+}
+@media (prefers-reduced-motion: reduce) { html .mh :is(.mh-title, .mh-gem) { animation: none; background-position: 50% 0; } }
