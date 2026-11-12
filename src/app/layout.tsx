@@ -104,7 +104,8 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   };
   const navConHijos = await Promise.all(
     nav.map(async (it) => {
-      const slug = /^\/seccion\/([^/?#]+)\/?$/.exec(it.href)?.[1];
+      // «Quiénes somos» vive en /quienes-somos pero es una sección del árbol: también despliega sus páginas.
+      const slug = /^\/seccion\/([^/?#]+)\/?$/.exec(it.href)?.[1] ?? (it.href === "/quienes-somos" ? "quienes-somos" : undefined);
       const section = slug ? await getSection(slug).catch(() => null) : null;
       const children = section && slug ? subs(section.tree, slug, it.href) : [];
       return children.length ? { ...it, children } : it;
