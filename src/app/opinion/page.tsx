@@ -94,7 +94,7 @@ export default async function OpinionPage({ searchParams }: { searchParams: Prom
           <ul className="mt-6 grid gap-x-5 md:grid-cols-2">
             {visibles.map((x) => (
               <li key={x.slug} className="py-3">
-                <Link href={`/noticias/${x.slug}`} className="group flex items-start gap-5 rounded-[1rem] border border-[var(--border)] bg-[var(--surface-solid)] p-5 transition-colors hover:border-[var(--fg-lime-500)]">
+                <Link href={`/noticias/${x.slug}`} className="group flex h-[14rem] items-center gap-5 rounded-[1rem] border border-[var(--border)] bg-[var(--surface-solid)] p-5 transition-colors hover:border-[var(--fg-lime-500)]">
                   {x.image ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img src={x.image} alt="" loading="lazy" className="h-20 w-20 shrink-0 rounded-full border border-[var(--border-strong)] object-cover" />
@@ -103,7 +103,7 @@ export default async function OpinionPage({ searchParams }: { searchParams: Prom
                   )}
                   <span className="min-w-0">
                     <span className="block text-sm font-semibold uppercase tracking-[0.14em] text-[var(--fg-lime-400)]">{x.author}</span>
-                    <span className="mt-1 block font-[var(--font-display)] text-2xl font-bold leading-snug text-[var(--text)] transition-colors group-hover:text-[var(--fg-lime-400)]">{x.title}</span>
+                    <span className="mt-1 line-clamp-3 font-[var(--font-display)] text-2xl font-bold leading-snug text-[var(--text)] transition-colors group-hover:text-[var(--fg-lime-400)]">{x.title}</span>
                     <span className="mt-2 block text-sm text-[var(--text-muted)]">{x.date}</span>
                   </span>
                 </Link>
