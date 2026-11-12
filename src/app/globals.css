@@ -2091,15 +2091,17 @@ header[data-region="navbar"] {
 }
 header[data-region="navbar"] .nv-link { color: #10240f; }
 header[data-region="navbar"] .nv-link:hover, header[data-region="navbar"] .nv-active { color: #10240f; }
-body:has(.mx-hero, .nomast) header[data-region="navbar"] .nv-brand {
-  display: inline-flex; align-items: center; gap: 0.5rem;
+header[data-region="navbar"] .nv-brand {
+  display: inline-flex; align-items: center; gap: 0.5rem; white-space: nowrap; overflow: hidden;
   /* Chip verde oscuro (el del cabezote) detrás de la marca: el dorado resalta sobre él en vez de perderse en el verde claro */
-  padding: 0.3rem 1.1rem 0.3rem 0.45rem; border-radius: 999px;
+  max-width: 0; padding: 0.3rem 0; opacity: 0; border-radius: 999px;
   background: linear-gradient(100deg, #b98f35 0%, #e7cf8c 35%, #fff2c8 55%, #d8b558 100%) text, #0f2a1f;
   -webkit-background-clip: text, border-box; background-clip: text, border-box; color: transparent; -webkit-text-fill-color: transparent;
   box-shadow: 0 2px 8px -2px rgba(6, 18, 11, 0.55);
+  transition: max-width 0.6s cubic-bezier(0.2, 0.7, 0.2, 1), padding 0.6s cubic-bezier(0.2, 0.7, 0.2, 1), opacity 0.45s ease 0.12s;
 }
-body:has(.mx-hero, .nomast) header[data-region="navbar"] .nv-gem { width: 2.4rem; height: 2.4rem; -webkit-text-fill-color: initial; }
+body:has(.mx-hero, .nomast) header[data-region="navbar"] .nv-brand { max-width: 16rem; padding: 0.3rem 1.1rem 0.3rem 0.45rem; opacity: 1; }
+header[data-region="navbar"] .nv-gem { flex: none; width: 2.4rem; height: 2.4rem; -webkit-text-fill-color: initial; }
 /* Iconos de la barra (buscar, cuenta, tono): negros */
 header[data-region="navbar"] svg { color: #000 !important; }
 /* Cabezote: la razón social y la fecha en dorado */
@@ -2137,3 +2139,12 @@ html:has(.ed-bgmark)::before { content: none !important; animation: none !import
 }
 .mx-hero.ed-head:has(.ed-bgmark) :is(.ed-title, .ed-deck, .mx-crumb, .mx-crumb a, .mx-crumb span, .hub-stats, .hub-stats dt, .hub-stats dd) { color: #fff !important; text-shadow: 0 1px 12px rgba(0, 0, 0, 0.55); }
 .mx-hero.ed-head:has(.ed-bgmark) .ed-flag { background: rgba(6, 18, 11, 0.85) !important; color: #fff !important; }
+
+/* Cambio suave entre la portada y las páginas interiores: el cabezote grande se pliega (y se despliega) en vez de desaparecer de golpe */
+.mh { overflow: hidden; max-height: 24rem; transition: max-height 0.6s cubic-bezier(0.2, 0.7, 0.2, 1), opacity 0.45s ease, padding 0.6s cubic-bezier(0.2, 0.7, 0.2, 1); }
+@media (min-width: 768px) {
+  body:has(.mx-hero, .nomast) .mh { display: block !important; max-height: 0; opacity: 0; padding-top: 0 !important; padding-bottom: 0 !important; pointer-events: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mh, header[data-region="navbar"] .nv-brand { transition: none; }
+}
