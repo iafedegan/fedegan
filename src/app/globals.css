@@ -69,14 +69,14 @@
   --fg-lime-400: #e7cf8c;
   --fg-teal-600: #2f9c62;
 
-  --bg: #071b13;
-  --bg-muted: #0a2218;
-  --bg-sunken: #0c281d;
+  --bg: #05070a;
+  --bg-muted: #0a0d10;
+  --bg-sunken: #0d1013;
   --surface: rgba(255,255,255,0.04);
-  --surface-solid: #0b2218;
+  --surface-solid: #0d1013;
   --surface-2: rgba(201,162,39,0.07);
-  --card-a: #0d2a1e;
-  --card-b: #071b13;
+  --card-a: #11161b;
+  --card-b: #07090b;
   --border: rgba(216,181,88,0.14);
   --border-strong: rgba(216,181,88,0.24);
   --border-hover: rgba(216,181,88,0.5);
