@@ -2107,16 +2107,21 @@ html .mh .mh-date { color: #d8b558; }
   border-radius: var(--card-radius) !important;
 }
 
+html { --hv-a: 0.08; --hv-b: 0.42; }
+html[data-theme="esmeralda"] { --hv-a: 0.22; --hv-b: 0.62; }
 /* La foto ya no cubre toda la página: va solo detrás de la cabecera (título y migas), con un velo para que el texto se lea */
 html:has(.ed-bgmark)::before { content: none !important; animation: none !important; }
 .mx-hero.ed-head:has(.ed-bgmark) {
   background-color: transparent !important;
-  background-image: linear-gradient(180deg, rgba(var(--veil), calc(var(--veil-a) - 0.22)) 0%, rgba(var(--veil), var(--veil-b)) 100%), var(--page-photo-sm) !important;
+  background-image: linear-gradient(180deg, rgba(var(--veil), var(--hv-a)) 0%, rgba(var(--veil), var(--hv-b)) 100%), var(--page-photo-sm) !important;
   background-size: cover !important; background-position: var(--page-pos, 50% 50%) !important; background-repeat: no-repeat !important;
   padding-bottom: clamp(1.4rem, 3vw, 2.4rem) !important;
 }
 @media (min-width: 900px) {
   .mx-hero.ed-head:has(.ed-bgmark) {
-    background-image: linear-gradient(180deg, rgba(var(--veil), calc(var(--veil-a) - 0.22)) 0%, rgba(var(--veil), var(--veil-b)) 100%), var(--page-photo) !important;
+    background-image: linear-gradient(180deg, rgba(var(--veil), var(--hv-a)) 0%, rgba(var(--veil), var(--hv-b)) 100%), var(--page-photo) !important;
   }
 }
+/* Texto de la cabecera sobre la foto: una sombra suave para que se lea con la foto más viva */
+.mx-hero.ed-head:has(.ed-bgmark) :is(.ed-title, .ed-deck, .mx-crumb, .hub-stats) { text-shadow: 0 1px 14px rgba(255, 255, 255, 0.7); }
+html[data-theme="esmeralda"] .mx-hero.ed-head:has(.ed-bgmark) :is(.ed-title, .ed-deck, .mx-crumb, .hub-stats) { text-shadow: 0 1px 14px rgba(0, 0, 0, 0.7); }
