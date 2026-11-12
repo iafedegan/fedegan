@@ -2480,3 +2480,5 @@ header[data-region="navbar"] [role="menu"] [role="menu"] { overflow: visible !im
   body:has(.mx-hero, .nomast) .mh > * { transform: translateY(-110%); opacity: 0; }
 }
 @media (prefers-reduced-motion: reduce) { .mh, .mh > * { transition: none; } }
+/* Pantallas medianas: opciones un poco más compactas para que quepan diez (con SIG) sin encimarse con los iconos */
+@media (max-width: 1535px) { header[data-region="navbar"] .nv-link { padding-inline: 0.5rem; letter-spacing: 0.05em; } }

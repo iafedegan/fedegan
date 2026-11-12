@@ -13,11 +13,11 @@ export const mainNav = [
   { label: "FNG", href: "/seccion/fng" },
   { label: "FEP", href: "/seccion/fep" },
   { label: "Opinión", href: "/opinion" },
+  { label: "SIG", href: "/seccion/sistema-integrado-de-gestion" },
   { label: "Contacto", href: "/contacto" },
   { label: "Zona de pagos", href: "/pagos" },
   { label: "Consulta RUV", href: "/servicios" },
   { label: "Cifras del sector", href: "/seccion/cifras-del-sector" },
-  { label: "Sistema Integrado de Gestión", href: "/seccion/sistema-integrado-de-gestion" },
   { label: "Escuela Virtual", href: "/escuela-virtual" },
 ];
 
