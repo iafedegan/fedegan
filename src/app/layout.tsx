@@ -150,8 +150,9 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
                 >
                   Saltar al contenido
                 </a>
+                <CifrasBar />
                 <Masthead />
-                <Header nav={sortNav(navConHijos, design.order)} cintillo={<CifrasBar />} />
+                <Header nav={sortNav(navConHijos, design.order)} />
                 <Ticker initial={design.ticker} />
                 <AdSlot zone="top" initial={design.ads.top} />
               </>

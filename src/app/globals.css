@@ -2200,10 +2200,3 @@ header[data-region="navbar"] [role="menu"] svg { color: inherit !important; }
 
 /* Menú vertical del recorrido: desenfoque del fondo y un velo negro detrás de la lista */
 .sw-rail { background: rgba(3, 10, 7, 0.72) !important; -webkit-backdrop-filter: blur(22px) saturate(1.15); backdrop-filter: blur(22px) saturate(1.15); border-radius: 1rem; }
-
-/* Cintillo de cifras pegado a la parte superior del navbar: letras más grandes y claras, filete dorado debajo (como el de CONtexto) */
-.mk-cifras { background: #08180f; border-bottom: 2px solid #b08f4f; }
-.mk-cifras .mk-track { padding: 0.5rem 0; gap: 3.2rem; }
-.mk-cifras .mk-item { font-size: 0.9rem; color: #c9cfc6; }
-.mk-cifras .mk-item b { color: #fff; font-weight: 700; }
-.mk-cifras .mk-item i { color: #c9cfc6; }
