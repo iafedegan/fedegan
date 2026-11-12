@@ -121,7 +121,16 @@ function TablaFilas({ campo, columnas, filas, onChange, sugerencias }: {
                 {visiblesT.map((t) => (
                   <Opcion key={t} tipo="checkbox" valor={t} marcada={marcadas.has(t)} onChange={() => alternar(t)} className="fp-tarea">{t}</Opcion>
                 ))}
-                {visiblesT.length === 0 && <p className="px-1 text-sm text-[#6b7d71]">Ninguna tarea coincide con «{buscar}».</p>}
+                {visiblesT.length === 0 && (
+                  <div className="flex flex-col items-start gap-2 px-1">
+                    <p className="text-sm text-[#6b7d71]">Ninguna tarea coincide con «{buscar}».</p>
+                    {filas.length < MAX_FILAS && (
+                      <button type="button" onClick={() => { onChange([...conDatos, { [col]: buscar.trim(), ...(sugerencias?.marca ? { [sugerencias.marca]: "No" } : {}) }]); setBuscar(""); }} className="fp-boton-sec">
+                        <Plus size={18} /> Añadir «{buscar.trim()}» como actividad
+                      </button>
+                    )}
+                  </div>
+                )}
               </div>
             </>
           )}
