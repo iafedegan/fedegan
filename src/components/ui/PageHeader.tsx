@@ -11,6 +11,14 @@ type Variant = "full" | "strip" | "band";
 //  · "strip": solo la franja de migas (con un hueco a la derecha); el titular lo pinta la propia página dentro del contenido.
 //  · "band":  franja oscura con el titular a la izquierda y un panel de datos o acciones a la derecha.
 // Ya no lleva foto de banner; image/imagePos se aceptan por compatibilidad y se ignoran.
+// Foto de la cabecera cuando la página no trae una propia: una de las del portal, siempre la misma para el mismo título.
+const FOTOS_CABECERA = ["/headers/campo.jpg", "/headers/prensa.jpg", "/headers/servicios.jpg", "/headers/ia-quienes-somos.jpg", "/headers/ia-publicaciones.jpg", "/headers/ia-eventos.jpg", "/headers/ia-seguridad.jpg", "/headers/ia-escuela.jpg"];
+function fotoPorDefecto(clave: string) {
+  let h = 0;
+  for (const c of clave) h = (h * 31 + c.charCodeAt(0)) >>> 0;
+  return FOTOS_CABECERA[h % FOTOS_CABECERA.length];
+}
+
 export function PageHeader({
   eyebrow,
   title,
@@ -74,12 +82,13 @@ export function PageHeader({
   // Foto de fondo de toda la página: queda fija detrás del contenido, con un degradé encima (se define en globals.css).
   // Va por el optimizador de Next (AVIF/WebP) con dos tamaños, uno para pantallas pequeñas y otro para grandes.
   // Se pinta con una hoja de estilos en línea: llega ya en el HTML y desaparece sola al salir de la página.
-  const bgOk = Boolean(image && image.startsWith("/") && /^[\w\-./]+$/.test(image));
+  const foto = image && image.startsWith("/") ? image : fotoPorDefecto(title);
+  const bgOk = Boolean(/^[\w\-./]+$/.test(foto));
   const posOk = imagePos && /^[\d.% ]+$/.test(imagePos) ? imagePos : "50% 50%";
   const photo = bgOk ? (
     <>
       <i hidden className="ed-bgmark" />
-      <style>{`html{--page-photo:url("/_next/image?url=${encodeURIComponent(image!)}&w=1920&q=75");--page-photo-sm:url("/_next/image?url=${encodeURIComponent(image!)}&w=768&q=75");--page-pos:${posOk}}`}</style>
+      <style>{`html{--page-photo:url("/_next/image?url=${encodeURIComponent(foto)}&w=1920&q=75");--page-photo-sm:url("/_next/image?url=${encodeURIComponent(foto)}&w=768&q=75");--page-pos:${posOk}}`}</style>
     </>
   ) : null;
   const ld = crumbLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(crumbLd) }} />;
