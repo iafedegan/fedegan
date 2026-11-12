@@ -585,7 +585,7 @@ p { text-wrap: pretty; }
 }
 .sw-skip:hover { background: rgba(5, 16, 11, 0.7); border-color: rgb(var(--acc)); }
 .sw-rail {
-  position: absolute; z-index: 3; right: 0; top: 28%; transform: translateY(-50%);
+  position: absolute; z-index: 3; right: 0; top: 50%; transform: translateY(-50%);
   display: none; flex-direction: column; align-items: flex-end; gap: 0.1rem;
   padding: 1rem 1.25rem 1rem 3.5rem;
   background: linear-gradient(270deg, rgba(5, 16, 11, 0.62) 0%, rgba(5, 16, 11, 0.4) 55%, transparent 100%);
@@ -2636,4 +2636,9 @@ header[data-region="navbar"]::before { content: none; }
   .mh-ico:hover { background: #8fd14f; color: #10240f !important; }
   .mh-ico svg { width: 1rem; height: 1rem; }
   .mh-ingreso { display: inline-flex; align-items: center; gap: 0.6rem; color: #e7cf8c; font-size: 0.95rem; font-weight: 700; text-decoration: none; }
+}
+
+/* Índice lateral de la portada: más arriba que la línea base de la tarjeta. */
+@media (min-width: 768px) {
+  .sw-rail { bottom: calc(15rem + var(--sw-cut, 0px)); max-height: calc(100% - 16rem - var(--sw-cut, 0px)); }
 }
