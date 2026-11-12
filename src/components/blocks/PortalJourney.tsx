@@ -173,6 +173,9 @@ export async function getJourneyScenes(): Promise<JourneyScene[]> {
 export async function PortalJourney() {
   const scenes = await getJourneyScenes();
   if (scenes.length < 2) return null;
+  // Lo que ya está en el menú principal no se repite en el recorrido (ni en su índice lateral ni con su foto).
   const nav = await getNav();
-  return <ScrollWorld scenes={scenes} enMenu={nav} />;
+  const enMenu = (sc: JourneyScene) => nav.some((n) => n.href === sc.href || n.label.toLowerCase() === sc.nombre.toLowerCase());
+  const visibles = scenes.filter((sc) => !enMenu(sc));
+  return <ScrollWorld scenes={visibles.length >= 2 ? visibles : scenes} />;
 }
