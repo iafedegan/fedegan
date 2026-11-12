@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { UserRound } from "lucide-react";
 import { useSession } from "next-auth/react";
+import { ThemeToggle } from "./ThemeToggle";
 import { redes } from "@/content/accesos";
 import { FacebookIcon, XIcon, InstagramIcon, YoutubeIcon } from "@/components/ui/SocialIcons";
 
@@ -28,6 +29,7 @@ export function MastheadLados() {
           <span className="mh-social mh-social-lleno"><UserRound size={18} strokeWidth={1.9} aria-hidden /></span>
           <span>{session?.user ? "Mi FEDEGÁN" : "Ingresar"}</span>
         </Link>
+        <ThemeToggle className="mh-social" />
       </div>
     </>
   );
