@@ -9,8 +9,8 @@ import {
 import { guardarFormulario, type GuardarFormularioEstado } from "@/lib/cms/formularios-actions";
 import { FormularioPublico } from "@/components/formularios/FormularioPublico";
 import {
-  MAX_CAMPOS, MAX_COLUMNAS, OPERADORES, TIPOS_CAMPO_FORM, TIPOS_COLUMNA, campoNuevo, columnaNueva, conOpciones, esPregunta, opcionesForm,
-  type CampoForm, type ColumnaTabla, type EsquemaForm, type TipoCampoForm, type TipoColumna,
+  CATALOGOS, MAX_CAMPOS, MAX_COLUMNAS, OPERADORES, TIPOS_CAMPO_FORM, TIPOS_COLUMNA, campoNuevo, columnaNueva, conOpciones, esPregunta, opcionesForm,
+  type CampoForm, type ColumnaTabla, type EsquemaForm, type MapaCargos, type TipoCampoForm, type TipoColumna,
 } from "@/lib/cms/formulario-esquema";
 
 // Constructor de formularios: a la izquierda el lienzo (título y preguntas como tarjetas, al estilo de Google Forms y Tally),
@@ -47,8 +47,9 @@ function Interruptor({ activo, onChange, children }: { activo: boolean; onChange
 }
 
 export function FormularioConstructor({
-  id, estado, version, hayCambiosSinPublicar, inicial, writable,
+  id, estado, version, hayCambiosSinPublicar, inicial, writable, mapas = {},
 }: {
+  mapas?: Record<string, MapaCargos>;
   id: string;
   estado: "borrador" | "publicado" | "cerrado";
   version: number;
@@ -268,7 +269,7 @@ export function FormularioConstructor({
                   <h3 className="font-[var(--font-display)] text-2xl font-bold leading-tight text-[#10240f]">{title || "Formulario sin título"}</h3>
                   {description && <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-[#44564a]">{description}</p>}
                   <div className={`mt-5 ${dispositivo === "movil" ? "[&_.fm-form]:!grid-cols-1" : ""}`}>
-                    <FormularioPublico slug={slug} esquema={esquema} preview />
+                    <FormularioPublico slug={slug} esquema={esquema} preview mapas={mapas} />
                   </div>
                 </div>
               </div>
@@ -324,7 +325,11 @@ function TarjetaPregunta({
           <input className={`${input} text-base font-semibold`} value={c.etiqueta} maxLength={160} onChange={(e) => onCambiar({ etiqueta: e.target.value })} placeholder="Escriba la pregunta" aria-label="Pregunta" autoFocus={!c.etiqueta} />
           <input className={`${input} text-sm`} value={c.ayuda} maxLength={200} onChange={(e) => onCambiar({ ayuda: e.target.value })} placeholder={c.tipo === "seccion" ? "Texto bajo el título (opcional)" : "Texto de ayuda bajo la pregunta (opcional)"} aria-label="Ayuda" />
 
-          {conOpciones(c.tipo) && (
+          {c.tipo === "lista" && (
+            <OrigenOpciones c={c} areas={anteriores.filter((p) => p.catalogo?.nivel === "area")} onCambiar={onCambiar} />
+          )}
+
+          {conOpciones(c.tipo) && !c.catalogo && (
             <div className="flex flex-col gap-2">
               <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#8a978f]">Opciones</p>
               {opciones.map((o, k) => (
@@ -360,7 +365,7 @@ function TarjetaPregunta({
             </div>
           )}
 
-          {c.tipo === "tabla" && <EditorColumnas columnas={c.columnas ?? []} onChange={(columnas) => onCambiar({ columnas })} />}
+          {c.tipo === "tabla" && <EditorColumnas columnas={c.columnas ?? []} cargos={anteriores.filter((p) => p.catalogo?.nivel === "cargo")} onChange={(columnas) => onCambiar({ columnas })} />}
 
           {/* Lógica condicional */}
           {anteriores.length > 0 && (
@@ -419,7 +424,29 @@ function TarjetaPregunta({
 }
 
 // Columnas de una tabla de filas: nombre, tipo, opciones (si es lista) y si es obligatoria en cada fila.
-function EditorColumnas({ columnas, onChange }: { columnas: ColumnaTabla[]; onChange: (c: ColumnaTabla[]) => void }) {
+// ¿De dónde salen las opciones de una lista? Escritas a mano, o del catálogo de cargos (áreas, o cargos del área elegida antes).
+function OrigenOpciones({ c, areas, onCambiar }: { c: CampoForm; areas: CampoForm[]; onCambiar: (p: Partial<CampoForm>) => void }) {
+  const cat = CATALOGOS[0];
+  const valor = !c.catalogo ? "manual" : c.catalogo.nivel === "area" ? "area" : `cargo:${c.catalogo.padre}`;
+  return (
+    <label className="flex flex-col gap-1.5">
+      <span className="text-xs font-bold uppercase tracking-[0.14em] text-[#8a978f]">Origen de las opciones</span>
+      <select className={`${input} py-2 text-sm`} value={valor} onChange={(e) => {
+        const v = e.target.value;
+        if (v === "manual") onCambiar({ catalogo: undefined, opciones: c.opciones.trim() ? c.opciones : "Opción 1\nOpción 2" });
+        else if (v === "area") onCambiar({ catalogo: { id: cat.id, nivel: "area" } });
+        else onCambiar({ catalogo: { id: cat.id, nivel: "cargo", padre: v.slice(6) } });
+      }}>
+        <option value="manual">Escritas a mano</option>
+        <option value="area">{cat.nombre}: áreas</option>
+        {areas.map((a) => <option key={a.id} value={`cargo:${a.id}`}>{cat.nombre}: cargos del área elegida en «{a.etiqueta}»</option>)}
+      </select>
+      {c.catalogo && <span className="text-xs text-[#667a6c]">{c.catalogo.nivel === "area" ? "Muestra las 12 áreas del catálogo." : "Muestra solo los cargos del área elegida, más «Otro (no está en la lista)»."}</span>}
+    </label>
+  );
+}
+
+function EditorColumnas({ columnas, cargos, onChange }: { columnas: ColumnaTabla[]; cargos: CampoForm[]; onChange: (c: ColumnaTabla[]) => void }) {
   const cambiar = (i: number, p: Partial<ColumnaTabla>) => onChange(columnas.map((k, j) => (j === i ? { ...k, ...p } : k)));
   const mover = (i: number, d: -1 | 1) => {
     const j = i + d;
@@ -451,6 +478,18 @@ function EditorColumnas({ columnas, onChange }: { columnas: ColumnaTabla[]; onCh
               <button type="button" onClick={() => onChange(columnas.filter((_, j) => j !== i))} disabled={columnas.length <= 1} aria-label="Quitar columna" className="grid size-7 place-items-center rounded-md text-[#a02323] hover:bg-[#fdecec] disabled:opacity-30"><X size={14} /></button>
             </span>
           </div>
+          {(k.tipo === "texto" || k.tipo === "parrafo") && cargos.length > 0 && (
+            <label className="mt-2 flex flex-wrap items-center gap-2 text-xs font-semibold text-[#33463a]">
+              <input type="checkbox" checked={Boolean(k.catalogo)} className="size-4 accent-[#2c6a14]"
+                onChange={(e) => cambiar(i, { catalogo: e.target.checked ? { id: CATALOGOS[0].id, nivel: "tarea", padre: cargos[cargos.length - 1].id } : undefined })} />
+              Sugerir las tareas del cargo para marcarlas
+              {k.catalogo && cargos.length > 1 && (
+                <select className={`${input} w-auto py-1 text-xs`} value={k.catalogo.padre} onChange={(e) => cambiar(i, { catalogo: { ...k.catalogo!, padre: e.target.value } })}>
+                  {cargos.map((p) => <option key={p.id} value={p.id}>{p.etiqueta}</option>)}
+                </select>
+              )}
+            </label>
+          )}
           {k.tipo === "lista" && (
             <textarea className={`${input} mt-2 py-2 text-sm`} rows={3} value={k.opciones} maxLength={1500} placeholder="Una opción por línea" aria-label="Opciones de la columna" onChange={(e) => cambiar(i, { opciones: e.target.value })} />
           )}

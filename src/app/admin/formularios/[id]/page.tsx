@@ -5,6 +5,8 @@ import { ConfigNotice } from "@/components/admin/ConfigNotice";
 import { FormularioConstructor } from "@/components/admin/FormularioConstructor";
 import { cmsWritable } from "@/lib/cms/client";
 import { formularioPorId } from "@/lib/cms/formularios";
+import { mapaCargos } from "@/lib/cms/catalogos";
+import { CATALOGOS } from "@/lib/cms/formulario-esquema";
 
 export const metadata: Metadata = { title: "Editar formulario", robots: { index: false } };
 
@@ -18,7 +20,7 @@ export default async function EditarFormularioPage({ params }: { params: Promise
       <FormularioPestanas id={f.id} titulo={f.title} slug={f.slug} publico={Boolean(f.published) && f.status !== "borrador"} activa="constructor" />
       {!cmsWritable && <ConfigNotice compact />}
       <FormularioConstructor
-        id={f.id} estado={f.status} version={f.version} writable={cmsWritable}
+        id={f.id} estado={f.status} mapas={Object.fromEntries(CATALOGOS.map((c) => [c.id, mapaCargos(c.id) ?? {}]))} version={f.version} writable={cmsWritable}
         hayCambiosSinPublicar={sinPublicar}
         inicial={{ title: f.title, description: f.description, slug: f.slug, schema: f.schema }}
       />

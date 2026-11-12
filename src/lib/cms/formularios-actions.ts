@@ -4,8 +4,9 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { adminDb, MEDIA_BUCKET } from "./client";
 import { requireEditorActor } from "./guard";
+import { mapasDe } from "./catalogos";
 import {
-  SLUG_VALIDO, TIPOS_ARCHIVO_FORM, leerEsquema, problemaEsquema, slugDe, validarRespuestas, visibles, type Valor,
+  SLUG_VALIDO, aplicarCatalogo, TIPOS_ARCHIVO_FORM, leerEsquema, problemaEsquema, slugDe, validarRespuestas, visibles, type Valor,
 } from "./formulario-esquema";
 
 export type GuardarFormularioEstado = { ok?: boolean; message?: string };
@@ -168,7 +169,8 @@ export async function enviarFormulario(fd: FormData): Promise<EnvioEstado> {
       } else valores[c.id] = "";
     } else valores[c.id] = String(fd.get(nombre) ?? "");
   }
-  const r = validarRespuestas(esquema, valores);
+  // Las listas que salen de un catálogo (área → cargo) se validan con las opciones que correspondían a lo respondido.
+  const r = validarRespuestas(aplicarCatalogo(esquema, mapasDe(esquema), valores), valores);
   if ("error" in r) return { error: r.error };
 
   const ver = visibles(esquema.campos, valores);

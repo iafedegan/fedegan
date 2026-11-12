@@ -5,6 +5,7 @@ import { Container } from "@/components/ui/Container";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { FormularioPublico } from "@/components/formularios/FormularioPublico";
 import { formularioPublico } from "@/lib/cms/formularios";
+import { mapasDe } from "@/lib/cms/catalogos";
 
 export const dynamic = "force-dynamic";
 
@@ -30,7 +31,7 @@ export default async function FormularioPage({ params }: { params: Promise<{ slu
               <p className="text-lg font-bold text-[#10240f]">Este formulario ya no recibe respuestas.</p>
             </div>
           ) : (
-            <FormularioPublico slug={f.slug} esquema={f.published} />
+            <FormularioPublico slug={f.slug} esquema={f.published} mapas={mapasDe(f.published)} />
           )}
         </div>
       </Container>

@@ -42,8 +42,44 @@ export type CampoForm = {
   max: number;
   /** Columnas de una tabla: cada fila que añade quien responde las llena (p. ej. una fila por actividad). */
   columnas?: ColumnaTabla[];
+  /** Opciones que salen de un catálogo (p. ej. áreas, o los cargos del área elegida en otra pregunta). */
+  catalogo?: FuenteCatalogo;
   si?: Condicion;
 };
+
+// ——— Catálogos: listas encadenadas área → cargo → tareas ———
+export const CATALOGOS = [{ id: "cargos-fng-2026", nombre: "Cargos y tareas FNG 2026" }] as const;
+const CATALOGO_IDS = new Set<string>(CATALOGOS.map((c) => c.id));
+/** `area`: las áreas; `cargo`: los cargos del área respondida en `padre`; `tarea` (columna de tabla): las tareas del cargo respondido en `padre`. */
+export type FuenteCatalogo = { id: string; nivel: "area" | "cargo" | "tarea"; padre?: string };
+/** Lo que el formulario necesita de un catálogo para las listas: área → cargos. */
+export type MapaCargos = Record<string, string[]>;
+export const OTRO_CARGO = "Otro (no está en la lista)";
+
+function leerFuente(raw: unknown, previos: string[], niveles: FuenteCatalogo["nivel"][]): FuenteCatalogo | undefined {
+  const o = raw && typeof raw === "object" ? (raw as Record<string, unknown>) : null;
+  if (!o || !CATALOGO_IDS.has(String(o.id)) || !niveles.includes(o.nivel as FuenteCatalogo["nivel"])) return undefined;
+  const nivel = o.nivel as FuenteCatalogo["nivel"];
+  if (nivel === "area") return { id: String(o.id), nivel };
+  // Cargo y tarea dependen de una pregunta anterior.
+  return typeof o.padre === "string" && previos.includes(o.padre) ? { id: String(o.id), nivel, padre: o.padre } : undefined;
+}
+
+/** Llena las opciones de las listas que salen de un catálogo según lo ya respondido (el área elegida define los cargos). */
+export function aplicarCatalogo(e: EsquemaForm, mapas: Record<string, MapaCargos>, valores: Record<string, Valor | undefined>): EsquemaForm {
+  if (!e.campos.some((c) => c.catalogo)) return e;
+  return {
+    ...e,
+    campos: e.campos.map((c) => {
+      const mapa = c.catalogo ? mapas[c.catalogo.id] : undefined;
+      if (!c.catalogo || !mapa) return c;
+      if (c.catalogo.nivel === "area") return { ...c, opciones: Object.keys(mapa).join("\n") };
+      const area = valores[c.catalogo.padre ?? ""];
+      const cargos = typeof area === "string" ? mapa[area] ?? [] : [];
+      return { ...c, opciones: cargos.length ? [...cargos, OTRO_CARGO].join("\n") : "" };
+    }),
+  };
+}
 export const TIPOS_COLUMNA = [
   { valor: "texto", nombre: "Texto corto" },
   { valor: "parrafo", nombre: "Texto largo" },
@@ -52,7 +88,7 @@ export const TIPOS_COLUMNA = [
 ] as const;
 export type TipoColumna = (typeof TIPOS_COLUMNA)[number]["valor"];
 const TIPOS_COL = new Set<string>(TIPOS_COLUMNA.map((t) => t.valor));
-export type ColumnaTabla = { id: string; etiqueta: string; tipo: TipoColumna; opciones: string; requerido: boolean };
+export type ColumnaTabla = { id: string; etiqueta: string; tipo: TipoColumna; opciones: string; requerido: boolean; catalogo?: FuenteCatalogo };
 export type Fila = Record<string, string>;
 export type EsquemaForm = { campos: CampoForm[]; gracias: string };
 export type Valor = string | string[] | Fila[];
@@ -88,7 +124,7 @@ export function campoNuevo(tipo: TipoCampoForm = "texto", etiqueta = ""): CampoF
   };
 }
 
-function leerColumnas(raw: unknown): ColumnaTabla[] {
+function leerColumnas(raw: unknown, previos: string[] = []): ColumnaTabla[] {
   if (!Array.isArray(raw)) return [];
   const vistos = new Set<string>();
   return raw.slice(0, MAX_COLUMNAS).flatMap((x): ColumnaTabla[] => {
@@ -99,7 +135,9 @@ function leerColumnas(raw: unknown): ColumnaTabla[] {
     if (!id || vistos.has(id)) id = columnaNueva().id;
     vistos.add(id);
     const tipo = (TIPOS_COL.has(String(p.tipo)) ? p.tipo : "texto") as TipoColumna;
-    return [{ id, etiqueta, tipo, opciones: typeof p.opciones === "string" ? p.opciones.slice(0, 1500) : "", requerido: p.requerido === true }];
+    // Solo las columnas de texto pueden sugerir tareas del catálogo (quien responde también puede escribir otra).
+    const catalogo = tipo === "texto" || tipo === "parrafo" ? leerFuente(p.catalogo, previos, ["tarea"]) : undefined;
+    return [{ id, etiqueta, tipo, opciones: typeof p.opciones === "string" ? p.opciones.slice(0, 1500) : "", requerido: p.requerido === true, ...(catalogo ? { catalogo } : {}) }];
   });
 }
 
@@ -140,7 +178,11 @@ export function leerEsquema(raw: unknown): EsquemaForm {
     campos.push({
       id, tipo, etiqueta, ayuda: str(p.ayuda, 200), requerido: p.requerido === true,
       opciones: typeof p.opciones === "string" ? p.opciones.slice(0, 1500) : "", max, ...(si ? { si } : {}),
-      ...(tipo === "tabla" ? { columnas: leerColumnas(p.columnas) } : {}),
+      ...(tipo === "tabla" ? { columnas: leerColumnas(p.columnas, campos.map((k) => k.id)) } : {}),
+      ...(() => {
+        const catalogo = tipo === "lista" ? leerFuente(p.catalogo, campos.map((k) => k.id), ["area", "cargo"]) : undefined;
+        return catalogo ? { catalogo } : {};
+      })(),
     });
   }
   return { campos, gracias: str(o.gracias, 400) };
@@ -150,7 +192,7 @@ export function leerEsquema(raw: unknown): EsquemaForm {
 export function problemaEsquema(e: EsquemaForm): string | null {
   if (!e.campos.some((c) => esPregunta(c.tipo))) return "Añada al menos una pregunta.";
   for (const c of e.campos) {
-    if (conOpciones(c.tipo) && opcionesForm(c.opciones).length < 2) return `«${c.etiqueta}»: escriba al menos dos opciones (una por línea).`;
+    if (conOpciones(c.tipo) && !c.catalogo && opcionesForm(c.opciones).length < 2) return `«${c.etiqueta}»: escriba al menos dos opciones (una por línea).`;
     if (c.tipo === "tabla") {
       if (!c.columnas?.length) return `«${c.etiqueta}»: añada al menos una columna a la tabla.`;
       for (const k of c.columnas) if (k.tipo === "lista" && opcionesForm(k.opciones).length < 2) return `«${c.etiqueta}» → «${k.etiqueta}»: escriba al menos dos opciones.`;

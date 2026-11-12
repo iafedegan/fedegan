@@ -118,3 +118,32 @@ test("el resumen cuenta opciones, filas de tabla y exporta una hoja por tabla", 
   assert.deepEqual(detalle.filas[1].slice(-4), [2, "actas", "No", "2"]);
   assert.match(aCsv(general), /"'=Beto"/, "el CSV neutraliza fórmulas");
 });
+
+import { aplicarCatalogo, OTRO_CARGO } from "../src/lib/cms/formulario-esquema.ts";
+import catalogo from "../src/content/catalogos/cargos-fng-2026.json" with { type: "json" };
+
+test("las listas del catálogo se encadenan: área → cargos de esa área → tareas del cargo", () => {
+  const e = leerEsquema({
+    campos: [
+      { id: "area", tipo: "lista", etiqueta: "Área", catalogo: { id: "cargos-fng-2026", nivel: "area" } },
+      { id: "cargo", tipo: "lista", etiqueta: "Cargo", catalogo: { id: "cargos-fng-2026", nivel: "cargo", padre: "area" } },
+      { id: "malo", tipo: "lista", etiqueta: "Malo", opciones: "A\nB", catalogo: { id: "cargos-fng-2026", nivel: "cargo", padre: "noexiste" } },
+      { id: "act", tipo: "tabla", etiqueta: "Actividades", columnas: [{ id: "t", etiqueta: "Tarea", tipo: "parrafo", catalogo: { id: "cargos-fng-2026", nivel: "tarea", padre: "cargo" } }] },
+    ],
+  });
+  assert.equal(e.campos[2].catalogo, undefined, "un padre que no existe anula el catálogo");
+  assert.equal(e.campos[3].columnas[0].catalogo.padre, "cargo");
+  assert.equal(problemaEsquema(e), null, "las listas de catálogo no necesitan opciones escritas");
+  const mapas = { "cargos-fng-2026": Object.fromEntries(Object.entries(catalogo).map(([a, c]) => [a, Object.keys(c)])) };
+  assert.equal(Object.keys(mapas["cargos-fng-2026"]).length, 12);
+  const sin = aplicarCatalogo(e, mapas, {});
+  assert.equal(sin.campos[1].opciones, "", "sin área no hay cargos");
+  const area = "Dirección Jurídica";
+  const con = aplicarCatalogo(e, mapas, { area });
+  const cargos = con.campos[1].opciones.split("\n");
+  assert.ok(cargos.includes("Director Jurídico"));
+  assert.equal(cargos.at(-1), OTRO_CARGO);
+  assert.ok(!cargos.includes("Coordinador Regional"), "solo los cargos de esa área");
+  assert.match(validarRespuestas(con, { area, cargo: "Coordinador Regional", act: [{ t: "x" }] }).error, /una de las opciones/);
+  assert.ok("respuestas" in validarRespuestas(con, { area, cargo: "Director Jurídico", act: [{ t: catalogo[area]["Director Jurídico"][0] }] }));
+});
