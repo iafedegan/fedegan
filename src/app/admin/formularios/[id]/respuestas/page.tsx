@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Download, Trash2 } from "lucide-react";
 import { FormularioPestanas } from "@/components/admin/FormularioPestanas";
-import { valorTexto } from "@/lib/cms/formulario-esquema";
+import { esFilas, valorTexto, type CampoForm } from "@/lib/cms/formulario-esquema";
 import { formularioPorId, respuestasDe } from "@/lib/cms/formularios";
 import { eliminarRespuesta } from "@/lib/cms/formularios-actions";
 
@@ -58,6 +58,34 @@ export default async function RespuestasPage({ params, searchParams }: { params:
                 </div>
                 <dl className="mt-2 grid gap-x-4 gap-y-1 text-sm sm:grid-cols-[minmax(0,14rem)_1fr]">
                   {r.answers.map((a, k) => {
+                    if (esFilas(a.v)) {
+                      const cols = (f.schema.campos.find((c: CampoForm) => c.id === a.id)?.columnas ?? []);
+                      return (
+                        <div key={k} className="contents">
+                          <dt className="text-[#5d6e65]">{a.e}<span className="mt-1 block text-xs text-[#8a978f]">{a.v.length} {a.v.length === 1 ? "fila" : "filas"}</span></dt>
+                          <dd className="flex flex-col gap-3">
+                            {a.v.map((fila, i) => {
+                              const ids = [...cols.map((c: { id: string }) => c.id), ...Object.keys(fila).filter((x) => !cols.some((c: { id: string }) => c.id === x))];
+                              const [principal, ...resto] = ids.filter((x) => fila[x]);
+                              const et = (x: string) => cols.find((c: { id: string; etiqueta: string }) => c.id === x)?.etiqueta ?? x;
+                              return (
+                                <div key={i} className="rounded-xl border border-[#e3e8dc] bg-[#fafbf6] p-3.5">
+                                  <p className="font-semibold text-[#10240f]"><span className="mr-2 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-[#e3f0d8] px-1.5 text-xs text-[#165a43]">{i + 1}</span>{principal ? fila[principal] : ""}</p>
+                                  <dl className="mt-2 grid gap-x-4 gap-y-1 sm:grid-cols-[minmax(0,15rem)_1fr]">
+                                    {resto.map((x) => (
+                                      <div key={x} className="contents">
+                                        <dt className="text-xs text-[#6b7d71]">{et(x)}</dt>
+                                        <dd className="whitespace-pre-line [overflow-wrap:anywhere]">{fila[x]}</dd>
+                                      </div>
+                                    ))}
+                                  </dl>
+                                </div>
+                              );
+                            })}
+                          </dd>
+                        </div>
+                      );
+                    }
                     const v = texto(a.v);
                     return (
                       <div key={k} className="contents">
