@@ -117,7 +117,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
       lang="es"
       data-scroll-behavior="smooth"
       data-tpl-mode={tpl?.mode}
-      data-theme="institucional"
+      data-theme="esmeralda"
       data-navbar={design.parts.navbar ?? "clasico"}
       data-footer={design.parts.footer ?? "completo"}
       data-hero={design.parts.hero ?? "izquierda"}

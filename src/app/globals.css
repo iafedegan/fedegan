@@ -2214,3 +2214,6 @@ header[data-region="navbar"]::before {
 }
 @media (min-width: 768px) and (max-height: 820px) { .sw-rail .sw-dot { font-size: 0.86em; } }
 @media (min-width: 768px) and (max-height: 700px) { .sw-rail .sw-dot { font-size: 0.78em; padding-block: 0.06rem; } }
+
+/* Mismo fondo oscuro en todas las páginas (sin saltos de tono al navegar) */
+html[data-theme="esmeralda"] { background-color: #05070a; }
