@@ -18,7 +18,7 @@ import { getPublishedDesign } from "@/lib/design/store";
 import { designCss, sortNav, TEMPLATE_BY_ID } from "@/lib/design/regions";
 import { Ticker } from "@/components/design/Ticker";
 import { AdSlot } from "@/components/design/AdSlot";
-import { MarketBar } from "@/components/layout/MarketBar";
+import { CifrasBar } from "@/components/layout/CifrasBar";
 import { Masthead } from "@/components/layout/Masthead";
 import { ThemeScript } from "@/components/layout/ThemeScript";
 import { ThemeRoute } from "@/components/layout/ThemeRoute";
@@ -150,7 +150,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
                 >
                   Saltar al contenido
                 </a>
-                {design.template === "marca" && <MarketBar />}
+                <CifrasBar />
                 <Masthead />
                 <Header nav={sortNav(navConHijos, design.order)} />
                 <Ticker initial={design.ticker} />

@@ -2148,3 +2148,8 @@ html:has(.ed-bgmark)::before { content: none !important; animation: none !import
 @media (prefers-reduced-motion: reduce) {
   .mh, header[data-region="navbar"] .nv-brand { transition: none; }
 }
+
+/* Cintillo de cifras ganaderas: oscuro, con filete dorado debajo, como el de CONtexto */
+.mk-cifras { background: #0b1b12; border-bottom: 1px solid rgba(216, 181, 88, 0.55); }
+.mk-cifras .mk-item { font-size: 0.82rem; }
+.mk-cifras .mk-item b { color: #f0d58a; }
