@@ -2180,7 +2180,7 @@ header[data-region="navbar"] [role="menu"] {
   --text: #eaf3e4; --text-muted: rgba(234, 243, 228, 0.78); --text-faint: rgba(234, 243, 228, 0.6);
   --fg-lime-400: #f0d58a; --fg-lime-500: #f0d58a; --bg-muted: rgba(216, 181, 88, 0.14); --border: rgba(216, 181, 88, 0.25); --border-strong: rgba(216, 181, 88, 0.4);
   --surface-solid: #071b13; --link: #eaf3e4;
-  margin-top: 0.55rem; border-radius: 1rem !important; border: 1px solid rgba(216, 181, 88, 0.4) !important;
+  margin-top: 0 !important; border-radius: 1rem !important; border: 1px solid rgba(216, 181, 88, 0.4) !important;
   background: #071b13 !important; box-shadow: 0 24px 44px -20px rgba(0, 0, 0, 0.75) !important;
   animation: nv-pop 0.22s cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }
@@ -2440,3 +2440,5 @@ html .hub-grid .hub-wrap > .hub-panel {
 .hub-grid .hub-open { display: inline-flex; align-items: center; gap: 0.5rem; margin-bottom: 0.8rem; padding: 0.5rem 1rem; border-radius: 999px; background: #d8b558; color: #071b13; font: 800 0.72rem/1 var(--font-body); letter-spacing: 0.1em; text-transform: uppercase; }
 .hub-grid .hub-sub a { padding: 0.5rem 0.7rem; border-radius: 0.6rem; color: var(--text); font-weight: 600; transition: background-color 0.2s, color 0.2s; }
 .hub-grid .hub-sub a:hover { background: rgba(216, 181, 88, 0.16); color: var(--text); }
+/* Los desplegables del navbar van pegados a su opción (sin hueco): así no se cierran al bajar el cursor hacia la lista */
+header[data-region="navbar"] [role="menu"]::before { content: ""; position: absolute; left: 0; right: 0; top: -0.8rem; height: 0.8rem; }
