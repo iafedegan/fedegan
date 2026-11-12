@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
-import { ExternalLink } from "lucide-react";
+import Link from "next/link";
+import { ArrowRight, Download, ExternalLink } from "lucide-react";
 import type { LegacyBlock } from "@/content/legacy";
 import { Inline, linkClass } from "./Inline";
 import { BLOQUES_RICOS, BloqueRico } from "./BloquesRicos";
@@ -72,6 +73,11 @@ function embedInfo(raw: string): EmbedInfo {
   if (host.startsWith("estadisticas.fedegan")) return { kind: "link", src: raw, href: raw, title: "Tablero interactivo", hint: "Se abre en el sitio de estadísticas de FEDEGÁN." };
   return { kind: "link", src: raw, href: raw, title: "Documento", hint: "Se abre en una pestaña nueva." };
 }
+
+// Párrafo que es únicamente un enlace (a veces en negrita) y enlaces dentro de un párrafo.
+const SOLO_ENLACE = /^\s*(?:\*\*)?\[([^\]]+)\]\((\/[^)\s]*|https?:\/\/[^)\s]+)\)(?:\*\*)?\s*$/;
+const ENLACE_G = /\[([^\]]*)\]\((https?:\/\/[^)\s]+|\/[^)\s]*)\)/g;
+const ARCHIVO = /\.(pdf|docx?|xlsx?|pptx?|zip|rar)(?:\?|$)/i;
 
 const isLabel = (b: LegacyBlock | undefined) => b?.t === "p" && /:$/.test(b.text ?? "") && (b.text ?? "").length <= 26;
 
@@ -329,6 +335,68 @@ export function LegacyContent({ blocks, lead: allowLead = true, preview = false,
               <h4 key={n} className="doc-subgrupo">{pz.texto}</h4>
             ),
           )}
+        </div>,
+      );
+      continue;
+    }
+
+    // Párrafo corto que termina en «:» justo antes de una lista de enlaces: rótulo del grupo.
+    if (b.t === "p" && !libre && /:\s*$/.test(b.text ?? "") && (b.text ?? "").length < 160 && SOLO_ENLACE.test(blocks[i + 1]?.text ?? "") && blocks[i + 1]?.t === "p") {
+      nodes.push(
+        <p key={key} className="lk-intro">
+          <Inline text={(b.text ?? "").replace(/:\s*$/, "")} />
+        </p>,
+      );
+      continue;
+    }
+
+    // Párrafos seguidos que son solo un enlace a otra página (capítulos, apartados…): tarjetas numeradas en cuadrícula.
+    if (b.t === "p" && !libre && SOLO_ENLACE.test(b.text ?? "")) {
+      const enlaces: { label: string; href: string }[] = [];
+      let j = i;
+      while (j < blocks.length && blocks[j].t === "p") {
+        const m = SOLO_ENLACE.exec(blocks[j].text ?? "");
+        if (!m) break;
+        enlaces.push({ label: m[1].replace(/\*\*/g, ""), href: m[2] });
+        j++;
+      }
+      nodes.push(
+        <ol key={key} className={`lk-grid ${enlaces.length === 1 ? "is-one" : ""}`}>
+          {enlaces.map((e, n) => {
+            const interno = e.href.startsWith("/");
+            const dentro = (
+              <>
+                <span className="lk-no" aria-hidden>{String(n + 1).padStart(2, "0")}</span>
+                <span className="lk-name">{e.label}</span>
+                <span className="lk-go" aria-hidden>{interno ? <ArrowRight size={16} /> : <ExternalLink size={15} />}</span>
+              </>
+            );
+            return (
+              <li key={`${e.href}-${n}`}>
+                {interno ? (
+                  <Link href={e.href} className="lk-card">{dentro}</Link>
+                ) : (
+                  <a href={e.href} target="_blank" rel="noopener noreferrer" className="lk-card">{dentro}</a>
+                )}
+              </li>
+            );
+          })}
+        </ol>,
+      );
+      i = j - 1;
+      continue;
+    }
+
+    // Párrafo corto con un único enlace a un archivo («puede descargar el PDF en este enlace»): aviso de descarga con botón.
+    const arch = b.t === "p" && !libre ? [...(b.text ?? "").matchAll(ENLACE_G)] : [];
+    if (arch.length === 1 && ARCHIVO.test(arch[0][2]) && plain(b.text ?? "").length < 220) {
+      const ext = (ARCHIVO.exec(arch[0][2])?.[1] ?? "archivo").toUpperCase();
+      const frase = (b.text ?? "").replace(arch[0][0], arch[0][1]).replace(/\*\*/g, "");
+      nodes.push(
+        <div key={key} className="dl-call">
+          <span className="dl-ico" aria-hidden><Download size={22} /></span>
+          <p className="dl-txt">{frase}</p>
+          <a href={arch[0][2]} target="_blank" rel="noopener noreferrer" className="dl-btn">Descargar {ext}</a>
         </div>,
       );
       continue;
