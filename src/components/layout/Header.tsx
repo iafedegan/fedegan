@@ -277,7 +277,6 @@ export function Header({ nav: mainNav }: { nav: { label: string; href: string; c
           {/* Marca compacta: solo se ve en las páginas interiores, donde la cabecera grande se oculta. */}
           <Link href="/" className="nv-brand" aria-label="FEDEGÁN, inicio">
             <span aria-hidden className="mh-gem nv-gem" />
-            FEDEGÁN
           </Link>
           <div className="flex min-w-0 flex-1 items-center justify-center gap-0.5">
             {mainNav.map((item, i) => {
