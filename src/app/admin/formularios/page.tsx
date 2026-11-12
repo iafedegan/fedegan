@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Copy, ExternalLink, Inbox, Lock, Unlock } from "lucide-react";
+import { BarChart3, Copy, ExternalLink, Inbox, Lock, Unlock } from "lucide-react";
 import { ConfigNotice } from "@/components/admin/ConfigNotice";
 import { NuevoFormulario } from "@/components/admin/NuevoFormulario";
 import { DeleteButton } from "@/components/admin/DeleteButton";
@@ -43,6 +43,7 @@ export default async function FormulariosPage() {
                   <Inbox size={14} /> {f.respuestas ?? 0} {(f.respuestas ?? 0) === 1 ? "respuesta" : "respuestas"}
                 </Link>
                 <div className="flex items-center gap-1.5">
+                  <Link href={`/admin/formularios/${f.id}/dashboard`} aria-label={`Dashboard de ${f.title}`} title="Dashboard" className="ad-icon-btn"><BarChart3 size={16} /></Link>
                   {f.published && f.status !== "borrador" && (
                     <Link href={`/formularios/${f.slug}`} target="_blank" aria-label={`Abrir ${f.title}`} title="Abrir el formulario público" className="ad-icon-btn"><ExternalLink size={16} /></Link>
                   )}

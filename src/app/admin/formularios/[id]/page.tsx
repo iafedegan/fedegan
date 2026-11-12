@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ChevronRight, ExternalLink, Inbox } from "lucide-react";
+import { FormularioPestanas } from "@/components/admin/FormularioPestanas";
 import { ConfigNotice } from "@/components/admin/ConfigNotice";
 import { FormularioConstructor } from "@/components/admin/FormularioConstructor";
 import { cmsWritable } from "@/lib/cms/client";
@@ -16,17 +15,7 @@ export default async function EditarFormularioPage({ params }: { params: Promise
   const sinPublicar = JSON.stringify(f.schema) !== JSON.stringify(f.published);
   return (
     <div className="flex flex-col gap-4">
-      <header className="flex flex-wrap items-center justify-between gap-3">
-        <nav aria-label="Ruta" className="flex min-w-0 items-center gap-1.5 text-sm text-[#8a978f]">
-          <Link href="/admin" className="hover:text-[#165a43]">Panel</Link><ChevronRight size={13} />
-          <Link href="/admin/formularios" className="hover:text-[#165a43]">Formularios</Link><ChevronRight size={13} />
-          <h1 className="truncate font-semibold text-[#10240f]">{f.title}</h1>
-        </nav>
-        <div className="flex flex-wrap gap-2">
-          {f.published && f.status !== "borrador" && <Link href={`/formularios/${f.slug}`} target="_blank" className="ad-btn ad-btn-ghost"><ExternalLink size={16} /> Ver público</Link>}
-          <Link href={`/admin/formularios/${f.id}/respuestas`} className="ad-btn ad-btn-ghost"><Inbox size={16} /> Respuestas</Link>
-        </div>
-      </header>
+      <FormularioPestanas id={f.id} titulo={f.title} slug={f.slug} publico={Boolean(f.published) && f.status !== "borrador"} activa="constructor" />
       {!cmsWritable && <ConfigNotice compact />}
       <FormularioConstructor
         id={f.id} estado={f.status} version={f.version} writable={cmsWritable}

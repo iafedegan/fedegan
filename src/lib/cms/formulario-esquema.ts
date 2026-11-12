@@ -13,6 +13,8 @@ export const TIPOS_CAMPO_FORM = [
   { valor: "casillas", nombre: "Casillas (varias)" },
   { valor: "escala", nombre: "Escala de valoración" },
   { valor: "archivo", nombre: "Archivo adjunto" },
+  { valor: "tabla", nombre: "Tabla (varias filas)" },
+  { valor: "seccion", nombre: "Título de sección" },
 ] as const;
 export type TipoCampoForm = (typeof TIPOS_CAMPO_FORM)[number]["valor"];
 const TIPOS = new Set<string>(TIPOS_CAMPO_FORM.map((t) => t.valor));
@@ -38,13 +40,30 @@ export type CampoForm = {
   opciones: string;
   /** Tope de la escala de valoración (de 1 a `max`). */
   max: number;
+  /** Columnas de una tabla: cada fila que añade quien responde las llena (p. ej. una fila por actividad). */
+  columnas?: ColumnaTabla[];
   si?: Condicion;
 };
+export const TIPOS_COLUMNA = [
+  { valor: "texto", nombre: "Texto corto" },
+  { valor: "parrafo", nombre: "Texto largo" },
+  { valor: "lista", nombre: "Lista de opciones" },
+  { valor: "numero", nombre: "Número" },
+] as const;
+export type TipoColumna = (typeof TIPOS_COLUMNA)[number]["valor"];
+const TIPOS_COL = new Set<string>(TIPOS_COLUMNA.map((t) => t.valor));
+export type ColumnaTabla = { id: string; etiqueta: string; tipo: TipoColumna; opciones: string; requerido: boolean };
+export type Fila = Record<string, string>;
 export type EsquemaForm = { campos: CampoForm[]; gracias: string };
-export type Valor = string | string[];
+export type Valor = string | string[] | Fila[];
 export type RespuestaForm = { id: string; e: string; v: Valor };
 
-export const MAX_CAMPOS = 40;
+export const MAX_CAMPOS = 60;
+export const MAX_COLUMNAS = 12;
+export const MAX_FILAS = 40;
+/** Campos que no piden respuesta (solo organizan el formulario). */
+export const esPregunta = (t: TipoCampoForm) => t !== "seccion";
+export const esFilas = (v: Valor | undefined): v is Fila[] => Array.isArray(v) && v.some((x) => typeof x === "object" && x !== null);
 export const TIPOS_ARCHIVO_FORM = new Map([
   ["application/pdf", "pdf"], ["application/msword", "doc"], ["application/vnd.openxmlformats-officedocument.wordprocessingml.document", "docx"],
   ["application/vnd.ms-excel", "xls"], ["application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "xlsx"], ["image/jpeg", "jpg"], ["image/png", "png"],
@@ -59,8 +78,36 @@ export const conOpciones = (t: TipoCampoForm) => t === "opcion" || t === "lista"
 export function nuevoIdCampo() {
   return `q${Math.random().toString(36).slice(2, 8)}`;
 }
+export function columnaNueva(tipo: TipoColumna = "texto", etiqueta = "", opciones = ""): ColumnaTabla {
+  return { id: `k${Math.random().toString(36).slice(2, 7)}`, etiqueta, tipo, opciones: tipo === "lista" && !opciones ? "Opción 1\nOpción 2" : opciones, requerido: false };
+}
 export function campoNuevo(tipo: TipoCampoForm = "texto", etiqueta = ""): CampoForm {
-  return { id: nuevoIdCampo(), tipo, etiqueta, ayuda: "", requerido: false, opciones: conOpciones(tipo) ? "Opción 1\nOpción 2" : "", max: 5 };
+  return {
+    id: nuevoIdCampo(), tipo, etiqueta, ayuda: "", requerido: false, opciones: conOpciones(tipo) ? "Opción 1\nOpción 2" : "", max: 5,
+    ...(tipo === "tabla" ? { columnas: [columnaNueva("texto", "Descripción")] } : {}),
+  };
+}
+
+function leerColumnas(raw: unknown): ColumnaTabla[] {
+  if (!Array.isArray(raw)) return [];
+  const vistos = new Set<string>();
+  return raw.slice(0, MAX_COLUMNAS).flatMap((x): ColumnaTabla[] => {
+    const p = x && typeof x === "object" ? (x as Record<string, unknown>) : {};
+    const etiqueta = str(p.etiqueta, 120);
+    if (!etiqueta) return [];
+    let id = str(p.id, 24).replace(/[^a-zA-Z0-9_-]/g, "");
+    if (!id || vistos.has(id)) id = columnaNueva().id;
+    vistos.add(id);
+    const tipo = (TIPOS_COL.has(String(p.tipo)) ? p.tipo : "texto") as TipoColumna;
+    return [{ id, etiqueta, tipo, opciones: typeof p.opciones === "string" ? p.opciones.slice(0, 1500) : "", requerido: p.requerido === true }];
+  });
+}
+
+/** Una respuesta como texto legible (para listas, CSV y Excel). */
+export function valorTexto(v: Valor, columnas?: ColumnaTabla[]): string {
+  if (typeof v === "string") return v;
+  if (!esFilas(v)) return (v as string[]).join(", ");
+  return v.map((f, i) => `${i + 1}) ${(columnas?.length ? columnas.map((c) => [c.etiqueta, f[c.id] ?? ""]) : Object.entries(f)).filter(([, x]) => x).map(([k, x]) => `${k}: ${x}`).join(" · ")}`).join("\n");
 }
 export const ESQUEMA_VACIO: EsquemaForm = { campos: [], gracias: "" };
 
@@ -93,6 +140,7 @@ export function leerEsquema(raw: unknown): EsquemaForm {
     campos.push({
       id, tipo, etiqueta, ayuda: str(p.ayuda, 200), requerido: p.requerido === true,
       opciones: typeof p.opciones === "string" ? p.opciones.slice(0, 1500) : "", max, ...(si ? { si } : {}),
+      ...(tipo === "tabla" ? { columnas: leerColumnas(p.columnas) } : {}),
     });
   }
   return { campos, gracias: str(o.gracias, 400) };
@@ -100,9 +148,13 @@ export function leerEsquema(raw: unknown): EsquemaForm {
 
 /** Qué está mal en el formulario (null = todo bien). */
 export function problemaEsquema(e: EsquemaForm): string | null {
-  if (e.campos.length === 0) return "Añada al menos una pregunta.";
+  if (!e.campos.some((c) => esPregunta(c.tipo))) return "Añada al menos una pregunta.";
   for (const c of e.campos) {
     if (conOpciones(c.tipo) && opcionesForm(c.opciones).length < 2) return `«${c.etiqueta}»: escriba al menos dos opciones (una por línea).`;
+    if (c.tipo === "tabla") {
+      if (!c.columnas?.length) return `«${c.etiqueta}»: añada al menos una columna a la tabla.`;
+      for (const k of c.columnas) if (k.tipo === "lista" && opcionesForm(k.opciones).length < 2) return `«${c.etiqueta}» → «${k.etiqueta}»: escriba al menos dos opciones.`;
+    }
     if (c.si && c.si.op !== "responde" && !c.si.valor) return `«${c.etiqueta}»: la condición necesita un valor.`;
   }
   return null;
@@ -110,7 +162,8 @@ export function problemaEsquema(e: EsquemaForm): string | null {
 
 /** ¿La condición se cumple con estos valores? */
 function cumple(si: Condicion, v: Valor | undefined): boolean {
-  const lista = Array.isArray(v) ? v : v ? [v] : [];
+  if (esFilas(v)) return si.op === "responde" ? v.length > 0 : false;
+  const lista = (Array.isArray(v) ? v : v ? [v] : []) as string[];
   if (si.op === "responde") return lista.length > 0;
   if (si.op === "es") return lista.length === 1 && lista[0] === si.valor;
   if (si.op === "no_es") return !(lista.length === 1 && lista[0] === si.valor);
@@ -134,12 +187,40 @@ export function validarRespuestas(e: EsquemaForm, valores: Record<string, Valor 
   const ver = visibles(e.campos, valores);
   const respuestas: RespuestaForm[] = [];
   for (const c of e.campos) {
-    if (!ver.has(c.id)) continue;
+    if (!ver.has(c.id) || !esPregunta(c.tipo)) continue;
     const falta = `Falta responder «${c.etiqueta}».`;
     const opciones = opcionesForm(c.opciones);
     const bruto = valores[c.id];
+    if (c.tipo === "tabla") {
+      const cols = c.columnas ?? [];
+      const filas = (Array.isArray(bruto) ? bruto : []).filter((f): f is Fila => typeof f === "object" && f !== null).slice(0, MAX_FILAS);
+      const limpias: Fila[] = [];
+      for (const f of filas) {
+        const fila: Fila = {};
+        for (const k of cols) {
+          const x = typeof f[k.id] === "string" ? f[k.id].trim().slice(0, k.tipo === "parrafo" ? 2000 : 300) : "";
+          if (x) fila[k.id] = x;
+        }
+        if (Object.keys(fila).length === 0) continue; // fila vacía: se ignora
+        const n = limpias.length + 1;
+        for (const k of cols) {
+          const x = fila[k.id] ?? "";
+          if (!x && k.requerido) return { error: `«${c.etiqueta}», fila ${n}: falta «${k.etiqueta}».` };
+          if (x && k.tipo === "lista" && !opcionesForm(k.opciones).includes(x)) return { error: `«${c.etiqueta}», fila ${n}: «${k.etiqueta}» debe ser una de las opciones.` };
+          if (x && k.tipo === "numero" && !/^-?\d+([.,]\d+)?$/.test(x)) return { error: `«${c.etiqueta}», fila ${n}: «${k.etiqueta}» debe ser un número.` };
+        }
+        limpias.push(fila);
+      }
+      if (limpias.length === 0) {
+        if (c.requerido) return { error: `«${c.etiqueta}»: añada al menos una fila.` };
+        continue;
+      }
+      respuestas.push({ id: c.id, e: c.etiqueta, v: limpias });
+      continue;
+    }
     if (c.tipo === "casillas") {
-      const marcadas = Array.isArray(bruto) ? bruto : bruto ? [bruto] : [];
+      const marcadas = (Array.isArray(bruto) ? bruto : bruto ? [bruto] : []) as string[];
+      if (marcadas.some((m) => typeof m !== "string")) return { error: `«${c.etiqueta}»: elija solo entre las opciones.` };
       if (marcadas.some((m) => !opciones.includes(m))) return { error: `«${c.etiqueta}»: elija solo entre las opciones.` };
       if (marcadas.length === 0) {
         if (c.requerido) return { error: falta };
@@ -148,7 +229,8 @@ export function validarRespuestas(e: EsquemaForm, valores: Record<string, Valor 
       respuestas.push({ id: c.id, e: c.etiqueta, v: marcadas });
       continue;
     }
-    const t = (Array.isArray(bruto) ? bruto[0] ?? "" : bruto ?? "").trim().slice(0, c.tipo === "parrafo" ? 3000 : 300);
+    const primero = Array.isArray(bruto) ? bruto[0] : bruto;
+    const t = (typeof primero === "string" ? primero : "").trim().slice(0, c.tipo === "parrafo" ? 3000 : 300);
     if (!t) {
       if (c.requerido) return { error: falta };
       continue;

@@ -3,14 +3,14 @@
 import { useActionState, useState, type ReactNode } from "react";
 import {
   AlignLeft, ArrowDown, ArrowUp, Calendar, CheckCircle2, CircleDot, Copy, Eye, GitBranch, GripVertical, Hash,
-  List, ListChecks, Loader2, Mail, Monitor, Paperclip, Phone, Plus, Rocket, Save, Settings2, Smartphone, Sparkles, Star, Trash2, Type, X, XCircle,
+  List, ListChecks, Loader2, Mail, Monitor, Paperclip, Phone, Plus, Rocket, Save, Settings2, Smartphone, Sparkles, Star, Table2, Heading, Trash2, Type, X, XCircle,
   type LucideIcon,
 } from "lucide-react";
 import { guardarFormulario, type GuardarFormularioEstado } from "@/lib/cms/formularios-actions";
 import { FormularioPublico } from "@/components/formularios/FormularioPublico";
 import {
-  MAX_CAMPOS, OPERADORES, TIPOS_CAMPO_FORM, campoNuevo, conOpciones, opcionesForm,
-  type CampoForm, type EsquemaForm, type TipoCampoForm,
+  MAX_CAMPOS, MAX_COLUMNAS, OPERADORES, TIPOS_CAMPO_FORM, TIPOS_COLUMNA, campoNuevo, columnaNueva, conOpciones, esPregunta, opcionesForm,
+  type CampoForm, type ColumnaTabla, type EsquemaForm, type TipoCampoForm, type TipoColumna,
 } from "@/lib/cms/formulario-esquema";
 
 // Constructor de formularios: a la izquierda el lienzo (título y preguntas como tarjetas, al estilo de Google Forms y Tally),
@@ -18,12 +18,12 @@ import {
 
 const ICONO: Record<TipoCampoForm, LucideIcon> = {
   texto: Type, parrafo: AlignLeft, numero: Hash, correo: Mail, telefono: Phone, fecha: Calendar,
-  opcion: CircleDot, lista: List, casillas: ListChecks, escala: Star, archivo: Paperclip,
+  opcion: CircleDot, lista: List, casillas: ListChecks, escala: Star, archivo: Paperclip, tabla: Table2, seccion: Heading,
 };
 const GRUPOS: { titulo: string; tipos: TipoCampoForm[] }[] = [
   { titulo: "Texto y datos", tipos: ["texto", "parrafo", "numero", "correo", "telefono", "fecha"] },
   { titulo: "Opciones", tipos: ["opcion", "lista", "casillas", "escala"] },
-  { titulo: "Otros", tipos: ["archivo"] },
+  { titulo: "Estructura y otros", tipos: ["tabla", "seccion", "archivo"] },
 ];
 const nombreTipo = (t: TipoCampoForm) => TIPOS_CAMPO_FORM.find((x) => x.valor === t)?.nombre ?? t;
 
@@ -185,7 +185,7 @@ export function FormularioConstructor({
                   {campos.map((c, i) => (
                     <TarjetaPregunta
                       key={c.id} c={c} i={i} total={campos.length} abierta={abierta === c.id}
-                      anteriores={campos.slice(0, i).filter((p) => p.etiqueta.trim())}
+                      anteriores={campos.slice(0, i).filter((p) => p.etiqueta.trim() && esPregunta(p.tipo))}
                       onAbrir={() => setAbierta(abierta === c.id ? null : c.id)}
                       onCambiar={(p) => cambiar(c.id, p)} onMover={(d) => mover(i, d)} onDuplicar={() => duplicar(i)} onQuitar={() => quitar(c.id)}
                       puedeDuplicar={campos.length < MAX_CAMPOS}
@@ -322,7 +322,7 @@ function TarjetaPregunta({
       {abierta && (
         <div className="flex flex-col gap-4 border-t border-[#eef0ea] bg-[#fcfdfb] px-4 pb-5 pt-4 sm:px-6">
           <input className={`${input} text-base font-semibold`} value={c.etiqueta} maxLength={160} onChange={(e) => onCambiar({ etiqueta: e.target.value })} placeholder="Escriba la pregunta" aria-label="Pregunta" autoFocus={!c.etiqueta} />
-          <input className={`${input} text-sm`} value={c.ayuda} maxLength={200} onChange={(e) => onCambiar({ ayuda: e.target.value })} placeholder="Texto de ayuda bajo la pregunta (opcional)" aria-label="Ayuda" />
+          <input className={`${input} text-sm`} value={c.ayuda} maxLength={200} onChange={(e) => onCambiar({ ayuda: e.target.value })} placeholder={c.tipo === "seccion" ? "Texto bajo el título (opcional)" : "Texto de ayuda bajo la pregunta (opcional)"} aria-label="Ayuda" />
 
           {conOpciones(c.tipo) && (
             <div className="flex flex-col gap-2">
@@ -360,6 +360,8 @@ function TarjetaPregunta({
             </div>
           )}
 
+          {c.tipo === "tabla" && <EditorColumnas columnas={c.columnas ?? []} onChange={(columnas) => onCambiar({ columnas })} />}
+
           {/* Lógica condicional */}
           {anteriores.length > 0 && (
             c.si ? (
@@ -393,7 +395,11 @@ function TarjetaPregunta({
               <span className="sr-only">Tipo de respuesta</span>
               <select className={`${input} w-auto py-2 text-sm`} value={c.tipo} onChange={(e) => {
                 const tipo = e.target.value as TipoCampoForm;
-                onCambiar({ tipo, ...(conOpciones(tipo) && !c.opciones.trim() ? { opciones: "Opción 1\nOpción 2" } : {}) });
+                onCambiar({
+                  tipo, ...(conOpciones(tipo) && !c.opciones.trim() ? { opciones: "Opción 1\nOpción 2" } : {}),
+                  ...(tipo === "tabla" && !c.columnas?.length ? { columnas: [columnaNueva("texto", "Descripción")] } : {}),
+                  ...(tipo === "seccion" ? { requerido: false } : {}),
+                });
               }}>
                 {TIPOS_CAMPO_FORM.map((t) => <option key={t.valor} value={t.valor}>{t.nombre}</option>)}
               </select>
@@ -403,11 +409,56 @@ function TarjetaPregunta({
                 <button type="button" onClick={() => onCambiar({ si: { campo: anteriores[anteriores.length - 1].id, op: "es", valor: "" } })}
                   className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#8a5a00] hover:underline"><GitBranch size={14} /> Añadir condición</button>
               )}
-              <Interruptor activo={c.requerido} onChange={(v) => onCambiar({ requerido: v })}>Obligatoria</Interruptor>
+              {esPregunta(c.tipo) && <Interruptor activo={c.requerido} onChange={(v) => onCambiar({ requerido: v })}>{c.tipo === "tabla" ? "Al menos una fila" : "Obligatoria"}</Interruptor>}
             </div>
           </div>
         </div>
       )}
     </li>
+  );
+}
+
+// Columnas de una tabla de filas: nombre, tipo, opciones (si es lista) y si es obligatoria en cada fila.
+function EditorColumnas({ columnas, onChange }: { columnas: ColumnaTabla[]; onChange: (c: ColumnaTabla[]) => void }) {
+  const cambiar = (i: number, p: Partial<ColumnaTabla>) => onChange(columnas.map((k, j) => (j === i ? { ...k, ...p } : k)));
+  const mover = (i: number, d: -1 | 1) => {
+    const j = i + d;
+    if (j < 0 || j >= columnas.length) return;
+    const n = [...columnas];
+    [n[i], n[j]] = [n[j], n[i]];
+    onChange(n);
+  };
+  return (
+    <div className="flex flex-col gap-2">
+      <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#8a978f]">Columnas de cada fila <span className="font-normal normal-case tracking-normal">({columnas.length}/{MAX_COLUMNAS})</span></p>
+      {columnas.map((k, i) => (
+        <div key={k.id} className="rounded-xl border border-[#e6e9e0] bg-white p-3">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="grid size-6 shrink-0 place-items-center rounded-md bg-[#f3f9ee] text-xs font-bold text-[#2c6a14]">{i + 1}</span>
+            <input className={`${input} min-w-0 flex-1 py-2 text-sm`} value={k.etiqueta} maxLength={120} placeholder="Nombre de la columna" aria-label={`Nombre de la columna ${i + 1}`} onChange={(e) => cambiar(i, { etiqueta: e.target.value })} />
+            <select className={`${input} w-auto py-2 text-sm`} value={k.tipo} aria-label="Tipo de la columna" onChange={(e) => {
+              const tipo = e.target.value as TipoColumna;
+              cambiar(i, { tipo, ...(tipo === "lista" && !k.opciones.trim() ? { opciones: "Opción 1\nOpción 2" } : {}) });
+            }}>
+              {TIPOS_COLUMNA.map((t) => <option key={t.valor} value={t.valor}>{t.nombre}</option>)}
+            </select>
+            <label className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#33463a]">
+              <input type="checkbox" checked={k.requerido} onChange={(e) => cambiar(i, { requerido: e.target.checked })} className="size-4 accent-[#2c6a14]" /> Obligatoria
+            </label>
+            <span className="flex">
+              <button type="button" onClick={() => mover(i, -1)} disabled={i === 0} aria-label="Subir columna" className="grid size-7 place-items-center rounded-md text-[#5d6e65] hover:bg-[#eef3e8] disabled:opacity-30"><ArrowUp size={14} /></button>
+              <button type="button" onClick={() => mover(i, 1)} disabled={i === columnas.length - 1} aria-label="Bajar columna" className="grid size-7 place-items-center rounded-md text-[#5d6e65] hover:bg-[#eef3e8] disabled:opacity-30"><ArrowDown size={14} /></button>
+              <button type="button" onClick={() => onChange(columnas.filter((_, j) => j !== i))} disabled={columnas.length <= 1} aria-label="Quitar columna" className="grid size-7 place-items-center rounded-md text-[#a02323] hover:bg-[#fdecec] disabled:opacity-30"><X size={14} /></button>
+            </span>
+          </div>
+          {k.tipo === "lista" && (
+            <textarea className={`${input} mt-2 py-2 text-sm`} rows={3} value={k.opciones} maxLength={1500} placeholder="Una opción por línea" aria-label="Opciones de la columna" onChange={(e) => cambiar(i, { opciones: e.target.value })} />
+          )}
+        </div>
+      ))}
+      {columnas.length < MAX_COLUMNAS && (
+        <button type="button" onClick={() => onChange([...columnas, columnaNueva()])} className="inline-flex w-fit items-center gap-1.5 rounded-lg px-2 py-1 text-sm font-semibold text-[#2c6a14] hover:bg-[#eef3e8]"><Plus size={14} /> Añadir columna</button>
+      )}
+    </div>
   );
 }

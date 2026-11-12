@@ -71,3 +71,50 @@ test("slugDe quita tildes y símbolos", () => {
   assert.equal(slugDe("¡Inscripción al Día del Ganadero 2026!"), "inscripcion-al-dia-del-ganadero-2026");
   assert.equal(slugDe("???"), "formulario");
 });
+
+import { aCsv, porDia, resumir, tablasExportables } from "../src/lib/cms/formulario-resumen.ts";
+import { valorTexto } from "../src/lib/cms/formulario-esquema.ts";
+
+const tabla = {
+  id: "act", tipo: "tabla", etiqueta: "Actividades", ayuda: "", requerido: true, opciones: "", max: 5,
+  columnas: [
+    { id: "a", etiqueta: "Actividad", tipo: "texto", opciones: "", requerido: true },
+    { id: "ia", etiqueta: "¿Con IA?", tipo: "lista", opciones: "Sí\nNo", requerido: false },
+    { id: "h", etiqueta: "Horas", tipo: "numero", opciones: "", requerido: false },
+  ],
+};
+
+test("la tabla valida cada fila, ignora las vacías y exige al menos una si es obligatoria", () => {
+  const e = leerEsquema({ campos: [{ ...tabla }, { id: "s", tipo: "seccion", etiqueta: "Parte 2" }] });
+  assert.equal(e.campos[0].columnas.length, 3);
+  assert.equal(problemaEsquema(e), null);
+  assert.match(validarRespuestas(e, { act: [{}] }).error, /al menos una fila/);
+  assert.match(validarRespuestas(e, { act: [{ ia: "Sí" }] }).error, /fila 1: falta «Actividad»/);
+  assert.match(validarRespuestas(e, { act: [{ a: "x", ia: "Tal vez" }] }).error, /una de las opciones/);
+  assert.match(validarRespuestas(e, { act: [{ a: "x", h: "mucho" }] }).error, /número/);
+  const ok = validarRespuestas(e, { act: [{ a: " Actas ", ia: "Sí", h: "4", raro: "z" }, {}, { a: "Pagos" }] });
+  assert.deepEqual(ok.respuestas, [{ id: "act", e: "Actividades", v: [{ a: "Actas", ia: "Sí", h: "4" }, { a: "Pagos" }] }]);
+  assert.equal(valorTexto(ok.respuestas[0].v, tabla.columnas), "1) Actividad: Actas · ¿Con IA?: Sí · Horas: 4\n2) Actividad: Pagos");
+});
+
+test("el resumen cuenta opciones, filas de tabla y exporta una hoja por tabla", () => {
+  const e = leerEsquema({ campos: [{ id: "n", tipo: "texto", etiqueta: "Nombre" }, { id: "o", tipo: "opcion", etiqueta: "Área", opciones: "A\nB" }, tabla] });
+  const rs = [
+    { id: "11111111-x", version: 1, created_at: "2026-11-10T10:00:00Z", answers: [{ id: "n", e: "Nombre", v: "Ana" }, { id: "o", e: "Área", v: "A" }, { id: "act", e: "Actividades", v: [{ a: "Actas", ia: "Sí", h: "4" }, { a: "actas", ia: "No", h: "2" }] }] },
+    { id: "22222222-y", version: 1, created_at: "2026-11-12T09:00:00Z", answers: [{ id: "n", e: "Nombre", v: "=Beto" }, { id: "o", e: "Área", v: "A" }] },
+  ];
+  const r = resumir(e, rs);
+  assert.deepEqual(r[1].conteos, [{ etiqueta: "A", n: 2 }, { etiqueta: "B", n: 0 }]);
+  assert.equal(r[2].filas, 2);
+  assert.deepEqual(r[2].columnas[1].conteos, [{ etiqueta: "Sí", n: 1 }, { etiqueta: "No", n: 1 }]);
+  assert.equal(r[2].columnas[2].suma, 6);
+  assert.deepEqual(r[2].columnas[0].repetidos, [{ etiqueta: "Actas", n: 2 }]);
+  const serie = porDia(rs, "2026-11-12", 3);
+  assert.deepEqual(serie.map((d) => d.value), [1, 0, 1]);
+  const [general, detalle] = tablasExportables(e, rs);
+  assert.deepEqual(general.cabecera, ["Código", "Fecha", "Versión", "Nombre", "Área", "Actividades (n.º de filas)"]);
+  assert.equal(general.filas[0][5], 2);
+  assert.equal(detalle.filas.length, 2);
+  assert.deepEqual(detalle.filas[1].slice(-4), [2, "actas", "No", "2"]);
+  assert.match(aCsv(general), /"'=Beto"/, "el CSV neutraliza fórmulas");
+});

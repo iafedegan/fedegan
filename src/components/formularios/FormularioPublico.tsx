@@ -1,9 +1,60 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { CheckCircle2, Loader2, Paperclip, Send } from "lucide-react";
+import type { ReactNode } from "react";
+import { CheckCircle2, Copy, Loader2, Paperclip, Plus, Send, Trash2 } from "lucide-react";
 import { enviarFormulario } from "@/lib/cms/formularios-actions";
-import { opcionesForm, visibles, type EsquemaForm, type Valor } from "@/lib/cms/formulario-esquema";
+import { MAX_FILAS, esFilas, opcionesForm, visibles, type ColumnaTabla, type EsquemaForm, type Fila, type Valor } from "@/lib/cms/formulario-esquema";
+
+// Tabla de filas repetibles (p. ej. «una fila por actividad»): cada fila es una tarjeta con sus columnas, cómoda también en el móvil.
+function TablaFilas({ etiqueta, ayuda, columnas, filas, onChange }: { etiqueta: ReactNode; ayuda: string; columnas: ColumnaTabla[]; filas: Fila[]; onChange: (f: Fila[]) => void }) {
+  const poner = (i: number, k: string, x: string) => onChange(filas.map((f, j) => (j === i ? { ...f, [k]: x } : f)));
+  return (
+    <fieldset className="fm-set">
+      <legend>{etiqueta}</legend>
+      {ayuda && <span className="fm-ayuda mb-2 block">{ayuda}</span>}
+      <div className="flex flex-col gap-3">
+        {filas.map((f, i) => (
+          <div key={i} className="rounded-2xl border border-[#e3ecdb] bg-[#fafcf7] p-4">
+            <div className="mb-3 flex items-center justify-between gap-2">
+              <span className="inline-flex items-center gap-2 text-sm font-bold text-[#2c6a14]"><span className="grid size-6 place-items-center rounded-full bg-[#2c6a14] text-xs text-white">{i + 1}</span> Fila {i + 1}</span>
+              <span className="flex gap-1">
+                <button type="button" onClick={() => filas.length < MAX_FILAS && onChange([...filas.slice(0, i + 1), { ...f }, ...filas.slice(i + 1)])} aria-label={`Duplicar la fila ${i + 1}`} title="Duplicar" className="grid size-8 place-items-center rounded-lg text-[#5d6e65] hover:bg-white"><Copy size={15} /></button>
+                <button type="button" onClick={() => onChange(filas.length > 1 ? filas.filter((_, j) => j !== i) : [{}])} aria-label={`Quitar la fila ${i + 1}`} title="Quitar" className="grid size-8 place-items-center rounded-lg text-[#a02323] hover:bg-[#fdecec]"><Trash2 size={15} /></button>
+              </span>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              {columnas.map((k) => {
+                const x = f[k.id] ?? "";
+                const et = <span className="fm-et text-sm">{k.etiqueta}{k.requerido && <abbr title="Obligatoria" className="fm-req">*</abbr>}</span>;
+                return (
+                  <label key={k.id} className={`flex flex-col gap-1 ${k.tipo === "parrafo" ? "sm:col-span-2" : ""}`}>
+                    {et}
+                    {k.tipo === "parrafo" ? (
+                      <textarea rows={2} maxLength={2000} value={x} onChange={(e) => poner(i, k.id, e.target.value)} className="fm-in" />
+                    ) : k.tipo === "lista" ? (
+                      <select value={x} onChange={(e) => poner(i, k.id, e.target.value)} className="fm-in">
+                        <option value="">Elija…</option>
+                        {opcionesForm(k.opciones).map((o) => <option key={o} value={o}>{o}</option>)}
+                      </select>
+                    ) : (
+                      <input value={x} maxLength={300} inputMode={k.tipo === "numero" ? "decimal" : undefined} onChange={(e) => poner(i, k.id, e.target.value)} className="fm-in" />
+                    )}
+                  </label>
+                );
+              })}
+            </div>
+          </div>
+        ))}
+        {filas.length < MAX_FILAS && (
+          <button type="button" onClick={() => onChange([...filas, {}])} className="inline-flex w-fit items-center gap-1.5 rounded-xl border-2 border-dashed border-[#b9cfa8] px-4 py-2.5 text-sm font-semibold text-[#2c6a14] transition hover:border-[#2c6a14] hover:bg-[#f3f9ee]">
+            <Plus size={16} /> Añadir otra fila
+          </button>
+        )}
+      </div>
+    </fieldset>
+  );
+}
 
 // Formulario público (y vista previa del constructor): las preguntas con condición aparecen o se ocultan al responder.
 // El envío no usa el reinicio automático de React: si hay un error, lo escrito se conserva.
@@ -53,9 +104,26 @@ export function FormularioPublico({ slug, esquema, preview = false }: { slug: st
         const opciones = opcionesForm(c.opciones);
         const v = valores[c.id];
         const texto = typeof v === "string" ? v : "";
-        const marcadas = Array.isArray(v) ? v : [];
+        const marcadas = (Array.isArray(v) && !esFilas(v) ? v : []) as string[];
         const etiqueta = <span className="fm-et">{c.etiqueta}{c.requerido ? <abbr title="Obligatoria" className="fm-req">*</abbr> : <span className="fm-opc"> (opcional)</span>}</span>;
         const ancho = c.tipo === "parrafo" || c.tipo === "casillas" || c.tipo === "opcion" || c.tipo === "escala";
+        if (c.tipo === "seccion") {
+          return (
+            <div key={c.id} className="fm-ancho mt-2 border-b-2 border-[#e3ecdb] pb-2">
+              <h3 className="font-[var(--font-display)] text-xl font-bold text-[#10240f]">{c.etiqueta}</h3>
+              {c.ayuda && <p className="mt-1 text-sm leading-relaxed text-[#5d6e65]">{c.ayuda}</p>}
+            </div>
+          );
+        }
+        if (c.tipo === "tabla") {
+          const filas: Fila[] = esFilas(v) ? v : [{}];
+          return (
+            <div key={c.id} className="fm-campo fm-ancho">
+              <input type="hidden" name={nombre} value={JSON.stringify(filas)} />
+              <TablaFilas etiqueta={etiqueta} ayuda={c.ayuda} columnas={c.columnas ?? []} filas={filas} onChange={(f) => poner(c.id, f)} />
+            </div>
+          );
+        }
         return (
           <div key={c.id} className={`fm-campo ${ancho ? "fm-ancho" : ""}`}>
             {c.tipo === "casillas" || c.tipo === "opcion" ? (

@@ -150,7 +150,16 @@ export async function enviarFormulario(fd: FormData): Promise<EnvioEstado> {
   const archivos = new Map<string, File>();
   for (const c of esquema.campos) {
     const nombre = `c_${c.id}`;
-    if (c.tipo === "casillas") valores[c.id] = fd.getAll(nombre).map((x) => String(x));
+    if (c.tipo === "seccion") continue;
+    if (c.tipo === "tabla") {
+      // Las filas llegan como JSON en un campo oculto; validarRespuestas descarta lo que no tenga la forma esperada.
+      try {
+        const v = JSON.parse(String(fd.get(nombre) ?? "[]").slice(0, 200_000));
+        valores[c.id] = Array.isArray(v) ? v : [];
+      } catch {
+        valores[c.id] = [];
+      }
+    } else if (c.tipo === "casillas") valores[c.id] = fd.getAll(nombre).map((x) => String(x));
     else if (c.tipo === "archivo") {
       const a = fd.get(nombre);
       if (a instanceof File && a.size > 0) {
