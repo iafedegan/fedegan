@@ -1806,7 +1806,6 @@ body:has(.mx-hero) main .eyebrow::before { content: none; }
 .nv-brand { display: none; }
 body:has(.mx-hero, .nomast) .nv-brand { display: inline-flex; align-items: baseline; gap: 0.35rem; font: 700 1.2rem/1 var(--font-display); letter-spacing: 0.01em; color: var(--ed-gold-ink); text-decoration: none; white-space: nowrap; }
 body:has(.mx-hero, .nomast) .nv-brand span { color: var(--text); }
-@media (min-width: 768px) { body:has(.mx-hero, .nomast) .mh { display: none; } }
 body:has(.mx-hero) .mh-date { display: none; }
 
 /* ======================================================================
