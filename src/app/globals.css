@@ -2469,8 +2469,6 @@ header[data-region="navbar"] [role="menu"]::before { content: ""; position: abso
 html[data-theme="esmeralda"] .doc-grid2 > .doc-content figure img { mix-blend-mode: normal; background: #fff; }
 /* Submenús del navbar: el panel del segundo nivel no recorta al del tercero (que se abre a su costado) */
 header[data-region="navbar"] [role="menu"] [role="menu"] { overflow: visible !important; max-height: none !important; }
-/* En pantallas que no alcanzan para tres paneles seguidos, el tercer nivel se abre hacia la izquierda */
-@media (max-width: 1439px) { header[data-region="navbar"] [role="menu"] [role="menu"] [role="menu"] { left: auto !important; right: calc(100% - 0.25rem); } }
 
 /* Al salir de la portada, el cabezote grande se esconde despacio hacia arriba (y al volver baja igual) */
 .mh { overflow: hidden; max-height: 24rem; transition: max-height 1.2s cubic-bezier(0.4, 0, 0.2, 1), padding 1.2s cubic-bezier(0.4, 0, 0.2, 1); }
@@ -2482,3 +2480,7 @@ header[data-region="navbar"] [role="menu"] [role="menu"] { overflow: visible !im
 @media (prefers-reduced-motion: reduce) { .mh, .mh > * { transition: none; } }
 /* Pantallas medianas: opciones un poco más compactas para que quepan diez (con SIG) sin encimarse con los iconos */
 @media (max-width: 1535px) { header[data-region="navbar"] .nv-link { padding-inline: 0.5rem; letter-spacing: 0.05em; } }
+/* Submenú que no cabe a la derecha: se abre a la izquierda de su opción */
+header[data-region="navbar"] [role="menu"][data-izq] { left: auto !important; right: calc(100% - 0.25rem) !important; margin-left: 0 !important; }
+/* Nunca hay desplazamiento horizontal de la página por un panel que se salga */
+html, body { overflow-x: clip; }

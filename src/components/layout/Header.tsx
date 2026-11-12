@@ -21,10 +21,18 @@ const inMoreOnlyBelow = (i: number) => (i < 10 ? "xl:hidden" : "");
 // Lista del menú: solo se ven las opciones del primer nivel; las que tienen sub-opciones abren un panel al costado
 // al pasar el mouse (o con el teclado), así no se despliega todo de una vez.
 function SubEntry({ it, onPick }: { it: SubItem; onPick: () => void }) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpenRaw] = useState(false);
+  // Si el panel no cabe a la derecha (opciones del final de la barra), se abre hacia la izquierda.
+  const [izq, setIzq] = useState(false);
+  const liRef = useRef<HTMLLIElement>(null);
+  const setOpen = (v: boolean) => {
+    if (v && liRef.current) setIzq(liRef.current.getBoundingClientRect().right + 300 > window.innerWidth);
+    setOpenRaw(v);
+  };
   const kids = it.children ?? [];
   return (
     <li
+      ref={liRef}
       role="none"
       className="relative"
       onMouseEnter={() => setOpen(true)}
@@ -47,7 +55,7 @@ function SubEntry({ it, onPick }: { it: SubItem; onPick: () => void }) {
         {kids.length > 0 && <ChevronRight size={15} aria-hidden className="shrink-0 opacity-70" />}
       </Link>
       {open && kids.length > 0 && (
-        <div role="menu" className="absolute left-full top-0 z-50 -ml-1 max-h-[70vh] w-72 overflow-y-auto rounded-[0.25rem] border border-[var(--border-strong)] bg-[var(--surface-solid)] py-2 shadow-[var(--shadow-lg)]">
+        <div role="menu" data-izq={izq ? "" : undefined} className="absolute left-full top-0 z-50 -ml-1 max-h-[70vh] w-72 overflow-y-auto rounded-[0.25rem] border border-[var(--border-strong)] bg-[var(--surface-solid)] py-2 shadow-[var(--shadow-lg)]">
           <SubList items={kids} onPick={onPick} />
         </div>
       )}
