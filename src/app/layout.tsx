@@ -42,25 +42,28 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "es_CO",
-    siteName: "FEDEGÁN–FNG",
+    siteName: "FEDEGÁN",
     url: "/",
-    title: "FEDEGÁN–FNG · Federación Colombiana de Ganaderos",
+    title: "FEDEGÁN · Federación Colombiana de Ganaderos",
     description: "Noticias, programas, publicaciones, servicios y cifras del sector ganadero colombiano.",
-    images: [{ url: "/brand/fedegan-icon-round.png", width: 512, height: 512, alt: "FEDEGÁN–FNG" }],
+    images: [{ url: "/brand/fedegan-icon-round.png", width: 512, height: 512, alt: "FEDEGÁN" }],
   },
-  twitter: { card: "summary", title: "FEDEGÁN–FNG · Federación Colombiana de Ganaderos", description: "Noticias, programas, publicaciones, servicios y cifras del sector ganadero colombiano.", images: ["/brand/fedegan-icon-round.png"] },
+  twitter: { card: "summary", title: "FEDEGÁN · Federación Colombiana de Ganaderos", description: "Noticias, programas, publicaciones, servicios y cifras del sector ganadero colombiano.", images: ["/brand/fedegan-icon-round.png"] },
   robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1, "max-video-preview": -1 } },
-  applicationName: "FEDEGÁN–FNG",
+  applicationName: "FEDEGÁN",
   category: "agricultura",
   appleWebApp: { capable: true, title: "FEDEGÁN", statusBarStyle: "black-translucent" },
   title: {
-    default: "FEDEGÁN–FNG · Federación Colombiana de Ganaderos",
-    template: "%s · FEDEGÁN–FNG",
+    default: "FEDEGÁN · Federación Colombiana de Ganaderos",
+    template: "%s · FEDEGÁN",
   },
   description:
-    "Portal institucional de FEDEGÁN–FNG, hub del ecosistema digital ganadero de Colombia: noticias, programas, publicaciones, servicios y cifras del sector.",
+    "Portal institucional de FEDEGÁN, hub del ecosistema digital ganadero de Colombia: noticias, programas, publicaciones, servicios y cifras del sector.",
   icons: {
-    icon: [{ url: "/brand/fedegan-icon-192.png", type: "image/png", sizes: "192x192" }],
+    icon: [
+      { url: "/brand/fedegan-icon-48.png", type: "image/png", sizes: "48x48" },
+      { url: "/brand/fedegan-icon-192.png", type: "image/png", sizes: "192x192" },
+    ],
     apple: "/brand/fedegan-icon-round.png",
   },
 };

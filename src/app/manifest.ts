@@ -3,7 +3,7 @@ import type { MetadataRoute } from "next";
 export default function manifest(): MetadataRoute.Manifest {
   return {
     id: "/",
-    name: "FEDEGÁN–FNG · Federación Colombiana de Ganaderos",
+    name: "FEDEGÁN · Federación Colombiana de Ganaderos",
     short_name: "FEDEGÁN",
     description: "Portal institucional y hub del ecosistema digital ganadero de Colombia.",
     start_url: "/?source=pwa",
