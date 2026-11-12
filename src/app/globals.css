@@ -2153,3 +2153,47 @@ html:has(.ed-bgmark)::before { content: none !important; animation: none !import
 .mk-cifras { background: #0b1b12; border-bottom: 1px solid rgba(216, 181, 88, 0.55); }
 .mk-cifras .mk-item { font-size: 0.82rem; }
 .mk-cifras .mk-item b { color: #f0d58a; }
+
+/* ======================================================================
+   Navbar rediseñado: barra verde con brillo y filete dorado, opciones en píldora (la activa en verde oscuro con texto dorado),
+   iconos en botones redondos y paneles desplegables en verde oscuro con detalles dorados.
+   ====================================================================== */
+header[data-region="navbar"] {
+  background-color: #72bf44 !important;
+  background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 55%, rgba(6, 40, 18, 0.1) 100%) !important;
+  box-shadow: 0 1px 0 #d8b558, 0 14px 26px -18px rgba(6, 18, 11, 0.7);
+}
+header[data-region="navbar"] nav > div { padding-block: 0.55rem; }
+header[data-region="navbar"] .nv-link {
+  position: relative; padding: 0.55rem 1rem; border-radius: 999px;
+  font-size: 0.74rem; font-weight: 800 !important; letter-spacing: 0.1em; color: #10240f;
+  transition: background-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+}
+header[data-region="navbar"] .nv-link::after { content: none; }
+header[data-region="navbar"] .nv-link:hover { background: rgba(255, 255, 255, 0.34); color: #10240f; transform: translateY(-1px); }
+header[data-region="navbar"] .nv-link.nv-active, header[data-region="navbar"] .nv-link[aria-current="page"] {
+  background: #0f2a1f; color: #f0d58a; box-shadow: 0 6px 14px -8px rgba(6, 18, 11, 0.8), inset 0 0 0 1px rgba(216, 181, 88, 0.55);
+}
+header[data-region="navbar"] .nv-link.nv-active:hover { transform: none; }
+header[data-region="navbar"] .nv-link svg { opacity: 0.75; }
+
+/* Iconos de la derecha: botones redondos */
+header[data-region="navbar"] nav .flex.shrink-0 > :is(a, button, div > button, div > a) {
+  width: 2.35rem; height: 2.35rem; border-radius: 999px !important; border: 0 !important;
+  background: rgba(255, 255, 255, 0.3); transition: background-color 0.25s ease, transform 0.25s ease;
+}
+header[data-region="navbar"] nav .flex.shrink-0 > :is(a, button, div > button, div > a):hover { background: #0f2a1f; transform: translateY(-1px); }
+header[data-region="navbar"] nav .flex.shrink-0 > :is(a, button, div > button, div > a):hover svg { color: #f0d58a !important; }
+
+/* Paneles desplegables: verde oscuro, borde dorado fino, esquinas redondeadas */
+header[data-region="navbar"] [role="menu"] {
+  --text: #eaf3e4; --text-muted: rgba(234, 243, 228, 0.78); --text-faint: rgba(234, 243, 228, 0.6);
+  --fg-lime-400: #f0d58a; --fg-lime-500: #f0d58a; --bg-muted: rgba(216, 181, 88, 0.14); --border: rgba(216, 181, 88, 0.25); --border-strong: rgba(216, 181, 88, 0.4);
+  --surface-solid: #0f2a1f; --link: #eaf3e4;
+  margin-top: 0.55rem; border-radius: 1rem !important; border: 1px solid rgba(216, 181, 88, 0.4) !important;
+  background: #0f2a1f !important; box-shadow: 0 24px 44px -20px rgba(0, 0, 0, 0.75) !important;
+  animation: nv-pop 0.22s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+header[data-region="navbar"] [role="menu"] svg { color: inherit !important; }
+@keyframes nv-pop { from { opacity: 0; transform: translateY(-6px) scale(0.98); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { header[data-region="navbar"] [role="menu"] { animation: none; } }
