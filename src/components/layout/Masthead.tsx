@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { MastheadTools } from "./MastheadTools";
+import { MastheadActions } from "./MastheadActions";
 import { MastheadMarca } from "./MastheadMarca";
 import { getPublishedDesign } from "@/lib/design/store";
 
@@ -21,6 +22,7 @@ export async function Masthead() {
       <p className="mh-tag">Federación Colombiana de Ganaderos</p>
       <p className="mh-date">{date}</p>
       <MastheadTools />
+      <MastheadActions />
     </div>
   );
 }
