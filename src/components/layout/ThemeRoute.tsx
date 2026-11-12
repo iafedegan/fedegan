@@ -19,7 +19,7 @@ export function ThemeRoute() {
     const dark = tpl && !adm ? tpl === "oscuro" : stored ? stored === "oscuro" : !adm;
     const next = dark ? "esmeralda" : "institucional";
     if (root.getAttribute("data-theme") !== next) root.setAttribute("data-theme", next);
-    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", dark ? "#0e0e0e" : "#0a2a20");
+    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", "#071b13");
   }, [pathname]);
   return null;
 }

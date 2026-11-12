@@ -2496,3 +2496,66 @@ header[data-region="navbar"] {
   box-shadow: 0 14px 26px -18px rgba(6, 18, 11, 0.7);
 }
 header[data-region="navbar"]::before { content: none; }
+
+/* ======================================================================
+   CELULAR / PWA — franjas de la barra de estado (arriba) y del indicador de inicio (abajo) en el verde oscuro del cabezote,
+   sin blanco ni degradé; título del recorrido siempre bajo el cabezote; teléfono en horizontal sin cabezote enorme.
+   ====================================================================== */
+[data-site-chrome]::before, [data-site-chrome]::after { content: ""; position: fixed; left: 0; right: 0; z-index: 54; pointer-events: none; background: #071b13; }
+[data-site-chrome]::before { top: 0; height: env(safe-area-inset-top, 0px); z-index: 90; }
+[data-site-chrome]::after { bottom: 0; height: env(safe-area-inset-bottom, 0px); }
+@media (max-width: 767px) {
+  html, html[data-theme] { background-color: #071b13; }
+  /* El cabezote es fijo arriba: la escena del recorrido empieza justo debajo de él (antes se metía debajo y tapaba el título) */
+  .sw-track { --sw-top: var(--mh-h, 9rem); }
+  /* Sin desenfoque ni blanco detrás del cabezote */
+  .mh { background: #071b13 !important; -webkit-backdrop-filter: none; backdrop-filter: none; }
+  header[data-region="navbar"] { -webkit-backdrop-filter: none !important; backdrop-filter: none !important; background-image: none !important; background-color: transparent !important; box-shadow: none !important; }
+}
+
+/* ---- Teléfono en horizontal y ventanas bajas (alto ≤ 520 px) ---- */
+@media (max-height: 520px) and (min-width: 768px) {
+  /* Sin cintillo ni cabezote grande: la barra queda sola arriba, con el escudo */
+  html .mk, html [data-site-chrome][data-site-chrome] .mh { display: none !important; }
+  header[data-region="navbar"] .nv-brand { max-width: 4rem; padding: 0.22rem; opacity: 1; position: relative; left: 0; }
+  header[data-region="navbar"] nav > div { padding-block: 0.15rem !important; }
+  .sw-track { --sw-top: 3.1rem; }
+  .sw-center { max-height: calc(100% - 1rem); }
+}
+@media (max-height: 520px) and (max-width: 767px) {
+  /* Cabezote bajo: solo el logo, sin fecha ni opciones; el recorrido empieza justo debajo */
+  html .mh { padding: calc(env(safe-area-inset-top, 0px) + 0.3rem) 0.5rem 0.3rem !important; }
+  .mh .mh-date, .mh .mh-tools { display: none !important; }
+  .mh .mh-title { font-size: 1.15rem; }
+  .mh .mh-gem { width: 2.1rem; height: 2.1rem; }
+  .sw-center .sw-cta-desc { -webkit-line-clamp: 2; font-size: 0.82rem; }
+}
+@media (max-height: 520px) {
+  /* Barra inferior más baja y angosta */
+  nav[aria-label="Navegación de la aplicación"] { left: 50%; right: auto; width: min(30rem, calc(100% - 1.5rem)); transform: translateX(-50%); padding-block: 0; }
+  nav[aria-label="Navegación de la aplicación"] span[class*="h-8"] { height: 1.7rem; }
+  nav[aria-label="Navegación de la aplicación"] a, nav[aria-label="Navegación de la aplicación"] button { padding-block: 0.15rem; font-size: 0.66rem; }
+  /* Aviso de cookies compacto: ocupa poco alto y deja ver la página */
+  section[aria-labelledby="consent-title"] { bottom: 0.5rem; max-height: calc(100svh - 1rem); overflow-y: auto; width: min(34rem, calc(100vw - 1rem)); padding: 0.7rem 0.9rem; }
+  section[aria-labelledby="consent-title"] p:nth-of-type(2) { display: none; }
+}
+@media (max-height: 520px) and (min-width: 768px) {
+  /* Menú vertical del recorrido: cabe completo dentro de la escena en horizontal */
+  .sw-rail { top: 0.5rem !important; bottom: auto !important; transform: none !important; max-height: calc(100% - 1rem) !important; padding-block: 0.5rem; }
+  .sw-rail .sw-dot { font-size: 0.62rem; padding-block: 0 !important; line-height: 1.2; gap: 0.5rem; }
+  .sw-rail .sw-item { line-height: 1; }
+  .sw-rail .sw-counter { display: none; }
+}
+
+/* Celular — páginas interiores: cabezote compacto (solo logo) y hoja de lectura sin relleno de más */
+@media (max-width: 767px) {
+  [data-site-chrome]:not([data-inicio]) .mh { padding-top: calc(env(safe-area-inset-top, 0px) + 0.55rem) !important; padding-bottom: 0.4rem !important; }
+  [data-site-chrome]:not([data-inicio]) .mh .mh-date, [data-site-chrome]:not([data-inicio]) .mh .mh-tools { display: none !important; }
+  [data-site-chrome]:not([data-inicio]) .mh .mh-title { font-size: 1.35rem; }
+  [data-site-chrome]:not([data-inicio]) .mh .mh-gem { width: 2.5rem; height: 2.5rem; }
+  .doc-grid2 > .doc-content { padding: 1.2rem 1rem 1.4rem; border-radius: 1.2rem; }
+  .doc-grid2 > .doc-content .ix-lead { padding: 0.9rem 0.9rem 0.9rem 2.7rem; font-size: 1.05rem; line-height: 1.6; }
+  .doc-grid2 > .doc-content .ix-lead::before { left: 0.55rem; top: 0.05rem; font-size: 3rem; }
+  .doc-wrap { margin-top: -1.2rem; padding-bottom: 2.5rem; }
+  .mx-hero.ed-head.ed-band .ed-title { font-size: clamp(1.7rem, 8vw, 2.2rem) !important; }
+}

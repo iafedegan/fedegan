@@ -32,7 +32,7 @@ import { Analytics } from "@/components/layout/Analytics";
 import { UsageTracker } from "@/components/layout/UsageTracker";
 
 export const viewport: Viewport = {
-  themeColor: "#05100b",
+  themeColor: "#071b13",
   colorScheme: "dark",
   viewportFit: "cover",
 };
