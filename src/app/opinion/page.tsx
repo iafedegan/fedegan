@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
+import { PageHeader } from "@/components/ui/PageHeader";
 import { NewsUnavailable } from "@/components/blocks/NewsUnavailable";
 import { getOpinion } from "@/lib/contexto";
 
@@ -44,13 +45,18 @@ export default async function OpinionPage({ searchParams }: { searchParams: Prom
   const lab = "mb-2 block text-[0.7rem] font-bold uppercase tracking-[0.2em] text-[var(--text-faint)]";
 
   return (
-    <Container className="py-10 sm:py-14">
-      <p className="mb-2 text-xs font-bold uppercase tracking-[0.3em] text-[var(--fg-lime-400)]">◆ Sección</p>
-      <h1 className="font-[var(--font-display)] text-5xl font-bold text-[var(--fg-lime-400)] sm:text-6xl">Opinión</h1>
-      <p className="mt-3 text-lg text-[var(--text-muted)]">Columnas, editoriales y columnistas.</p>
-      <div className="mt-6 border-t border-[var(--border)]" />
-
-      <form method="get" action="/opinion" className="mt-8 grid gap-4 rounded-[0.25rem] border border-[var(--border)] bg-[var(--surface-2)] p-5 md:grid-cols-[1.6fr_1fr_1fr_auto] md:items-end">
+    <>
+    <PageHeader
+      variant="band"
+      eyebrow="Opinión"
+      title="Opinión"
+      description="Columnas, editoriales y columnistas de CONtexto Ganadero."
+      image="/headers/ia-noticias.jpg"
+      imagePos="50% 50%"
+      breadcrumbs={[{ label: "Opinión" }]}
+    />
+    <Container className="py-5 sm:py-8">
+      <form method="get" action="/opinion" className="grid gap-4 rounded-[1rem] border border-[var(--border)] bg-[var(--surface-2)] p-5 md:grid-cols-[1.6fr_1fr_1fr_auto] md:items-end">
         <label>
           <span className={lab}>Nombre autor</span>
           <select name="autor" defaultValue={autor} className={sel}>
@@ -85,10 +91,10 @@ export default async function OpinionPage({ searchParams }: { searchParams: Prom
         <p className="mt-10 text-[var(--text-muted)]">No hay columnas para esa búsqueda.</p>
       ) : (
         <>
-          <ul className="mt-10 grid gap-x-16 md:grid-cols-2">
+          <ul className="mt-6 grid gap-x-5 md:grid-cols-2">
             {visibles.map((x) => (
-              <li key={x.slug} className="border-b border-[var(--border)] py-6">
-                <Link href={`/noticias/${x.slug}`} className="group flex items-start gap-5">
+              <li key={x.slug} className="py-3">
+                <Link href={`/noticias/${x.slug}`} className="group flex items-start gap-5 rounded-[1rem] border border-[var(--border)] bg-[var(--surface-solid)] p-5 transition-colors hover:border-[var(--fg-lime-500)]">
                   {x.image ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img src={x.image} alt="" loading="lazy" className="h-20 w-20 shrink-0 rounded-full border border-[var(--border-strong)] object-cover" />
@@ -117,5 +123,6 @@ export default async function OpinionPage({ searchParams }: { searchParams: Prom
         </>
       )}
     </Container>
+    </>
   );
 }
