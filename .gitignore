@@ -48,3 +48,6 @@ next-env.d.ts
 
 # Exportaciones del CMS (npm run exportar)
 /exportacion
+
+# Claude Code (configuración local)
+.claude/
