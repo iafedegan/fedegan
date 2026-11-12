@@ -3,8 +3,9 @@
 import type { ReactNode } from "react";
 import { usePathname } from "next/navigation";
 
-// Oculta el pie de página en las pantallas de acceso, que caben completas en una sola vista.
-export function ChromeGate({ children }: { children: ReactNode }) {
+// Oculta partes del marco del sitio en ciertas rutas: por defecto el pie de página en las pantallas de acceso
+// (caben completas en una sola vista). `en`: los prefijos de ruta donde no se muestra.
+export function ChromeGate({ children, en = ["/ingresar"] }: { children: ReactNode; en?: string[] }) {
   const pathname = usePathname();
-  return pathname.startsWith("/ingresar") ? null : <>{children}</>;
+  return en.some((p) => pathname === p || pathname.startsWith(`${p}/`)) ? null : <>{children}</>;
 }
