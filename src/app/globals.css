@@ -585,7 +585,7 @@ p { text-wrap: pretty; }
 }
 .sw-skip:hover { background: rgba(5, 16, 11, 0.7); border-color: rgb(var(--acc)); }
 .sw-rail {
-  position: absolute; z-index: 3; right: 0; top: 38%; transform: translateY(-50%);
+  position: absolute; z-index: 3; right: 0; top: 28%; transform: translateY(-50%);
   display: none; flex-direction: column; align-items: flex-end; gap: 0.1rem;
   padding: 1rem 1.25rem 1rem 3.5rem;
   background: linear-gradient(270deg, rgba(5, 16, 11, 0.62) 0%, rgba(5, 16, 11, 0.4) 55%, transparent 100%);
