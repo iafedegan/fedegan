@@ -2471,3 +2471,12 @@ html[data-theme="esmeralda"] .doc-grid2 > .doc-content figure img { mix-blend-mo
 header[data-region="navbar"] [role="menu"] [role="menu"] { overflow: visible !important; max-height: none !important; }
 /* En pantallas que no alcanzan para tres paneles seguidos, el tercer nivel se abre hacia la izquierda */
 @media (max-width: 1439px) { header[data-region="navbar"] [role="menu"] [role="menu"] [role="menu"] { left: auto !important; right: calc(100% - 0.25rem); } }
+
+/* Al salir de la portada, el cabezote grande se esconde despacio hacia arriba (y al volver baja igual) */
+.mh { overflow: hidden; max-height: 24rem; transition: max-height 1.2s cubic-bezier(0.4, 0, 0.2, 1), padding 1.2s cubic-bezier(0.4, 0, 0.2, 1); }
+.mh > * { transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease 0.7s; }
+@media (min-width: 768px) {
+  body:has(.mx-hero, .nomast) .mh { display: block !important; max-height: 0; padding-top: 0 !important; padding-bottom: 0 !important; border-bottom-width: 0; pointer-events: none; }
+  body:has(.mx-hero, .nomast) .mh > * { transform: translateY(-110%); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) { .mh, .mh > * { transition: none; } }
