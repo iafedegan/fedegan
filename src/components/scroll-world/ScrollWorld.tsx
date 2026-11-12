@@ -167,10 +167,9 @@ export function ScrollWorld({ scenes: base }: { scenes: JourneyScene[] }) {
         if (hidden) return;
         const cu = clamp(u, -1, 1);
         const dir = i % 2 ? 1 : -1;
-        const blur = u > 0.35 ? (u - 0.35) * 5 : u < -0.3 ? (-0.3 - u) * 6 : 0;
         el.style.opacity = String(i === 0 ? 1 : smooth(-0.68, -0.32, u));
         el.style.transform = `translate3d(${(-dir * cu * 1.4).toFixed(3)}%, ${(-cu * 0.9).toFixed(3)}%, 0) scale(${(1 + 0.1 * u).toFixed(4)})`;
-        el.style.filter = blur > 0.05 ? `blur(${blur.toFixed(2)}px)` : "none";
+        // Sin desenfoque por cuadro: un filtro sobre fotos de pantalla completa traba el scroll.
       });
 
       if (barRef.current) barRef.current.style.transform = `scaleX(${pv.toFixed(4)})`;

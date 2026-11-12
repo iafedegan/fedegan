@@ -2189,7 +2189,7 @@ header[data-region="navbar"] [role="menu"] svg { color: inherit !important; }
 @media (prefers-reduced-motion: reduce) { header[data-region="navbar"] [role="menu"] { animation: none; } }
 
 /* Menú vertical del recorrido: desenfoque del fondo y un velo negro detrás de la lista */
-.sw-rail { background: rgba(7, 27, 19, 0.78) !important; -webkit-backdrop-filter: blur(22px) saturate(1.15); backdrop-filter: blur(22px) saturate(1.15); border-radius: 1rem; }
+.sw-rail { background: rgba(7, 27, 19, 0.86) !important; -webkit-backdrop-filter: none; backdrop-filter: none; border-radius: 1rem; }
 
 /* Cinta dorada en el borde superior del navbar */
 header[data-region="navbar"]::before {
