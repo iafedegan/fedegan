@@ -213,7 +213,7 @@ select.fp-in:disabled { cursor: not-allowed; opacity: 0.6; background-color: #ee
 }
 
 /* ——— Portada de la página pública ——— */
-.fp-portada { position: relative; overflow: hidden; padding: 1.75rem 0 4.5rem; color: #fff; background: radial-gradient(90% 120% at 10% 0%, #2f7a17 0%, transparent 55%), radial-gradient(70% 90% at 100% 20%, rgba(216, 181, 88, 0.35) 0%, transparent 60%), linear-gradient(160deg, #0d2410 0%, #143a12 45%, #1d5212 100%); }
+.fp-portada { position: relative; overflow: hidden; padding: 1.75rem 0 4.5rem; color: #fff; background: linear-gradient(180deg, rgba(8, 28, 10, 0.78) 0%, rgba(10, 36, 12, 0.66) 55%, rgba(13, 36, 16, 0.9) 100%), url(/journey/colombian-beef.jpg) center 62% / cover no-repeat, #143a12; }
 .fp-portada::before { content: ""; position: absolute; inset: 0; opacity: 0.18; background-image: radial-gradient(rgba(255, 255, 255, 0.5) 1px, transparent 1px); background-size: 22px 22px; mask-image: linear-gradient(180deg, #000 0%, transparent 85%); }
 .fp-blob { position: absolute; border-radius: 999px; filter: blur(60px); opacity: 0.55; animation: fp-flota 14s ease-in-out infinite alternate; }
 @keyframes fp-flota { to { transform: translate(40px, -30px) scale(1.15); } }
