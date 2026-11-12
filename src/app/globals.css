@@ -2319,3 +2319,18 @@ html:not([data-theme="esmeralda"]) .tl-item::before { background: #b08f4f; box-s
 /* Tablas e imágenes dentro de la hoja */
 .doc-grid2 > .doc-content img { border-radius: 1rem; }
 .doc-grid2 > .doc-content table { border-radius: 1rem; overflow: hidden; }
+
+/* ---- Transición entre páginas (escritorio): el contenido entra desenfocado y se aclara mientras un destello dorado cruza la parte superior ---- */
+@keyframes page-in-d {
+  from { opacity: 0; transform: translateY(26px) scale(0.992); filter: blur(10px); }
+  60% { filter: blur(1px); }
+  to { opacity: 1; transform: none; filter: none; }
+}
+@keyframes page-sweep { from { transform: translateX(-100%); opacity: 1; } 85% { opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
+.page-sweep { display: none; }
+@media (min-width: 768px) {
+  .page-in { animation: page-in-d 0.75s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+  .page-sweep { display: block; position: fixed; top: 0; left: 0; z-index: 90; width: 100%; height: 3px; pointer-events: none; background: linear-gradient(90deg, transparent 0%, #b08f4f 30%, #fff2c8 50%, #b08f4f 70%, transparent 100%); animation: page-sweep 0.95s cubic-bezier(0.4, 0, 0.2, 1) both; }
+  .mh { transition-duration: 0.9s, 0.6s, 0.9s; }
+}
+@media (prefers-reduced-motion: reduce) { .page-in, .page-sweep { animation: none !important; } }
