@@ -191,6 +191,33 @@ export function LegacyContent({ blocks, lead: allowLead = true, preview = false,
       continue;
     }
 
+    // Tabla cuyas celdas solo traen enlaces «> Ver más» (las fotos del sitio viejo se perdieron): tarjetas con el nombre de cada página.
+    if (b.t === "table" && !libre) {
+      const celdas = (b.rows ?? []).flat().filter((c) => c && c.trim());
+      const destinos = celdas.map((c) => /\[\s*>?\s*Ver m[aá]s\s*\]\((\/[^)\s]+)\)/i.exec(c)?.[1]).filter((h): h is string => Boolean(h));
+      if (celdas.length > 0 && destinos.length === celdas.length) {
+        const nombre = (h: string) => {
+          const t = decodeURIComponent(h.split("/").filter(Boolean).pop() ?? "").replace(/-/g, " ");
+          const menores = new Set(["de", "del", "la", "las", "el", "los", "y", "en"]);
+          return t.split(" ").map((w, n) => (n > 0 && menores.has(w) ? w : w.charAt(0).toUpperCase() + w.slice(1))).join(" ");
+        };
+        nodes.push(
+          <ul key={key} className="mb-grid">
+            {destinos.map((h, n) => (
+              <li key={h}>
+                <Link href={h} className="mb-card" style={{ ["--n" as string]: n % 4 }}>
+                  <span className="mb-ico" aria-hidden>{nombre(h).replace(/^C[aá]mara Gremial (de la |del |de )?/i, "").charAt(0)}</span>
+                  <span className="mb-name">{nombre(h)}</span>
+                  <span className="mb-go">Ver más <ArrowRight size={15} aria-hidden /></span>
+                </Link>
+              </li>
+            ))}
+          </ul>,
+        );
+        continue;
+      }
+    }
+
     if (b.t === "table") {
       const rows = b.rows ?? [];
       // Celdas largas o con varias líneas: son tarjetas (programas, enlaces); se apilan en pantallas angostas.
@@ -403,6 +430,33 @@ export function LegacyContent({ blocks, lead: allowLead = true, preview = false,
     }
 
     // Párrafo que empieza con un año («1963. El 13 de diciembre…» o «**1963**. …»): hito de la línea de tiempo.
+    // Párrafo vacío o solo con asteriscos (restos del sitio viejo): se omite.
+    if (b.t === "p" && /^[\s*]*$/.test(b.text ?? "")) continue;
+
+    // Párrafo que es solo un texto en negrita corto («**Antecedentes**»): es un subtítulo.
+    const tituloNegrita = b.t === "p" && !libre ? /^\s*\*\*([^*\n]{2,70}?)\*\*\s*:?\s*$/.exec(b.text ?? "") : null;
+    if (tituloNegrita) {
+      nodes.push(
+        <h2 key={key} id={preview ? undefined : `s${offset + i}`} className="mb-3 mt-10 font-[var(--font-display)] text-2xl font-bold leading-snug text-[var(--text)] first:mt-0 sm:text-[1.7rem]">
+          {tituloNegrita[1]}
+        </h2>,
+      );
+      continue;
+    }
+
+    // Párrafo con renglones que empiezan con viñeta («• …»): lista con marcas.
+    const renglones = b.t === "p" && !libre ? (b.text ?? "").split("\n").map((x) => x.trim()).filter(Boolean) : [];
+    if (renglones.length >= 2 && renglones.every((x) => /^[•·▪●\-–]\s+/.test(x))) {
+      nodes.push(
+        <ul key={key} className="ck-list">
+          {renglones.map((x, n) => (
+            <li key={n}><Inline text={x.replace(/^[•·▪●\-–]\s+/, "")} /></li>
+          ))}
+        </ul>,
+      );
+      continue;
+    }
+
     // Los textos migrados traen cortes de renglón del original («ani- males», «moder- nización»): se unen.
     if (b.t === "p" && b.text && !libre) b = { ...b, text: b.text.replace(/([a-záéíóúñ])- ([a-záéíóúñ])/g, "$1$2") };
     const anio = b.t === "p" ? /^\s*(?:\*\*)?((?:19|20)\d{2})(?:\*\*)?\s*[.:–-]\s+([\s\S]+)$/.exec(b.text ?? "") : null;
