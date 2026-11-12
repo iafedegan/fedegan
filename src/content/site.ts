@@ -6,13 +6,11 @@
 export const mainNav = [
   { label: "Quiénes somos", href: "/quienes-somos" },
   { label: "Programas", href: "/seccion/programas" },
-  { label: "Noticias", href: "/noticias" },
   { label: "Publicaciones", href: "/seccion/publicaciones" },
   { label: "Eventos", href: "/eventos" },
   { label: "Servicios", href: "/servicios" },
   { label: "FNG", href: "/seccion/fng" },
   { label: "FEP", href: "/seccion/fep" },
-  { label: "Opinión", href: "/opinion" },
   { label: "SIG", href: "/seccion/sistema-integrado-de-gestion" },
   { label: "Contacto", href: "/contacto" },
   { label: "Zona de pagos", href: "/pagos" },
@@ -174,7 +172,6 @@ export const footerLinks = {
   enlaces: [
     { label: "Quiénes somos", href: "/quienes-somos" },
     { label: "Programas", href: "/seccion/programas" },
-    { label: "Noticias", href: "/noticias" },
     { label: "Publicaciones", href: "/publicaciones" },
     { label: "Eventos", href: "/eventos" },
     { label: "Contacto", href: "/contacto" },

@@ -1,4 +1,4 @@
-import { getPartners, getPisos } from "@/lib/cms/content";
+import { getNav, getPartners, getPisos } from "@/lib/cms/content";
 import { getHomeNews, getSecciones } from "@/lib/contexto";
 import { getPublishedDesign } from "@/lib/design/store";
 import { journeyPhotos } from "@/content/scroll-world";
@@ -103,6 +103,21 @@ export async function getJourneyScenes(): Promise<JourneyScene[]> {
     alt: lead?.imageAlt ?? "Vacas pastando en un potrero con cerca de alambre y árboles",
   });
 
+  // Opinión: columnas y voces del sector (ya no va en el menú, se llega desde este índice).
+  scenes.push({
+    id: "opinion",
+    nombre: "Opinión",
+    rubro: "Columnas",
+    descripcion: "Columnas y análisis de voces del sector ganadero: lea la opinión del presidente ejecutivo y de expertos sobre los temas que mueven al gremio.",
+    tags: ["Columnas", "Análisis"],
+    href: "/opinion",
+    subs: [],
+    accent: "216,181,88",
+    image: "/headers/ia-cartas.jpg",
+    pos: "50% 50%",
+    alt: "Cartas y columnas de opinión sobre una mesa",
+  });
+
   // Frases de invitación para cada sección (reemplazan la descripción neutra del directorio).
   const FRASES: Record<string, string> = {
     programas: "FEDEGÁN, el Fondo Nacional del Ganado, el Fondo de Estabilización de Precios, Fundagán y el proyecto Ganadería Colombiana Sostenible: conozca los programas con los que el gremio impulsa una ganadería más sostenible, sana y competitiva, y fomenta el consumo de carne y leche.",
@@ -158,5 +173,6 @@ export async function getJourneyScenes(): Promise<JourneyScene[]> {
 export async function PortalJourney() {
   const scenes = await getJourneyScenes();
   if (scenes.length < 2) return null;
-  return <ScrollWorld scenes={scenes} />;
+  const nav = await getNav();
+  return <ScrollWorld scenes={scenes} enMenu={nav} />;
 }

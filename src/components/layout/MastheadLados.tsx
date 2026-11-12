@@ -25,11 +25,10 @@ export function MastheadLados() {
         })}
       </ul>
       <div className="mh-lado mh-lado-r">
-        <Link href={session?.user ? "/mi-fedegan" : "/ingresar"} className="mh-ingreso">
-          <span className="mh-social mh-social-lleno"><UserRound size={18} strokeWidth={1.9} aria-hidden /></span>
-          <span>{session?.user ? "Mi FEDEGÁN" : "Ingresar"}</span>
+        <Link href={session?.user ? "/mi-fedegan" : "/ingresar"} aria-label={session?.user ? "Mi FEDEGÁN" : "Ingresar"} title={session?.user ? "Mi FEDEGÁN" : "Ingresar"} className="mh-ico">
+          <UserRound size={16} strokeWidth={1.9} aria-hidden />
         </Link>
-        <ThemeToggle className="mh-social" />
+        <ThemeToggle className="mh-ico" />
       </div>
     </>
   );
