@@ -2106,3 +2106,17 @@ html .mh .mh-date { color: #d8b558; }
 :is(div, article, section, li, aside, details)[class*="rounded-[0.25rem]"]:not([class*="inline-flex"]) {
   border-radius: var(--card-radius) !important;
 }
+
+/* La foto ya no cubre toda la página: va solo detrás de la cabecera (título y migas), con un velo para que el texto se lea */
+html:has(.ed-bgmark)::before { content: none !important; animation: none !important; }
+.mx-hero.ed-head:has(.ed-bgmark) {
+  background-color: transparent !important;
+  background-image: linear-gradient(180deg, rgba(var(--veil), calc(var(--veil-a) - 0.22)) 0%, rgba(var(--veil), var(--veil-b)) 100%), var(--page-photo-sm) !important;
+  background-size: cover !important; background-position: var(--page-pos, 50% 50%) !important; background-repeat: no-repeat !important;
+  padding-bottom: clamp(1.4rem, 3vw, 2.4rem) !important;
+}
+@media (min-width: 900px) {
+  .mx-hero.ed-head:has(.ed-bgmark) {
+    background-image: linear-gradient(180deg, rgba(var(--veil), calc(var(--veil-a) - 0.22)) 0%, rgba(var(--veil), var(--veil-b)) 100%), var(--page-photo) !important;
+  }
+}
