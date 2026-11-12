@@ -2229,3 +2229,11 @@ html .mh :is(.mh-title, .mh-gem) {
   83%, 100% { background-position: 0% 0; }
 }
 @media (prefers-reduced-motion: reduce) { html .mh :is(.mh-title, .mh-gem) { animation: none; background-position: 50% 0; } }
+
+/* Navbar más bajo */
+header[data-region="navbar"] nav > div { padding-block: 0.28rem !important; }
+header[data-region="navbar"] .nv-link { padding: 0.42rem 0.95rem; }
+header[data-region="navbar"] nav .flex.shrink-0 > :is(a, button, div > button, div > a) { width: 2.1rem; height: 2.1rem; }
+header[data-region="navbar"]::before { height: 3px; }
+body:has(.mx-hero, .nomast) header[data-region="navbar"] .nv-brand { padding: 0.22rem; }
+header[data-region="navbar"] .nv-gem { width: 2rem; height: 2rem; }
