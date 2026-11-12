@@ -5,9 +5,12 @@ import { nf } from "@/components/observatorio/format";
 // Cintillo superior con cifras ganaderas del sistema de estadísticas de FEDEGÁN (precios, inventario…): el último dato de cada
 // indicador y su variación frente al periodo anterior, en movimiento continuo. Sin cifras cargadas, el cintillo no aparece.
 const CODIGOS = ["046", "057", "058", "056", "069", "070", "080", "001"];
+// Prefijo de moneda por indicador (la unidad no viene en todos los datos).
+const PREFIJO: Record<string, string> = { "046": "$", "057": "$", "058": "$", "070": "$", "080": "$", "056": "US$", "069": "US$" };
 const ES_NUM = (n: number) => Number.isFinite(n);
 
 function resumen(i: IndicadorFedegan) {
+  const prefijo = PREFIJO[i.codigo] ?? (i.unidad.includes("$") ? "$" : "");
   const serie = i.series.find((s) => s.valores.filter(ES_NUM).length >= 1);
   if (!serie) return null;
   const v = serie.valores.filter(ES_NUM);
@@ -15,7 +18,7 @@ function resumen(i: IndicadorFedegan) {
   const previo = v.length > 1 ? v[v.length - 2] : null;
   const cambio = previo ? ((ultimo - previo) / Math.abs(previo)) * 100 : 0;
   const d = Math.abs(ultimo) >= 1000 ? 0 : Math.abs(ultimo) >= 100 ? 1 : 2;
-  const valor = `${i.unidad.includes("$") ? "$" : ""}${nf(ultimo, d)}`;
+  const valor = `${prefijo}${nf(ultimo, d)}`;
   const etiqueta = i.titulo.replace(/\s*[-–(].*$/, "").trim();
   return { id: i.clave, label: etiqueta.length > 42 ? `${etiqueta.slice(0, 40)}…` : etiqueta, valor, cambio };
 }
