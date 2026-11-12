@@ -2484,3 +2484,17 @@ header[data-region="navbar"] [role="menu"] [role="menu"] { overflow: visible !im
 header[data-region="navbar"] [role="menu"][data-izq] { left: auto !important; right: calc(100% - 0.25rem) !important; margin-left: 0 !important; }
 /* Nunca hay desplazamiento horizontal de la página por un panel que se salga */
 html, body { overflow-x: clip; }
+
+/* Barra verde igual a la de CONtexto: degradé #86D058 → #72BF44 con filetes dorados arriba (3 px) y abajo (2 px) que se desvanecen en los extremos */
+header[data-region="navbar"] {
+  background-color: #72bf44 !important;
+  background-image:
+    linear-gradient(90deg, transparent 0%, #b8892f 15%, #f6e9b4 50%, #b8892f 85%, transparent 100%),
+    linear-gradient(90deg, transparent 0%, #b8892f 15%, #f6e9b4 50%, #b8892f 85%, transparent 100%),
+    linear-gradient(180deg, #86d058 0%, #72bf44 100%) !important;
+  background-size: 100% 3px, 100% 2px, auto !important;
+  background-position: 50% 0%, 50% 100%, 0 0 !important;
+  background-repeat: no-repeat, no-repeat, repeat !important;
+  box-shadow: 0 14px 26px -18px rgba(6, 18, 11, 0.7);
+}
+header[data-region="navbar"]::before { content: none; }
