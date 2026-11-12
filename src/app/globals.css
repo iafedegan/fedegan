@@ -2430,3 +2430,13 @@ html:not([data-theme="esmeralda"]) .hub-grid .hub-no { -webkit-text-stroke-color
 .sd-card, .doc-side > * { transition: transform 0.35s var(--ease-lux, ease), box-shadow 0.35s; }
 .doc-side > *:hover { transform: translateY(-3px); box-shadow: 0 22px 36px -26px rgba(0, 0, 0, 0.6); }
 html:not([data-theme="esmeralda"]) .tl-year { background: linear-gradient(120deg, #7a5a12, #b98f35 55%, #7a5a12); -webkit-background-clip: text; background-clip: text; }
+
+/* Temas: la lista de páginas que se despliega queda por encima de las tarjetas de abajo y con el estilo del tema */
+.hub-grid > li:has(.hub-panel:not([hidden])) { position: relative; z-index: 40; }
+html .hub-grid .hub-wrap > .hub-panel {
+  top: calc(100% + 0.4rem); margin: 0; padding: 1rem 1.3rem 1.1rem; border: 1px solid #d8b558; border-radius: 1rem !important;
+  background: var(--surface-solid); box-shadow: 0 30px 50px -22px rgba(0, 0, 0, 0.6);
+}
+.hub-grid .hub-open { display: inline-flex; align-items: center; gap: 0.5rem; margin-bottom: 0.8rem; padding: 0.5rem 1rem; border-radius: 999px; background: #d8b558; color: #071b13; font: 800 0.72rem/1 var(--font-body); letter-spacing: 0.1em; text-transform: uppercase; }
+.hub-grid .hub-sub a { padding: 0.5rem 0.7rem; border-radius: 0.6rem; color: var(--text); font-weight: 600; transition: background-color 0.2s, color 0.2s; }
+.hub-grid .hub-sub a:hover { background: rgba(216, 181, 88, 0.16); color: var(--text); }
