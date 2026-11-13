@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, LayoutGrid, Newspaper, Search } from "lucide-react";
+import { Home, Newspaper, Search } from "lucide-react";
 
 const tabs = [
   { href: "/", label: "Inicio", icon: Home },
@@ -10,7 +10,7 @@ const tabs = [
   { href: "/buscador", label: "Buscar", icon: Search },
 ];
 
-// Barra de pestañas flotante tipo app, solo en celular: Inicio, Noticias, Buscar y un único «Menú» con todo lo demás.
+// Barra de pestañas flotante tipo app, solo en celular: Inicio, Noticias y Buscar (el menú está en el encabezado).
 export function MobileTabBar() {
   const pathname = usePathname();
   if (pathname.startsWith("/ingresar")) return null;
@@ -35,18 +35,6 @@ export function MobileTabBar() {
           </Link>
         );
       })}
-      <button
-        type="button"
-        aria-haspopup="dialog"
-        aria-controls="menu-movil"
-        onClick={() => window.dispatchEvent(new Event("fedegan:menu"))}
-        className={`${item} text-[var(--text-muted)] active:text-[var(--text)]`}
-      >
-        <span className="flex h-8 w-14 items-center justify-center rounded-full">
-          <LayoutGrid size={21} strokeWidth={1.8} />
-        </span>
-        Menú
-      </button>
     </nav>
   );
 }

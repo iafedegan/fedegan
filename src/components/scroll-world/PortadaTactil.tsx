@@ -1,13 +1,13 @@
 import "./portada-tactil.css";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight, LayoutGrid, Search } from "lucide-react";
+import { ArrowUpRight, LayoutGrid } from "lucide-react";
 import { canOptimize } from "@/lib/image-host";
 import { registrarUso } from "@/lib/uso";
 import { AccesosRapidos } from "@/components/layout/AccesosRapidos";
 import type { JourneyScene } from "./ScrollWorld";
 
-// Portada para celular y tableta (menos de 1024 px): foto de apertura con buscador y la noticia del día, y los
+// Portada para celular y tableta (menos de 1024 px): foto de apertura con la noticia del día, y los
 // accesos de un toque. Todo lo demás vive en un solo lugar, el menú (barra inferior → «Menú»): aquí solo se le da paso.
 export function PortadaTactil({ scenes }: { scenes: JourneyScene[] }) {
   const inicio = scenes[0];
@@ -23,10 +23,6 @@ export function PortadaTactil({ scenes }: { scenes: JourneyScene[] }) {
         <div className="pt-hero-in">
           <p className="pt-kicker"><i aria-hidden />Federación Colombiana de Ganaderos</p>
           <h2 className="pt-title">Todo el gremio ganadero, <em>en su mano</em></h2>
-          <Link href="/buscador" className="pt-search">
-            <Search size={18} aria-hidden />
-            <span>¿Qué está buscando?</span>
-          </Link>
           {nota && noticias && (
             <Link href={nota.href ?? noticias.href} className="pt-news" onClick={() => registrarUso("noticias")}>
               <span className="pt-news-img">

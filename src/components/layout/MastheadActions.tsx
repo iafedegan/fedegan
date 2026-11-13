@@ -1,9 +1,9 @@
 "use client";
 
 import { usePathname, useRouter } from "next/navigation";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, EllipsisVertical } from "lucide-react";
 
-// Barra de la app en el celular: «volver» a la izquierda (fuera de la portada) con zona táctil de 44 px (buscar va en la barra inferior).
+// Barra de la app en el celular: «volver» a la izquierda (fuera de la portada) con zona táctil de 44 px y el menú a la derecha.
 // En escritorio no se ve (el cabezote grande y la barra verde ya traen todo).
 export function MastheadActions() {
   const pathname = usePathname();
@@ -17,8 +17,10 @@ export function MastheadActions() {
       ) : (
         <span aria-hidden className="mh-act mh-act-vacio" />
       )}
-      {/* Buscar ya está en la barra inferior: aquí solo queda el espacio para que el logo siga centrado. */}
-      <span aria-hidden className="mh-act mh-act-vacio" />
+      {/* El menú único del celular vive aquí, en el encabezado de todas las páginas. */}
+      <button type="button" onClick={() => window.dispatchEvent(new Event("fedegan:menu"))} aria-haspopup="dialog" aria-label="Abrir el menú" className="mh-act">
+        <EllipsisVertical size={24} strokeWidth={2.4} aria-hidden />
+      </button>
     </div>
   );
 }

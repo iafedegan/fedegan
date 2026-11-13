@@ -2655,3 +2655,15 @@ header[data-region="navbar"]::before { content: none; }
   .sw-panel .sw-extra b { font-size: 1.2rem !important; }
   .sw-panel .sw-cta { font-size: 0.95rem !important; padding: 1rem 1.7rem !important; }
 }
+
+/* Celular — encabezado como el de CONtexto: cintillo de cifras arriba con línea dorada, logo grande al centro,
+   la fecha debajo, volver a la izquierda y el menú (tres puntos) a la derecha. */
+@media (max-width: 767px) {
+  .mk-cifras { display: block !important; border-bottom: 2px solid #b08f4f; background: #071b13; }
+  .mk-cifras .mk-track { padding-block: 0.5rem; }
+  html .mh, [data-site-chrome]:not([data-inicio]) .mh { padding: calc(env(safe-area-inset-top, 0px) + 0.7rem) 3.4rem 0.55rem !important; background: #0a1c12 !important; border-bottom: 1px solid rgba(216, 181, 88, 0.25) !important; box-shadow: none; }
+  html .mh .mh-date, [data-site-chrome]:not([data-inicio]) .mh .mh-date { display: block !important; margin: 0.2rem 0 0 !important; font-size: 0.66rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(214, 226, 214, 0.75) !important; }
+  html .mh .mh-title, [data-site-chrome]:not([data-inicio]) .mh .mh-title { font-size: 1.85rem !important; gap: 0.6rem; }
+  html .mh .mh-gem, [data-site-chrome]:not([data-inicio]) .mh .mh-gem { width: 2.9rem !important; height: 2.9rem !important; }
+  .mh-actions { inset: calc(env(safe-area-inset-top, 0px) + 0.2rem) 0.35rem auto 0.35rem; height: 3.6rem; }
+}

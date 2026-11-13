@@ -16,9 +16,6 @@
   .pt-title { margin: 0; font-family: var(--font-display); font-weight: 700; font-size: clamp(2.05rem, 9.4vw, 3.4rem); line-height: 1.03; letter-spacing: -0.015em; text-wrap: balance; text-shadow: 0 2px 22px rgba(0, 0, 0, 0.45); }
   .pt-title em { font-style: italic; font-weight: 600; color: #b9ef7d; }
 
-  .pt-search { display: flex; align-items: center; gap: 0.7rem; min-height: 3.1rem; margin-top: 0.2rem; padding: 0 1.1rem; border: 1px solid rgba(255, 255, 255, 0.24); border-radius: 999px; background: rgba(255, 255, 255, 0.14); color: rgba(247, 245, 236, 0.88); font-size: 0.98rem; text-decoration: none; -webkit-backdrop-filter: blur(14px) saturate(1.4); backdrop-filter: blur(14px) saturate(1.4); }
-  .pt-search svg { flex: none; color: #e7cf8c; }
-  .pt-search:active { background: rgba(255, 255, 255, 0.22); }
 
   .pt-news { display: flex; align-items: center; gap: 0.8rem; padding: 0.6rem 0.8rem 0.6rem 0.6rem; border: 1px solid rgba(255, 255, 255, 0.16); border-radius: 1.1rem; background: rgba(8, 24, 15, 0.62); color: inherit; text-decoration: none; -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
   .pt-news:active { background: rgba(8, 24, 15, 0.8); }
@@ -48,8 +45,6 @@
   .pt-hoja { padding-top: 1.9rem; }
   .pt-accesos { padding-inline: 2rem; }
   .pt-todo { width: auto; margin: 1.8rem auto 0; padding-inline: 2.2rem; }
-  /* La barra de la tableta ya trae buscador. */
-  .pt-search { display: none; }
 }
 
 /* ——— Movimiento: solo si la persona no pidió reducirlo ——— */
@@ -58,7 +53,6 @@
   .pt-hero-in > * { animation: pt-sube 0.7s cubic-bezier(0.22, 1, 0.36, 1) both; }
   .pt-hero-in > :nth-child(2) { animation-delay: 0.07s; }
   .pt-hero-in > :nth-child(3) { animation-delay: 0.14s; }
-  .pt-hero-in > :nth-child(4) { animation-delay: 0.21s; }
   @keyframes pt-ken { from { transform: scale(1.14); } to { transform: scale(1); } }
   @keyframes pt-sube { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
 }
