@@ -11,8 +11,6 @@
   .pt-hero-img { object-fit: cover; z-index: -2; }
   .pt-hero-shade { position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(6, 18, 11, 0.5) 0%, rgba(6, 18, 11, 0) 26%, rgba(6, 18, 11, 0.55) 58%, rgba(6, 18, 11, 0.94) 100%); }
   .pt-hero-in { display: flex; flex-direction: column; gap: 0.85rem; width: 100%; padding: 0 1.15rem 7rem; }
-  .pt-kicker { display: flex; align-items: center; gap: 0.55rem; margin: 0; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: #e7cf8c; }
-  .pt-kicker i { flex: none; width: 1.6rem; height: 2px; border-radius: 2px; background: #d8b558; }
   .pt-title { margin: 0; font-family: var(--font-display); font-weight: 700; font-size: clamp(2.05rem, 9.4vw, 3.4rem); line-height: 1.03; letter-spacing: -0.015em; text-wrap: balance; text-shadow: 0 2px 22px rgba(0, 0, 0, 0.45); }
   .pt-title em { font-style: italic; font-weight: 600; color: #b9ef7d; }
 
@@ -27,7 +25,7 @@
   .pt-news-go { flex: none; color: #b9ef7d; }
 
   /* ——— Hoja que sube sobre la foto: accesos de un toque y el paso al menú ——— */
-  .pt-hoja { position: relative; z-index: 1; margin-top: -5.2rem; padding: 1.5rem 0 1.6rem; border-radius: 1.6rem 1.6rem 0 0; border-top: 1px solid rgba(255, 255, 255, 0.35); background: color-mix(in srgb, var(--bg) 72%, transparent); -webkit-backdrop-filter: blur(22px) saturate(1.6); backdrop-filter: blur(22px) saturate(1.6); }
+  .pt-hoja { position: relative; z-index: 1; margin-top: -5.2rem; padding: 1.5rem 0 1.6rem; border-radius: 1.6rem 1.6rem 0 0; border-top: 1px solid rgba(255, 255, 255, 0.35); background: color-mix(in srgb, var(--bg) 42%, transparent); -webkit-backdrop-filter: blur(26px) saturate(1.8); backdrop-filter: blur(26px) saturate(1.8); }
   .pt-hoja::before { content: ""; position: absolute; top: 0.6rem; left: 50%; width: 2.6rem; height: 0.26rem; border-radius: 999px; background: var(--border); translate: -50% 0; }
 
   .pt-accesos { padding: 0.75rem 1.15rem 0; }
@@ -58,7 +56,6 @@
   @keyframes pt-baja { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: none; } }
   .pt-hero-in > * { animation: pt-sube 0.7s cubic-bezier(0.22, 1, 0.36, 1) both; }
   .pt-hero-in > :nth-child(2) { animation-delay: 0.07s; }
-  .pt-hero-in > :nth-child(3) { animation-delay: 0.14s; }
   @keyframes pt-ken { from { transform: scale(1.14); } to { transform: scale(1); } }
   @keyframes pt-sube { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
 }

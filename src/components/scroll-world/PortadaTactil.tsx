@@ -22,7 +22,6 @@ export function PortadaTactil({ scenes }: { scenes: JourneyScene[] }) {
         <Image src={inicio.image} alt={inicio.alt} fill sizes="100vw" preload unoptimized={!canOptimize(inicio.image)} className="pt-hero-img" style={{ objectPosition: inicio.pos }} />
         <div className="pt-hero-shade" aria-hidden />
         <div className="pt-hero-in">
-          <p className="pt-kicker"><i aria-hidden />Federación Colombiana de Ganaderos</p>
           <h2 className="pt-title">Todo el gremio ganadero, <em>en su mano</em></h2>
           {nota && noticias && (
             <Link href={nota.href ?? noticias.href} className="pt-news" onClick={() => registrarUso("noticias")}>

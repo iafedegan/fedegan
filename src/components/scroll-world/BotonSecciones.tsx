@@ -15,14 +15,21 @@ export function BotonSecciones() {
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    const alto = () => parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--mh-h")) || 64;
-    const io = new IntersectionObserver(
-      ([e]) => setFijo(!e.isIntersecting && e.boundingClientRect.top < alto()),
-      // El margen superior es el alto del encabezado fijo: se considera «atrás» al quedar tapado por él.
-      { rootMargin: `-${Math.round(alto())}px 0px 0px 0px`, threshold: 0 },
-    );
-    io.observe(el);
-    return () => io.disconnect();
+    // «Atrás» = el botón quedó tapado por el encabezado fijo (su borde de abajo pasó el borde de abajo del encabezado).
+    const medir = () => {
+      const mh = document.querySelector<HTMLElement>(".mh");
+      const tope = mh ? mh.getBoundingClientRect().bottom : 64;
+      setFijo(el.getBoundingClientRect().bottom < tope + 4);
+    };
+    // Sin requestAnimationFrame: con la pestaña en segundo plano se detiene. React ya agrupa los cambios de estado iguales.
+    const pedir = medir;
+    medir();
+    window.addEventListener("scroll", pedir, { passive: true });
+    window.addEventListener("resize", pedir);
+    return () => {
+      window.removeEventListener("scroll", pedir);
+      window.removeEventListener("resize", pedir);
+    };
   }, []);
 
   return (

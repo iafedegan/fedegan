@@ -2667,3 +2667,9 @@ header[data-region="navbar"]::before { content: none; }
   html .mh .mh-gem, [data-site-chrome]:not([data-inicio]) .mh .mh-gem { width: 2.9rem !important; height: 2.9rem !important; }
   .mh-actions { inset: calc(env(safe-area-inset-top, 0px) + 0.2rem) 0.35rem auto 0.35rem; height: 3.6rem; }
 }
+
+/* Celular — el nombre de la federación va debajo del logo, antes de la fecha. */
+@media (max-width: 767px) {
+  html .mh .mh-tag, [data-site-chrome]:not([data-inicio]) .mh .mh-tag { display: block !important; margin: 0.3rem 0 0 !important; font-size: 0.62rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: #e7cf8c !important; }
+  html .mh .mh-date, [data-site-chrome]:not([data-inicio]) .mh .mh-date { margin-top: 0.1rem !important; }
+}
