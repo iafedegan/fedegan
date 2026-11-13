@@ -15,5 +15,7 @@
   /* Inicio: círculo grande que sube sobre la barra, con un aro del color de la barra que lo separa del contenido. */
   .mtb-casa { position: relative; display: flex; border: 0; background: transparent; padding: 0; justify-content: center; align-self: stretch; text-decoration: none; -webkit-tap-highlight-color: transparent; }
   .mtb-casa span { position: absolute; bottom: 0.2rem; display: flex; width: 4.2rem; height: 4.2rem; align-items: center; justify-content: center; margin-bottom: 0.45rem; border-radius: 50%; background: linear-gradient(160deg, #f0d58a, #b08f4f); color: #071b13; box-shadow: 0 0 0 0.4rem #071b13, 0 10px 22px -6px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.45); transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1); }
+  /* El escudo de FEDEGÁN (la silueta blanca del logo) pintado en el verde oscuro de la barra. */
+  .mtb-escudo { display: block; width: 2.9rem; height: 2.9rem; background: #071b13; -webkit-mask: url(/brand/fedegan-emblema-blanco.png) center / contain no-repeat; mask: url(/brand/fedegan-emblema-blanco.png) center / contain no-repeat; }
   .mtb-casa:active span { transform: scale(0.92); }
 }
