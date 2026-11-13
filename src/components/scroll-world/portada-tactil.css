@@ -1,0 +1,90 @@
+/* Portada táctil (celular y tableta, < 1024 px). En escritorio no se muestra: allí va el recorrido con scroll. */
+.pt { display: none; }
+
+@media (max-width: 1023.98px) {
+  .pt { display: block; background: var(--bg); }
+  /* El recorrido de escritorio (y su respaldo sin movimiento) no se pinta en pantallas táctiles. */
+  .sw { display: none !important; }
+
+  /* ——— Apertura: foto a sangre, titular, buscador y la noticia del día ——— */
+  .pt-hero { position: relative; display: flex; align-items: flex-end; height: clamp(29rem, 74svh, 40rem); overflow: hidden; background: #0a1c12; color: #f7f5ec; isolation: isolate; }
+  .pt-hero-img { object-fit: cover; z-index: -2; }
+  .pt-hero-shade { position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(6, 18, 11, 0.5) 0%, rgba(6, 18, 11, 0) 26%, rgba(6, 18, 11, 0.55) 58%, rgba(6, 18, 11, 0.94) 100%); }
+  .pt-hero-in { display: flex; flex-direction: column; gap: 0.85rem; width: 100%; padding: 0 1.15rem 3.4rem; }
+  .pt-kicker { display: flex; align-items: center; gap: 0.55rem; margin: 0; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: #e7cf8c; }
+  .pt-kicker i { flex: none; width: 1.6rem; height: 2px; border-radius: 2px; background: #d8b558; }
+  .pt-title { margin: 0; font-family: var(--font-display); font-weight: 700; font-size: clamp(2.05rem, 9.4vw, 3.4rem); line-height: 1.03; letter-spacing: -0.015em; text-wrap: balance; text-shadow: 0 2px 22px rgba(0, 0, 0, 0.45); }
+  .pt-title em { font-style: italic; font-weight: 600; color: #b9ef7d; }
+
+  .pt-search { display: flex; align-items: center; gap: 0.7rem; min-height: 3.1rem; margin-top: 0.2rem; padding: 0 1.1rem; border: 1px solid rgba(255, 255, 255, 0.24); border-radius: 999px; background: rgba(255, 255, 255, 0.14); color: rgba(247, 245, 236, 0.88); font-size: 0.98rem; text-decoration: none; -webkit-backdrop-filter: blur(14px) saturate(1.4); backdrop-filter: blur(14px) saturate(1.4); }
+  .pt-search svg { flex: none; color: #e7cf8c; }
+  .pt-search:active { background: rgba(255, 255, 255, 0.22); }
+
+  .pt-news { display: flex; align-items: center; gap: 0.8rem; padding: 0.6rem 0.8rem 0.6rem 0.6rem; border: 1px solid rgba(255, 255, 255, 0.16); border-radius: 1.1rem; background: rgba(8, 24, 15, 0.62); color: inherit; text-decoration: none; -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
+  .pt-news:active { background: rgba(8, 24, 15, 0.8); }
+  .pt-news-img { position: relative; flex: none; width: 3.6rem; height: 3.6rem; overflow: hidden; border-radius: 0.8rem; background: #143a12; }
+  .pt-news-img img { object-fit: cover; }
+  .pt-news-txt { display: flex; min-width: 0; flex: 1; flex-direction: column; gap: 0.15rem; }
+  .pt-news-txt small { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: #e7cf8c; }
+  .pt-news-txt b { display: -webkit-box; overflow: hidden; -webkit-line-clamp: 2; -webkit-box-orient: vertical; font-family: var(--font-read); font-size: 0.98rem; font-weight: 600; line-height: 1.25; }
+  .pt-news-go { flex: none; color: #b9ef7d; }
+
+  /* ——— Hoja que sube sobre la foto: accesos y secciones ——— */
+  .pt-hoja { position: relative; z-index: 1; margin-top: -1.6rem; padding: 1.5rem 0 1.6rem; border-radius: 1.6rem 1.6rem 0 0; background: var(--bg); }
+  .pt-hoja::before { content: ""; position: absolute; top: 0.6rem; left: 50%; width: 2.6rem; height: 0.26rem; border-radius: 999px; background: var(--border); translate: -50% 0; }
+
+  .pt-quick { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.65rem; padding: 0.4rem 1.15rem 0; }
+  .pt-q { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; padding: 0.95rem 0.4rem 0.8rem; border: 1px solid var(--border); border-radius: 1.15rem; background: var(--surface-2); color: var(--text); font-size: 0.82rem; font-weight: 600; text-align: center; text-decoration: none; transition: transform 0.18s ease, background 0.18s ease; }
+  .pt-q:active { transform: scale(0.96); background: var(--bg-sunken); }
+  .pt-q-ico { display: flex; width: 2.9rem; height: 2.9rem; align-items: center; justify-content: center; border-radius: 999px; background: linear-gradient(140deg, #143a12, #2c6a14); color: #d6f2b4; box-shadow: 0 8px 16px -10px rgba(20, 58, 18, 0.9); }
+
+  .pt-sec-head { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; padding: 1.7rem 1.15rem 0.85rem; }
+  .pt-sec-head h2 { margin: 0; font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; line-height: 1.1; color: var(--text); }
+  .pt-sec-head span { display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-faint); }
+
+  .pt-rail { display: flex; gap: 0.85rem; margin: 0; padding: 0 1.15rem 0.4rem; overflow-x: auto; list-style: none; scroll-snap-type: x mandatory; scroll-padding-inline: 1.15rem; scrollbar-width: none; overscroll-behavior-x: contain; -webkit-overflow-scrolling: touch; }
+  .pt-rail::-webkit-scrollbar { display: none; }
+  .pt-rail li { flex: 0 0 78%; scroll-snap-align: start; }
+  .pt-card { position: relative; display: flex; align-items: flex-end; height: clamp(21rem, 56svh, 26rem); overflow: hidden; border-radius: 1.4rem; background: #0a1c12; color: #f7f5ec; text-decoration: none; isolation: isolate; box-shadow: 0 18px 30px -22px rgba(10, 28, 18, 0.9); }
+  .pt-card img { object-fit: cover; z-index: -2; transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1); }
+  .pt-card:active img { transform: scale(1.04); }
+  .pt-card-shade { position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(6, 18, 11, 0.42) 0%, rgba(6, 18, 11, 0) 30%, rgba(6, 18, 11, 0.6) 62%, rgba(6, 18, 11, 0.95) 100%); }
+  .pt-card-n { position: absolute; top: 0.9rem; left: 1rem; padding: 0.28rem 0.6rem; border-radius: 999px; background: rgba(6, 18, 11, 0.5); font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.1em; -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+  .pt-card-in { display: flex; width: 100%; flex-direction: column; gap: 0.35rem; padding: 1.1rem 1.1rem 1.15rem; border-top: 2px solid rgb(var(--acc, 216, 181, 88)); border-image: linear-gradient(90deg, rgb(var(--acc, 216, 181, 88)), transparent 70%) 1; }
+  .pt-card-in small { font-size: 0.64rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: rgb(var(--acc, 216, 181, 88)); }
+  .pt-card-in b { font-family: var(--font-display); font-size: 1.6rem; font-weight: 700; line-height: 1.08; text-wrap: balance; }
+  .pt-card-desc { display: -webkit-box; overflow: hidden; -webkit-line-clamp: 2; -webkit-box-orient: vertical; font-family: var(--font-read); font-size: 0.95rem; line-height: 1.4; color: rgba(247, 245, 236, 0.85); }
+  .pt-card-cta { display: inline-flex; align-items: center; gap: 0.4rem; align-self: flex-start; margin-top: 0.45rem; padding: 0.5rem 0.95rem; border-radius: 999px; background: rgb(var(--acc, 216, 181, 88)); color: #08140d; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
+}
+
+/* ——— Tableta: más aire, texto a la izquierda y tarjetas más angostas ——— */
+@media (min-width: 768px) and (max-width: 1023.98px) {
+  .pt-hero { height: clamp(31rem, 62svh, 42rem); }
+  .pt-hero-in { max-width: 37rem; padding: 0 2rem 4rem; gap: 1rem; }
+  .pt-title { font-size: clamp(3rem, 6.4vw, 4rem); }
+  .pt-hoja { padding-top: 1.9rem; }
+  .pt-quick { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 0.8rem; padding-inline: 2rem; }
+  .pt-sec-head { padding: 2.1rem 2rem 1rem; }
+  .pt-sec-head h2 { font-size: 1.9rem; }
+  .pt-rail { gap: 1rem; padding-inline: 2rem; scroll-padding-inline: 2rem; }
+  .pt-rail li { flex-basis: 42%; }
+  /* La barra de la tableta ya trae buscador. */
+  .pt-search { display: none; }
+  .pt-card { height: clamp(23rem, 44svh, 28rem); }
+}
+
+/* ——— Movimiento: solo si la persona no pidió reducirlo ——— */
+@media (max-width: 1023.98px) and (prefers-reduced-motion: no-preference) {
+  .pt-hero-img { animation: pt-ken 16s cubic-bezier(0.22, 1, 0.36, 1) both; }
+  .pt-hero-in > * { animation: pt-sube 0.7s cubic-bezier(0.22, 1, 0.36, 1) both; }
+  .pt-hero-in > :nth-child(2) { animation-delay: 0.07s; }
+  .pt-hero-in > :nth-child(3) { animation-delay: 0.14s; }
+  .pt-hero-in > :nth-child(4) { animation-delay: 0.21s; }
+  @keyframes pt-ken { from { transform: scale(1.14); } to { transform: scale(1); } }
+  @keyframes pt-sube { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+  /* Las tarjetas crecen al entrar a la pantalla mientras se deslizan (donde el navegador lo admite). */
+  @supports (animation-timeline: view()) {
+    .pt-rail li { animation: pt-entra linear both; animation-timeline: view(inline); animation-range: entry 0% entry 90%; }
+    @keyframes pt-entra { from { opacity: 0.55; transform: scale(0.9); } to { opacity: 1; transform: none; } }
+  }
+}

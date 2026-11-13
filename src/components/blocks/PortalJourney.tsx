@@ -90,7 +90,7 @@ export async function getJourneyScenes(): Promise<JourneyScene[]> {
   const lead = news.carousel.find((n) => n.image && !n.imageAlt?.toLowerCase().startsWith("imagen generada con ia"));
   scenes.push({
     id: "noticias",
-    nombre: "Noticias en CONtexto Ganadero",
+    nombre: "Noticias",
     rubro: "Actualidad",
     descripcion: "¿Quiere estar súper informado de lo que pasa en el sector? Entre a CONtexto Ganadero: periodismo del sector ganadero y agropecuario de Colombia, con verificación humana en cada nota, análisis y datos al día.",
     extra: news.carousel[0] ? { etiqueta: "La noticia del día", texto: news.carousel[0].title, href: `/noticias/${news.carousel[0].slug}` } : undefined,

@@ -8,6 +8,7 @@ import Link from "next/link";
 import { ArrowRight, Check, ChevronUp, X } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { warp } from "./timing";
+import { PortadaTactil } from "./PortadaTactil";
 import { instantaneaUso, ordenarPorUso, parseUso, registrarUso, suscribirUso } from "@/lib/uso";
 
 export interface JourneySub {
@@ -41,6 +42,15 @@ const smooth = (a: number, b: number, x: number) => {
   return t * t * (3 - 2 * t);
 };
 const two = (n: number) => String(n).padStart(2, "0");
+
+// El recorrido con scroll solo corre en escritorio; celular y tableta usan la portada táctil.
+const ESCRITORIO = "(min-width: 1024px)";
+const suscribirAncho = (cb: () => void) => {
+  const mq = window.matchMedia(ESCRITORIO);
+  mq.addEventListener("change", cb);
+  return () => mq.removeEventListener("change", cb);
+};
+const esEscritorio = () => window.matchMedia(ESCRITORIO).matches;
 
 function SubLink({ sub }: { sub: JourneySub }) {
   return sub.external ? (
@@ -82,6 +92,7 @@ export function ScrollWorld({ scenes: base }: { scenes: JourneyScene[] }) {
     return [...ord.filter((s) => s.id === "inicio"), ...ord.filter((s) => s.id !== "inicio")];
   }, [base, usoTxt]);
   const K = scenes.length - 1;
+  const desk = useSyncExternalStore(suscribirAncho, esEscritorio, () => true);
   const trackRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const layerRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -98,6 +109,7 @@ export function ScrollWorld({ scenes: base }: { scenes: JourneyScene[] }) {
   const [desliza, setDesliza] = useState(false);
   useEffect(() => {
     // Se arma tras un instante para ignorar el desplazamiento de carga o de restauración de la página.
+    if (!desk) return;
     let ini = window.scrollY;
     let armado = false;
     const t = window.setTimeout(() => { ini = window.scrollY; armado = true; }, 800);
@@ -107,7 +119,7 @@ export function ScrollWorld({ scenes: base }: { scenes: JourneyScene[] }) {
       window.clearTimeout(t);
       window.removeEventListener("scroll", listo);
     };
-  }, []);
+  }, [desk]);
   // Escritorio: la tarjeta solo aparece (al centro) mientras se apunta a una sección de la lista.
   const [hover, setHover] = useState<number | null>(null);
   const hoverTimer = useRef<number | undefined>(undefined);
@@ -138,7 +150,7 @@ export function ScrollWorld({ scenes: base }: { scenes: JourneyScene[] }) {
   useEffect(() => {
     const track = trackRef.current;
     const stage = stageRef.current;
-    if (!track || !stage || K < 1) return;
+    if (!desk || !track || !stage || K < 1) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     let target = 0;
@@ -234,13 +246,13 @@ export function ScrollWorld({ scenes: base }: { scenes: JourneyScene[] }) {
       window.removeEventListener("scroll", onScroll);
       if (raf) cancelAnimationFrame(raf);
     };
-  }, [K, scenes]);
+  }, [K, scenes, desk]);
 
   // Mientras la escena aún no está anclada, su parte baja queda fuera de la pantalla: la lista y la card se suben
   // esa cantidad para que siempre se vean completas.
   useEffect(() => {
     const stage = stageRef.current;
-    if (!stage) return;
+    if (!desk || !stage) return;
     const medir = () => stage.style.setProperty("--sw-cut", `${Math.max(0, Math.round(stage.getBoundingClientRect().bottom - window.innerHeight))}px`);
     medir();
     window.addEventListener("scroll", medir, { passive: true });
@@ -256,7 +268,7 @@ export function ScrollWorld({ scenes: base }: { scenes: JourneyScene[] }) {
       window.removeEventListener("resize", medir);
       window.removeEventListener("load", medir);
     };
-  }, []);
+  }, [desk]);
 
   const goTo = useCallback(
     (i: number) => {
@@ -298,6 +310,9 @@ export function ScrollWorld({ scenes: base }: { scenes: JourneyScene[] }) {
   );
 
   return (
+    <>
+    {/* Celular y tableta: portada táctil. Va fuera de .sw para heredar los colores del tema, no los de la escena oscura. */}
+    <PortadaTactil scenes={scenes} />
     <section className="sw" data-region="hero" aria-label="Recorrido por los locales del portal">
       <div ref={trackRef} className="sw-track" style={{ "--sw-k": K } as React.CSSProperties}>
         <div ref={stageRef} className="sw-stage" style={{ "--acc": scenes[0].accent } as React.CSSProperties}>
@@ -468,5 +483,6 @@ export function ScrollWorld({ scenes: base }: { scenes: JourneyScene[] }) {
         </Container>
       </div>
     </section>
+    </>
   );
 }
