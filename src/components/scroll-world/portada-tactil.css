@@ -7,10 +7,10 @@
   .sw { display: none !important; }
 
   /* ——— Apertura: foto a sangre, titular, buscador y la noticia del día ——— */
-  .pt-hero { position: relative; display: flex; flex-direction: column; justify-content: flex-end; min-height: max(27rem, calc(100svh - var(--mh-h, 6.2rem) - 2.4rem - env(safe-area-inset-top, 0px) - 4.6rem)); overflow: hidden; background: #0a1c12; color: #f7f5ec; isolation: isolate; }
+  .pt-hero { position: relative; display: flex; flex-direction: column; justify-content: flex-end; min-height: max(27rem, calc(100svh - var(--mh-h, 6.2rem) - 2.4rem - env(safe-area-inset-top, 0px) + 1.2rem)); overflow: hidden; background: #0a1c12; color: #f7f5ec; isolation: isolate; }
   .pt-hero-img { object-fit: cover; z-index: -2; }
   .pt-hero-shade { position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(6, 18, 11, 0.45) 0%, rgba(6, 18, 11, 0) 24%, rgba(6, 18, 11, 0) 46%, rgba(6, 18, 11, 0.55) 100%); }
-  .pt-hero-in { display: flex; flex-direction: column; gap: 0.85rem; width: 100%; padding: 0 1.15rem 3.2rem; }
+  .pt-hero-in { display: flex; flex-direction: column; gap: 0.85rem; width: 100%; padding: 0 1.15rem 6rem; }
   .pt-title { margin: 0; font-family: var(--font-display); font-weight: 700; font-size: clamp(2.05rem, 9.4vw, 3.4rem); line-height: 1.03; letter-spacing: -0.015em; text-wrap: balance; text-shadow: 0 2px 22px rgba(0, 0, 0, 0.45); }
   .pt-title em { font-style: italic; font-weight: 600; color: #b9ef7d; }
 
@@ -38,16 +38,16 @@
 /* ——— El carrusel de portada en celular y tableta: a pantalla completa hasta la barra inferior, texto abajo y botones grandes ——— */
 @media (max-width: 1023.98px) {
   .pt .car { width: 100%; border-radius: 0 !important; }
-  .pt .car-track { height: max(27rem, calc(100svh - var(--mh-h, 6.2rem) - 2.4rem - env(safe-area-inset-top, 0px) - 4.6rem)); }
+  .pt .car-track { height: max(27rem, calc(100svh - var(--mh-h, 6.2rem) - 2.4rem - env(safe-area-inset-top, 0px) + 1.2rem)); }  /* sigue por debajo de la barra inferior: no asoma lo verde de la sección siguiente */
   .pt .car-veil { background: linear-gradient(180deg, rgba(6, 18, 11, 0.4) 0%, rgba(6, 18, 11, 0) 26%, rgba(6, 18, 11, calc(var(--car-veil) * 0.7)) 62%, rgba(6, 18, 11, calc(var(--car-veil) * 1.5)) 100%) !important; }
-  .pt .car-text { max-width: none; justify-content: flex-end; gap: 0.7rem; padding: 1.4rem 1.15rem 4.6rem; }
+  .pt .car-text { max-width: none; justify-content: flex-end; gap: 0.7rem; padding: 1.4rem 1.15rem 5.8rem; }
   .pt .car-text :is(h1, h2) { font-size: clamp(2.05rem, 9.4vw, 3.2rem); text-wrap: balance; }
   .pt .car-text p { display: -webkit-box; overflow: hidden; -webkit-line-clamp: 3; -webkit-box-orient: vertical; font-size: 0.98rem; line-height: 1.5; }
   .pt .car-text .hi-btns { display: flex; flex-wrap: wrap; gap: 0.55rem; margin-top: 0.3rem; }
   .pt .car-text .hi-btn { min-height: 2.9rem; }
   /* Se desliza con el dedo: sin flechas; los puntos suben para no chocar con el círculo de la casa. */
   .pt .car-arrow { display: none; }
-  .pt .car-bar { bottom: 1.7rem; }
+  .pt .car-bar { bottom: 2.9rem; }
 }
 @media (min-width: 768px) and (max-width: 1023.98px) {
   .pt .car-track { height: max(34rem, calc(100svh - var(--mh-h, 6.2rem) - 2.4rem - env(safe-area-inset-top, 0px))); }
