@@ -14,7 +14,7 @@ export default function manifest(): MetadataRoute.Manifest {
     theme_color: "#05100b",
     lang: "es",
     categories: ["news", "business", "productivity"],
-    // El escudo de FEDEGÁN (blanco) sobre verde, a cuadro completo: sin esquinas transparentes ni fondo negro al instalarla.
+    // Solo el escudo de FEDEGÁN, dorado sobre verde oscuro, a cuadro completo: sin esquinas transparentes ni fondo negro al instalarla.
     icons: [
       { src: "/brand/fedegan-app-192.png", sizes: "192x192", type: "image/png", purpose: "any" },
       { src: "/brand/fedegan-app-512.png", sizes: "512x512", type: "image/png", purpose: "any" },
