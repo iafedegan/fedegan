@@ -7,7 +7,7 @@
   .sw { display: none !important; }
 
   /* ——— Apertura: foto a sangre, titular, buscador y la noticia del día ——— */
-  .pt-hero { position: relative; display: flex; flex-direction: column; justify-content: flex-end; height: max(31rem, calc(100svh - var(--mh-h, 6.2rem) - 2.4rem - env(safe-area-inset-top, 0px) - 5.4rem)); overflow: hidden; background: #0a1c12; color: #f7f5ec; isolation: isolate; }
+  .pt-hero { position: relative; display: flex; flex-direction: column; justify-content: flex-end; min-height: max(31rem, calc(100svh - var(--mh-h, 6.2rem) - 2.4rem - env(safe-area-inset-top, 0px) - 5.4rem)); overflow: hidden; background: #0a1c12; color: #f7f5ec; isolation: isolate; }
   .pt-hero-img { object-fit: cover; z-index: -2; }
   .pt-hero-shade { position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(6, 18, 11, 0.45) 0%, rgba(6, 18, 11, 0) 24%, rgba(6, 18, 11, 0) 46%, rgba(6, 18, 11, 0.55) 100%); }
   .pt-hero-in { display: flex; flex-direction: column; gap: 0.85rem; width: 100%; padding: 0 1.15rem 1.6rem; }
@@ -33,7 +33,7 @@
 
 /* ——— Tableta: más aire y el texto a la izquierda ——— */
 @media (min-width: 768px) and (max-width: 1023.98px) {
-  .pt-hero { height: max(34rem, calc(100svh - var(--mh-h, 6.2rem) - 2.4rem - env(safe-area-inset-top, 0px) - 5.4rem)); }
+  .pt-hero { min-height: max(34rem, calc(100svh - var(--mh-h, 6.2rem) - 2.4rem - env(safe-area-inset-top, 0px) - 5.4rem)); }
   .pt-hero-in { max-width: 37rem; padding: 0 2rem 2rem; gap: 1rem; }
   .pt-title { font-size: clamp(3rem, 6.4vw, 4rem); }
   .pt-hoja { padding-top: 1.9rem; }

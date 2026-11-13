@@ -61,7 +61,7 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1, "max-video-preview": -1 } },
   applicationName: "FEDEGÁN",
   category: "agricultura",
-  appleWebApp: { capable: true, title: "FEDEGÁN", statusBarStyle: "black-translucent" },
+  appleWebApp: { capable: true, title: "FEDEGÁN", statusBarStyle: "black" },
   title: {
     default: "FEDEGÁN · Federación Colombiana de Ganaderos",
     template: "%s · FEDEGÁN",
