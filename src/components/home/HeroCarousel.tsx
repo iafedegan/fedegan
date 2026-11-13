@@ -93,6 +93,8 @@ export function HeroCarousel({ initial, fallback }: { initial: Slide[]; fallback
               {/* Las imágenes subidas desde el panel pasan por el optimizador: el tamaño de pantalla justo, en AVIF o WebP y con caché larga
                   (sin esto, una foto de 2 MB se descargaba completa en cada visita y la portada tardaba varios segundos). */}
               <Image src={s.image as string} alt={s.alt || ""} fill sizes="(min-width: 1536px) 1536px, 100vw" quality={72} priority={k === 0} unoptimized={!canOptimize(s.image as string)} className="car-img" />
+              {/* Celular y tableta: una copia de la foto, desenfocada, rellena el alto que la foto «de verdad» (menos ampliada) no cubre. */}
+              <Image src={s.image as string} alt="" aria-hidden fill sizes="(min-width: 1536px) 1536px, 100vw" quality={40} loading="lazy" unoptimized={!canOptimize(s.image as string)} className="car-fondo" />
               {conTexto && <div className="car-veil" aria-hidden />}
               {conTexto ? (
                 <div className="car-text">

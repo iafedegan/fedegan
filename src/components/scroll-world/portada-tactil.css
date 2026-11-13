@@ -55,3 +55,10 @@
   .pt .car-text { max-width: 38rem; padding: 2rem 2rem 5rem; }
   .pt .car-bar { bottom: 1.4rem; }
 }
+
+/* ——— Menos zoom en celular y tableta: la foto se ve más completa arriba y su prolongación desenfocada rellena el resto del alto ——— */
+.car-fondo { display: none; }
+@media (max-width: 1023.98px) {
+  .pt .car-fondo { display: block; object-fit: cover; filter: blur(26px) brightness(0.72) saturate(1.1); transform: scale(1.25); }
+  .pt .car-img { z-index: 1; bottom: auto !important; height: 64% !important; -webkit-mask-image: linear-gradient(180deg, #000 78%, transparent 100%); mask-image: linear-gradient(180deg, #000 78%, transparent 100%); }
+}
