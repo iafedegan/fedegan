@@ -3,9 +3,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { createPortal } from "react-dom";
 import Link from "next/link";
-import { ArrowRight, Check, ChevronUp, X } from "lucide-react";
+import { ArrowRight, ChevronUp } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { warp } from "./timing";
 import { PortadaTactil } from "./PortadaTactil";
@@ -104,7 +103,6 @@ export function ScrollWorld({ scenes: base }: { scenes: JourneyScene[] }) {
   // Escena cuyas opciones están desplegadas; «pending» evita cerrarla mientras el scroll llega a ella.
   const [open, setOpen] = useState<number | null>(null);
   const [current, setCurrent] = useState(0);
-  const [menu, setMenu] = useState(false);
   // La indicación de deslizar se va en cuanto la persona empieza a desplazarse.
   const [desliza, setDesliza] = useState(false);
   useEffect(() => {
@@ -133,17 +131,6 @@ export function ScrollWorld({ scenes: base }: { scenes: JourneyScene[] }) {
   }, []);
   const shown = hover ?? current;
   const sc = scenes[shown];
-  useEffect(() => {
-    const abrir = () => setMenu(true);
-    window.addEventListener("fedegan:secciones", abrir);
-    try {
-      if (sessionStorage.getItem("fedegan:secciones")) {
-        sessionStorage.removeItem("fedegan:secciones");
-        abrir();
-      }
-    } catch {}
-    return () => window.removeEventListener("fedegan:secciones", abrir);
-  }, []);
   const openRef = useRef<number | null>(null);
   const pending = useRef<number | null>(null);
 
@@ -341,23 +328,6 @@ export function ScrollWorld({ scenes: base }: { scenes: JourneyScene[] }) {
           <span ref={barRef} className="sw-bar" aria-hidden />
           {!desliza && <p className="sw-swipe" aria-hidden><ChevronUp size={22} />Deslice hacia arriba</p>}
 
-          {menu && createPortal(
-            <div className="sw-sheet" role="dialog" aria-modal="true" aria-label="Secciones del portal" onClick={() => setMenu(false)}>
-              <div className="sw-sheet-box" onClick={(e) => e.stopPropagation()}>
-                <div className="sw-sheet-head"><p>¿A dónde quiere ir?</p><button type="button" onClick={() => setMenu(false)} aria-label="Cerrar"><X size={18} /></button></div>
-                <ul>
-                  {scenes.map((sc, i) => (
-                    <li key={sc.id}>
-                      <button type="button" onClick={() => { setMenu(false); navigate(scenes[i]); }} className={i === current ? "is-on" : ""} style={{ "--acc": sc.accent } as React.CSSProperties}>
-                        <span className="sw-sheet-n">{two(i + 1)}</span><span className="sw-sheet-t">{sc.nombre}</span>{i === current && <Check size={16} />}
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>,
-            document.body,
-          )}
 
           <nav className="sw-chips" aria-label="Locales del recorrido">
             {scenes.map((s, i) => (

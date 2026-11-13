@@ -7,6 +7,7 @@ import "./templates.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { getNav } from "@/lib/cms/content";
+import { getMenuGrupos } from "@/lib/menu-movil";
 import { getSection } from "@/lib/cms/nodos";
 import { getLegacyPage, legacyHref, type NavNode } from "@/content/legacy";
 import { Providers } from "@/components/layout/Providers";
@@ -129,6 +130,8 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
       return children.length ? { ...it, children } : it;
     }),
   );
+  // Menú único de celular y tableta: menú principal + secciones del recorrido + aliados, agrupado y sin repetir.
+  const menuGrupos = await getMenuGrupos(sortNav(nav, design.order));
   const css = designCss(design);
   const tpl = design.template ? TEMPLATE_BY_ID[design.template] : null;
   return (
@@ -178,7 +181,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
                 <Masthead />
                 {/* En los formularios públicos no se muestra el menú: quien responde se queda en el formulario. */}
                 <ChromeGate en={["/formularios"]}>
-                  <Header nav={sortNav(navConHijos, design.order)} />
+                  <Header nav={sortNav(navConHijos, design.order)} grupos={menuGrupos} />
                 </ChromeGate>
                 <ChromeGate en={["/formularios"]}>
                   <Ticker initial={design.ticker} />

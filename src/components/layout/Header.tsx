@@ -3,11 +3,13 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { signOut, useSession } from "next-auth/react";
-import { ArrowRight, ChevronDown, ChevronRight, LogIn, LogOut, Menu, Search, UserCircle2, X } from "lucide-react";
+import { useSession } from "next-auth/react";
+import { ChevronDown, ChevronRight, Menu, Search, UserCircle2, X } from "lucide-react";
 import { Logo } from "./Logo";
 import { ThemeToggle } from "./ThemeToggle";
 import { LoginMenu } from "./LoginMenu";
+import { MenuMovil } from "./MenuMovil";
+import type { MenuGrupo } from "@/lib/menu-movil";
 import { Container } from "@/components/ui/Container";
 
 function isActive(pathname: string, href: string) {
@@ -169,7 +171,7 @@ function MoreMenu({ items, pathname }: { items: { label: string; href: string }[
 }
 
 export type SubItem = { label: string; href: string; children?: SubItem[] };
-export function Header({ nav: mainNav }: { nav: { label: string; href: string; children?: SubItem[] }[] }) {
+export function Header({ nav: mainNav, grupos = [] }: { nav: { label: string; href: string; children?: SubItem[] }[]; grupos?: MenuGrupo[] }) {
   const pathname = usePathname();
   const router = useRouter();
   const { data: session } = useSession();
@@ -304,96 +306,8 @@ export function Header({ nav: mainNav }: { nav: { label: string; href: string; c
         </Container>
       </nav>
 
-      {open && (
-        <div
-          id="menu-movil"
-          className="menu-sheet absolute inset-x-0 top-full max-h-[calc(100dvh-4.4rem)] overflow-y-auto overscroll-contain border-t border-[var(--border)] bg-[var(--bg)] lg:hidden"
-        >
-          <Container className="flex flex-col gap-7 pb-32 pt-6">
-            <form
-              role="search"
-              onSubmit={submitSearch}
-              className="flex items-center gap-2 rounded-full border border-[var(--border-strong)] bg-[var(--bg-muted)] py-1.5 pl-4 pr-1.5 focus-within:border-[var(--fg-lime-500)] md:hidden"
-            >
-              <Search size={18} className="shrink-0 text-[var(--text-faint)]" />
-              <input
-                type="search"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="¿Qué está buscando?"
-                aria-label="Buscar en el portal"
-                className="min-w-0 flex-1 bg-transparent py-2 text-base outline-none placeholder:text-[var(--text-faint)] [&::-webkit-search-cancel-button]:hidden"
-              />
-              <button
-                type="submit"
-                className="rounded-full bg-[var(--fg-lime-500)] px-4 py-2.5 text-xs font-bold uppercase tracking-[0.12em] text-[var(--fg-green-900)]"
-              >
-                Buscar
-              </button>
-            </form>
-
-            <nav aria-label="Navegación móvil">
-              <ul className="flex flex-col">
-                {mainNav.map((item, i) => {
-                  const active = isActive(pathname, item.href);
-                  return (
-                    <li key={`${item.href}-${i}`} className="border-b border-[rgba(255,255,255,0.07)] last:border-0">
-                      <Link
-                        href={item.href}
-                        onClick={() => setOpenAt(null)}
-                        aria-current={active ? "page" : undefined}
-                        className="group flex items-center gap-[0.9rem] py-[0.95rem]"
-                      >
-                        <span className="text-[0.75rem] font-bold leading-normal tracking-[0.12em] text-[var(--fg-lime-400)]">{String(i + 1).padStart(2, "0")}</span>
-                        <span className={`flex-1 text-[1.02rem] font-semibold leading-normal ${active ? "text-[var(--fg-lime-400)]" : "text-[#e7e3d4]"}`}>
-                          {item.label}
-                        </span>
-                        <ArrowRight size={18} className="ml-auto text-[var(--text-faint)] transition-transform duration-300 group-active:translate-x-1" />
-                      </Link>
-                    </li>
-                  );
-                })}
-              </ul>
-            </nav>
-
-            <div className="gl">
-              <div className="gl-face gap-4 p-5">
-                {user ? (
-                  <>
-                    <p className="flex items-center gap-2 text-sm text-[var(--text-muted)]">
-                      <UserCircle2 size={18} className="text-[var(--fg-lime-400)]" /> {user.email ?? user.name}
-                    </p>
-                    <Link
-                      href="/mi-fedegan"
-                      onClick={() => setOpenAt(null)}
-                      className="flex min-h-12 items-center justify-center gap-2 rounded-[var(--radius-sm)] bg-[var(--fg-lime-500)] px-5 text-[0.8rem] font-bold uppercase tracking-[0.08em] text-[var(--fg-green-900)]"
-                    >
-                      Mi FEDEGÁN
-                    </Link>
-                    <button
-                      type="button"
-                      onClick={() => signOut({ redirectTo: "/" })}
-                      className="flex min-h-11 items-center justify-center gap-2 text-sm text-[var(--text-muted)]"
-                    >
-                      <LogOut size={16} /> Cerrar sesión
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    <Link
-                      href="/ingresar"
-                      onClick={() => setOpenAt(null)}
-                      className="flex min-h-12 items-center justify-center gap-2 rounded-[var(--radius-sm)] bg-[var(--fg-lime-500)] px-5 text-[0.8rem] font-bold uppercase tracking-[0.08em] text-[var(--fg-green-900)]"
-                    >
-                      <LogIn size={17} /> Iniciar sesión
-                    </Link>
-                  </>
-                )}
-              </div>
-            </div>
-          </Container>
-        </div>
-      )}
+      {/* Celular y tableta: el menú único (reemplaza las dos listas anteriores, «Secciones» y «Más»). */}
+      {open && <MenuMovil grupos={grupos} onClose={() => setOpenAt(null)} />}
     </header>
   );
 }

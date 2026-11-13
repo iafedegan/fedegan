@@ -1,0 +1,53 @@
+/* Menú único de celular y tableta: hoja que sube desde abajo, por encima de la barra inferior. */
+.mm { position: fixed; inset: 0; z-index: 80; display: flex; align-items: flex-end; justify-content: center; }
+.mm-fondo { position: absolute; inset: 0; border: 0; background: rgba(4, 12, 8, 0.58); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); cursor: default; }
+.mm-hoja { position: relative; display: flex; width: 100%; max-width: 48rem; max-height: 92dvh; flex-direction: column; overflow: hidden; border-radius: 1.6rem 1.6rem 0 0; background: var(--bg-muted); color: var(--text); box-shadow: 0 -26px 60px -22px rgba(0, 0, 0, 0.65); }
+
+.mm-cab { position: relative; display: flex; flex: none; align-items: center; justify-content: space-between; padding: 1.35rem 1.15rem 0.75rem; }
+.mm-asa { position: absolute; top: 0.55rem; left: 50%; width: 2.6rem; height: 0.26rem; border-radius: 999px; background: var(--border); translate: -50% 0; }
+.mm-cab p { margin: 0; font-family: var(--font-display); font-size: 1.7rem; font-weight: 700; line-height: 1; }
+.mm-cerrar { display: flex; width: 2.5rem; height: 2.5rem; align-items: center; justify-content: center; border: 0; border-radius: 999px; background: var(--bg-sunken); color: var(--text); }
+.mm-cerrar:active { transform: scale(0.92); }
+
+.mm-cuerpo { display: flex; flex-direction: column; gap: 1.55rem; overflow-y: auto; overscroll-behavior: contain; padding: 0.35rem 1.15rem calc(1.75rem + env(safe-area-inset-bottom)); -webkit-overflow-scrolling: touch; }
+
+.mm-busca { display: flex; flex: none; align-items: center; gap: 0.65rem; min-height: 3rem; padding: 0 1rem; border: 1px solid var(--border); border-radius: 999px; background: var(--surface-solid); color: var(--text-faint); }
+.mm-busca:focus-within { border-color: var(--fg-lime-500); box-shadow: 0 0 0 4px color-mix(in srgb, var(--fg-lime-500) 22%, transparent); }
+.mm-busca input { min-width: 0; flex: 1; border: 0; background: transparent; color: var(--text); font-size: 1rem; outline: none; }
+.mm-busca input::placeholder { color: var(--text-faint); }
+.mm-busca input::-webkit-search-cancel-button { display: none; }
+
+.mm-rotulo { margin: 0 0 0.65rem 0.3rem; font-family: var(--font-body); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-faint); }
+.mm-accesos { padding: 0.35rem 0 0.1rem; }
+
+.mm-grupos { display: flex; flex-direction: column; gap: 1.55rem; }
+/* Listas agrupadas: una tarjeta por grupo, con filas grandes y separadores finos. */
+.mm-lista { margin: 0; padding: 0; overflow: hidden; border: 1px solid var(--border); border-radius: 1.1rem; background: var(--surface-solid); list-style: none; }
+.mm-fila { display: flex; width: 100%; min-height: 3.3rem; align-items: center; gap: 0.75rem; padding: 0.5rem 0.95rem 0.5rem 1.05rem; border: 0; background: transparent; color: var(--text); font-family: var(--font-body); font-size: 1.03rem; font-weight: 500; line-height: 1.25; text-align: left; text-decoration: none; -webkit-tap-highlight-color: transparent; }
+.mm-lista li + li { border-top: 1px solid var(--border); }
+a.mm-fila:active, button.mm-fila:active { background: var(--bg-sunken); }
+.mm-fila[aria-current="page"] { color: var(--fg-lime-400); font-weight: 700; }
+.mm-ir { flex: none; margin-left: auto; color: var(--text-faint); }
+.mm-pre { flex: none; color: var(--fg-lime-400); }
+.mm-fila-fija { justify-content: space-between; }
+.mm-tono { width: 2.4rem !important; height: 2.4rem !important; }
+
+/* Tableta: hoja centrada, más aire y los grupos en dos columnas. */
+@media (min-width: 768px) {
+  .mm-hoja { max-height: 88dvh; border-radius: 1.8rem 1.8rem 0 0; }
+  .mm-cab { padding-inline: 1.75rem; }
+  .mm-cuerpo { padding-inline: 1.75rem; }
+  /* Dos columnas que se llenan de arriba abajo, sin huecos entre grupos de distinto alto. */
+  .mm-grupos { display: block; columns: 2; column-gap: 1.25rem; }
+  .mm-grupos > section { break-inside: avoid; margin-bottom: 1.6rem; }
+  .mm-grupos > section:last-child { margin-bottom: 0; }
+}
+/* En escritorio no existe: allí manda la barra de navegación. */
+@media (min-width: 1024px) { .mm { display: none; } }
+
+@media (prefers-reduced-motion: no-preference) {
+  .mm-fondo { animation: mm-aparece 0.25s ease both; }
+  .mm-hoja { animation: mm-sube 0.4s cubic-bezier(0.22, 1, 0.36, 1) both; }
+  @keyframes mm-aparece { from { opacity: 0; } }
+  @keyframes mm-sube { from { transform: translateY(100%); } }
+}

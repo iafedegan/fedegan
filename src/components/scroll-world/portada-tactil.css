@@ -7,7 +7,7 @@
   .sw { display: none !important; }
 
   /* ——— Apertura: foto a sangre, titular, buscador y la noticia del día ——— */
-  .pt-hero { position: relative; display: flex; align-items: flex-end; height: clamp(29rem, 74svh, 40rem); overflow: hidden; background: #0a1c12; color: #f7f5ec; isolation: isolate; }
+  .pt-hero { position: relative; display: flex; align-items: flex-end; height: clamp(24.5rem, 55svh, 34rem); overflow: hidden; background: #0a1c12; color: #f7f5ec; isolation: isolate; }
   .pt-hero-img { object-fit: cover; z-index: -2; }
   .pt-hero-shade { position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(6, 18, 11, 0.5) 0%, rgba(6, 18, 11, 0) 26%, rgba(6, 18, 11, 0.55) 58%, rgba(6, 18, 11, 0.94) 100%); }
   .pt-hero-in { display: flex; flex-direction: column; gap: 0.85rem; width: 100%; padding: 0 1.15rem 3.4rem; }
@@ -29,57 +29,27 @@
   .pt-news-txt b { display: -webkit-box; overflow: hidden; -webkit-line-clamp: 2; -webkit-box-orient: vertical; font-family: var(--font-read); font-size: 0.98rem; font-weight: 600; line-height: 1.25; }
   .pt-news-go { flex: none; color: #b9ef7d; }
 
-  /* ——— Hoja que sube sobre la foto: accesos y secciones ——— */
+  /* ——— Hoja que sube sobre la foto: accesos de un toque y el paso al menú ——— */
   .pt-hoja { position: relative; z-index: 1; margin-top: -1.6rem; padding: 1.5rem 0 1.6rem; border-radius: 1.6rem 1.6rem 0 0; background: var(--bg); }
   .pt-hoja::before { content: ""; position: absolute; top: 0.6rem; left: 50%; width: 2.6rem; height: 0.26rem; border-radius: 999px; background: var(--border); translate: -50% 0; }
 
-  /* Accesos como iconos de app de iOS: sin tarjeta, cuadro redondeado de color con figura blanca y el nombre debajo. */
-  .pt-quick { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.15rem 0.5rem; padding: 0.7rem 1.15rem 0; }
-  .pt-q { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; color: var(--text); font-size: 0.8rem; font-weight: 500; letter-spacing: 0.005em; text-align: center; text-decoration: none; -webkit-tap-highlight-color: transparent; }
-  .pt-q-ico { position: relative; display: flex; width: 3.9rem; height: 3.9rem; align-items: center; justify-content: center; overflow: hidden; border-radius: 27%; background: linear-gradient(180deg, var(--a), var(--b)); color: #fff; box-shadow: 0 10px 18px -10px color-mix(in srgb, var(--b) 85%, #000), 0 1px 2px rgba(0, 0, 0, 0.18), inset 0 0 0 0.5px rgba(255, 255, 255, 0.28); transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), filter 0.2s ease; }
-  /* Brillo suave en la mitad de arriba, como el de los iconos de iOS. */
-  .pt-q-ico::before { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(255, 255, 255, 0.26) 0%, rgba(255, 255, 255, 0) 52%); pointer-events: none; }
-  .pt-q-ico svg { position: relative; filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.18)); }
-  .pt-q:active .pt-q-ico { transform: scale(0.9); filter: brightness(0.82); }
-  /* Esquinas de «superelipse» (el contorno real de iOS) donde el navegador las admite. */
-  @supports (corner-shape: squircle) { .pt-q-ico { border-radius: 42%; corner-shape: squircle; } }
-
-  .pt-sec-head { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; padding: 1.7rem 1.15rem 0.85rem; }
-  .pt-sec-head h2 { margin: 0; font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; line-height: 1.1; color: var(--text); }
-  .pt-sec-head span { display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-faint); }
-
-  .pt-rail { display: flex; gap: 0.85rem; margin: 0; padding: 0 1.15rem 0.4rem; overflow-x: auto; list-style: none; scroll-snap-type: x mandatory; scroll-padding-inline: 1.15rem; scrollbar-width: none; overscroll-behavior-x: contain; -webkit-overflow-scrolling: touch; }
-  .pt-rail::-webkit-scrollbar { display: none; }
-  .pt-rail li { flex: 0 0 78%; scroll-snap-align: start; }
-  .pt-card { position: relative; display: flex; align-items: flex-end; height: clamp(21rem, 56svh, 26rem); overflow: hidden; border-radius: 1.4rem; background: #0a1c12; color: #f7f5ec; text-decoration: none; isolation: isolate; box-shadow: 0 18px 30px -22px rgba(10, 28, 18, 0.9); }
-  .pt-card img { object-fit: cover; z-index: -2; transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1); }
-  .pt-card:active img { transform: scale(1.04); }
-  .pt-card-shade { position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(6, 18, 11, 0.42) 0%, rgba(6, 18, 11, 0) 30%, rgba(6, 18, 11, 0.6) 62%, rgba(6, 18, 11, 0.95) 100%); }
-  .pt-card-n { position: absolute; top: 0.9rem; left: 1rem; padding: 0.28rem 0.6rem; border-radius: 999px; background: rgba(6, 18, 11, 0.5); font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.1em; -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
-  .pt-card-in { display: flex; width: 100%; flex-direction: column; gap: 0.35rem; padding: 1.1rem 1.1rem 1.15rem; border-top: 2px solid rgb(var(--acc, 216, 181, 88)); border-image: linear-gradient(90deg, rgb(var(--acc, 216, 181, 88)), transparent 70%) 1; }
-  .pt-card-in small { font-size: 0.64rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: rgb(var(--acc, 216, 181, 88)); }
-  .pt-card-in b { font-family: var(--font-display); font-size: 1.6rem; font-weight: 700; line-height: 1.08; text-wrap: balance; }
-  .pt-card-desc { display: -webkit-box; overflow: hidden; -webkit-line-clamp: 2; -webkit-box-orient: vertical; font-family: var(--font-read); font-size: 0.95rem; line-height: 1.4; color: rgba(247, 245, 236, 0.85); }
-  .pt-card-cta { display: inline-flex; align-items: center; gap: 0.4rem; align-self: flex-start; margin-top: 0.45rem; padding: 0.5rem 0.95rem; border-radius: 999px; background: rgb(var(--acc, 216, 181, 88)); color: #08140d; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
+  .pt-accesos { padding: 0.75rem 1.15rem 0; }
+  /* Un solo paso a todo lo demás: abre el menú. */
+  .pt-todo { display: flex; width: calc(100% - 2.3rem); min-height: 3.2rem; align-items: center; justify-content: center; gap: 0.6rem; margin: 1.5rem 1.15rem 0; border: 1px solid var(--border); border-radius: 999px; background: var(--surface-2); color: var(--text); font-family: var(--font-body); font-size: 0.95rem; font-weight: 600; -webkit-tap-highlight-color: transparent; transition: transform 0.18s ease, background 0.18s ease; }
+  .pt-todo svg { color: var(--fg-lime-400); }
+  .pt-todo:active { transform: scale(0.98); background: var(--bg-sunken); }
 }
 
-/* ——— Tableta: más aire, texto a la izquierda y tarjetas más angostas ——— */
+/* ——— Tableta: más aire y el texto a la izquierda ——— */
 @media (min-width: 768px) and (max-width: 1023.98px) {
   .pt-hero { height: clamp(31rem, 62svh, 42rem); }
   .pt-hero-in { max-width: 37rem; padding: 0 2rem 4rem; gap: 1rem; }
   .pt-title { font-size: clamp(3rem, 6.4vw, 4rem); }
   .pt-hoja { padding-top: 1.9rem; }
-  .pt-quick { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 0.8rem; padding-inline: 2rem; }
-  .pt-q { font-size: 0.86rem; }
-  .pt-q-ico { width: 4.3rem; height: 4.3rem; }
-  .pt-q-ico svg { width: 2.1rem; height: 2.1rem; }
-  .pt-sec-head { padding: 2.1rem 2rem 1rem; }
-  .pt-sec-head h2 { font-size: 1.9rem; }
-  .pt-rail { gap: 1rem; padding-inline: 2rem; scroll-padding-inline: 2rem; }
-  .pt-rail li { flex-basis: 42%; }
+  .pt-accesos { padding-inline: 2rem; }
+  .pt-todo { width: auto; margin: 1.8rem auto 0; padding-inline: 2.2rem; }
   /* La barra de la tableta ya trae buscador. */
   .pt-search { display: none; }
-  .pt-card { height: clamp(23rem, 44svh, 28rem); }
 }
 
 /* ——— Movimiento: solo si la persona no pidió reducirlo ——— */
@@ -91,9 +61,4 @@
   .pt-hero-in > :nth-child(4) { animation-delay: 0.21s; }
   @keyframes pt-ken { from { transform: scale(1.14); } to { transform: scale(1); } }
   @keyframes pt-sube { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
-  /* Las tarjetas crecen al entrar a la pantalla mientras se deslizan (donde el navegador lo admite). */
-  @supports (animation-timeline: view()) {
-    .pt-rail li { animation: pt-entra linear both; animation-timeline: view(inline); animation-range: entry 0% entry 90%; }
-    @keyframes pt-entra { from { opacity: 0.55; transform: scale(0.9); } to { opacity: 1; transform: none; } }
-  }
 }
