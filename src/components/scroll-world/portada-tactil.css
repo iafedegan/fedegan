@@ -35,6 +35,10 @@
   .pt-todo { display: flex; width: calc(100% - 2.3rem); min-height: 3.2rem; align-items: center; justify-content: center; gap: 0.6rem; margin: 1.5rem 1.15rem 0; border: 1px solid var(--border); border-radius: 999px; background: var(--surface-2); color: var(--text); font-family: var(--font-body); font-size: 0.95rem; font-weight: 600; -webkit-tap-highlight-color: transparent; transition: transform 0.18s ease, background 0.18s ease; }
   .pt-todo svg { color: var(--fg-lime-400); }
   .pt-todo:active { transform: scale(0.98); background: var(--bg-sunken); }
+  /* Copia fija: aparece bajo el encabezado cuando el botón de la portada queda atrás. */
+  .pt-todo-fijo { position: fixed; white-space: nowrap; z-index: 54; top: calc(var(--mh-h, 4.5rem) + 0.55rem); left: 50%; display: flex; min-height: 2.9rem; align-items: center; justify-content: center; gap: 0.6rem; padding: 0 1.5rem; border: 1px solid color-mix(in srgb, var(--border) 70%, #fff); border-radius: 999px; background: color-mix(in srgb, var(--bg) 92%, transparent); color: var(--text); font-family: var(--font-body); font-size: 0.92rem; font-weight: 600; box-shadow: 0 14px 28px -14px rgba(0, 0, 0, 0.6); -webkit-backdrop-filter: blur(16px) saturate(1.5); backdrop-filter: blur(16px) saturate(1.5); translate: -50% 0; -webkit-tap-highlight-color: transparent; }
+  .pt-todo-fijo svg { color: var(--fg-lime-400); }
+  .pt-todo-fijo:active { transform: scale(0.97); }
 }
 
 /* ——— Tableta: más aire y el texto a la izquierda ——— */
@@ -50,6 +54,8 @@
 /* ——— Movimiento: solo si la persona no pidió reducirlo ——— */
 @media (max-width: 1023.98px) and (prefers-reduced-motion: no-preference) {
   .pt-hero-img { animation: pt-ken 16s cubic-bezier(0.22, 1, 0.36, 1) both; }
+  .pt-todo-fijo { animation: pt-baja 0.3s cubic-bezier(0.22, 1, 0.36, 1) both; }
+  @keyframes pt-baja { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: none; } }
   .pt-hero-in > * { animation: pt-sube 0.7s cubic-bezier(0.22, 1, 0.36, 1) both; }
   .pt-hero-in > :nth-child(2) { animation-delay: 0.07s; }
   .pt-hero-in > :nth-child(3) { animation-delay: 0.14s; }

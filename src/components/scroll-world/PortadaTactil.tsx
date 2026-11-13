@@ -1,7 +1,8 @@
 import "./portada-tactil.css";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight, LayoutGrid } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
+import { BotonSecciones } from "./BotonSecciones";
 import { canOptimize } from "@/lib/image-host";
 import { registrarUso } from "@/lib/uso";
 import { AccesosRapidos } from "@/components/layout/AccesosRapidos";
@@ -40,10 +41,7 @@ export function PortadaTactil({ scenes }: { scenes: JourneyScene[] }) {
 
       <div className="pt-hoja">
         <AccesosRapidos className="pt-accesos" />
-        <button type="button" className="pt-todo" aria-haspopup="dialog" onClick={() => window.dispatchEvent(new Event("fedegan:menu"))}>
-          <LayoutGrid size={18} aria-hidden />
-          Ver todas las secciones
-        </button>
+        <BotonSecciones />
       </div>
     </div>
   );
