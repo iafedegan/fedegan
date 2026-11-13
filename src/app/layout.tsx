@@ -40,8 +40,9 @@ export const viewport: Viewport = {
 // Fuentes servidas por el propio sitio (next/font): sin la cadena CSS → Google → archivos que bloqueaba el primer pintado.
 const fBody = Inter({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800"], variable: "--ff-body", display: "swap" });
 const fDisplay = Playfair_Display({ subsets: ["latin"], weight: ["500", "600", "700", "800"], variable: "--ff-display", display: "swap" });
-const fRead = Spectral({ subsets: ["latin"], weight: ["400", "500", "600"], style: ["normal", "italic"], variable: "--ff-read", display: "swap" });
-const fMono = JetBrains_Mono({ subsets: ["latin"], weight: ["500"], variable: "--ff-mono", display: "swap" });
+// Spectral (6 archivos) y la monoespaciada no se precargan: se piden al usarse y dejan el ancho de banda inicial a la foto de portada.
+const fRead = Spectral({ subsets: ["latin"], weight: ["400", "500", "600"], style: ["normal", "italic"], variable: "--ff-read", display: "swap", preload: false });
+const fMono = JetBrains_Mono({ subsets: ["latin"], weight: ["500"], variable: "--ff-mono", display: "swap", preload: false });
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

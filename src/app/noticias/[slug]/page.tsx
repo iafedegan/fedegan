@@ -58,7 +58,7 @@ export default async function NoticiaDetailPage({ params }: { params: Promise<{ 
             publisher: { "@type": "Organization", name: "FEDEGÁN–FNG", logo: { "@type": "ImageObject", url: `${SITE_URL}/brand/fedegan-icon-round.png` } },
             mainEntityOfPage: `${SITE_URL}/noticias/${slug}`,
             inLanguage: "es-CO",
-          }),
+          }).replace(/</g, "\\u003c"), // «<» escapado: un titular con «</script>» no puede cerrar la etiqueta
         }}
       />
       <section className="ph">

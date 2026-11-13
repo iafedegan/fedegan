@@ -4,7 +4,7 @@ import { adminDb } from "@/lib/cms/client";
 
 export const dynamic = "force-dynamic";
 
-const SECCIONES = new Set(["programas", "normatividad", "publicaciones", "cifras", "fng", "fep", "sig", "noticias", "aliado-tvgan", "aliado-fundagan", "aliado-bursagan", "aliado-maestro-de-la-carne", "aliado-colombian-beef"]);
+const SECCIONES = new Set(["programas", "normatividad", "publicaciones", "cifras", "fng", "fep", "sig", "noticias", "opinion", "aliado-tvgan", "aliado-fundagan", "aliado-bursagan", "aliado-maestro-de-la-carne", "aliado-colombian-beef"]);
 const VISITANTE = "fedegan-visitante";
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
