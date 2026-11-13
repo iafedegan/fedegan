@@ -1,19 +1,21 @@
 import "./portada-tactil.css";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight, BarChart3, CalendarDays, CreditCard, GraduationCap, Handshake, MessageCircle, Search } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Search } from "lucide-react";
+import { CalendarDots, ChartBar, ChatCircleDots, CreditCard, GraduationCap, Handshake } from "@phosphor-icons/react/dist/ssr";
 import { canOptimize } from "@/lib/image-host";
 import { registrarUso } from "@/lib/uso";
 import type { JourneyScene } from "./ScrollWorld";
 
-// Accesos de un toque: las tareas que más se hacen desde el celular.
+// Accesos de un toque, como iconos de app de iOS: cuadro redondeado con degradado de color y figura blanca rellena.
+// `tono` son los dos colores del degradado (claro arriba, intenso abajo).
 const ACCESOS = [
-  { href: "/pagos", label: "Pagos", icon: CreditCard },
-  { href: "/seccion/cifras-del-sector", label: "Cifras", icon: BarChart3 },
-  { href: "/eventos", label: "Eventos", icon: CalendarDays },
-  { href: "/servicios", label: "Servicios", icon: Handshake },
-  { href: "/escuela-virtual", label: "Escuela", icon: GraduationCap },
-  { href: "/contacto", label: "Contacto", icon: MessageCircle },
+  { href: "/pagos", label: "Pagos", icon: CreditCard, tono: ["#4cd964", "#1f9d3f"] },
+  { href: "/seccion/cifras-del-sector", label: "Cifras", icon: ChartBar, tono: ["#7d7aff", "#4a3fd6"] },
+  { href: "/eventos", label: "Eventos", icon: CalendarDots, tono: ["#ff6961", "#e0261b"] },
+  { href: "/servicios", label: "Servicios", icon: Handshake, tono: ["#4aa8ff", "#0a66e0"] },
+  { href: "/escuela-virtual", label: "Escuela", icon: GraduationCap, tono: ["#ffb340", "#f57c00"] },
+  { href: "/contacto", label: "Contacto", icon: ChatCircleDots, tono: ["#5ad7e8", "#0e93b3"] },
 ] as const;
 
 const two = (n: number) => String(n).padStart(2, "0");
@@ -56,9 +58,9 @@ export function PortadaTactil({ scenes }: { scenes: JourneyScene[] }) {
 
       <div className="pt-hoja">
         <nav className="pt-quick" aria-label="Accesos rápidos">
-          {ACCESOS.map(({ href, label, icon: Icon }) => (
+          {ACCESOS.map(({ href, label, icon: Icon, tono }) => (
             <Link key={href} href={href} className="pt-q">
-              <span className="pt-q-ico"><Icon size={22} strokeWidth={1.8} aria-hidden /></span>
+              <span className="pt-q-ico" style={{ "--a": tono[0], "--b": tono[1] } as React.CSSProperties}><Icon size={30} weight="fill" aria-hidden /></span>
               {label}
             </Link>
           ))}

@@ -33,10 +33,16 @@
   .pt-hoja { position: relative; z-index: 1; margin-top: -1.6rem; padding: 1.5rem 0 1.6rem; border-radius: 1.6rem 1.6rem 0 0; background: var(--bg); }
   .pt-hoja::before { content: ""; position: absolute; top: 0.6rem; left: 50%; width: 2.6rem; height: 0.26rem; border-radius: 999px; background: var(--border); translate: -50% 0; }
 
-  .pt-quick { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.65rem; padding: 0.4rem 1.15rem 0; }
-  .pt-q { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; padding: 0.95rem 0.4rem 0.8rem; border: 1px solid var(--border); border-radius: 1.15rem; background: var(--surface-2); color: var(--text); font-size: 0.82rem; font-weight: 600; text-align: center; text-decoration: none; transition: transform 0.18s ease, background 0.18s ease; }
-  .pt-q:active { transform: scale(0.96); background: var(--bg-sunken); }
-  .pt-q-ico { display: flex; width: 2.9rem; height: 2.9rem; align-items: center; justify-content: center; border-radius: 999px; background: linear-gradient(140deg, #143a12, #2c6a14); color: #d6f2b4; box-shadow: 0 8px 16px -10px rgba(20, 58, 18, 0.9); }
+  /* Accesos como iconos de app de iOS: sin tarjeta, cuadro redondeado de color con figura blanca y el nombre debajo. */
+  .pt-quick { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.15rem 0.5rem; padding: 0.7rem 1.15rem 0; }
+  .pt-q { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; color: var(--text); font-size: 0.8rem; font-weight: 500; letter-spacing: 0.005em; text-align: center; text-decoration: none; -webkit-tap-highlight-color: transparent; }
+  .pt-q-ico { position: relative; display: flex; width: 3.9rem; height: 3.9rem; align-items: center; justify-content: center; overflow: hidden; border-radius: 27%; background: linear-gradient(180deg, var(--a), var(--b)); color: #fff; box-shadow: 0 10px 18px -10px color-mix(in srgb, var(--b) 85%, #000), 0 1px 2px rgba(0, 0, 0, 0.18), inset 0 0 0 0.5px rgba(255, 255, 255, 0.28); transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), filter 0.2s ease; }
+  /* Brillo suave en la mitad de arriba, como el de los iconos de iOS. */
+  .pt-q-ico::before { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(255, 255, 255, 0.26) 0%, rgba(255, 255, 255, 0) 52%); pointer-events: none; }
+  .pt-q-ico svg { position: relative; filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.18)); }
+  .pt-q:active .pt-q-ico { transform: scale(0.9); filter: brightness(0.82); }
+  /* Esquinas de «superelipse» (el contorno real de iOS) donde el navegador las admite. */
+  @supports (corner-shape: squircle) { .pt-q-ico { border-radius: 42%; corner-shape: squircle; } }
 
   .pt-sec-head { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; padding: 1.7rem 1.15rem 0.85rem; }
   .pt-sec-head h2 { margin: 0; font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; line-height: 1.1; color: var(--text); }
@@ -64,6 +70,9 @@
   .pt-title { font-size: clamp(3rem, 6.4vw, 4rem); }
   .pt-hoja { padding-top: 1.9rem; }
   .pt-quick { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 0.8rem; padding-inline: 2rem; }
+  .pt-q { font-size: 0.86rem; }
+  .pt-q-ico { width: 4.3rem; height: 4.3rem; }
+  .pt-q-ico svg { width: 2.1rem; height: 2.1rem; }
   .pt-sec-head { padding: 2.1rem 2rem 1rem; }
   .pt-sec-head h2 { font-size: 1.9rem; }
   .pt-rail { gap: 1rem; padding-inline: 2rem; scroll-padding-inline: 2rem; }
