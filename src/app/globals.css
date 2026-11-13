@@ -2673,3 +2673,11 @@ header[data-region="navbar"]::before { content: none; }
   html .mh .mh-tag, [data-site-chrome]:not([data-inicio]) .mh .mh-tag { display: block !important; margin: 0.3rem 0 0 !important; font-size: 0.62rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: #e7cf8c !important; }
   html .mh .mh-date, [data-site-chrome]:not([data-inicio]) .mh .mh-date { margin-top: 0.1rem !important; }
 }
+
+/* PWA / celular con muesca: la barra de estado (reloj, batería) ocupa su propia franja oscura arriba. El cintillo de cifras
+   queda justo debajo y el encabezado fijo se pega debajo de esa franja, en vez de sumar el área segura por su cuenta. */
+@media (max-width: 767px) {
+  [data-site-chrome] { padding-top: env(safe-area-inset-top, 0px); }
+  html .mh, [data-site-chrome]:not([data-inicio]) .mh { top: env(safe-area-inset-top, 0px) !important; padding-top: 0.7rem !important; }
+  .mh-actions { inset: 0.2rem 0.35rem auto 0.35rem !important; }
+}

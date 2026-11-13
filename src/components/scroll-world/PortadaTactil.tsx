@@ -19,11 +19,11 @@ export function PortadaTactil({ scenes }: { scenes: JourneyScene[] }) {
         <div className="pt-hero-in">
           <h2 className="pt-title">Todo el gremio ganadero, <em>en su mano</em></h2>
         </div>
-      </div>
-
-      <div className="pt-hoja">
-        <AccesosRapidos className="pt-accesos" />
-        <BotonSecciones />
+        {/* Dentro de la foto: la hoja es transparente y deja ver la imagen completa detrás. */}
+        <div className="pt-hoja">
+          <AccesosRapidos className="pt-accesos" />
+          <BotonSecciones />
+        </div>
       </div>
     </div>
   );
