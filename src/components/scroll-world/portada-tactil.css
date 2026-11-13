@@ -10,7 +10,7 @@
   .pt-hero { position: relative; display: flex; align-items: flex-end; height: clamp(24.5rem, 55svh, 34rem); overflow: hidden; background: #0a1c12; color: #f7f5ec; isolation: isolate; }
   .pt-hero-img { object-fit: cover; z-index: -2; }
   .pt-hero-shade { position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(6, 18, 11, 0.5) 0%, rgba(6, 18, 11, 0) 26%, rgba(6, 18, 11, 0.55) 58%, rgba(6, 18, 11, 0.94) 100%); }
-  .pt-hero-in { display: flex; flex-direction: column; gap: 0.85rem; width: 100%; padding: 0 1.15rem 3.4rem; }
+  .pt-hero-in { display: flex; flex-direction: column; gap: 0.85rem; width: 100%; padding: 0 1.15rem 7rem; }
   .pt-kicker { display: flex; align-items: center; gap: 0.55rem; margin: 0; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: #e7cf8c; }
   .pt-kicker i { flex: none; width: 1.6rem; height: 2px; border-radius: 2px; background: #d8b558; }
   .pt-title { margin: 0; font-family: var(--font-display); font-weight: 700; font-size: clamp(2.05rem, 9.4vw, 3.4rem); line-height: 1.03; letter-spacing: -0.015em; text-wrap: balance; text-shadow: 0 2px 22px rgba(0, 0, 0, 0.45); }
@@ -30,7 +30,7 @@
   .pt-news-go { flex: none; color: #b9ef7d; }
 
   /* ——— Hoja que sube sobre la foto: accesos de un toque y el paso al menú ——— */
-  .pt-hoja { position: relative; z-index: 1; margin-top: -1.6rem; padding: 1.5rem 0 1.6rem; border-radius: 1.6rem 1.6rem 0 0; background: var(--bg); }
+  .pt-hoja { position: relative; z-index: 1; margin-top: -5.2rem; padding: 1.5rem 0 1.6rem; border-radius: 1.6rem 1.6rem 0 0; border-top: 1px solid rgba(255, 255, 255, 0.35); background: color-mix(in srgb, var(--bg) 72%, transparent); -webkit-backdrop-filter: blur(22px) saturate(1.6); backdrop-filter: blur(22px) saturate(1.6); }
   .pt-hoja::before { content: ""; position: absolute; top: 0.6rem; left: 50%; width: 2.6rem; height: 0.26rem; border-radius: 999px; background: var(--border); translate: -50% 0; }
 
   .pt-accesos { padding: 0.75rem 1.15rem 0; }
@@ -43,7 +43,7 @@
 /* ——— Tableta: más aire y el texto a la izquierda ——— */
 @media (min-width: 768px) and (max-width: 1023.98px) {
   .pt-hero { height: clamp(31rem, 62svh, 42rem); }
-  .pt-hero-in { max-width: 37rem; padding: 0 2rem 4rem; gap: 1rem; }
+  .pt-hero-in { max-width: 37rem; padding: 0 2rem 8rem; gap: 1rem; }
   .pt-title { font-size: clamp(3rem, 6.4vw, 4rem); }
   .pt-hoja { padding-top: 1.9rem; }
   .pt-accesos { padding-inline: 2rem; }
