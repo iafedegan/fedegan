@@ -2681,3 +2681,11 @@ header[data-region="navbar"]::before { content: none; }
   html .mh, [data-site-chrome]:not([data-inicio]) .mh { top: env(safe-area-inset-top, 0px) !important; padding-top: 0.7rem !important; }
   .mh-actions { inset: 0.2rem 0.35rem auto 0.35rem !important; }
 }
+
+/* Escritorio: el carrusel de portada ocupa la escena de «Inicio»; las demás escenas lo dejan ver y se ocultan. */
+.sw-banner { position: absolute; inset: 0; z-index: 2; opacity: 0; visibility: hidden; transition: opacity 0.5s ease, visibility 0s linear 0.5s; }
+.sw-banner[data-on="si"] { opacity: 1; visibility: visible; transition: opacity 0.5s ease, visibility 0s; }
+.sw-banner .car { width: 100%; height: 100%; border-radius: 0 !important; background: transparent; }
+.sw-banner .car-track { height: 100%; }
+.sw-banner .car-text { max-width: min(40rem, 56%); padding-bottom: 5rem; }
+@media (max-width: 1023.98px) { .sw-banner { display: none; } }

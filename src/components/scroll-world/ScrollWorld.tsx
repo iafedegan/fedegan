@@ -9,6 +9,7 @@ import { Container } from "@/components/ui/Container";
 import { warp } from "./timing";
 import { PortadaTactil } from "./PortadaTactil";
 import type { AdConfig } from "@/lib/design/regions";
+import { HeroCarousel } from "@/components/home/HeroCarousel";
 import { instantaneaUso, ordenarPorUso, parseUso, registrarUso, suscribirUso } from "@/lib/uso";
 
 export interface JourneySub {
@@ -93,6 +94,7 @@ export function ScrollWorld({ scenes: base, banners = [] }: { scenes: JourneySce
   }, [base, usoTxt]);
   const K = scenes.length - 1;
   const desk = useSyncExternalStore(suscribirAncho, esEscritorio, () => true);
+  const hayBanner = banners.some((b) => b.on !== false && b.image);
   const trackRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const layerRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -325,6 +327,12 @@ export function ScrollWorld({ scenes: base, banners = [] }: { scenes: JourneySce
               />}
             </div>
           ))}
+          {/* Escritorio: el carrusel de portada (Admin → Diseño → Publicidad) es la primera escena. Se ve mientras «Inicio» es la escena actual. */}
+          {hayBanner && (
+            <div className="sw-banner" data-on={current === 0 ? "si" : "no"} inert={current !== 0}>
+              <HeroCarousel initial={banners} fallback={null} />
+            </div>
+          )}
           <div className="sw-shade" aria-hidden />
           <span ref={barRef} className="sw-bar" aria-hidden />
           {!desliza && <p className="sw-swipe" aria-hidden><ChevronUp size={22} />Deslice hacia arriba</p>}
@@ -360,7 +368,8 @@ export function ScrollWorld({ scenes: base, banners = [] }: { scenes: JourneySce
           )}
 
 
-          <div className={`sw-center${hover === null ? " is-idle" : ""}`} onMouseEnter={() => verCard(shown)} onMouseLeave={ocultarCard}>
+          {/* En «Inicio» con carrusel no hay tarjeta: el texto y los botones son los de la diapositiva. */}
+          <div className={`sw-center${hover === null ? " is-idle" : ""}`} hidden={hayBanner && shown === 0} onMouseEnter={() => verCard(shown)} onMouseLeave={ocultarCard}>
             <div
               className="sw-panel"
               style={{ "--acc": sc.accent } as React.CSSProperties}
