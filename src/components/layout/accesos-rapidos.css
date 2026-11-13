@@ -1,17 +1,14 @@
-/* Accesos de un toque como iconos de app de iOS: sin tarjeta, cuadro redondeado de color con figura blanca y el nombre debajo. */
-.ar { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.15rem 0.5rem; }
-.ar-item { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; color: var(--text); font-size: 0.8rem; font-weight: 500; letter-spacing: 0.005em; text-align: center; text-decoration: none; -webkit-tap-highlight-color: transparent; }
-.ar-ico { position: relative; display: flex; width: 3.9rem; height: 3.9rem; align-items: center; justify-content: center; overflow: hidden; border-radius: 27%; background: linear-gradient(180deg, var(--a), var(--b)); color: #fff; box-shadow: 0 10px 18px -10px color-mix(in srgb, var(--b) 85%, #000), 0 1px 2px rgba(0, 0, 0, 0.18), inset 0 0 0 0.5px rgba(255, 255, 255, 0.28); transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), filter 0.2s ease; }
-/* Brillo suave en la mitad de arriba, como el de los iconos de iOS. */
-.ar-ico::before { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(255, 255, 255, 0.26) 0%, rgba(255, 255, 255, 0) 52%); pointer-events: none; }
-.ar-ico svg { position: relative; filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.18)); }
-.ar-item:active .ar-ico { transform: scale(0.9); filter: brightness(0.82); }
-/* Esquinas de «superelipse» (el contorno real de iOS) donde el navegador las admite. */
-@supports (corner-shape: squircle) { .ar-ico { border-radius: 42%; corner-shape: squircle; } }
-/* Tableta: los seis en una fila y un poco más grandes. */
+/* Accesos de un toque como fotos: cuadro redondeado con la imagen de la sección, un velo oscuro abajo y el nombre encima. */
+.ar { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.6rem; }
+.ar-item { position: relative; display: block; aspect-ratio: 1 / 1.08; overflow: hidden; border-radius: 1.1rem; background: #10240f; color: #fff; isolation: isolate; text-decoration: none; box-shadow: 0 12px 20px -14px rgba(0, 0, 0, 0.75), inset 0 0 0 1px rgba(255, 255, 255, 0.14); -webkit-tap-highlight-color: transparent; transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1); }
+.ar-foto { z-index: -2; object-fit: cover; transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1); }
+.ar-vela { position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(6, 18, 11, 0.05) 30%, rgba(6, 18, 11, 0.82) 100%); }
+.ar-nombre { position: absolute; left: 0; right: 0; bottom: 0; padding: 0 0.5rem 0.6rem; font-size: 0.86rem; font-weight: 700; letter-spacing: 0.01em; text-align: center; text-shadow: 0 1px 8px rgba(0, 0, 0, 0.7); }
+.ar-item:active { transform: scale(0.95); }
+.ar-item:active .ar-foto { transform: scale(1.06); }
+/* Tableta: los seis en una fila y un poco más altos. */
 @media (min-width: 768px) {
   .ar { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 0.8rem; }
-  .ar-item { font-size: 0.86rem; }
-  .ar-ico { width: 4.3rem; height: 4.3rem; }
-  .ar-ico svg { width: 2.1rem; height: 2.1rem; }
+  .ar-item { aspect-ratio: 1 / 1.2; border-radius: 1.25rem; }
+  .ar-nombre { font-size: 0.95rem; }
 }
