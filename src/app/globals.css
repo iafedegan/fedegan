@@ -2691,3 +2691,28 @@ header[data-region="navbar"]::before { content: none; }
 @media (max-width: 1023.98px) { .sw-banner { display: none; } }
 /* La escena es más alta que la pantalla hasta que se ancla: los controles suben lo que ella se sale (--sw-cut). */
 .sw-banner .car-bar { bottom: calc(1.6rem + var(--sw-cut, 0px)); }
+
+/* Legibilidad: las entradas por scroll no dejan texto a medio aparecer. En celular y tableta (elementos altos, que tardan en
+   «entrar» por completo) se muestran ya completos; en escritorio terminan en el primer tercio de su entrada. */
+@media (max-width: 1023.98px) {
+  .gl, .reveal, .mx-rise, .tl-item,
+  .doc-grid2 > .doc-content :is(p.read:not(.tl-txt), h2, h3, .lk-grid > li, .dl-call, .doc-grid, table) { animation: none !important; opacity: 1 !important; transform: none !important; }
+}
+@supports (animation-timeline: view()) {
+  @media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+    .gl, .reveal { animation-range: entry 0% entry 28%; }
+    .mx-rise { animation-range: entry 0% entry 32%; }
+    .doc-grid2 > .doc-content :is(p.read:not(.tl-txt), h2, h3, .lk-grid > li, .dl-call, .doc-grid, table) { animation-range: entry 0% entry 30%; }
+  }
+}
+
+/* Legibilidad en celular, tono claro: el fondo oscuro de la página era solo para las franjas de la barra de estado, pero en las
+   páginas sin los degradados de fondo (p. ej. Noticias) dejaba texto oscuro sobre verde oscuro. Las franjas ya las cubren
+   [data-site-chrome]::before/::after, así que el fondo del tono claro vuelve a ser blanco. */
+@media (max-width: 767px) {
+  html[data-theme="institucional"] { background-color: #fff; }
+}
+
+/* Pie de página: fondo verde oscuro con filete dorado (el texto blanco y dorado sobre el verde brillante #72BF44 no se leía: 1,3 a 2,3 de contraste). */
+footer[data-region="footer"] { background-color: #0a1c12 !important; color: rgba(255, 255, 255, 0.9); border-top: 3px solid #b08f4f; }
+footer[data-region="footer"] .text-white\/65, footer[data-region="footer"] [class*="text-white/6"] { color: rgba(255, 255, 255, 0.78) !important; }
