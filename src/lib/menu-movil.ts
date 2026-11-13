@@ -6,6 +6,7 @@ export type MenuItem = { label: string; href: string; external?: boolean };
 export type MenuGrupo = { id: string; titulo: string; items: MenuItem[] };
 
 const ACTUALIDAD: MenuItem[] = [
+  { label: "Inicio", href: "/" },
   { label: "Noticias", href: "/noticias" },
   { label: "Opinión", href: "/opinion" },
 ];
