@@ -14,15 +14,16 @@ export default function manifest(): MetadataRoute.Manifest {
     theme_color: "#05100b",
     lang: "es",
     categories: ["news", "business", "productivity"],
+    // El escudo de FEDEGÁN (blanco) sobre verde, a cuadro completo: sin esquinas transparentes ni fondo negro al instalarla.
     icons: [
-      { src: "/brand/fedegan-icon-192.png", sizes: "192x192", type: "image/png", purpose: "any" },
-      { src: "/brand/fedegan-icon-round.png", sizes: "512x512", type: "image/png", purpose: "any" },
-      { src: "/brand/fedegan-maskable-512.png", sizes: "512x512", type: "image/png", purpose: "maskable" },
+      { src: "/brand/fedegan-app-192.png", sizes: "192x192", type: "image/png", purpose: "any" },
+      { src: "/brand/fedegan-app-512.png", sizes: "512x512", type: "image/png", purpose: "any" },
+      { src: "/brand/fedegan-app-maskable-512.png", sizes: "512x512", type: "image/png", purpose: "maskable" },
     ],
     shortcuts: [
-      { name: "Noticias", url: "/noticias", icons: [{ src: "/brand/fedegan-icon-192.png", sizes: "192x192" }] },
-      { name: "Servicios", url: "/servicios", icons: [{ src: "/brand/fedegan-icon-192.png", sizes: "192x192" }] },
-      { name: "Contacto", url: "/contacto", icons: [{ src: "/brand/fedegan-icon-192.png", sizes: "192x192" }] },
+      { name: "Noticias", url: "/noticias", icons: [{ src: "/brand/fedegan-app-192.png", sizes: "192x192" }] },
+      { name: "Servicios", url: "/servicios", icons: [{ src: "/brand/fedegan-app-192.png", sizes: "192x192" }] },
+      { name: "Contacto", url: "/contacto", icons: [{ src: "/brand/fedegan-app-192.png", sizes: "192x192" }] },
     ],
   };
 }

@@ -71,9 +71,9 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       { url: "/brand/fedegan-icon-48.png", type: "image/png", sizes: "48x48" },
-      { url: "/brand/fedegan-icon-192.png", type: "image/png", sizes: "192x192" },
+      { url: "/brand/fedegan-app-192.png", type: "image/png", sizes: "192x192" },
     ],
-    apple: "/brand/fedegan-icon-round.png",
+    apple: [{ url: "/brand/fedegan-app-180.png", sizes: "180x180", type: "image/png" }],
   },
 };
 
