@@ -1,40 +1,41 @@
 "use client";
 
+import "./mobile-tab-bar.css";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Newspaper, Search } from "lucide-react";
+import { CreditCard, Home, LayoutGrid, Newspaper, Search } from "lucide-react";
 
-const tabs = [
-  { href: "/", label: "Inicio", icon: Home },
+const izquierda = [
   { href: "/noticias", label: "Noticias", icon: Newspaper },
   { href: "/buscador", label: "Buscar", icon: Search },
-];
+] as const;
 
-// Barra de pestañas flotante tipo app, solo en celular: Inicio, Noticias y Buscar (el menú está en el encabezado).
+// Barra inferior del celular: el inicio es un círculo grande al centro (como en CONtexto), a cada lado dos accesos,
+// y «Menú» abre la hoja con todas las secciones.
 export function MobileTabBar() {
   const pathname = usePathname();
   if (pathname.startsWith("/ingresar")) return null;
+  const activa = (href: string) => (href === "/" ? pathname === "/" : pathname.startsWith(href));
+  const abrirMenu = () => window.dispatchEvent(new Event("fedegan:menu"));
 
-  const isActive = (href: string) => (href === "/" ? pathname === "/" : pathname.startsWith(href));
-  const item =
-    "relative flex min-h-14 flex-1 flex-col items-center justify-center gap-0.5 text-[0.7rem] font-semibold tracking-wide transition-colors";
+  const item = (href: string, label: string, Icon: typeof Home) => (
+    <Link key={href} href={href} aria-current={activa(href) ? "page" : undefined} className="mtb-item">
+      <Icon size={22} strokeWidth={activa(href) ? 2.2 : 1.8} aria-hidden />
+      {label}
+    </Link>
+  );
 
   return (
-    <nav
-      aria-label="Navegación de la aplicación"
-      className="fixed inset-x-3 bottom-[max(0.75rem,env(safe-area-inset-bottom))] z-[60] flex items-center rounded-full border border-[var(--border-strong)] bg-[color-mix(in_srgb,var(--bg)_86%,transparent)] px-1.5 shadow-[0_22px_44px_-14px_rgba(0,0,0,0.95)] backdrop-blur-xl md:hidden"
-    >
-      {tabs.map(({ href, label, icon: Icon }) => {
-        const active = isActive(href);
-        return (
-          <Link key={href} href={href} aria-current={active ? "page" : undefined} className={`${item} ${active ? "text-[var(--fg-lime-400)]" : "text-[var(--text-muted)] active:text-[var(--text)]"}`}>
-            <span className={`flex h-8 w-14 items-center justify-center rounded-full transition-colors duration-300 ${active ? "bg-[rgba(216,181,88,0.16)]" : ""}`}>
-              <Icon size={21} strokeWidth={active ? 2.2 : 1.8} />
-            </span>
-            {label}
-          </Link>
-        );
-      })}
+    <nav aria-label="Navegación de la aplicación" className="mtb">
+      {izquierda.map((t) => item(t.href, t.label, t.icon))}
+      <Link href="/" aria-label="Inicio" aria-current={pathname === "/" ? "page" : undefined} className="mtb-casa">
+        <span><Home size={28} strokeWidth={2} aria-hidden /></span>
+      </Link>
+      {item("/pagos", "Pagos", CreditCard)}
+      <button type="button" aria-haspopup="dialog" aria-controls="menu-movil" onClick={abrirMenu} className="mtb-item">
+        <LayoutGrid size={22} strokeWidth={1.8} aria-hidden />
+        Menú
+      </button>
     </nav>
   );
 }

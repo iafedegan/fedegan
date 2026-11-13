@@ -1,0 +1,20 @@
+/* Barra inferior del celular: cinco espacios, con el inicio en un círculo elevado al centro. Solo < 768 px. */
+.mtb { display: none; }
+@media (max-width: 767px) {
+  nav.mtb[aria-label="Navegación de la aplicación"] {
+    position: fixed; z-index: 60; left: 0 !important; right: 0 !important; bottom: 0 !important; width: auto !important; transform: none !important;
+    display: grid; grid-template-columns: 1fr 1fr 5.2rem 1fr 1fr; align-items: end;
+    padding: 0.35rem 0.25rem calc(env(safe-area-inset-bottom, 0px) + 0.3rem) !important;
+    border: 0 !important; border-top: 1px solid rgba(216, 181, 88, 0.45) !important; border-radius: 1.2rem 1.2rem 0 0 !important;
+    background: #071b13 !important; box-shadow: 0 -12px 26px -16px rgba(0, 0, 0, 0.75) !important;
+    -webkit-backdrop-filter: none !important; backdrop-filter: none !important;
+  }
+  .mtb-item { display: flex; min-height: 3.2rem; flex-direction: column; align-items: center; justify-content: center; gap: 0.2rem; padding: 0.25rem 0 !important; border: 0; background: transparent; color: rgba(234, 243, 228, 0.7); font: 600 0.68rem/1 var(--font-body); letter-spacing: 0.02em; text-decoration: none; -webkit-tap-highlight-color: transparent; transition: color 0.2s, transform 0.2s; }
+  .mtb-item:active { color: #fff; transform: scale(0.94); }
+  .mtb-item[aria-current="page"] { color: #f0d58a; }
+  /* Inicio: círculo grande que sube sobre la barra, con un aro del color de la barra que lo separa del contenido. */
+  .mtb-casa { position: relative; display: flex; justify-content: center; align-self: stretch; text-decoration: none; -webkit-tap-highlight-color: transparent; }
+  .mtb-casa span { position: absolute; bottom: 0.2rem; display: flex; width: 4.2rem; height: 4.2rem; align-items: center; justify-content: center; margin-bottom: 0.45rem; border-radius: 50%; background: linear-gradient(160deg, #f0d58a, #b08f4f); color: #071b13; box-shadow: 0 0 0 0.4rem #071b13, 0 10px 22px -6px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.45); transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1); }
+  .mtb-casa:active span { transform: scale(0.92); }
+  .mtb-casa[aria-current="page"] span { background: linear-gradient(160deg, #fff0b8, #d8b558); }
+}
