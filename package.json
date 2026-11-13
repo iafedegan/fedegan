@@ -13,17 +13,17 @@
     "inventario": "node scripts/inventario-componentes.mjs"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^1.6.0",
+    "@anthropic-ai/sdk": "^1.7.0",
     "@google/genai": "^3.0.0",
     "@phosphor-icons/react": "^2.1.10",
-    "@supabase/supabase-js": "^2.117.3",
-    "lucide-react": "^1.48.0",
+    "@supabase/supabase-js": "^2.119.0",
+    "lucide-react": "^1.71.0",
     "mammoth": "^1.13.0",
     "next": "16.4.6",
     "next-auth": "^5.0.0-beta.32",
     "qrcode": "^1.5.4",
-    "react": "19.2.8",
-    "react-dom": "19.2.8",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
     "read-excel-file": "^9.3.14",
     "write-excel-file": "^4.1.1"
   },
