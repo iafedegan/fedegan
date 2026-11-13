@@ -671,3 +671,8 @@ textarea.fm-in { resize: vertical; min-height: 6rem; }
 .sx-menu button.sx-fila-b { display: grid; width: 2.4rem; flex: none; padding: 0; margin: 0; border: 0; align-items: center; justify-items: center; }
 .sx-menu .sx-sub button.sx-fila-b { padding: 0; margin: 0; }
 .sx-menu .sx-fila-a { align-items: baseline; }
+
+/* Controles del carrusel centrados abajo: las flechas van dentro de la barra, junto a la pausa y los puntos. */
+.car-bar { gap: 0.6rem; padding: 0.3rem 0.5rem; }
+.car-bar .car-arrow { position: static; top: auto; bottom: auto; margin: 0; width: 2rem; height: 2rem; border-color: rgba(255, 255, 255, 0.35); background: transparent; }
+.car-bar .car-arrow:hover, .car-bar .car-arrow:focus-visible { background: #72bf44; color: #10240f; }

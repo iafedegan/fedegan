@@ -2689,3 +2689,5 @@ header[data-region="navbar"]::before { content: none; }
 .sw-banner .car-track { height: 100%; }
 .sw-banner .car-text { max-width: min(40rem, 56%); padding-bottom: 5rem; }
 @media (max-width: 1023.98px) { .sw-banner { display: none; } }
+/* La escena es más alta que la pantalla hasta que se ancla: los controles suben lo que ella se sale (--sw-cut). */
+.sw-banner .car-bar { bottom: calc(1.6rem + var(--sw-cut, 0px)); }

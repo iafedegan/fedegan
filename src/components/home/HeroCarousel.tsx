@@ -117,14 +117,10 @@ export function HeroCarousel({ initial, fallback }: { initial: Slide[]; fallback
           );
         })}
       </div>
-      {flechas && (
-        <>
-          <button type="button" className="car-arrow car-prev" onClick={() => ir(act - 1)} aria-label="Diapositiva anterior"><ChevronLeft size={22} aria-hidden /></button>
-          <button type="button" className="car-arrow car-next" onClick={() => ir(act + 1)} aria-label="Diapositiva siguiente"><ChevronRight size={22} aria-hidden /></button>
-        </>
-      )}
-      {(puntos || (n > 1 && segundos > 0)) && (
+      {/* Los controles van juntos, centrados abajo: flecha anterior, pausa, puntos y flecha siguiente. */}
+      {(puntos || flechas || (n > 1 && segundos > 0)) && (
         <div className="car-bar">
+          {flechas && <button type="button" className="car-arrow car-prev" onClick={() => ir(act - 1)} aria-label="Diapositiva anterior"><ChevronLeft size={18} aria-hidden /></button>}
           {n > 1 && segundos > 0 && (
             <button type="button" className="car-play" onClick={() => setDetenido(!detenido)} aria-label={detenido ? "Reanudar el carrusel" : "Detener el carrusel"}>
               {detenido ? <Play size={14} aria-hidden /> : <Pause size={14} aria-hidden />}
@@ -133,6 +129,7 @@ export function HeroCarousel({ initial, fallback }: { initial: Slide[]; fallback
           {puntos && slides.map((_, k) => (
             <button key={k} type="button" className={`car-dot ${k === act ? "on" : ""}`} onClick={() => ir(k)} aria-label={`Ir a la diapositiva ${k + 1}`} aria-current={k === act} />
           ))}
+          {flechas && <button type="button" className="car-arrow car-next" onClick={() => ir(act + 1)} aria-label="Diapositiva siguiente"><ChevronRight size={18} aria-hidden /></button>}
         </div>
       )}
     </section>
