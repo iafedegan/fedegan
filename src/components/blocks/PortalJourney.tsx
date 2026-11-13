@@ -174,7 +174,7 @@ export async function PortalJourney() {
   const scenes = await getJourneyScenes();
   if (scenes.length < 2) return null;
   // Lo que ya está en el menú principal no se repite en el recorrido (ni en su índice lateral ni con su foto).
-  const nav = await getNav();
+  const [nav, design] = await Promise.all([getNav(), getPublishedDesign()]);
   const enMenu = (sc: JourneyScene) => nav.some((n) => n.href === sc.href || n.label.toLowerCase() === sc.nombre.toLowerCase());
   const visibles = scenes.filter((sc) => !enMenu(sc));
   // «Inicio» abre siempre el recorrido con la foto de los novillos en la pradera, sea cual sea la primera sección.
@@ -192,5 +192,10 @@ export async function PortalJourney() {
     alt: "Novillos de pasto en una pradera verde de Colombia al amanecer",
   };
   const resto = visibles.length >= 2 ? visibles : scenes;
-  return <ScrollWorld scenes={[inicio, ...resto.filter((sc) => sc.id !== "inicio")]} />;
+  // Los banners del carrusel de portada (Admin → Diseño → Publicidad): el banner de portada y los adicionales. La primera foto
+  // del carrusel es también la foto de «Inicio» en escritorio.
+  const banners = [design.ads.portada, ...(design.banners ?? [])].filter((b): b is NonNullable<typeof b> => Boolean(b));
+  const primera = banners.find((b) => b.on !== false && b.image)?.image;
+  if (primera) { inicio.image = primera; inicio.pos = "50% 50%"; }
+  return <ScrollWorld scenes={[inicio, ...resto.filter((sc) => sc.id !== "inicio")]} banners={banners} />;
 }

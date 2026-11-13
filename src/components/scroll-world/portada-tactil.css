@@ -34,3 +34,23 @@
   @keyframes pt-ken { from { transform: scale(1.14); } to { transform: scale(1); } }
   @keyframes pt-sube { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
 }
+
+/* ——— El carrusel de portada en celular y tableta: a pantalla completa hasta la barra inferior, texto abajo y botones grandes ——— */
+@media (max-width: 1023.98px) {
+  .pt .car { width: 100%; border-radius: 0 !important; }
+  .pt .car-track { height: max(27rem, calc(100svh - var(--mh-h, 6.2rem) - 2.4rem - env(safe-area-inset-top, 0px) - 4.6rem)); }
+  .pt .car-veil { background: linear-gradient(180deg, rgba(6, 18, 11, 0.4) 0%, rgba(6, 18, 11, 0) 26%, rgba(6, 18, 11, calc(var(--car-veil) * 0.7)) 62%, rgba(6, 18, 11, calc(var(--car-veil) * 1.5)) 100%) !important; }
+  .pt .car-text { max-width: none; justify-content: flex-end; gap: 0.7rem; padding: 1.4rem 1.15rem 4.6rem; }
+  .pt .car-text :is(h1, h2) { font-size: clamp(2.05rem, 9.4vw, 3.2rem); text-wrap: balance; }
+  .pt .car-text p { display: -webkit-box; overflow: hidden; -webkit-line-clamp: 3; -webkit-box-orient: vertical; font-size: 0.98rem; line-height: 1.5; }
+  .pt .car-text .hi-btns { display: flex; flex-wrap: wrap; gap: 0.55rem; margin-top: 0.3rem; }
+  .pt .car-text .hi-btn { min-height: 2.9rem; }
+  /* Se desliza con el dedo: sin flechas; los puntos suben para no chocar con el círculo de la casa. */
+  .pt .car-arrow { display: none; }
+  .pt .car-bar { bottom: 1.7rem; }
+}
+@media (min-width: 768px) and (max-width: 1023.98px) {
+  .pt .car-track { height: max(34rem, calc(100svh - var(--mh-h, 6.2rem) - 2.4rem - env(safe-area-inset-top, 0px))); }
+  .pt .car-text { max-width: 38rem; padding: 2rem 2rem 5rem; }
+  .pt .car-bar { bottom: 1.4rem; }
+}

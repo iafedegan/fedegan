@@ -8,6 +8,7 @@ import { ArrowRight, ChevronUp } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { warp } from "./timing";
 import { PortadaTactil } from "./PortadaTactil";
+import type { AdConfig } from "@/lib/design/regions";
 import { instantaneaUso, ordenarPorUso, parseUso, registrarUso, suscribirUso } from "@/lib/uso";
 
 export interface JourneySub {
@@ -82,7 +83,7 @@ function EnterLink({ scene, className }: { scene: JourneyScene; className?: stri
 
 // Recorrido a pantalla completa por los locales del portal: el scroll conduce una cámara que
 // avanza de foto en foto (cada una real, de finca), con un empuje continuo entre escenas.
-export function ScrollWorld({ scenes: base }: { scenes: JourneyScene[] }) {
+export function ScrollWorld({ scenes: base, banners = [] }: { scenes: JourneyScene[]; banners?: AdConfig[] }) {
   // Con permiso de la persona, las secciones que más visita pasan primero en el recorrido y en la lista.
   const usoTxt = useSyncExternalStore(suscribirUso, instantaneaUso, () => "");
   // «Inicio» queda siempre de primero; el resto se reordena por uso.
@@ -299,7 +300,7 @@ export function ScrollWorld({ scenes: base }: { scenes: JourneyScene[] }) {
   return (
     <>
     {/* Celular y tableta: portada táctil. Va fuera de .sw para heredar los colores del tema, no los de la escena oscura. */}
-    <PortadaTactil scenes={scenes} />
+    <PortadaTactil scenes={scenes} banners={banners} />
     <section className="sw" data-region="hero" aria-label="Recorrido por los locales del portal">
       <div ref={trackRef} className="sw-track" style={{ "--sw-k": K } as React.CSSProperties}>
         <div ref={stageRef} className="sw-stage" style={{ "--acc": scenes[0].accent } as React.CSSProperties}>
