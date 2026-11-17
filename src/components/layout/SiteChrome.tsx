@@ -3,6 +3,7 @@
 import { useEffect, type ReactNode } from "react";
 import { usePathname } from "next/navigation";
 import { UniversityShell } from "./UniversityShell";
+import { EscuelaSubnav } from "./EscuelaSubnav";
 import { TEMPLATE_BY_ID, type TemplateId } from "@/lib/design/regions";
 
 // Carga las tipografías de una plantilla cuando se activa (en el editor de diseño la plantilla cambia sin recargar).
@@ -20,7 +21,7 @@ function ensureFonts(id: string | null) {
 // El marco lleva la plantilla elegida (data-template): así el panel y la Escuela Virtual no se ven afectados.
 export function SiteChrome({ top, bottom, children, template }: { top: ReactNode; bottom: ReactNode; children: ReactNode; template?: string }) {
   const pathname = usePathname();
-  const publico = !pathname.startsWith("/admin") && !pathname.startsWith("/escuela-virtual");
+  const publico = !pathname.startsWith("/admin");
 
   useEffect(() => {
     if (!publico) return;
@@ -33,11 +34,14 @@ export function SiteChrome({ top, bottom, children, template }: { top: ReactNode
   }, [publico]);
 
   if (pathname.startsWith("/admin")) return <>{children}</>;
-  // La Escuela Virtual es un espacio aparte, con su propio marco.
-  if (pathname.startsWith("/escuela-virtual")) return <UniversityShell>{children}</UniversityShell>;
+  // Certificado, carnet y verificación se imprimen: llevan el marco limpio de la Escuela. El resto de la Escuela usa el mismo
+  // encabezado y pie que todo el portal, con su propia barra (Cursos, Mi perfil) debajo del encabezado.
+  const escuela = pathname.startsWith("/escuela-virtual");
+  if (escuela && /\/(certificado|carnet|verificar)(\/|$)/.test(pathname)) return <UniversityShell>{children}</UniversityShell>;
   return (
     <div data-site-chrome data-inicio={pathname === "/" ? "" : undefined} data-template={template} className="flex min-h-dvh flex-1 flex-col pb-[calc(5.5rem+env(safe-area-inset-bottom))] md:pb-0">
       {top}
+      {escuela && <EscuelaSubnav />}
       <main id="contenido" data-region="body" className="flex-1">{children}</main>
       {bottom}
     </div>
