@@ -75,7 +75,7 @@ export default function PagosPage() {
         <ul className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {opciones.map((o) => (
             <li key={o.title}>
-              <WaveCard href={o.href} accent={o.wave} icon={o.icon} title={o.title} tags={o.tags} text={`${o.quien}. ${o.text}`} cta={o.cta} image={`/headers/ia-${/biol/i.test(o.title) ? "biologico" : /planilla/i.test(o.title) ? "planilla" : "cuota"}.jpg`} />
+              <WaveCard href={o.href} accent={o.wave} icon={o.icon} title={o.title} tags={o.tags} text={`${o.quien}. ${o.text}`} cta={o.cta} image={/biol/i.test(o.title) ? "/headers/ia-biologico.jpg" : /leche/i.test(o.title) ? "/accesos/fomento-leche.webp" : "/accesos/fomento-carne.webp"} />
             </li>
           ))}
         </ul>
