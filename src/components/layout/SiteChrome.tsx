@@ -42,7 +42,7 @@ export function SiteChrome({ top, bottom, children, template }: { top: ReactNode
     <div data-site-chrome data-inicio={pathname === "/" ? "" : undefined} data-template={template} className="flex min-h-dvh flex-1 flex-col pb-[calc(5.5rem+env(safe-area-inset-bottom))] md:pb-0">
       {top}
       {escuela && <EscuelaSubnav />}
-      <main id="contenido" data-region="body" className="flex-1">{children}</main>
+      <main id="contenido" data-region="body" data-escuela={escuela ? "" : undefined} className="flex-1">{children}</main>
       {bottom}
     </div>
   );

@@ -65,7 +65,7 @@ export function UniversityShell({ children }: { children: ReactNode }) {
         </div>
       </header>
 
-      <main id="contenido" data-region="body" className="flex-1">{children}</main>
+      <main id="contenido" data-region="body" data-escuela="" className="flex-1">{children}</main>
 
       <footer className="border-t border-[var(--border)] py-6 print:hidden text-center text-xs text-[var(--text-faint)]">
         © {new Date().getFullYear()} Escuela Virtual FEDEGÁN–FNG

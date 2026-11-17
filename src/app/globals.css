@@ -2716,3 +2716,7 @@ header[data-region="navbar"]::before { content: none; }
 /* Pie de página: fondo verde oscuro con filete dorado (el texto blanco y dorado sobre el verde brillante #72BF44 no se leía: 1,3 a 2,3 de contraste). */
 footer[data-region="footer"] { background-color: #0a1c12 !important; color: rgba(255, 255, 255, 0.9); border-top: 3px solid #b08f4f; }
 footer[data-region="footer"] .text-white\/65, footer[data-region="footer"] [class*="text-white/6"] { color: rgba(255, 255, 255, 0.78) !important; }
+
+/* Escuela Virtual (y su ventana de estudio): usa la misma tipografía del resto del sitio. Los títulos dejan de usar la serif
+   decorativa y toman la fuente general del portal. Solo dentro del contenido de la Escuela, no en el encabezado del sitio. */
+[data-escuela], .st-fondo { --font-display: var(--font-body); }
