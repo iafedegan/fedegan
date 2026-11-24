@@ -2641,7 +2641,8 @@ header[data-region="navbar"]::before { content: none; }
 /* Índice lateral de la portada: más arriba que la línea base de la tarjeta. */
 @media (min-width: 768px) {
   /* Anclado arriba (no desde abajo): con 13 opciones necesita todo el alto de la escena y así no se corta. */
-  .sw-rail { top: 0.75rem; bottom: auto; transform: none; max-height: calc(100% - 1.5rem - var(--sw-cut, 0px)); }
+  /* A la mitad de la pantalla visible: --sw-cut es lo que la escena se sale por abajo hasta que se ancla. */
+  .sw-rail { top: calc(50% - var(--sw-cut, 0px) / 2); bottom: auto; transform: translateY(-50%); max-height: calc(100% - 1.5rem - var(--sw-cut, 0px)); }
 }
 
 /* Tarjeta de cada sección de la portada: más ancha, igual en todas y con letra más grande. */
@@ -2727,3 +2728,7 @@ footer[data-region="footer"] .text-white\/65, footer[data-region="footer"] [clas
   .sw-rail .sw-dot { padding-block: 0.2rem !important; font-size: 0.8em !important; }
   .sw-rail .sw-counter { margin-bottom: 0.3rem; }
 }
+
+/* Índice lateral más transparente: deja ver la foto detrás. */
+.sw-rail { background: rgba(7, 27, 19, 0.5) !important; }
+.sw-rail .sw-dot { text-shadow: 0 1px 8px rgba(0, 0, 0, 0.7); }

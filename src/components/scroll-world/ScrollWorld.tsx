@@ -284,6 +284,12 @@ export function ScrollWorld({ scenes: base, banners = [] }: { scenes: JourneySce
   // Primer toque: lleva la cámara a la escena y despliega sus opciones. Segundo toque sobre la misma: abre la sección.
   const pick = useCallback(
     (i: number) => {
+      // Un solo clic: las secciones sin submenú abren su página directo (Inicio solo lleva la cámara a la primera escena).
+      if (!scenes[i].subs?.length) {
+        if (scenes[i].id === "inicio") goTo(0);
+        else navigate(scenes[i]);
+        return;
+      }
       if (openRef.current === i) {
         navigate(scenes[i]);
         return;
