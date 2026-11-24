@@ -2640,7 +2640,8 @@ header[data-region="navbar"]::before { content: none; }
 
 /* Índice lateral de la portada: más arriba que la línea base de la tarjeta. */
 @media (min-width: 768px) {
-  .sw-rail { bottom: calc(15rem + var(--sw-cut, 0px)); max-height: calc(100% - 16rem - var(--sw-cut, 0px)); }
+  /* Anclado arriba (no desde abajo): con 13 opciones necesita todo el alto de la escena y así no se corta. */
+  .sw-rail { top: 0.75rem; bottom: auto; transform: none; max-height: calc(100% - 1.5rem - var(--sw-cut, 0px)); }
 }
 
 /* Tarjeta de cada sección de la portada: más ancha, igual en todas y con letra más grande. */
@@ -2720,3 +2721,9 @@ footer[data-region="footer"] .text-white\/65, footer[data-region="footer"] [clas
 /* Escuela Virtual (y su ventana de estudio): usa la misma tipografía del resto del sitio. Los títulos dejan de usar la serif
    decorativa y toman la fuente general del portal. Solo dentro del contenido de la Escuela, no en el encabezado del sitio. */
 [data-escuela], .st-fondo { --font-display: var(--font-body); }
+
+/* Índice lateral con 13 opciones: más compacto en pantallas de escritorio bajas, para que quepan sin tener que desplazarlo. */
+@media (min-width: 768px) and (max-height: 960px) {
+  .sw-rail .sw-dot { padding-block: 0.2rem !important; font-size: 0.8em !important; }
+  .sw-rail .sw-counter { margin-bottom: 0.3rem; }
+}

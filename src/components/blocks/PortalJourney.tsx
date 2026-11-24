@@ -42,6 +42,8 @@ function subsOf(id: string): JourneySub[] {
   return out;
 }
 
+const GANADERIA_SOSTENIBLE_URL = "https://static.fedegan.org.co/ganaderia-sostenible/index.html";
+
 /** Las secciones del recorrido (CMS + orden del editor de diseño): las usan la portada clásica y las portadas de las plantillas. */
 export async function getJourneyScenes(): Promise<JourneyScene[]> {
   const [pisos, news, design, secciones, aliados] = await Promise.all([getPisos(), getHomeNews(), getPublishedDesign(), getSecciones(), getPartners()]);
@@ -90,7 +92,7 @@ export async function getJourneyScenes(): Promise<JourneyScene[]> {
   const lead = news.carousel.find((n) => n.image && !n.imageAlt?.toLowerCase().startsWith("imagen generada con ia"));
   scenes.push({
     id: "noticias",
-    nombre: "Noticias",
+    nombre: "Contexto Ganadero",
     rubro: "Actualidad",
     descripcion: "¿Quiere estar súper informado de lo que pasa en el sector? Entre a CONtexto Ganadero: periodismo del sector ganadero y agropecuario de Colombia, con verificación humana en cada nota, análisis y datos al día.",
     extra: news.carousel[0] ? { etiqueta: "La noticia del día", texto: news.carousel[0].title, href: `/noticias/${news.carousel[0].slug}` } : undefined,
@@ -101,6 +103,20 @@ export async function getJourneyScenes(): Promise<JourneyScene[]> {
     image: lead?.image ?? "/headers/campo.jpg",
     pos: lead?.image ? "50% 50%" : "20% 45%",
     alt: lead?.imageAlt ?? "Vacas pastando en un potrero con cerca de alambre y árboles",
+  });
+
+  // Precio del ganado: acceso directo a los precios en el Observatorio de cifras.
+  scenes.push({
+    id: "precio-ganado",
+    nombre: "Precio del ganado",
+    rubro: "Mercado",
+    descripcion: "Consulte el precio del ganado gordo, de la leche y de los insumos, con su variación frente al periodo anterior. Datos oficiales de FEDEGÁN en el Observatorio ganadero.",
+    tags: ["Precios", "Mercado"],
+    href: "/seccion/cifras-del-sector#precios",
+    accent: "216,181,88",
+    image: "/journey/cifras.jpg",
+    pos: "50% 50%",
+    alt: "Ganado en una pradera, referencia de los precios del mercado ganadero",
   });
 
   // Opinión: columnas y voces del sector (ya no va en el menú, se llega desde este índice).
@@ -136,11 +152,13 @@ export async function getJourneyScenes(): Promise<JourneyScene[]> {
     fundagan: { texto: "La Fundación Colombia Ganadera trabaja por la ganadería, los derechos humanos y la responsabilidad social. Conozca sus proyectos y cómo acompaña a las comunidades ganaderas del país.", image: "/journey/fundagan.jpg", pos: "50% 50%", acc: "92,205,134", alt: "Familia campesina y un técnico caminando por una vereda verde con un ternero" },
     bursagan: { texto: "Bursagán es la bolsa ganadera del sector: un espacio para el comercio y la información del mercado de ganado en Colombia.", image: "/journey/bursagan.jpg", pos: "50% 50%", acc: "112,214,196", alt: "Compradores de sombrero en la baranda de un corral de subasta ganadera" },
     "maestro-de-la-carne": { texto: "Maestro de la Carne, de Friogán, promueve la carne colombiana de calidad y la lleva a más mesas. Descubra el sello del gremio para la mesa de los consumidores.", image: "/journey/maestro-de-la-carne.jpg", pos: "50% 50%", acc: "216,181,88", alt: "Maestro carnicero cortando carne de res fresca sobre una mesa de madera" },
+    "ganaderia-sostenible": { texto: "Ganadería Colombiana Sostenible, de FEDEGÁN: el proyecto que impulsa una ganadería más productiva, amable con el ambiente y con las familias del campo.", image: "/journey/programas.jpg", pos: "50% 50%", acc: "143,209,79", alt: "Ganado en un sistema silvopastoril de Colombia" },
     "colombian-beef": { texto: "Colombian Beef presenta la carne de res colombiana alimentada con pasto (grass-fed), para mostrarla en el mundo con la garantía del gremio.", image: "/headers/campo.jpg", pos: "50% 60%", acc: "190,222,203", alt: "Novillos de raza cebú pastando en un potrero con cerca de alambre" },
   };
   for (const a of aliados) {
     if (/contexto/i.test(a.nombre)) continue;
-    const key = a.nombre.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+    const nombreKey = a.nombre.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+    const key = /sostenible/.test(nombreKey) ? "ganaderia-sostenible" : nombreKey;
     const info = ALIADOS[key];
     if (!info) continue;
     scenes.push({
@@ -149,7 +167,7 @@ export async function getJourneyScenes(): Promise<JourneyScene[]> {
       rubro: "Portal aliado",
       descripcion: info.texto,
       tags: [],
-      href: a.href,
+      href: key === "ganaderia-sostenible" ? GANADERIA_SOSTENIBLE_URL : a.href,
       external: true,
       extra: info.extra,
       accent: info.acc,
@@ -157,6 +175,12 @@ export async function getJourneyScenes(): Promise<JourneyScene[]> {
       pos: info.pos,
       alt: info.alt,
     });
+  }
+
+  // Ganadería Sostenible siempre va en el índice, aunque el aliado no esté cargado en el panel.
+  if (!scenes.some((x) => x.id === "aliado-ganaderia-sostenible")) {
+    const g = ALIADOS["ganaderia-sostenible"];
+    scenes.push({ id: "aliado-ganaderia-sostenible", nombre: "Ganadería Sostenible", rubro: "Portal aliado", descripcion: g.texto, tags: [], href: GANADERIA_SOSTENIBLE_URL, external: true, accent: g.acc, image: g.image, pos: g.pos, alt: g.alt });
   }
 
   if (design.order.length) {
@@ -175,7 +199,8 @@ export async function PortalJourney() {
   if (scenes.length < 2) return null;
   // Lo que ya está en el menú principal no se repite en el recorrido (ni en su índice lateral ni con su foto).
   const [nav, design] = await Promise.all([getNav(), getPublishedDesign()]);
-  const enMenu = (sc: JourneyScene) => nav.some((n) => n.href === sc.href || n.label.toLowerCase() === sc.nombre.toLowerCase());
+  // FNG y FEP se quedan en el índice lateral aunque estén en el menú: pidieron tenerlos ahí.
+  const enMenu = (sc: JourneyScene) => sc.id !== "fng" && sc.id !== "fep" && nav.some((n) => n.href === sc.href || n.label.toLowerCase() === sc.nombre.toLowerCase());
   const visibles = scenes.filter((sc) => !enMenu(sc));
   // «Inicio» abre siempre el recorrido con la foto de los novillos en la pradera, sea cual sea la primera sección.
   const inicio: JourneyScene = {
