@@ -6,8 +6,8 @@ import { auth } from "@/auth";
 import { hasAnyRole } from "@/lib/access";
 import { EDITOR_ROLES } from "@/lib/cms/guard";
 import { adminDb, CMS_TAG } from "@/lib/cms/client";
+import { enrollLearner, markLessonDone, submitQuizFor, type QuizResult } from "./servicio";
 
-type Row = Record<string, unknown>;
 const NOT_CONFIGURED = "La Escuela Virtual aún no tiene la clave de servicio (SUPABASE_SERVICE_ROLE_KEY) en el servidor.";
 
 async function learner() {
@@ -31,10 +31,6 @@ const int = (fd: FormData, k: string) => {
 };
 const safeUrl = (v: string) => (!v ? null : /^(https:\/\/|http:\/\/|\/(?!\/))/.test(v) ? v : null);
 
-function certificateCode() {
-  return `FED-${new Date().getFullYear()}-${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
-}
-
 // ---------------------------------------------------------------- estudiante
 
 export async function enroll(fd: FormData) {
@@ -44,24 +40,8 @@ export async function enroll(fd: FormData) {
   if (!me) redirect(`/escuela-virtual/ingresar?callbackUrl=${encodeURIComponent(`/escuela-virtual/${slug}`)}`);
   const db = adminDb();
   if (!db) redirect(`/escuela-virtual/${slug}?error=${encodeURIComponent(NOT_CONFIGURED)}`);
-  await db.from("lms_enrollments").upsert({ course_id: courseId, user_key: me.key, user_name: me.name }, { onConflict: "course_id,user_key", ignoreDuplicates: true });
+  await enrollLearner(db, courseId, me.key, me.name);
   redirect(`/escuela-virtual/perfil?inscrito=${encodeURIComponent(slug)}`);
-}
-
-/** Marca la lección como vista y, si era la última, cierra el curso y emite el certificado. */
-async function markDone(courseId: string, lessonId: string, key: string, score: number | null) {
-  const db = adminDb()!;
-  await db.from("lms_progress").upsert({ course_id: courseId, lesson_id: lessonId, user_key: key, score }, { onConflict: "user_key,lesson_id" });
-  const [{ count: total }, { count: done }] = await Promise.all([
-    db.from("lms_lessons").select("id", { count: "exact", head: true }).eq("course_id", courseId),
-    db.from("lms_progress").select("id", { count: "exact", head: true }).eq("course_id", courseId).eq("user_key", key),
-  ]);
-  if (total && done && done >= total) {
-    const { data } = await db.from("lms_enrollments").select("completed_at").eq("course_id", courseId).eq("user_key", key).maybeSingle();
-    if (data && !data.completed_at) {
-      await db.from("lms_enrollments").update({ completed_at: new Date().toISOString(), certificate_code: certificateCode() }).eq("course_id", courseId).eq("user_key", key);
-    }
-  }
 }
 
 export async function completeLesson(fd: FormData) {
@@ -74,12 +54,12 @@ export async function completeLesson(fd: FormData) {
   if (!me || !db) redirect(`/escuela-virtual/${slug}`);
   const { data: enr } = await db.from("lms_enrollments").select("id").eq("course_id", courseId).eq("user_key", me.key).maybeSingle();
   if (!enr) redirect(`/escuela-virtual/${slug}`);
-  await markDone(courseId, lessonId, me.key, null);
+  await markLessonDone(db, courseId, lessonId, me.key, null);
   revalidatePath(`/escuela-virtual/${slug}`, "layout");
   redirect(next ? `/escuela-virtual/${slug}/aula/${next}` : `/escuela-virtual/${slug}/aula/${lessonId}?fin=1`);
 }
 
-export type QuizResult = { error?: string; score?: number; passed?: boolean; wrong?: { question: string; explanation: string }[] };
+export type { QuizResult };
 
 export async function submitQuiz(_prev: QuizResult, fd: FormData): Promise<QuizResult> {
   const courseId = str(fd, "course_id", 60);
@@ -88,27 +68,11 @@ export async function submitQuiz(_prev: QuizResult, fd: FormData): Promise<QuizR
   const me = await learner();
   const db = adminDb();
   if (!me || !db) return { error: "Ingrese para presentar la evaluación." };
-  const { data: enr } = await db.from("lms_enrollments").select("id").eq("course_id", courseId).eq("user_key", me.key).maybeSingle();
-  if (!enr) return { error: "Inscríbase al curso para presentar la evaluación." };
-  const [{ data: qs }, { data: les }] = await Promise.all([
-    db.from("lms_quiz_questions").select("*").eq("lesson_id", lessonId).order("sort_order", { ascending: true }),
-    db.from("lms_lessons").select("pass_score").eq("id", lessonId).maybeSingle(),
-  ]);
-  const questions = (qs ?? []) as Row[];
-  if (!questions.length) return { error: "Esta evaluación aún no tiene preguntas." };
-  let ok = 0;
-  const wrong: NonNullable<QuizResult["wrong"]> = [];
-  for (const q of questions) {
-    if (Number(fd.get(`q_${q.id}`)) === q.correct_index) ok++;
-    else wrong.push({ question: String(q.question), explanation: String(q.explanation ?? "") });
-  }
-  const score = Math.round((ok / questions.length) * 100);
-  const passed = score >= (typeof les?.pass_score === "number" ? les.pass_score : 70);
-  if (passed) {
-    await markDone(courseId, lessonId, me.key, score);
-    revalidatePath(`/escuela-virtual/${slug}`, "layout");
-  }
-  return { score, passed, wrong };
+  const answers: Record<string, string> = {};
+  for (const [k, v] of fd.entries()) if (k.startsWith("q_")) answers[k.slice(2)] = String(v);
+  const result = await submitQuizFor(db, { courseId, lessonId, key: me.key, answers });
+  if (result.passed) revalidatePath(`/escuela-virtual/${slug}`, "layout");
+  return result;
 }
 
 export async function submitReview(fd: FormData) {
