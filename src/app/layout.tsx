@@ -97,6 +97,9 @@ const siteJsonLd = {
   potentialAction: { "@type": "SearchAction", target: { "@type": "EntryPoint", urlTemplate: `${SITE_URL}/buscador?q={search_term_string}` }, "query-input": "required name=search_term_string" },
 };
 
+// Estas opciones viven en el índice lateral de la portada: no se repiten en la barra de navegación (el menú de celular las conserva).
+const SOLO_EN_INDICE = new Set(["/seccion/fng", "/seccion/fep"]);
+
 export default async function RootLayout({ children }: LayoutProps<"/">) {
   const [nav, design] = await Promise.all([getNav(), getPublishedDesign()]);
   // Cada opción que lleva a una sección muestra sus páginas al pasar el mouse.
@@ -181,7 +184,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
                 <Masthead />
                 {/* En los formularios públicos no se muestra el menú: quien responde se queda en el formulario. */}
                 <ChromeGate en={["/formularios"]}>
-                  <Header nav={sortNav(navConHijos, design.order)} grupos={menuGrupos} />
+                  <Header nav={sortNav(navConHijos, design.order).filter((it) => !SOLO_EN_INDICE.has(it.href))} grupos={menuGrupos} />
                 </ChromeGate>
                 <ChromeGate en={["/formularios"]}>
                   <Ticker initial={design.ticker} />
