@@ -5,8 +5,7 @@ import { Pictogram, type PictogramName } from "@/components/ui/Pictogram";
 import { NextDeadline } from "@/components/pagos/NextDeadline";
 
 const options: { icon: PictogramName; title: string; text: string; href: string }[] = [
-  { icon: "pago", title: "Cuota de fomento · Leche", text: "Planilla de recaudo mensual y pago por PSE.", href: "/pagos/cuota?c=leche" },
-  { icon: "res", title: "Cuota de fomento · Carne", text: "Cabezas sacrificadas y pago por PSE.", href: "/pagos/cuota?c=carne" },
+  { icon: "pago", title: "Cuota de fomento · Carne o Leche", text: "Planilla de recaudo mensual y pago por PSE.", href: "/pagos/cuota" },
   { icon: "biologico", title: "Recaudo biológico", text: "Dosis aplicadas: aftosa, rabia y brucelosis.", href: "/pagos/biologico" },
   { icon: "libro", title: "Calendario y guía", text: "Fechas límite 2026 e instructivo paso a paso.", href: "/pagos#calendario" },
 ];

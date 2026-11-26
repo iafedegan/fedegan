@@ -1,6 +1,16 @@
 import { ArrowUpRight, LockKeyhole } from "lucide-react";
 import { pagosActual } from "@/content/pagos";
+import Image from "next/image";
 import { panel } from "./ui";
+
+// Botón de PSE con su logo: lleva al sistema de pago en línea (el mismo para carne y leche).
+function BotonPse({ className = "" }: { className?: string }) {
+  return (
+    <a href={pagosActual} target="_blank" rel="noopener noreferrer" className={`block w-full max-w-sm overflow-hidden rounded-xl border border-[var(--border-strong)] bg-white transition hover:-translate-y-0.5 hover:shadow-lg ${className}`}>
+      <Image src="/accesos/pago-pse.webp" alt="PSE: pague aquí la cuota de fomento ganadero y lechero" width={500} height={250} unoptimized priority className="h-auto w-full" />
+    </a>
+  );
+}
 
 // Ingreso de recaudadores: el formulario real del sistema de pago en línea. Si ese sistema permite mostrarse dentro del portal
 // se incrusta aquí; si no, se ofrece el acceso directo. No se usa «sandbox»: es un sistema propio de FEDEGÁN y el flujo de pago (PSE)
@@ -9,6 +19,9 @@ export function PagosEmbebido({ embebible }: { embebible: boolean }) {
   if (embebible) {
     return (
       <div className={`${panel} overflow-hidden border-t-2 border-t-[var(--fg-lime-500)]`}>
+        <div className="flex justify-center p-5">
+          <BotonPse />
+        </div>
         <iframe
           src={pagosActual}
           title="Sistema de pago en línea de la cuota de fomento"
@@ -33,13 +46,14 @@ export function PagosEmbebido({ embebible }: { embebible: boolean }) {
       <p className="mt-1.5 text-sm leading-relaxed text-[var(--text-muted)]">
         Ingrese con su identificación de recaudador (NIT con dígito de verificación, sin guion ni espacio, o cédula) para diligenciar la planilla y pagar por PSE. En su primer ingreso, su clave es el mismo número de identificación.
       </p>
+      <BotonPse className="mt-6" />
       <a
         href={pagosActual}
         target="_blank"
         rel="noopener noreferrer"
-        className="mt-6 inline-flex items-center justify-center gap-2 rounded-[0.25rem] bg-[var(--fg-lime-500)] px-6 py-3 text-[0.8rem] font-bold uppercase tracking-[0.12em] text-[#0a1a11] transition hover:brightness-110"
+        className="mt-4 inline-flex items-center justify-center gap-2 rounded-[0.25rem] bg-[var(--fg-lime-500)] px-6 py-3 text-[0.8rem] font-bold uppercase tracking-[0.12em] text-[#0a1a11] transition hover:brightness-110"
       >
-        Ingresar al sistema de pagos <ArrowUpRight size={16} />
+        Pagar con PSE <ArrowUpRight size={16} />
       </a>
     </div>
   );

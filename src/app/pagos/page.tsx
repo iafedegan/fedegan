@@ -17,23 +17,12 @@ const opciones: { icon: PictogramName; wave: WaveAccent; tags: string[]; title: 
     icon: "pago",
     wave: "esmeralda",
     tags: ["PSE", "Planilla"],
-    title: "Cuota de fomento · Leche",
-    quien: "Recaudadores de leche",
-    text: "Reporte los litros comprados por municipio y pague el recaudo del mes por PSE.",
-    need: ["NIT o cédula de recaudador", "Litros y valor por municipio", "Mes de causación"],
-    href: "/pagos/cuota?c=leche",
-    cta: "Pagar cuota de leche",
-  },
-  {
-    icon: "res",
-    wave: "oro",
-    tags: ["PSE", "Planilla"],
-    title: "Cuota de fomento · Carne",
-    quien: "Recaudadores de carne",
-    text: "Reporte las cabezas sacrificadas por municipio, machos y hembras, y pague por PSE.",
-    need: ["NIT o cédula de recaudador", "Cabezas por municipio", "Machos y hembras del mes"],
-    href: "/pagos/cuota?c=carne",
-    cta: "Pagar cuota de carne",
+    title: "Cuota de fomento · Carne o Leche",
+    quien: "Recaudadores de carne y de leche",
+    text: "Reporte las cabezas sacrificadas o los litros comprados por municipio y pague el recaudo del mes por el mismo botón de PSE.",
+    need: ["NIT o cédula de recaudador", "Cabezas o litros por municipio", "Mes de causación"],
+    href: "/pagos/cuota",
+    cta: "Pagar cuota de fomento",
   },
   {
     icon: "biologico",
@@ -72,10 +61,10 @@ export default function PagosPage() {
           <NextDeadline size="lg" />
         </div>
 
-        <ul className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="mt-8 grid gap-6 sm:grid-cols-2">
           {opciones.map((o) => (
             <li key={o.title}>
-              <WaveCard href={o.href} accent={o.wave} icon={o.icon} title={o.title} tags={o.tags} text={`${o.quien}. ${o.text}`} cta={o.cta} image={/biol/i.test(o.title) ? "/headers/ia-biologico.jpg" : /leche/i.test(o.title) ? "/accesos/fomento-leche.webp" : "/accesos/fomento-carne.webp"} />
+              <WaveCard href={o.href} accent={o.wave} icon={o.icon} title={o.title} tags={o.tags} text={`${o.quien}. ${o.text}`} cta={o.cta} image={/biol/i.test(o.title) ? "/headers/ia-biologico.jpg" : "/headers/ia-cuota.jpg"} />
             </li>
           ))}
         </ul>
