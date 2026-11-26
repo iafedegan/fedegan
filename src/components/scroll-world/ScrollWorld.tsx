@@ -90,7 +90,8 @@ export function ScrollWorld({ scenes: base, banners = [] }: { scenes: JourneySce
   // «Inicio» queda siempre de primero; el resto se reordena por uso.
   const scenes = useMemo(() => {
     const ord = ordenarPorUso(base, parseUso(usoTxt));
-    return [...ord.filter((s) => s.id === "inicio"), ...ord.filter((s) => s.id !== "inicio")];
+    const fijas = ["inicio", "pagos"];
+    return [...fijas.flatMap((id) => ord.filter((s) => s.id === id)), ...ord.filter((s) => !fijas.includes(s.id))];
   }, [base, usoTxt]);
   const K = scenes.length - 1;
   const desk = useSyncExternalStore(suscribirAncho, esEscritorio, () => true);
@@ -420,7 +421,7 @@ export function ScrollWorld({ scenes: base, banners = [] }: { scenes: JourneySce
               {two(1)} / {two(K + 1)}
             </span>
             {scenes.map((s, i) => (
-              <div key={s.id} className="sw-item" style={{ "--acc": s.accent } as React.CSSProperties} onMouseEnter={() => verCard(i)} onMouseLeave={ocultarCard} onFocus={() => verCard(i)} onBlur={ocultarCard}>
+              <div key={s.id} data-id={s.id} className="sw-item" style={{ "--acc": s.accent } as React.CSSProperties} onMouseEnter={() => verCard(i)} onMouseLeave={ocultarCard} onFocus={() => verCard(i)} onBlur={ocultarCard}>
                 <button
                   ref={(el) => {
                     dotRefs.current[i] = el;

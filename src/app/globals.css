@@ -2732,3 +2732,10 @@ footer[data-region="footer"] .text-white\/65, footer[data-region="footer"] [clas
 /* Índice lateral más transparente: deja ver la foto detrás. */
 .sw-rail { background: rgba(7, 27, 19, 0.5) !important; }
 .sw-rail .sw-dot { text-shadow: 0 1px 8px rgba(0, 0, 0, 0.7); }
+
+/* «Zona de pagos» en el índice lateral: píldora dorada para que salte a la vista. */
+.sw-rail .sw-item[data-id="pagos"] > .sw-dot { margin: 0.25rem 0; padding: 0.45rem 0.75rem !important; border-radius: 999px; background: linear-gradient(135deg, #ffd23f, #ff9f1c); color: #10240f !important; font-weight: 800; text-shadow: none; box-shadow: 0 8px 20px -8px rgba(255, 176, 28, 0.9); }
+.sw-rail .sw-item[data-id="pagos"] > .sw-dot .sw-dot-label { color: #10240f !important; opacity: 1; }
+.sw-rail .sw-item[data-id="pagos"] > .sw-dot::after { border-color: #10240f; }
+.sw-rail .sw-item[data-id="pagos"] > .sw-dot.is-active::after { background: #10240f; }
+.sw-rail .sw-item[data-id="pagos"] > .sw-dot:hover { filter: brightness(1.08); }

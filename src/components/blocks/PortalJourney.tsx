@@ -200,7 +200,7 @@ export async function PortalJourney() {
   // Lo que ya está en el menú principal no se repite en el recorrido (ni en su índice lateral ni con su foto).
   const [nav, design] = await Promise.all([getNav(), getPublishedDesign()]);
   // FNG y FEP se quedan en el índice lateral aunque estén en el menú: pidieron tenerlos ahí.
-  const enMenu = (sc: JourneyScene) => sc.id !== "fng" && sc.id !== "fep" && nav.some((n) => n.href === sc.href || n.label.toLowerCase() === sc.nombre.toLowerCase());
+  const enMenu = (sc: JourneyScene) => !["fng", "fep", "pagos"].includes(sc.id) && nav.some((n) => n.href === sc.href || n.label.toLowerCase() === sc.nombre.toLowerCase());
   const visibles = scenes.filter((sc) => !enMenu(sc));
   // «Inicio» abre siempre el recorrido con la foto de los novillos en la pradera, sea cual sea la primera sección.
   const inicio: JourneyScene = {
@@ -222,5 +222,7 @@ export async function PortalJourney() {
   const banners = [design.ads.portada, ...(design.banners ?? [])].filter((b): b is NonNullable<typeof b> => Boolean(b));
   const primera = banners.find((b) => b.on !== false && b.image)?.image;
   if (primera) { inicio.image = primera; inicio.pos = "50% 50%"; }
-  return <ScrollWorld scenes={[inicio, ...resto.filter((sc) => sc.id !== "inicio")]} banners={banners} />;
+  // «Zona de pagos» va justo después de Inicio, destacada en el índice.
+  const orden = [...resto.filter((sc) => sc.id === "pagos"), ...resto.filter((sc) => sc.id !== "pagos" && sc.id !== "inicio")];
+  return <ScrollWorld scenes={[inicio, ...orden]} banners={banners} />;
 }

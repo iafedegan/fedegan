@@ -98,7 +98,16 @@ const siteJsonLd = {
 };
 
 // Estas opciones viven en el índice lateral de la portada: no se repiten en la barra de navegación (el menú de celular las conserva).
-const SOLO_EN_INDICE = new Set(["/seccion/fng", "/seccion/fep"]);
+const SOLO_EN_INDICE = new Set(["/seccion/fng", "/seccion/fep", "/pagos"]);
+
+// «Contacto» cierra la barra: es la última opción visible (la barra muestra 9; lo demás va en «Más»).
+function contactoAlFinal<T extends { href: string }>(items: T[]): T[] {
+  const contacto = items.find((it) => it.href === "/contacto");
+  if (!contacto) return items;
+  const resto = items.filter((it) => it !== contacto);
+  const i = Math.min(8, resto.length);
+  return [...resto.slice(0, i), contacto, ...resto.slice(i)];
+}
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {
   const [nav, design] = await Promise.all([getNav(), getPublishedDesign()]);
@@ -184,7 +193,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
                 <Masthead />
                 {/* En los formularios públicos no se muestra el menú: quien responde se queda en el formulario. */}
                 <ChromeGate en={["/formularios"]}>
-                  <Header nav={sortNav(navConHijos, design.order).filter((it) => !SOLO_EN_INDICE.has(it.href))} grupos={menuGrupos} />
+                  <Header nav={contactoAlFinal(sortNav(navConHijos, design.order).filter((it) => !SOLO_EN_INDICE.has(it.href)))} grupos={menuGrupos} />
                 </ChromeGate>
                 <ChromeGate en={["/formularios"]}>
                   <Ticker initial={design.ticker} />
